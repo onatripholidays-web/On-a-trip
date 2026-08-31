@@ -1,11 +1,11 @@
-ON A TRIP HOLIDAYS — HOME V15
-Homepage refresh:
-- Strong Telugu States trust/branch section
-- Hot international packages
-- Couple & honeymoon collection
-- South India weekend collection
-- On A Trip Temple collection
-- Mobile-first visual cards
-- Existing website and CRM retained
+ON A TRIP HOLIDAYS — V16
+Homepage conversion upgrade:
+- Review/testimonial section with Verified Traveller presentation
+- Instagram/Reels showcase
+- Expandable day-by-day itinerary
+- Telugu traveller trust section
+- Hyderabad and Vijayawada branches
+- Smart Plan My Trip enquiry form
+- WhatsApp handoff with destination, dates, travellers, trip type, budget and notes
 
-Deploy: upload extracted contents to GitHub and let Vercel redeploy.
+Important: The review and reel cards are presentation placeholders until official Google review data, customer photos/videos and Instagram embed links are supplied.
