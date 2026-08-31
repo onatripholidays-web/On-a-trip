@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>On A Trip Holidays — Admin</title>
+<style>
+:root{
+  --navy:#08233f;--navy2:#103d66;--orange:#ee5a2a;--bg:#f4f7f9;
+  --text:#102335;--muted:#6c7b87;--white:#fff;--line:#dce4e9;
+  --green:#18a66a;--red:#d64545;--shadow:0 8px 28px rgba(10,35,55,.08);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{min-height:100vh;display:flex}
+.sidebar{width:250px;background:var(--navy);color:#fff;padding:22px 16px;position:fixed;inset:0 auto 0 0;z-index:10}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 10px 26px;border-bottom:1px solid rgba(255,255,255,.12)}
+.brand-mark{width:38px;height:38px;border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--orange);font-weight:900}
+.brand b{font-size:17px}.brand small{display:block;color:#b9c8d4;margin-top:3px}
+.nav{margin-top:18px;display:grid;gap:7px}.nav button{border:0;background:transparent;color:#d9e5ee;text-align:left;padding:13px 14px;border-radius:10px;font-weight:700}
+.nav button.active,.nav button:hover{background:var(--orange);color:#fff}
+.main{margin-left:250px;width:calc(100% - 250px);padding:24px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.topbar h1{margin:0;font-size:28px}.topbar p{margin:5px 0 0;color:var(--muted)}
+.actions{display:flex;gap:10px}.btn{border:0;border-radius:10px;padding:11px 16px;font-weight:800}.primary{background:var(--orange);color:#fff}.secondary{background:#fff;border:1px solid var(--line);color:var(--navy)}
+.view{display:none}.view.active{display:block}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:20px}
+.stat,.card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.stat{padding:20px}.stat span{color:var(--muted);font-weight:700}.stat strong{display:block;font-size:31px;margin-top:7px}.stat em{font-style:normal;color:var(--green);font-size:13px;font-weight:800}
+.grid2{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}.card{padding:20px}.card h2{margin:0 0 15px;font-size:19px}
+.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:13px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}.table th{font-size:12px;text-transform:uppercase;color:var(--muted)}
+.badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#e9f7f0;color:#087548;font-size:12px;font-weight:800}.badge.hot{background:#fff0ea;color:#d84e24}.badge.gray{background:#eef2f5;color:#62717d}
+.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.quick button{padding:18px;text-align:left;background:#f8fafb;border:1px solid var(--line);border-radius:12px;font-weight:800;color:var(--navy)}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}.filters input,.filters select,.form input,.form select,.form textarea{border:1px solid var(--line);border-radius:10px;padding:11px 12px;background:#fff;outline:none}.filters input{min-width:230px}
+.package-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.pkg{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}.pkg img{width:100%;height:145px;object-fit:cover;background:#edf2f5}.pkg-body{padding:15px}.pkg-body h3{margin:0 0 7px}.pkg-body p{margin:4px 0;color:var(--muted);font-size:14px}.pkg-foot{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.form{display:grid;gap:12px}.form label{font-size:13px;font-weight:800}.form textarea{min-height:100px;resize:vertical}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.48);display:none;place-items:center;padding:20px;z-index:30}.modal.show{display:grid}.modal-box{background:#fff;border-radius:18px;width:min(680px,100%);max-height:90vh;overflow:auto;padding:22px}.modal-head{display:flex;justify-content:space-between;align-items:center}.close{border:0;background:#eef2f5;border-radius:50%;width:38px;height:38px;font-size:20px}
+.notice{padding:13px 15px;background:#fff8e9;border:1px solid #f5dfaa;border-radius:11px;color:#7b5b14;font-size:13px;margin-bottom:16px}
+.branch{display:flex;gap:12px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:12px;margin-bottom:10px}.branch-icon{width:42px;height:42px;border-radius:10px;background:#fff0ea;display:grid;place-items:center;color:var(--orange);font-weight:900}
+@media(max-width:900px){.sidebar{width:76px}.brand div:not(.brand-mark),.nav span{display:none}.main{margin-left:76px;width:calc(100% - 76px)}.nav button{text-align:center}.stats{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.package-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.sidebar{display:none}.main{margin:0;width:100%;padding:15px}.topbar{align-items:flex-start}.topbar h1{font-size:22px}.stats{grid-template-columns:1fr 1fr;gap:10px}.stat{padding:14px}.stat strong{font-size:25px}.package-grid{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}.actions .secondary{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><div class="brand-mark">✈</div><div><b>ON A TRIP</b><small>HOLIDAYS • ADMIN</small></div></div>
+  <div class="nav">
+    <button class="active" data-view="dashboard">📊 <span>Dashboard</span></button>
+    <button data-view="packages">🧳 <span>Packages</span></button>
+    <button data-view="batches">📅 <span>Batches & Seats</span></button>
+    <button data-view="enquiries">📲 <span>Enquiries</span></button>
+    <button data-view="blog">✍️ <span>Blog / SEO</span></button>
+    <button data-view="branches">📍 <span>Branches</span></button>
+    <button data-view="settings">⚙️ <span>Website Settings</span></button>
+  </div>
+</aside>
+
+<main class="main">
+<header class="topbar">
+  <div><h1 id="pageTitle">Dashboard</h1><p>On A Trip Holidays • Hyderabad & Vijayawada</p></div>
+  <div class="actions"><button class="btn secondary" onclick="openModal('leadModal')">＋ Quick Lead</button><button class="btn primary" onclick="openModal('packageModal')">＋ Add Package</button></div>
+</header>
+
+<section id="dashboard" class="view active">
+  <div class="stats">
+    <div class="stat"><span>Total Packages</span><strong>36</strong><em>+5 this month</em></div>
+    <div class="stat"><span>Upcoming Batches</span><strong>14</strong><em>8 seats filling</em></div>
+    <div class="stat"><span>New Enquiries</span><strong>27</strong><em>+18% this week</em></div>
+    <div class="stat"><span>Hot Leads</span><strong>9</strong><em>Follow up today</em></div>
+  </div>
+  <div class="grid2">
+    <div class="card"><h2>Quick actions</h2><div class="quick">
+      <button onclick="showView('packages')">🧳 Manage packages</button>
+      <button onclick="showView('batches')">📅 Update batch seats</button>
+      <button onclick="showView('enquiries')">📲 Check enquiries</button>
+      <button onclick="showView('blog')">✍️ Create SEO blog</button>
+      <button onclick="showView('branches')">📍 Manage branches</button>
+      <button onclick="openModal('offerModal')">💥 Create offer</button>
+    </div></div>
+    <div class="card"><h2>Today</h2>
+      <p>🔥 <b>September offers</b><br><span style="color:var(--muted)">Limited seats • update current batch pricing</span></p>
+      <p>📲 <b>9 hot enquiries</b><br><span style="color:var(--muted)">Prioritise WhatsApp follow-ups</span></p>
+      <p>🌍 <b>International focus</b><br><span style="color:var(--muted)">Thailand • Bali • Dubai • Vietnam</span></p>
+    </div>
+  </div>
+</section>
+
+<section id="packages" class="view">
+  <div class="section-head"><h2>Package Manager</h2><button class="btn primary" onclick="openModal('packageModal')">＋ Add Package</button></div>
+  <div class="filters"><input id="pkgSearch" placeholder="Search destination..." oninput="filterPackages()"><select id="pkgType" onchange="filterPackages()"><option value="">All categories</option><option>Pilgrimage</option><option>India</option><option>North East</option><option>International</option><option>Couples</option><option>Weekend</option></select></div>
+  <div class="package-grid" id="packageGrid"></div>
+</section>
+
+<section id="batches" class="view">
+ <div class="section-head"><h2>Batch Dates & Seat Availability</h2><button class="btn primary" onclick="openModal('batchModal')">＋ Add Batch</button></div>
+ <div class="notice">Update seats here and the website can show <b>Available / Filling Fast / Sold Out</b> status.</div>
+ <div class="card table-wrap"><table class="table"><thead><tr><th>Package</th><th>Date</th><th>From</th><th>Seats</th><th>Status</th><th>Action</th></tr></thead><tbody id="batchTable"></tbody></table></div>
+</section>
+
+<section id="enquiries" class="view">
+ <div class="section-head"><h2>Lead & Enquiry Manager</h2><button class="btn primary" onclick="openModal('leadModal')">＋ Add Lead</button></div>
+ <div class="filters"><input placeholder="Search name / phone / destination..." oninput="filterLeads(this.value)"><select><option>All statuses</option><option>New</option><option>Contacted</option><option>Hot</option><option>Booked</option></select></div>
+ <div class="card table-wrap"><table class="table"><thead><tr><th>Name</th><th>Destination</th><th>Travellers</th><th>Source</th><th>Status</th><th>Action</th></tr></thead><tbody id="leadTable"></tbody></table></div>
+</section>
+
+<section id="blog" class="view">
+ <div class="section-head"><h2>Blog & SEO Manager</h2><button class="btn primary" onclick="openModal('blogModal')">＋ New Blog</button></div>
+ <div class="grid2"><div class="card"><h2>Published / Drafts</h2><div id="blogList"></div></div>
+ <div class="card"><h2>SEO checklist</h2><p>✅ Unique page title</p><p>✅ Meta description</p><p>✅ Destination keywords</p><p>✅ Internal links to packages</p><p>✅ WhatsApp CTA</p><p>⚠️ Add destination image alt text</p></div></div>
+</section>
+
+<section id="branches" class="view">
+ <div class="section-head"><h2>Our Branches</h2><button class="btn primary" onclick="openModal('branchModal')">＋ Add Branch</button></div>
+ <div class="card"><div class="branch"><div class="branch-icon">HYD</div><div><b>Hyderabad</b><div style="color:var(--muted)">Telangana • Main Office • Telugu Support</div></div><span class="badge" style="margin-left:auto">Active</span></div>
+ <div class="branch"><div class="branch-icon">VJA</div><div><b>Vijayawada</b><div style="color:var(--muted)">Andhra Pradesh • Telugu Support</div></div><span class="badge" style="margin-left:auto">Active</span></div></div>
+ <div class="notice" style="margin-top:16px">Brand message: <b>Two Telugu States • One Trusted Travel Company.</b></div>
+</section>
+
+<section id="settings" class="view">
+ <div class="card"><h2>Website Control Centre</h2><div class="form">
+ <label>September Offer Banner</label><input value="🔥 SEPTEMBER TRAVEL OFFERS • Limited seats • Ask for current batch pricing">
+ <label>WhatsApp Number</label><input value="+91 ">
+ <label>Homepage headline</label><input value="Your next trip starts here.">
+ <label>Trust line</label><input value="The two Telugu states trusted travel company">
+ <label>Featured international packages</label><input value="Thailand, Bali, Dubai, Vietnam, Nepal, Singapore">
+ <label>Featured North East packages</label><input value="Tawang, Ziro Valley, Arunachal, Sikkim, Meghalaya">
+ <button class="btn primary" onclick="alert('Demo settings saved in this browser.')">Save Website Settings</button>
+ </div></div>
+</section>
+</main>
+</div>
+
+<div class="modal" id="packageModal"><div class="modal-box"><div class="modal-head"><h2>Add / Edit Package</h2><button class="close" onclick="closeModal('packageModal')">×</button></div><form class="form" onsubmit="addPackage(event)"><div class="form-row"><div><label>Destination</label><input id="pName" required placeholder="Thailand"></div><div><label>Category</label><select id="pType"><option>International</option><option>India</option><option>North East</option><option>Pilgrimage</option><option>Couples</option><option>Weekend</option></select></div></div><div class="form-row"><div><label>Duration</label><input id="pDuration" placeholder="6D/5N"></div><div><label>Starting price</label><input id="pPrice" placeholder="₹39,999"></div></div><label>Image path</label><input id="pImage" placeholder="assets/thailand.jpg"><label>Highlights</label><textarea id="pHighlights" placeholder="Bangkok • Pattaya • Phuket"></textarea><button class="btn primary">Save Package</button></form></div></div>
+
+<div class="modal" id="batchModal"><div class="modal-box"><div class="modal-head"><h2>Add Batch</h2><button class="close" onclick="closeModal('batchModal')">×</button></div><form class="form" onsubmit="addBatch(event)"><label>Package</label><input id="bPackage" required placeholder="Spiti Valley"><div class="form-row"><div><label>Date</label><input id="bDate" type="date" required></div><div><label>Pickup</label><input id="bFrom" placeholder="Delhi"></div></div><div class="form-row"><div><label>Total seats</label><input id="bTotal" type="number" value="16"></div><div><label>Available seats</label><input id="bSeats" type="number" value="8"></div></div><button class="btn primary">Save Batch</button></form></div></div>
+
+<div class="modal" id="leadModal"><div class="modal-box"><div class="modal-head"><h2>Add Lead</h2><button class="close" onclick="closeModal('leadModal')">×</button></div><form class="form" onsubmit="addLead(event)"><div class="form-row"><div><label>Name</label><input id="lName" required></div><div><label>Phone / WhatsApp</label><input id="lPhone"></div></div><div class="form-row"><div><label>Destination</label><input id="lDest" placeholder="Kashmir"></div><div><label>Travellers</label><input id="lTrav" value="2"></div></div><label>Source</label><select id="lSource"><option>WhatsApp</option><option>Instagram</option><option>Facebook</option><option>Website</option><option>Google</option></select><button class="btn primary">Save Lead</button></form></div></div>
+
+<div class="modal" id="blogModal"><div class="modal-box"><div class="modal-head"><h2>Create SEO Blog</h2><button class="close" onclick="closeModal('blogModal')">×</button></div><form class="form" onsubmit="addBlog(event)"><label>Blog title</label><input id="blogTitle" required placeholder="Best time to visit Spiti Valley"></label><label>Target keyword</label><input id="blogKeyword" placeholder="Spiti Valley tour from Hyderabad"><label>Meta description</label><textarea id="blogMeta"></textarea><button class="btn primary">Save Draft</button></form></div></div>
+
+<div class="modal" id="offerModal"><div class="modal-box"><div class="modal-head"><h2>Create Offer</h2><button class="close" onclick="closeModal('offerModal')">×</button></div><form class="form" onsubmit="event.preventDefault();closeModal('offerModal');alert('Offer saved in this browser.')"><label>Offer headline</label><input value="🔥 September Travel Offers"></label><label>Offer text</label><input value="Limited seats • Ask for current batch pricing"></label><button class="btn primary">Save Offer</button></form></div></div>
+
+<script>
+const packages=[
+{name:"Char Dham Yatra",type:"Pilgrimage",duration:"11D/10N",price:"₹30,500",image:"assets/char-dham.jpg",high:"Kedarnath • Badrinath • Gangotri • Yamunotri",tag:"BESTSELLER"},
+{name:"Spiti Valley",type:"India",duration:"9D/8N",price:"₹29,999",image:"assets/spiti.jpg",high:"Kaza • Chicham • Kibber • Tabo",tag:"HOT"},
+{name:"Ladakh",type:"India",duration:"7D/6N",price:"₹24,999",image:"assets/ladakh.jpg",high:"Leh • Nubra • Pangong • Khardung La",tag:"POPULAR"},
+{name:"Kashmir Deluxe",type:"India",duration:"6D/5N",price:"₹19,999",image:"assets/kashmir.jpg",high:"Srinagar • Gulmarg • Pahalgam • Sonmarg",tag:"POPULAR"},
+{name:"Tawang + Bomdila",type:"North East",duration:"8D/7N",price:"₹24,999",image:"assets/tawang.jpg",high:"Guwahati • Bomdila • Tawang",tag:"HOT"},
+{name:"Ziro Valley Escape",type:"North East",duration:"5D/4N",price:"₹18,999",image:"assets/ziro.jpg",high:"Itanagar • Ziro • Daporijo",tag:"NEW"},
+{name:"Arunachal Explorer",type:"North East",duration:"9D/8N",price:"₹28,999",image:"assets/arunachal.jpg",high:"Itanagar • Ziro • Bomdila • Tawang",tag:"POPULAR"},
+{name:"Sikkim & Gangtok",type:"North East",duration:"5D/4N",price:"₹16,999",image:"assets/sikkim.jpg",high:"Gangtok • Tsomgo Lake • Nathula",tag:"HOT"},
+{name:"Thailand",type:"International",duration:"6D/5N",price:"₹39,999",image:"assets/thailand.jpg",high:"Bangkok • Pattaya • Phuket",tag:"HOT"},
+{name:"Bali",type:"International",duration:"6D/5N",price:"₹42,999",image:"assets/bali.jpg",high:"Ubud • Kuta • Nusa Penida",tag:"HOT"},
+{name:"Dubai",type:"International",duration:"5D/4N",price:"₹44,999",image:"assets/dubai.jpg",high:"City Tour • Desert Safari • Burj Khalifa",tag:"POPULAR"},
+{name:"Vietnam",type:"International",duration:"6D/5N",price:"₹49,999",image:"assets/vietnam.jpg",high:"Hanoi • Ha Long Bay • Da Nang",tag:"HOT"},
+{name:"Nepal",type:"International",duration:"7D/6N",price:"₹32,999",image:"assets/nepal.jpg",high:"Kathmandu • Pokhara • Muktinath",tag:"POPULAR"},
+{name:"Singapore",type:"International",duration:"5D/4N",price:"₹52,999",image:"assets/singapore.jpg",high:"City • Sentosa • Universal Studios",tag:"HOT"},
+{name:"Maldives Couple Escape",type:"Couples",duration:"5D/4N",price:"₹69,999",image:"assets/maldives.jpg",high:"Resort • Island • Couple experiences",tag:"COUPLES"},
+{name:"Kerala Couple",type:"Couples",duration:"6D/5N",price:"₹39,500",image:"assets/kerala.jpg",high:"Munnar • Thekkady • Alleppey",tag:"COUPLES"}
+];
+let batches=[
+["Char Dham Yatra","20 Sep 2026","Hyderabad",20,6],["Spiti Valley","25 Sep 2026","Delhi",16,5],
+["Ladakh","02 Oct 2026","Delhi",16,11],["Tawang + Bomdila","10 Oct 2026","Guwahati",16,4],
+["Thailand","17 Oct 2026","Hyderabad",20,13],["Kashmir Deluxe","24 Oct 2026","Srinagar",12,2]
+];
+let leads=[
+["Ravi Kumar","Kashmir",4,"Instagram","Hot"],["Srinivas","Thailand",2,"WhatsApp","New"],
+["Lakshmi","Char Dham",3,"Website","Contacted"],["Anil","Spiti Valley",6,"Facebook","Hot"],["Priya","Bali",2,"Google","New"]
+];
+let blogs=[["Spiti Valley: Complete Travel Guide","Spiti Valley tour from Hyderabad","Published"],["Char Dham Yatra Guide","Char Dham Yatra from Hyderabad","Published"],["Best Time to Visit Ladakh","Ladakh tour packages","Draft"]];
+
+function showView(id){
+ document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
+ const names={dashboard:"Dashboard",packages:"Packages",batches:"Batches & Seats",enquiries:"Enquiries",blog:"Blog / SEO",branches:"Branches",settings:"Website Settings"};
+ document.getElementById('pageTitle').textContent=names[id];
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>showView(b.dataset.view));
+
+function renderPackages(list=packages){
+ document.getElementById('packageGrid').innerHTML=list.map((p,i)=>`
+ <article class="pkg"><img src="${p.image}" onerror="this.style.opacity='.15'" alt="${p.name}">
+ <div class="pkg-body"><span class="badge ${p.tag==='HOT'?'hot':''}">${p.tag}</span><h3>${p.name}</h3>
+ <p>${p.type} • ${p.duration}</p><p>${p.high}</p><div class="pkg-foot"><b style="color:var(--orange)">${p.price}</b><button class="btn secondary" onclick="alert('Edit ${p.name}')">Edit</button></div></div></article>`).join('');
+}
+function filterPackages(){const q=document.getElementById('pkgSearch').value.toLowerCase(),t=document.getElementById('pkgType').value;renderPackages(packages.filter(p=>(p.name.toLowerCase().includes(q)||p.high.toLowerCase().includes(q))&&(!t||p.type===t)))}
+function renderBatches(){document.getElementById('batchTable').innerHTML=batches.map((b,i)=>{let s=b[4],status=s===0?'Sold Out':s<=3?'Filling Fast':'Available';return `<tr><td><b>${b[0]}</b></td><td>${b[1]}</td><td>${b[2]}</td><td>${s}/${b[3]}</td><td><span class="badge ${s<=3?'hot':''}">${status}</span></td><td><button class="btn secondary" onclick="editSeats(${i})">Update</button></td></tr>`}).join('')}
+function editSeats(i){let v=prompt('Available seats:',batches[i][4]);if(v!==null&&!isNaN(v)){batches[i][4]=Math.max(0,+v);renderBatches()}}
+function renderLeads(list=leads){document.getElementById('leadTable').innerHTML=list.map((l,i)=>`<tr><td><b>${l[0]}</b></td><td>${l[1]}</td><td>${l[2]}</td><td>${l[3]}</td><td><span class="badge ${l[4]==='Hot'?'hot':''}">${l[4]}</span></td><td><button class="btn secondary" onclick="alert('WhatsApp follow-up for ${l[0]}')">WhatsApp</button></td></tr>`).join('')}
+function filterLeads(q){q=q.toLowerCase();renderLeads(leads.filter(l=>l.join(' ').toLowerCase().includes(q)))}
+function renderBlogs(){document.getElementById('blogList').innerHTML=blogs.map(b=>`<div style="padding:13px 0;border-bottom:1px solid var(--line)"><b>${b[0]}</b><div style="color:var(--muted);font-size:13px">${b[1]}</div><span class="badge" style="margin-top:7px">${b[2]}</span></div>`).join('')}
+function openModal(id){document.getElementById(id).classList.add('show')}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+function addPackage(e){e.preventDefault();packages.unshift({name:pName.value,type:pType.value,duration:pDuration.value||"Custom",price:pPrice.value||"Ask",image:pImage.value||"assets/placeholder.jpg",high:pHighlights.value||"Custom itinerary",tag:"NEW"});renderPackages();closeModal('packageModal');e.target.reset();showView('packages')}
+function addBatch(e){e.preventDefault();batches.unshift([bPackage.value,bDate.value,bFrom.value,bTotal.value,+bSeats.value]);renderBatches();closeModal('batchModal');e.target.reset();showView('batches')}
+function addLead(e){e.preventDefault();leads.unshift([lName.value,lDest.value,lTrav.value,lSource.value,"New"]);renderLeads();closeModal('leadModal');e.target.reset();showView('enquiries')}
+function addBlog(e){e.preventDefault();blogs.unshift([blogTitle.value,blogKeyword.value||"—","Draft"]);renderBlogs();closeModal('blogModal');e.target.reset();showView('blog')}
+renderPackages();renderBatches();renderLeads();renderBlogs();
+</script>
+</body>
+</html>
