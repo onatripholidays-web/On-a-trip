@@ -199,4 +199,75 @@ function submitPlan(e){
 </script>
 <!-- V16 END -->
 
+
+<!-- V17 START -->
+<section class="v17" id="explore">
+ <div class="v17-wrap">
+  <div class="v17-kicker">Explore On A Trip Holidays</div>
+  <h2 class="v17-title">Find a trip that feels like you.</h2>
+  <p class="v17-sub">Search destinations, upcoming departures and travel styles — or tell us what you want and we'll plan it.</p>
+  <form class="v17-search" onsubmit="v17Search(event)">
+   <input id="v17Dest" placeholder="🔎 Search destination e.g. Kashmir">
+   <select id="v17Month"><option value="">Travel month</option><option>September 2026</option><option>October 2026</option><option>November 2026</option><option>December 2026</option></select>
+   <select id="v17Type"><option value="">Travel style</option><option>Group</option><option>Couple</option><option>Family</option><option>Private</option></select>
+   <select id="v17Budget"><option value="">Budget</option><option>Under ₹20,000</option><option>₹20,000–₹40,000</option><option>₹40,000–₹70,000</option><option>₹70,000+</option></select>
+   <button>Search Trips</button>
+  </form>
+  <div class="v17-pills"><a class="v17-pill" href="packages.html">🏔️ Adventure</a><a class="v17-pill" href="pilgrimage.html">🛕 Pilgrimage</a><a class="v17-pill" href="south-weekends.html">🌴 Weekend</a><a class="v17-pill" href="packages.html">💑 Couples</a><a class="v17-pill" href="north-east.html">🌿 North East</a><a class="v17-pill" href="packages.html">🌍 International</a></div>
+ </div>
+</section>
+
+<section class="v17 v17-batches">
+ <div class="v17-wrap">
+  <div class="v17-kicker" style="color:#ff9b79">Fixed departures</div><h2 class="v17-title">📅 Upcoming Trips</h2><p class="v17-sub" style="color:#c7d4dd">Pick your date and reserve before the batch fills.</p>
+  <div class="batch-grid">
+   <article class="batch-card"><div class="date">20 SEP 2026</div><h3>Char Dham</h3><p>📍 Hyderabad pickup • 11D/10N</p><div class="seats">🔥 6 seats left</div><div class="seats-bar"><i style="width:30%"></i></div></article>
+   <article class="batch-card"><div class="date">25 SEP 2026</div><h3>Spiti Valley</h3><p>📍 Delhi pickup • 9D/8N</p><div class="seats">🔥 5 seats left</div><div class="seats-bar"><i style="width:31%"></i></div></article>
+   <article class="batch-card"><div class="date">02 OCT 2026</div><h3>Ladakh</h3><p>📍 Delhi pickup • 7D/6N</p><div class="seats">11 seats available</div><div class="seats-bar"><i style="width:69%"></i></div></article>
+   <article class="batch-card"><div class="date">10 OCT 2026</div><h3>Tawang</h3><p>📍 Guwahati pickup • 8D/7N</p><div class="seats">🔥 4 seats left</div><div class="seats-bar"><i style="width:25%"></i></div></article>
+  </div>
+ </div>
+</section>
+
+<section class="v17 v17-styles">
+ <div class="v17-wrap">
+  <div class="v17-kicker">Travel your way</div><h2 class="v17-title">Explore by travel style</h2><p class="v17-sub">From quick weekends to once-in-a-lifetime journeys.</p>
+  <div class="v17-style-grid">
+   <a class="style-card" href="packages.html" style="text-decoration:none;color:inherit"><div class="style-icon">🏔️</div><h3>Adventure</h3><p>Spiti • Ladakh • Arunachal • Himalayan circuits</p></a>
+   <a class="style-card" href="pilgrimage.html" style="text-decoration:none;color:inherit"><div class="style-icon">🛕</div><h3>Pilgrimage</h3><p>Char Dham • Kedarnath • Ujjain • Vaishno Devi</p></a>
+   <a class="style-card" href="south-weekends.html" style="text-decoration:none;color:inherit"><div class="style-icon">🌴</div><h3>Weekend Getaways</h3><p>Araku • Gokarna • Coorg • Munnar</p></a>
+   <a class="style-card" href="packages.html" style="text-decoration:none;color:inherit"><div class="style-icon">👨‍👩‍👧</div><h3>Family Holidays</h3><p>Comfortable stays, flexible plans and group options</p></a>
+   <a class="style-card" href="packages.html" style="text-decoration:none;color:inherit"><div class="style-icon">💑</div><h3>Couples</h3><p>Maldives • Bali • Thailand • Dubai</p></a>
+   <a class="style-card" href="packages.html" style="text-decoration:none;color:inherit"><div class="style-icon">👥</div><h3>Group Trips</h3><p>Fixed departures with trip coordinators</p></a>
+   <a class="style-card" href="north-east.html" style="text-decoration:none;color:inherit"><div class="style-icon">🌿</div><h3>North East</h3><p>Tawang • Ziro • Sikkim • Meghalaya</p></a>
+   <a class="style-card" href="packages.html" style="text-decoration:none;color:inherit"><div class="style-icon">🌍</div><h3>International</h3><p>Thailand • Bali • Vietnam • Dubai and more</p></a>
+  </div>
+ </div>
+</section>
+
+<section class="v17 v17-event">
+ <div class="v17-wrap">
+  <div class="v17-kicker">Limited season departures</div><h2 class="v17-title">🎉 Events & Festival Trips</h2><p class="v17-sub">Special departures around festivals, holidays and major travel events.</p>
+  <div class="event-grid">
+   <article class="event-card"><div>🌸</div><h3>North East Festival Escapes</h3><p>Seasonal Meghalaya, Sikkim and Arunachal departures.</p></article>
+   <article class="event-card"><div>🎄</div><h3>Christmas & New Year</h3><p>Popular hill stations and international celebrations.</p></article>
+   <article class="event-card"><div>🏎️</div><h3>Event Holidays</h3><p>Build a package around the event you want to attend.</p></article>
+  </div>
+ </div>
+</section>
+
+<section class="v17-cta">
+ <h2>🤖 Tell us your dream trip.</h2><p>Destination • Dates • Travellers • Budget — our team will plan the rest.</p>
+ <a href="#plan-trip">Plan My Trip →</a>
+</section>
+<script>
+function v17Search(e){
+ e.preventDefault();
+ const d=document.getElementById("v17Dest").value.trim(),m=document.getElementById("v17Month").value,t=document.getElementById("v17Type").value,b=document.getElementById("v17Budget").value;
+ const params=new URLSearchParams({destination:d,month:m,type:t,budget:b});
+ window.location.href="packages.html?"+params.toString();
+}
+</script>
+<!-- V17 END -->
+
 </body></html>
