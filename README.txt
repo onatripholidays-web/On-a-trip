@@ -1,18 +1,12 @@
-ON A TRIP HOLIDAYS V4
-Upload all files in this folder to the ROOT of the GitHub repository.
-Vercel will automatically redeploy after the GitHub commit.
+ON A TRIP HOLIDAYS V6
 
-Included:
-- Upgraded mobile-responsive homepage
-- 30 real package entries
-- Search/category filters
-- Batch dates + seat availability UI
-- Offers/pricing
-- On A Trip Temple
-- Blog/SEO pages
-- WhatsApp enquiry form
-- Admin CMS prototype at /admin.html
+This version fixes the broken/oversized logo and restores the missing style.css.
 
-IMPORTANT:
-The admin page is a front-end prototype using browser localStorage. It is NOT secure production authentication and is NOT a shared database.
-Production step: connect Supabase/PostgreSQL, secure admin login, real CRUD, media uploads, enquiry CRM and publish workflow.
+UPLOAD:
+1. Upload the CONTENTS of this folder to the ROOT of your GitHub repository.
+2. Make sure style.css is in the ROOT beside index.html.
+3. Make sure assets/logo.jpeg is inside assets/.
+4. Commit to main.
+5. Vercel will redeploy.
+
+Do not upload only the ZIP file.
