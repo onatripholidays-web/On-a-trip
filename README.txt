@@ -1,11 +1,14 @@
-ON A TRIP HOLIDAYS — V14
+ON A TRIP HOLIDAYS — CRM V1
 
-New collections:
-- Hot International Packages
-- Couple & Honeymoon Packages
-- Prominent Hyderabad and Vijayawada branch section
-- Brand positioning: Two Telugu States. One Trusted Travel Company.
-- International cards for Thailand, Bali, Dubai, Vietnam, Nepal, Singapore, Malaysia and Maldives
+Files:
+- crm.html — standalone sales CRM
+- admin.html — existing admin dashboard with Open CRM link
 
-No unverified prices or batch dates were invented. Prices/batches should be controlled from Admin.
-Deployment: extract and upload contents to GitHub repository root; Vercel redeploys automatically.
+CRM:
+New → Contacted → Qualified → Hot → Quote Sent → Follow-up → Booked → Lost
+Search/filter, branch/source filters, WhatsApp follow-up, lead details and CSV export.
+Branches: Hyderabad and Vijayawada.
+
+Important:
+This V1 is a front-end prototype. Data is held in the page JavaScript and is NOT shared across devices.
+Production next step: connect Supabase/Auth and website/Meta lead webhooks.
