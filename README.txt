@@ -14,3 +14,5 @@ Highlights:
 Deployment:
 Upload the extracted contents to the GitHub repository root and let Vercel redeploy.
 Do not upload the ZIP file itself.
+
+V10 image refresh: destination-specific hero/card images mapped to exact destinations. Verify image licensing before commercial production.
