@@ -1,0 +1,24 @@
+ON A TRIP HOLIDAYS — META LANDING PAGE V1
+
+Landing pages:
+- /lp/thailand.html
+- /lp/bali.html
+- /lp/dubai.html
+- /lp/vietnam.html
+- /lp/kashmir.html
+- /lp/spiti.html
+
+Recommended Meta flow:
+Ad -> exact destination LP -> Plan/Quote form -> WhatsApp -> CRM
+
+Before going live:
+1. Replace demo prices/dates/seats with actual current offers.
+2. Replace sample reviews with real customer/Google reviews.
+3. Add your official WhatsApp phone number in the page script.
+4. Add Meta Pixel base code + Lead event to each LP.
+5. Connect form submission to the CRM backend/webhook.
+6. Use UTM parameters on every Meta ad and store source/campaign in CRM.
+
+Suggested URL examples:
+https://YOURDOMAIN/lp/thailand.html?utm_source=meta&utm_medium=paid_social&utm_campaign=thailand
+https://YOURDOMAIN/lp/kashmir.html?utm_source=meta&utm_medium=paid_social&utm_campaign=kashmir
