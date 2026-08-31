@@ -247,3 +247,19 @@ footer a{display:block;margin:8px 0;font-size:14px}.copy{grid-column:1/-1;border
  .hot-card .visual{height:120px}
  .couple-grid{grid-template-columns:1fr}
 }
+
+/* ===== V15 HOMEPAGE REFRESH ===== */
+.v15-section{padding:58px 5%;background:#fff}.v15-wrap{max-width:1180px;margin:auto}
+.v15-eyebrow{color:#ee5a2a;font-size:12px;font-weight:950;letter-spacing:1px;text-transform:uppercase}
+.v15-title{font-size:clamp(30px,5vw,52px);line-height:1.02;margin:7px 0;color:#08233f;letter-spacing:-1px}
+.v15-sub{color:#6d7b85;margin:0 0 25px;font-size:16px}
+.v15-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+.v15-card{background:#fff;border:1px solid #dfe6ea;border-radius:18px;overflow:hidden;box-shadow:0 8px 25px #08233f0c}
+.v15-card-img{height:190px;background-size:cover;background-position:center;position:relative}
+.v15-card-badge{position:absolute;top:11px;left:11px;background:#ee5a2a;color:#fff;border-radius:9px;padding:6px 9px;font-size:10px;font-weight:950}
+.v15-card-body{padding:15px}.v15-card h3{margin:0 0 5px;font-size:19px;color:#08233f}.v15-card p{margin:0;color:#71808a;font-size:12px;line-height:1.45}
+.v15-card .v15-link{display:inline-block;margin-top:11px;color:#ee5a2a;font-size:12px;font-weight:950;text-decoration:none}
+.v15-trust{background:#08233f;color:#fff;padding:35px 5%}.v15-trust-grid{max-width:1180px;margin:auto;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:14px;align-items:center}.v15-trust h2{margin:0 0 6px;font-size:28px}.v15-trust p{margin:0;color:#c8d5df}.v15-branch{background:#fff;color:#08233f;border-radius:14px;padding:15px}.v15-branch b{display:block}.v15-branch small{color:#6d7b85}
+.v15-hot{background:#fff6f1}.v15-couple{background:#f4f8fa}.v15-weekend{background:#fff}.v15-temple{background:#faf7f2}
+@media(max-width:800px){.v15-grid{grid-template-columns:repeat(2,1fr)}.v15-trust-grid{grid-template-columns:1fr 1fr}.v15-trust-grid>div:first-child{grid-column:1/-1}}
+@media(max-width:520px){.v15-section{padding:45px 5%}.v15-grid{grid-template-columns:1fr 1fr;gap:10px}.v15-card-img{height:135px}.v15-card-body{padding:12px}.v15-card h3{font-size:16px}.v15-trust-grid{grid-template-columns:1fr}.v15-trust-grid>div:first-child{grid-column:auto}.v15-title{font-size:34px}}
