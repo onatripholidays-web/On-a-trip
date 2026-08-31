@@ -1,16 +1,18 @@
-ON A TRIP HOLIDAYS WEBSITE
-Files:
-index.html — Home
-packages.html — all packages
-pilgrimage.html — pilgrimage
-about.html — about
-contact.html — enquiry form
-package-char-dham.html
-package-kedarnath.html
-package-spiti.html
-package-thailand.html
-style.css — shared styling
+ON A TRIP HOLIDAYS V4
+Upload all files in this folder to the ROOT of the GitHub repository.
+Vercel will automatically redeploy after the GitHub commit.
 
-Upload all files preserving the same folder structure to your hosting public_html/root.
-Replace image URLs with your own licensed photos and replace/confirm package prices before publishing.
-WhatsApp number used: +91 91828 94146.
+Included:
+- Upgraded mobile-responsive homepage
+- 30 real package entries
+- Search/category filters
+- Batch dates + seat availability UI
+- Offers/pricing
+- On A Trip Temple
+- Blog/SEO pages
+- WhatsApp enquiry form
+- Admin CMS prototype at /admin.html
+
+IMPORTANT:
+The admin page is a front-end prototype using browser localStorage. It is NOT secure production authentication and is NOT a shared database.
+Production step: connect Supabase/PostgreSQL, secure admin login, real CRUD, media uploads, enquiry CRM and publish workflow.
