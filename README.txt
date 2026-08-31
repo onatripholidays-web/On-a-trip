@@ -1,18 +1,15 @@
-ON A TRIP HOLIDAYS — V9
-Conversion-focused mobile refresh.
+ON A TRIP HOLIDAYS — V12
+Inspired by the provided MoonTrip travel-agency-software sample.
 
-Highlights:
-- Larger, cleaner branded header
-- Mobile quick-destination chips
-- Mobile bottom navigation
-- Sticky WhatsApp availability CTA
-- Existing 30+ package pages retained
-- Existing admin, blog and pilgrimage pages retained
-- Responsive cards, batch listings and enquiry CTAs
-- Original On A Trip Holidays logo retained
+V12:
+- Travel Business OS-style admin dashboard
+- Quotes, bookings, payments, WhatsApp share and offer management entry points
+- Mobile-first admin layout
+- Exact destination visual mapping for Spiti, Ladakh, Char Dham and Kashmir
+- Existing package, blog, pilgrimage and admin pages retained
+
+Images:
+The four destination visuals currently use Wikimedia Commons redirect URLs. Check the individual file licenses/attribution before commercial production use.
 
 Deployment:
-Upload the extracted contents to the GitHub repository root and let Vercel redeploy.
-Do not upload the ZIP file itself.
-
-V10 image refresh: destination-specific hero/card images mapped to exact destinations. Verify image licensing before commercial production.
+Extract this ZIP and upload its contents to the GitHub repository root. Let Vercel redeploy.

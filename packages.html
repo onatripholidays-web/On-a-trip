@@ -7,4 +7,68 @@ function applyFilter(){const q=document.getElementById('q').value.toLowerCase(),
 <a href="pilgrimage.html">🛕<span>Temple</span></a>
 <a href="blogs.html">📖<span>Blog</span></a>
 <a href="contact.html">📲<span>Enquire</span></a>
-</nav></body></html>
+</nav>
+<section class="package-discovery">
+  <div class="wrap">
+    <h1 class="discovery-title">Where do you want to go?</h1>
+    <p class="discovery-sub">Choose your destination, travel style and next available batch.</p>
+
+    <div class="category-tabs">
+      <a class="active" href="packages.html">🌍 All</a>
+      <a href="packages.html?cat=pilgrimage">🛕 Pilgrimage</a>
+      <a href="packages.html?cat=india">🏔️ India</a>
+      <a href="packages.html?cat=international">✈️ International</a>
+      <a href="packages.html?cat=adventure">🥾 Adventure</a>
+    </div>
+
+    <div class="package-searchbar">
+      <input id="v11Search" type="search" placeholder="🔎 Search destination or package">
+      <select id="v11Style">
+        <option value="">Travel style</option>
+        <option>Pilgrimage</option>
+        <option>Adventure</option>
+        <option>Family</option>
+        <option>International</option>
+      </select>
+      <select id="v11Duration">
+        <option value="">Duration</option>
+        <option>1–5 Days</option>
+        <option>6–8 Days</option>
+        <option>9+ Days</option>
+      </select>
+      <button onclick="v11Filter()">Search Trips</button>
+    </div>
+
+    <div class="visual-destinations">
+      <a href="package-spiti.html" style="background-image:url('https://commons.wikimedia.org/wiki/Special:Redirect/file/Chicham%20Bridge%20in%20Spiti.jpg')"><span>🏔️ Spiti Valley<small>Chicham • Kaza • Tabo</small></span></a>
+      <a href="package-ladakh.html" style="background-image:url('https://commons.wikimedia.org/wiki/Special:Redirect/file:Pangong_tso.jpg')"><span>🏍️ Ladakh<small>Pangong • Nubra • Leh</small></span></a>
+      <a href="package-kashmir-deluxe.html" style="background-image:url('https://commons.wikimedia.org/wiki/Special:Redirect/file:DalLake.jpeg')"><span>🏞️ Kashmir<small>Srinagar • Gulmarg • Pahalgam</small></span></a>
+      <a href="package-char-dham.html" style="background-image:url('https://commons.wikimedia.org/wiki/Special:Redirect/file:Kedarnath_Temple_Uttarakhand_India.webp')"><span>🛕 Char Dham<small>Kedarnath • Badrinath</small></span></a>
+    </div>
+
+    <h2 class="discovery-title" style="font-size:32px">Popular packages</h2>
+    <div class="package-grid-v11">
+      <article class="package-card-v11" data-search="char dham kedarnath badrinath pilgrimage">
+        <div class="pic" style="background-image:url('https://commons.wikimedia.org/wiki/Special:Redirect/file:Kedarnath_Temple_Uttarakhand_India.webp')"><span class="tag">🔥 BESTSELLER</span></div>
+        <div class="body"><h3>Char Dham Yatra</h3><div class="meta">11 Days • Pilgrimage • Telugu support</div><div class="price">₹30,500 <span class="old">₹34,999</span></div><div class="batch">📅 Next batch • Limited seats</div><div class="actions"><a class="primary" href="package-char-dham.html">View Details</a><a class="secondary" href="https://wa.me/919182894146?text=Hi%20On%20A%20Trip%2C%20I%20want%20Char%20Dham%20details">WhatsApp</a></div></div>
+      </article>
+      <article class="package-card-v11" data-search="spiti valley kaza chicham adventure">
+        <div class="pic" style="background-image:url('https://commons.wikimedia.org/wiki/Special:Redirect/file/Chicham%20Bridge%20in%20Spiti.jpg')"><span class="tag">🏔️ ADVENTURE</span></div>
+        <div class="body"><h3>Spiti Valley Circuit</h3><div class="meta">9 Days • Adventure • 4×4 circuit</div><div class="price">₹29,999</div><div class="batch">📅 September departures • Ask seats</div><div class="actions"><a class="primary" href="package-spiti.html">View Details</a><a class="secondary" href="https://wa.me/919182894146?text=Hi%20On%20A%20Trip%2C%20I%20want%20Spiti%20details">WhatsApp</a></div></div>
+      </article>
+      <article class="package-card-v11" data-search="ladakh leh pangong nubra adventure">
+        <div class="pic" style="background-image:url('https://commons.wikimedia.org/wiki/Special:Redirect/file:Pangong_tso.jpg')"><span class="tag">🏍️ TOP TRIP</span></div>
+        <div class="body"><h3>Ladakh Adventure</h3><div class="meta">7 Days • Mountain adventure</div><div class="price">₹24,999</div><div class="batch">📅 Upcoming batches • Limited seats</div><div class="actions"><a class="primary" href="package-ladakh.html">View Details</a><a class="secondary" href="https://wa.me/919182894146?text=Hi%20On%20A%20Trip%2C%20I%20want%20Ladakh%20details">WhatsApp</a></div></div>
+      </article>
+    </div>
+  </div>
+</section>
+<script>
+function v11Filter(){
+ const q=(document.getElementById('v11Search')?.value||'').toLowerCase().trim();
+ document.querySelectorAll('.package-card-v11').forEach(c=>{
+   c.style.display=(!q || (c.dataset.search||'').includes(q))?'block':'none';
+ });
+}
+</script>
+</body></html>
