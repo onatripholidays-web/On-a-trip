@@ -1,12 +1,16 @@
-ON A TRIP HOLIDAYS V6
+ON A TRIP HOLIDAYS — V9
+Conversion-focused mobile refresh.
 
-This version fixes the broken/oversized logo and restores the missing style.css.
+Highlights:
+- Larger, cleaner branded header
+- Mobile quick-destination chips
+- Mobile bottom navigation
+- Sticky WhatsApp availability CTA
+- Existing 30+ package pages retained
+- Existing admin, blog and pilgrimage pages retained
+- Responsive cards, batch listings and enquiry CTAs
+- Original On A Trip Holidays logo retained
 
-UPLOAD:
-1. Upload the CONTENTS of this folder to the ROOT of your GitHub repository.
-2. Make sure style.css is in the ROOT beside index.html.
-3. Make sure assets/logo.jpeg is inside assets/.
-4. Commit to main.
-5. Vercel will redeploy.
-
-Do not upload only the ZIP file.
+Deployment:
+Upload the extracted contents to the GitHub repository root and let Vercel redeploy.
+Do not upload the ZIP file itself.
