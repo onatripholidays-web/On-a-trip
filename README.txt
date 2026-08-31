@@ -1,15 +1,11 @@
-ON A TRIP HOLIDAYS — V12
-Inspired by the provided MoonTrip travel-agency-software sample.
+ON A TRIP HOLIDAYS — V14
 
-V12:
-- Travel Business OS-style admin dashboard
-- Quotes, bookings, payments, WhatsApp share and offer management entry points
-- Mobile-first admin layout
-- Exact destination visual mapping for Spiti, Ladakh, Char Dham and Kashmir
-- Existing package, blog, pilgrimage and admin pages retained
+New collections:
+- Hot International Packages
+- Couple & Honeymoon Packages
+- Prominent Hyderabad and Vijayawada branch section
+- Brand positioning: Two Telugu States. One Trusted Travel Company.
+- International cards for Thailand, Bali, Dubai, Vietnam, Nepal, Singapore, Malaysia and Maldives
 
-Images:
-The four destination visuals currently use Wikimedia Commons redirect URLs. Check the individual file licenses/attribution before commercial production use.
-
-Deployment:
-Extract this ZIP and upload its contents to the GitHub repository root. Let Vercel redeploy.
+No unverified prices or batch dates were invented. Prices/batches should be controlled from Admin.
+Deployment: extract and upload contents to GitHub repository root; Vercel redeploys automatically.

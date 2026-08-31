@@ -200,3 +200,50 @@ footer a{display:block;margin:8px 0;font-size:14px}.copy{grid-column:1/-1;border
 .os-quick h3{margin:0 0 14px;color:#5b2b1e}.os-quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .os-quick a{background:#fff7f3;border:1px solid #f0d8cf;border-radius:12px;padding:13px;color:#6c382a;font-weight:800;text-decoration:none}
 @media(max-width:700px){.os-shell{padding:34px 5% 80px}.os-stats{grid-template-columns:repeat(2,1fr)}.os-actions{grid-template-columns:1fr 1fr}.os-quick-grid{grid-template-columns:1fr}.os-title{font-size:43px}}
+
+/* V13: North East + South India weekend collections */
+.v13-wrap{max-width:1180px;margin:auto}
+.v13-hero{padding:48px 5%;background:linear-gradient(135deg,#071d35,#123d58);color:#fff}
+.v13-hero h1{font-size:clamp(36px,6vw,62px);line-height:1;margin:8px 0 12px}
+.v13-hero p{max-width:780px;color:#d6e5ed;font-size:17px;line-height:1.55}
+.v13-tabs{display:flex;gap:10px;overflow:auto;padding:8px 0 18px}
+.v13-tabs button{flex:0 0 auto;border:1px solid #d9e2e7;background:#fff;border-radius:30px;padding:12px 18px;font-weight:900;color:#102b43}
+.v13-tabs button.active{background:#f05a28;color:#fff;border-color:#f05a28}
+.v13-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.v13-card{background:#fff;border:1px solid #dfe6ea;border-radius:18px;padding:18px;box-shadow:0 7px 22px #08223d0d}
+.v13-card .icon{font-size:32px}.v13-card h3{margin:8px 0 5px;color:#0b2134}.v13-card p{margin:0;color:#72808a;font-size:13px;line-height:1.5}.v13-card .duration{margin-top:13px;font-weight:900;color:#f05a28;font-size:13px}.v13-card a{display:block;margin-top:13px;background:#f05a28;color:#fff;text-align:center;padding:11px;border-radius:10px;font-weight:900}
+@media(max-width:700px){.v13-grid{grid-template-columns:1fr}.v13-card{padding:16px}.v13-hero{padding:38px 5%}.v13-hero h1{font-size:42px}}
+
+/* ===== V14 INTERNATIONAL + COUPLES + TELUGU STATES ===== */
+.branch-strip{background:#06213d;color:#fff;padding:24px 5%;text-align:center}
+.branch-strip .branch-wrap{max-width:1100px;margin:auto}
+.branch-strip h2{margin:0 0 6px;font-size:25px}
+.branch-strip p{margin:0 0 16px;color:#cbd8e3}
+.branch-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.branch-card{background:#fff;color:#09233b;border-radius:16px;padding:17px;text-align:left;border:1px solid #dce5eb}
+.branch-card b{font-size:18px}
+.branch-card span{display:block;color:#6c7a84;font-size:12px;margin-top:4px}
+.trust-line{margin-top:18px;font-size:14px;font-weight:900;letter-spacing:.2px}
+.hot-section{padding:50px 5%;background:#fff7f3}
+.hot-section .wrap{max-width:1180px;margin:auto}
+.hot-title{font-size:clamp(30px,5vw,48px);margin:0;color:#0b2134}
+.hot-sub{color:#687984;margin:8px 0 24px}
+.hot-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.hot-card{background:#fff;border:1px solid #eadfd9;border-radius:18px;overflow:hidden;box-shadow:0 8px 22px #54200f0d}
+.hot-card .visual{height:145px;background-size:cover;background-position:center;position:relative}
+.hot-badge{position:absolute;top:10px;left:10px;background:#f05a28;color:#fff;border-radius:9px;padding:6px 9px;font-size:10px;font-weight:950}
+.hot-card .copy{padding:14px}
+.hot-card h3{margin:0 0 4px;font-size:18px}
+.hot-card p{margin:0;color:#72808a;font-size:12px}
+.couple-section{padding:50px 5%;background:#f6f9fa}
+.couple-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.couple-card{background:#fff;border-radius:18px;padding:20px;border:1px solid #dde6ea}
+.couple-card h3{margin:0 0 6px;font-size:20px}
+.couple-card p{margin:0;color:#71808a;font-size:13px}
+.couple-card a{display:inline-block;margin-top:13px;color:#f05a28;font-weight:900;font-size:12px}
+@media(max-width:700px){
+ .branch-grid{grid-template-columns:1fr}
+ .hot-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+ .hot-card .visual{height:120px}
+ .couple-grid{grid-template-columns:1fr}
+}
