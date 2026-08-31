@@ -1,16 +1,197 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin CMS | On A Trip Holidays</title><meta name="description" content="On A Trip Holidays — Telugu travel specialists for pilgrimage, domestic, adventure and international tours."><link rel="stylesheet" href="style.css"></head><body><nav class="nav"><a class="brand" href="index.html"><img src="assets/logo.jpeg" alt="On A Trip Holidays"></a><div class="navlinks"><a href="packages.html">Packages</a><a href="pilgrimage.html">Pilgrimage</a><a href="packages.html#batches">Batches</a><a href="blogs.html">Blogs</a><a href="about.html">About</a><a href="contact.html">Contact</a></div><a class="wa" href="https://wa.me/919182894146?text=Hi%20On%20A%20Trip%20Holidays%2C%20I%20want%20a%20travel%20quote">WhatsApp Us</a></nav><div class="adminbar"><strong>ON A TRIP HOLIDAYS • ADMIN CMS</strong><div>Demo admin — data saved in this browser only</div></div>
-<section class="section"><div class="statgrid"><div class="stat"><small>Packages</small><b>30+</b></div><div class="stat"><small>Upcoming batches</small><b>12</b></div><div class="stat"><small>Enquiries</small><b id="leadCount">0</b></div><div class="stat"><small>Blogs</small><b>6</b></div></div></section>
-<section class="section" style="padding-top:0"><div class="panel"><h2>Admin modules</h2><div class="adminnav"><button class="active" onclick="show('overview',this)">Dashboard</button><button onclick="show('packages',this)">Packages</button><button onclick="show('batches',this)">Batches</button><button onclick="show('enquiries',this)">Enquiries</button><button onclick="show('blog',this)">Blog Writer</button><button onclick="show('seo',this)">SEO</button></div></div>
-<div id="overview" class="panel"><h3>Website status</h3><p>Customer website: <span class="pill">LIVE</span></p><p>WhatsApp lead forms: <span class="pill">CONNECTED</span></p><p>Package filters: <span class="pill">READY</span></p><p>Database: <span class="pill">NEXT — SUPABASE</span></p></div>
-<div id="packages" class="panel" style="display:none"><h3>Package Manager</h3><p>Add a package now as a browser demo. Production version will save to the database.</p><form onsubmit="addPackage(event)" class="form" style="box-shadow:none;padding:0"><input id="pn" required placeholder="Package name"><input id="pc" required placeholder="Category"><input id="pp" placeholder="Price"><button class="btn">Add Package</button></form><div id="newPackages"></div></div>
-<div id="batches" class="panel" style="display:none"><h3>Batch Manager</h3><table class="admin-table"><tr><th>Package</th><th>Date</th><th>Capacity</th><th>Seats</th><th>Price</th></tr>{''.join(f'<tr><td>{b[0]}</td><td>{b[1]}</td><td>{b[2]}</td><td>{b[3]}</td><td>{b[4]}</td></tr>' for b in batches)}</table></div>
-<div id="enquiries" class="panel" style="display:none"><h3>Enquiries</h3><p>WhatsApp forms can be connected to a database/CRM in the production phase. Local demo enquiries appear below.</p><table class="admin-table" id="leadTable"><tr><th>Name</th><th>Destination</th><th>Date</th><th>Travellers</th></tr></table></div>
-<div id="blog" class="panel" style="display:none"><h3>Blog Writer</h3><input id="blogTopic" placeholder="Blog topic" style="width:100%;padding:14px;border:1px solid #ddd;border-radius:10px"><br><br><button class="btn" onclick="draftBlog()">Generate Draft</button><div id="draft" class="form" style="margin-top:15px;display:none;box-shadow:none"></div></div>
-<div id="seo" class="panel" style="display:none"><h3>SEO checklist</h3><ul><li>Unique page title + meta description</li><li>Package destination keywords</li><li>Internal links from blog to packages</li><li>WhatsApp CTA on conversion pages</li><li>Next production step: sitemap + Search Console + schema markup</li></ul></div></section>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin Dashboard | On A Trip Holidays</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.admin-shell{max-width:1180px;margin:auto}
+.adminbar{position:sticky;top:0;z-index:60}
+.adminbar small{display:block;color:#b9c7d0;font-weight:500;margin-top:3px}
+.kpis{padding-top:28px;padding-bottom:20px}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}
+.quick button{border:1px solid var(--line);background:#fff;border-radius:14px;padding:17px;text-align:left;font-weight:900;cursor:pointer}
+.quick button span{display:block;color:var(--red);font-size:22px;margin-bottom:6px}
+.module{display:none}.module.active{display:block}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.searchbox{padding:12px;border:1px solid var(--line);border-radius:10px;min-width:240px}
+.notice{padding:12px 15px;border-radius:10px;background:#fff8e7;border:1px solid #f0d58a;color:#664d00;font-size:13px}
+.item-row{display:flex;justify-content:space-between;gap:12px;align-items:center;border:1px solid var(--line);padding:13px;border-radius:12px;margin-top:10px;background:#fff}
+.item-row small{color:var(--muted)}.danger{background:#fff0ee;color:#b3261e;border:1px solid #f1c5c0;padding:8px 11px;border-radius:8px;font-weight:800}
+.blog-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+textarea.writer{min-height:240px;width:100%;padding:14px;border:1px solid var(--line);border-radius:10px;line-height:1.55}
+@media(max-width:700px){.quick{grid-template-columns:1fr 1fr}.searchbox{width:100%;min-width:0}.item-row{align-items:flex-start}.adminbar{display:block}.adminnav{margin-top:10px}}
+</style>
+</head>
+<body>
+<nav class="nav">
+<a class="brand" href="index.html"><img src="assets/logo.jpeg" alt="On A Trip Holidays"></a>
+<div class="navlinks"><a href="packages.html">Packages</a><a href="pilgrimage.html">Pilgrimage</a><a href="blogs.html">Blogs</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+<a class="wa" href="https://wa.me/919182894146?text=Hi%20On%20A%20Trip%20Holidays">WhatsApp Us</a>
+</nav>
+
+<div class="adminbar">
+<div class="admin-shell"><strong>ON A TRIP HOLIDAYS • ADMIN DASHBOARD</strong>
+<small>Mobile-ready content manager • demo storage in this browser</small></div>
+</div>
+
+<main class="section admin-shell">
+<div class="statgrid">
+<div class="stat"><small>Packages</small><b id="packageCount">30+</b></div>
+<div class="stat"><small>Upcoming batches</small><b id="batchCount">0</b></div>
+<div class="stat"><small>Enquiries</small><b id="leadCount">0</b></div>
+<div class="stat"><small>Saved blogs</small><b id="blogCount">0</b></div>
+</div>
+
+<div class="quick">
+<button onclick="openModule('packages')"><span>🧳</span>Add / manage packages</button>
+<button onclick="openModule('batches')"><span>📅</span>Manage batch dates</button>
+<button onclick="openModule('enquiries')"><span>📲</span>View enquiries</button>
+<button onclick="openModule('blog')"><span>✍️</span>Write a blog</button>
+</div>
+
+<div class="panel" style="margin-top:22px">
+<div class="adminnav">
+<button class="active" onclick="openModule('overview',this)">Dashboard</button>
+<button onclick="openModule('packages',this)">Packages</button>
+<button onclick="openModule('batches',this)">Batches</button>
+<button onclick="openModule('enquiries',this)">Enquiries</button>
+<button onclick="openModule('blog',this)">Blog Writer</button>
+<button onclick="openModule('seo',this)">SEO</button>
+</div>
+</div>
+
+<section id="overview" class="panel module active">
+<h2>Website control centre</h2>
+<p>Use this page from your phone to prepare packages, batches, enquiries and blog content.</p>
+<div class="notice">⚠️ Current version stores changes in this browser only. The next production step is connecting Supabase so your whole team sees the same data securely.</div>
+<div class="why" style="margin-top:18px">
+<div><b>🔎 Package Search</b><p>Customer-facing destination and category filtering is ready.</p></div>
+<div><b>📅 Batch Management</b><p>Add dates, capacity, seats remaining and prices.</p></div>
+<div><b>📲 Lead Capture</b><p>WhatsApp enquiry flow is ready for customer conversations.</p></div>
+<div><b>✍️ Blog SEO</b><p>Create structured travel articles with titles and meta descriptions.</p></div>
+</div>
+</section>
+
+<section id="packages" class="panel module">
+<div class="toolbar"><div><h2>Package Manager</h2><p>Add packages for this browser demo.</p></div><input class="searchbox" id="packageSearch" placeholder="Search packages…" oninput="renderPackages()"></div>
+<form onsubmit="addPackage(event)" class="form" style="box-shadow:none;padding:0;margin:15px 0 0">
+<div class="formgrid">
+<input id="pn" required placeholder="Package name">
+<input id="pc" required placeholder="Category (Pilgrimage / Domestic / International)">
+<input id="pp" placeholder="Price e.g. ₹30,500">
+<input id="pd" placeholder="Duration e.g. 10N/11D">
+</div>
+<button class="btn">＋ Add Package</button>
+</form>
+<div id="packageList"></div>
+</section>
+
+<section id="batches" class="panel module">
+<h2>Batch Manager</h2>
+<form onsubmit="addBatch(event)" class="form" style="box-shadow:none;padding:0;margin:15px 0 0">
+<div class="formgrid">
+<input id="bn" required placeholder="Package name">
+<input id="bd" required type="date">
+<input id="bc" required type="number" min="1" placeholder="Capacity">
+<input id="bs" required type="number" min="0" placeholder="Seats available">
+<input id="bp" placeholder="Price">
+</div>
+<button class="btn">＋ Add Batch</button>
+</form>
+<div id="batchList"></div>
+</section>
+
+<section id="enquiries" class="panel module">
+<div class="toolbar"><div><h2>Enquiries</h2><p>Local demo enquiries saved by the website in this browser.</p></div><button class="danger" onclick="clearLeads()">Clear demo leads</button></div>
+<div style="overflow:auto"><table class="admin-table" id="leadTable"></table></div>
+</section>
+
+<section id="blog" class="panel module">
+<h2>Blog Writer</h2>
+<p>Draft a travel article, then save it in this browser for your team to review.</p>
+<input id="blogTopic" placeholder="Topic e.g. Best time to visit Spiti Valley" style="width:100%;padding:14px;border:1px solid #ddd;border-radius:10px">
+<div class="blog-actions"><button class="btn" onclick="draftBlog()">Generate Draft</button><button class="btn light" onclick="saveBlog()">Save Draft</button></div>
+<textarea id="draft" class="writer" style="margin-top:14px" placeholder="Your blog draft will appear here…"></textarea>
+<div id="savedBlogs"></div>
+</section>
+
+<section id="seo" class="panel module">
+<h2>SEO checklist</h2>
+<ul>
+<li>Unique title + meta description on every package page</li>
+<li>Use destination + duration + “from Hyderabad” naturally</li>
+<li>Link blogs to relevant package pages</li>
+<li>Add image alt text</li>
+<li>Create sitemap.xml and robots.txt</li>
+<li>Add TravelAgency / TouristTrip structured data</li>
+<li>Connect Google Search Console after the domain is live</li>
+</ul>
+</section>
+</main>
+
 <script>
-function show(id,btn){['overview','packages','batches','enquiries','blog','seo'].forEach(x=>document.getElementById(x).style.display=x===id?'block':'none');document.querySelectorAll('.adminnav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active')}
-function addPackage(e){e.preventDefault();let a=JSON.parse(localStorage.getItem('otpPackages')||'[]');a.push({name:pn.value,cat:pc.value,price:pp.value});localStorage.setItem('otpPackages',JSON.stringify(a));renderNew();e.target.reset()}
-function renderNew(){let a=JSON.parse(localStorage.getItem('otpPackages')||'[]');document.getElementById('newPackages').innerHTML=a.length?'<h4>Added in this browser</h4><ul>'+a.map(x=>`<li>${x.name} — ${x.cat} — ${x.price}</li>`).join('')+'</ul>':''}
-function draftBlog(){let t=document.getElementById('blogTopic').value||'Your next travel adventure';let d=document.getElementById('draft');d.style.display='block';d.innerHTML=`<h3>${t}</h3><p><b>SEO Title:</b> ${t} | On A Trip Holidays</p><p><b>Meta Description:</b> Plan ${t} with On A Trip Holidays. Explore routes, package options, travel tips and get a personalised quote.</p><h4>Draft</h4><p>Start planning with practical route information, the best time to travel, suggested stays, transport options, must-visit places and a simple enquiry call-to-action. Add verified package details before publishing.</p><p><b>CTA:</b> Get your personalised travel quote on WhatsApp.</p>`}
-renderNew()
-</script><footer><div><div class="footlogo"><img src="assets/logo.jpeg" alt="On A Trip Holidays"></div><p>Hyderabad-based Telugu travel specialists for pilgrimage, domestic, adventure and international holidays.</p></div><div><h4>Explore</h4><a href="packages.html">All Packages</a><a href="pilgrimage.html">Pilgrimage</a><a href="packages.html#batches">Batch Dates</a><a href="blogs.html">Travel Blog</a></div><div><h4>Popular</h4><a href="package-spiti.html">Spiti Valley</a><a href="package-char-dham.html">Char Dham</a><a href="package-kedarnath.html">Kedarnath</a><a href="package-thailand.html">Thailand</a></div><div><h4>Contact</h4><a href="tel:+919182894146">+91 91828 94146</a><a href="https://wa.me/919182894146">WhatsApp</a><a href="https://www.instagram.com/onatriphyd/">Instagram</a><a href="admin.html">Admin</a></div><div class="copy">© 2026 On A Trip Holidays. All rights reserved.</div></footer></body></html>
+const KEY={packages:'oat_packages_v7',batches:'oat_batches_v7',leads:'oat_leads',blogs:'oat_blogs_v7'};
+const get=(k,d=[])=>JSON.parse(localStorage.getItem(k)||JSON.stringify(d));
+const set=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+function openModule(id,btn){
+ document.querySelectorAll('.module').forEach(x=>x.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('.adminnav button').forEach(x=>x.classList.remove('active'));
+ if(btn) btn.classList.add('active');
+ renderAll();
+ window.scrollTo({top:document.getElementById(id).offsetTop-80,behavior:'smooth'});
+}
+function addPackage(e){
+ e.preventDefault();
+ const a=get(KEY.packages); a.push({id:Date.now(),name:pn.value,cat:pc.value,price:pp.value||'Quote',duration:pd.value||'Custom'});
+ set(KEY.packages,a); e.target.reset(); renderAll();
+}
+function removePackage(id){set(KEY.packages,get(KEY.packages).filter(x=>x.id!==id));renderAll()}
+function renderPackages(){
+ const q=(document.getElementById('packageSearch')?.value||'').toLowerCase();
+ const a=get(KEY.packages).filter(x=>(x.name+' '+x.cat).toLowerCase().includes(q));
+ packageList.innerHTML=a.length?a.map(x=>`<div class="item-row"><div><b>${esc(x.name)}</b><small>${esc(x.cat)} • ${esc(x.duration)} • ${esc(x.price)}</small></div><button class="danger" onclick="removePackage(${x.id})">Delete</button></div>`).join(''):'<p>No added packages yet.</p>';
+}
+function addBatch(e){
+ e.preventDefault();
+ const a=get(KEY.batches); a.push({id:Date.now(),name:bn.value,date:bd.value,capacity:+bc.value,seats:+bs.value,price:bp.value||'Quote'});
+ set(KEY.batches,a); e.target.reset(); renderAll();
+}
+function removeBatch(id){set(KEY.batches,get(KEY.batches).filter(x=>x.id!==id));renderAll()}
+function renderBatches(){
+ const a=get(KEY.batches);
+ batchList.innerHTML=a.length?a.map(x=>`<div class="item-row"><div><b>${esc(x.name)}</b><small>${esc(x.date)} • Capacity ${x.capacity} • ${x.seats} seats left • ${esc(x.price)}</small></div><button class="danger" onclick="removeBatch(${x.id})">Delete</button></div>`).join(''):'<p>No batches added yet.</p>';
+}
+function renderLeads(){
+ const a=get(KEY.leads);
+ leadCount.textContent=a.length;
+ leadTable.innerHTML='<tr><th>Name</th><th>Destination</th><th>Date</th><th>Travellers</th><th>Phone</th></tr>'+
+ (a.length?a.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.destination)}</td><td>${esc(x.date)}</td><td>${esc(x.travelers)}</td><td>${esc(x.phone)}</td></tr>`).join(''):'<tr><td colspan="5">No demo enquiries yet.</td></tr>');
+}
+function clearLeads(){if(confirm('Clear demo enquiries from this browser?')){localStorage.removeItem(KEY.leads);renderAll()}}
+function draftBlog(){
+ const t=blogTopic.value.trim()||'A Travel Guide';
+ draft.value=`${t}\n\nIntroduction\nPlanning your next journey from Hyderabad? Here is a practical guide to help you choose the right season, route, stay and experiences.\n\nBest time to travel\nChoose your travel month based on weather, road conditions and local festivals. Always check current conditions before departure.\n\nWhat to plan\n• Transport and pickup point\n• Hotel category and meal plan\n• Sightseeing and permits where required\n• Emergency/local support\n• Budget and travel insurance\n\nWhy travel with On A Trip Holidays?\nWe help Telugu-speaking travellers plan comfortable group and private journeys with trusted stays, transport and local assistance.\n\nReady to plan?\nContact On A Trip Holidays for a customised quote and current batch availability.`;
+}
+function saveBlog(){
+ const a=get(KEY.blogs); if(!draft.value.trim())return;
+ a.unshift({id:Date.now(),title:(blogTopic.value.trim()||'Travel Guide'),text:draft.value});
+ set(KEY.blogs,a); renderAll();
+}
+function renderBlogs(){
+ const a=get(KEY.blogs); blogCount.textContent=a.length;
+ savedBlogs.innerHTML=a.length?'<h3 style="margin-top:25px">Saved drafts</h3>'+a.map(x=>`<div class="item-row"><div><b>${esc(x.title)}</b><small>${esc(x.text).slice(0,180)}…</small></div></div>`).join(''):'';
+}
+function renderAll(){
+ packageCount.textContent=(30+get(KEY.packages).length)+'+';
+ batchCount.textContent=get(KEY.batches).length;
+ renderPackages();renderBatches();renderLeads();renderBlogs();
+}
+renderAll();
+</script>
+</body>
+</html>
