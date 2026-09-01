@@ -309,3 +309,49 @@ footer a{display:block;margin:8px 0;font-size:14px}.copy{grid-column:1/-1;border
 .v18-final{margin:55px auto 80px;max-width:1180px;border-radius:25px;background:linear-gradient(110deg,#092442,#165083);color:#fff;padding:43px 50px;display:flex;align-items:center;justify-content:space-between;gap:25px}.v18-final label{color:#ffab8f;font-size:11px;font-weight:900;letter-spacing:2px}.v18-final h2{font-family:Georgia,serif;font-size:39px;margin:8px 0}.v18-final p{color:#cbd9e4;margin:0}.v18-final a{background:#f05a28;color:#fff;padding:15px 22px;border-radius:9px;font-size:12px;font-weight:900;white-space:nowrap}.v18-wa{position:fixed;right:22px;bottom:25px;z-index:100}.v18-wa a{width:55px;height:55px;background:#1bbd62;color:#fff;border-radius:50%;display:grid;place-items:center;font-size:27px;box-shadow:0 8px 24px #0003}.v18-mobile{display:none}
 @media(max-width:1150px){.v18-links{gap:13px}.v18-links a{font-size:10px}.v18-logo{width:235px;flex-basis:235px}.v18-featurebar{grid-template-columns:repeat(3,1fr)}.v18-featurebar div:nth-child(3){border:0}.v18-featurebar div{margin:6px 0}.v18-destinations{grid-template-columns:repeat(3,1fr)}.v18-batch-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:800px){.v18-topbar{display:none}.v18-header{height:74px;padding:0 4%;gap:10px}.v18-logo{width:175px;flex-basis:175px}.v18-logo img{height:68px}.v18-links{display:none}.v18-plan{margin-left:auto;padding:11px 13px;font-size:11px}.v18-hero{min-height:690px}.v18-hero-bg{background:linear-gradient(180deg,#ffffffd9 0%,#ffffffb8 46%,#ffffff20 100%),url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=85') center/cover}.v18-hero-inner{display:block;padding:38px 6% 40px}.v18-hero-copy{max-width:none}.v18-hero h1{font-size:52px}.v18-hero p{font-size:14px}.v18-benefits{gap:12px}.v18-benefits span{font-size:18px}.v18-benefits b{font-size:11px}.v18-benefits small{font-size:8px}.v18-planner{margin-top:28px;padding:21px}.v18-planner h2{font-size:24px}.v18-float-tools{display:none}.v18-destinations{grid-template-columns:repeat(2,1fr);gap:10px;margin:-32px 4% 0;padding:0}.v18-dest{height:130px;padding:12px}.v18-dest b{font-size:14px}.v18-dest strong{font-size:9px}.v18-featurebar{grid-template-columns:repeat(2,1fr);margin:13px 4% 0;padding:10px}.v18-featurebar div{padding:8px 10px;border-bottom:1px solid #e5e9ed}.v18-featurebar div:nth-child(even){border-right:0}.v18-featurebar b{font-size:9px}.v18-featurebar small{font-size:8px}.v18-section,.v18-temple,.v18-travel-reels,.v18-reviews{padding:42px 5%}.v18-section-head{align-items:flex-start}.v18-section-head h2{font-size:27px}.v18-section-head>a{font-size:9px;padding:9px}.v18-batch-grid{grid-template-columns:1fr}.v18-batch-grid article{display:grid;grid-template-columns:42% 58%}.batch-img{height:100%}.batch-copy{padding:13px}.batch-copy h3{font-size:17px}.v18-temple{padding-left:5%;padding-right:5%}.v18-temple-grid{grid-template-columns:repeat(2,1fr)}.v18-temple-grid a{padding:15px;font-size:25px}.v18-temple-grid b{font-size:14px}.v18-reels{grid-template-columns:1fr}.reel-img{height:210px}.v18-confidence{padding:42px 5%}.v18-confidence-grid{grid-template-columns:repeat(2,1fr)}.v18-confidence-grid div{padding:16px;font-size:24px}.v18-confidence-grid b{font-size:14px}.v18-confidence-grid p{font-size:10px}.v18-reviews{padding-left:5%;padding-right:5%}.review-grid{grid-template-columns:1fr}.v18-final{margin:30px 5% 85px;padding:30px 25px;display:block}.v18-final h2{font-size:31px}.v18-final a{display:inline-block;margin-top:20px}.v18-mobile{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);left:9px;right:9px;bottom:9px;height:62px;background:#fff;border:1px solid #dfe6eb;border-radius:18px;z-index:99;box-shadow:0 10px 30px #0002}.v18-mobile a{text-align:center;color:#0b2340;font-size:19px;padding-top:7px;font-weight:900}.v18-mobile a.active{color:#f05a28}.v18-mobile small{display:block;font-size:8px;margin-top:2px}.v18-wa{right:18px;bottom:80px}.v18-wa a{width:49px;height:49px;font-size:24px}}
+
+/* V19 — Two Telugu States trust positioning */
+.v19-telugu-trust{margin:0 4.5%;padding:28px 34px;background:linear-gradient(120deg,#092442,#102f50);color:#fff;border-radius:0 0 24px 24px;box-shadow:0 10px 30px #09244218;position:relative;z-index:3}
+.v19-trust-inner{max-width:1240px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:30px}
+.v19-trust-copy>span{font-size:10px;font-weight:900;letter-spacing:1.7px;color:#f4c45e}
+.v19-trust-copy h2{font-size:30px;line-height:1.1;margin:8px 0 8px}.v19-trust-copy h2 em{color:#f05a28;font-style:normal}.v19-trust-copy p{margin:0;color:#cbd7df;font-size:13px;line-height:1.55;max-width:680px}
+.v19-branches{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;min-width:390px}.v19-branches div{border:1px solid #ffffff22;border-radius:14px;padding:13px 15px;background:#ffffff08}.v19-branches b{display:block;font-size:13px}.v19-branches small{display:block;color:#b8c7d0;font-size:9px;margin-top:4px;line-height:1.4}
+@media(max-width:800px){.v19-telugu-trust{margin:0 4%;padding:22px 18px;border-radius:0 0 18px 18px}.v19-trust-inner{display:block}.v19-trust-copy h2{font-size:24px}.v19-trust-copy p{font-size:11px}.v19-branches{min-width:0;margin-top:16px;grid-template-columns:1fr 1fr}.v19-branches div{padding:11px}.v19-branches b{font-size:11px}.v19-branches small{font-size:8px}}
+
+/* V20 MOBILE NAV GLITCH FIX */
+@media (max-width:800px){
+  .v18-mobile{
+    bottom:max(9px, env(safe-area-inset-bottom));
+    transition:transform .28s ease, opacity .28s ease;
+    will-change:transform;
+  }
+  .v18-mobile.nav-hidden{
+    transform:translateY(calc(100% + 18px));
+    opacity:.98;
+  }
+  .v18-wa{
+    bottom:max(82px, calc(env(safe-area-inset-bottom) + 73px));
+    transition:bottom .28s ease;
+  }
+  .v18-mobile.nav-hidden + .v18-wa{bottom:18px}
+  body{padding-bottom:90px}
+}
+
+/* V21: Travel without the stress — four-column benefit cards */
+.v18-confidence-grid{grid-template-columns:repeat(4,minmax(0,1fr));align-items:stretch}
+.v18-confidence-grid>div{min-width:0;min-height:155px;display:flex;flex-direction:column;justify-content:flex-start}
+.v18-confidence-grid .benefit-icon{font-size:30px;line-height:1;display:block;margin-bottom:6px}
+.v18-confidence-grid b{font-size:18px}
+.v18-confidence-grid p{font-size:14px}
+.v18-confidence{overflow:hidden}
+@media(max-width:900px){.v18-confidence-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){
+ .v18-confidence{padding:52px 5% 58px}
+ .v18-confidence .v18-section-head{margin-bottom:20px}
+ .v18-confidence-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .v18-confidence-grid>div{min-height:166px;padding:20px 18px}
+ .v18-confidence-grid b{font-size:16px;line-height:1.25}
+ .v18-confidence-grid p{font-size:13px;line-height:1.5}
+ .v18-confidence-grid .benefit-icon{font-size:27px}
+ .v18-reviews{padding-bottom:130px}
+}
