@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>On A Trip Holidays — V18</title>
+<meta name="description" content="On A Trip Holidays — curated holidays, yatras and adventures.">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f7f8fa;color:#142033}
+:root{--orange:#ff6a00;--navy:#102033;--muted:#6d7785;--card:#fff}
+a{text-decoration:none;color:inherit}.app{max-width:1180px;margin:auto;background:#fff;min-height:100vh}
+header{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid #eee;position:sticky;top:0;background:#fff;z-index:10}
+.logo{font-weight:900;font-size:22px;letter-spacing:-1px}.logo span{color:var(--orange)}
+.whatsapp{background:#eaf9ef;color:#15803d;border:0;border-radius:24px;padding:11px 16px;font-weight:800}
+.hero{margin:18px;border-radius:28px;min-height:430px;padding:42px 34px;display:flex;align-items:flex-end;position:relative;overflow:hidden;background:linear-gradient(120deg,#19334a,#426b83 55%,#d58d55)}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(8,18,30,.8),rgba(8,18,30,.08))}
+.hero-content{position:relative;z-index:1;color:white;max-width:650px}.eyebrow{font-size:12px;font-weight:900;letter-spacing:1.8px;text-transform:uppercase;opacity:.9}
+h1{font-size:clamp(42px,7vw,74px);line-height:.95;margin:12px 0}.hero p{font-size:17px;line-height:1.55;max-width:570px;color:#eef3f7}
+.buttons{display:flex;gap:10px;flex-wrap:wrap}.btn{padding:14px 20px;border-radius:14px;font-weight:900;border:1px solid transparent}.primary{background:var(--orange);color:white}.secondary{background:white;color:var(--navy)}
+.search{margin:-38px 28px 0;position:relative;z-index:3;background:#fff;border-radius:20px;box-shadow:0 14px 40px #1420331a;padding:14px;display:flex;gap:10px;align-items:center}.search input{border:0;outline:0;font-size:16px;flex:1;padding:10px}.search button{background:var(--orange);color:white;border:0;border-radius:14px;padding:13px 20px;font-weight:900}
+section{padding:34px 28px}.section-head{display:flex;align-items:end;justify-content:space-between;margin-bottom:18px}.section-head h2{margin:0;font-size:28px}.section-head a{color:var(--orange);font-weight:800}
+.categories{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}.cat{padding:18px 10px;border:1px solid #edf0f3;border-radius:18px;text-align:center;font-weight:800;background:#fff}.cat b{display:block;font-size:25px;margin-bottom:8px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.trip{border-radius:20px;overflow:hidden;background:white;border:1px solid #edf0f3;box-shadow:0 5px 20px #1420330b}.photo{height:190px;background:linear-gradient(135deg,#274e63,#d89b68);position:relative}.badge{position:absolute;top:12px;left:12px;background:#fff;padding:7px 10px;border-radius:20px;font-size:11px;font-weight:900}.trip-body{padding:15px}.trip h3{margin:0 0 7px}.trip p{margin:0;color:var(--muted);font-size:13px}.price{margin-top:13px;font-weight:900}.price span{font-size:12px;color:var(--muted);font-weight:500}
+.temple{border-radius:25px;background:var(--navy);color:white;padding:28px;display:flex;justify-content:space-between;gap:20px;align-items:center}.temple p{color:#cdd7e0}.temple .btn{display:inline-block;white-space:nowrap}
+.reels{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.reel{height:280px;border-radius:20px;background:linear-gradient(160deg,#344e61,#c77b47);color:#fff;padding:18px;display:flex;align-items:end;font-weight:900}
+.offer{border-radius:24px;background:#fff1e7;padding:28px;display:flex;justify-content:space-between;align-items:center;gap:20px}.offer h2{margin:0 0 8px}.offer p{margin:0;color:#6d5140}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat{padding:20px;border-radius:18px;background:#f7f8fa}.stat strong{font-size:28px;display:block}.stat small{color:var(--muted)}
+.reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.review{padding:20px;border:1px solid #edf0f3;border-radius:18px}.stars{color:#f59e0b;letter-spacing:2px}.review p{line-height:1.5;color:#566170}
+footer{padding:35px 28px 100px;background:#f7f8fa;color:#5d6774}.float{position:fixed;right:20px;bottom:80px;background:var(--orange);color:#fff;border:0;border-radius:28px;padding:14px 18px;font-weight:900;box-shadow:0 10px 25px #ff6a0040;z-index:20}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);max-width:1180px;width:100%;height:64px;background:#fff;border-top:1px solid #eee;display:flex;justify-content:space-around;align-items:center;z-index:15}.bottom a{font-size:12px;font-weight:800;color:#6d7785}.bottom a:first-child{color:var(--orange)}
+@media(max-width:800px){.app{width:100%}.categories{grid-template-columns:repeat(3,1fr)}.cards{grid-template-columns:repeat(2,1fr)}.reels{grid-template-columns:repeat(2,1fr)}.reviews{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.temple,.offer{flex-direction:column;align-items:flex-start}.hero{min-height:470px;margin:12px;border-radius:24px;padding:30px 22px}.search{margin:-30px 16px 0}.search button{padding:13px}.search input{min-width:0}section{padding:28px 16px}}
+@media(max-width:480px){header{padding:0 16px}.logo{font-size:19px}.categories{grid-template-columns:repeat(3,1fr);gap:8px}.cat{font-size:12px;padding:14px 5px}.cat b{font-size:22px}.cards{grid-template-columns:1fr 1fr;gap:10px}.photo{height:145px}.trip-body{padding:12px}.trip h3{font-size:16px}.reels{grid-template-columns:repeat(2,1fr)}.reel{height:220px}.hero h1{font-size:46px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="logo">ON A <span>TRIP</span> HOLIDAYS</div><button class="whatsapp">WhatsApp Us</button></header>
+
+<div class="hero">
+<div class="hero-content">
+<div class="eyebrow">Telugu travel specialists • Hyderabad</div>
+<h1>Travel more.<br>Live more.</h1>
+<p>Curated holidays, spiritual yatras and unforgettable adventures — planned with trusted stays, transport and local support.</p>
+<div class="buttons"><a class="btn primary" href="#trips">Explore Packages</a><a class="btn secondary" href="#enquire">Plan My Trip</a></div>
+</div></div>
+
+<div class="search"><span>🔎</span><input placeholder="Where do you want to go?"><button>Search</button></div>
+
+<section><div class="section-head"><h2>Explore by travel style</h2></div>
+<div class="categories">
+<div class="cat"><b>🛕</b>Yatra</div><div class="cat"><b>🏔️</b>Adventure</div><div class="cat"><b>💕</b>Honeymoon</div><div class="cat"><b>👨‍👩‍👧</b>Family</div><div class="cat"><b>🌴</b>Weekend</div><div class="cat"><b>✈️</b>International</div>
+</div></section>
+
+<section id="trips"><div class="section-head"><h2>Trending trips</h2><a href="#">View all →</a></div>
+<div class="cards">
+<article class="trip"><div class="photo"><span class="badge">BEST SELLER</span></div><div class="trip-body"><h3>Spiti Valley</h3><p>Shimla • Kaza • Chitkul</p><div class="price">₹24,999 <span>/ person</span></div></div></article>
+<article class="trip"><div class="photo"><span class="badge">ADVENTURE</span></div><div class="trip-body"><h3>Ladakh</h3><p>Leh • Nubra • Pangong</p><div class="price">₹29,999 <span>/ person</span></div></div></article>
+<article class="trip"><div class="photo"><span class="badge">POPULAR</span></div><div class="trip-body"><h3>Kashmir</h3><p>Srinagar • Gulmarg • Pahalgam</p><div class="price">₹19,499 <span>/ person</span></div></div></article>
+<article class="trip"><div class="photo"><span class="badge">INTERNATIONAL</span></div><div class="trip-body"><h3>Thailand</h3><p>Bangkok • Pattaya • Phuket</p><div class="price">₹32,999 <span>/ person</span></div></div></article>
+</div></section>
+
+<section><div class="temple"><div><div class="eyebrow">ON A TRIP TEMPLE</div><h2>Divine journeys. Seamlessly planned.</h2><p>Char Dham • Kedarnath • Badrinath • Vaishno Devi • Amarnath</p></div><a class="btn primary" href="#">Explore Yatra</a></div></section>
+
+<section><div class="section-head"><h2>🎥 Travel Reels</h2><a href="#">See more →</a></div><div class="reels"><div class="reel">Spiti in 30 seconds →</div><div class="reel">Ladakh road trip →</div><div class="reel">Kashmir moments →</div><div class="reel">Thailand vibes →</div></div></section>
+
+<section><div class="section-head"><h2>▶️ YouTube Shorts</h2><a href="#">Watch channel →</a></div><div class="reels"><div class="reel">5 places in Spiti</div><div class="reel">Kedarnath tips</div><div class="reel">Ladakh checklist</div><div class="reel">Thailand guide</div></div></section>
+
+<section><div class="offer"><div><div class="eyebrow">LIMITED-TIME OFFER</div><h2>Travel now. Save more.</h2><p>Unlock special pricing on selected upcoming batches.</p></div><a class="btn primary" href="#enquire">Check Offers</a></div></section>
+
+<section><div class="section-head"><h2>Why On A Trip?</h2></div><div class="stats">
+<div class="stat"><strong>10+</strong><small>Years travel expertise</small></div><div class="stat"><strong>50K+</strong><small>Happy travellers</small></div><div class="stat"><strong>100+</strong><small>Destinations</small></div><div class="stat"><strong>24/7</strong><small>Travel support</small></div>
+</div></section>
+
+<section><div class="section-head"><h2>What travellers say</h2><a href="#">All reviews →</a></div><div class="reviews">
+<div class="review"><div class="stars">★★★★★</div><p>“Excellent coordination from pickup to drop. The entire trip was comfortable and well organised.”</p><b>— Traveller</b></div>
+<div class="review"><div class="stars">★★★★★</div><p>“Very helpful team and smooth arrangements. Would definitely travel with On A Trip again.”</p><b>— Traveller</b></div>
+<div class="review"><div class="stars">★★★★★</div><p>“Good hotels, vehicle and support throughout the journey. Highly recommended.”</p><b>— Traveller</b></div>
+</div></section>
+
+<section id="enquire"><div class="temple"><div><h2>Your next trip starts here.</h2><p>Tell us where you want to go. We'll plan the rest.</p></div><a class="btn primary" href="#">Plan My Trip →</a></div></section>
+<footer><b>ON A TRIP HOLIDAYS</b><br><br>Curated holidays, yatras & adventures.<br><br>© 2026 On A Trip Holidays. All rights reserved.</footer>
+</div>
+<button class="float">Check Availability</button>
+<nav class="bottom"><a href="#">⌂<br>Home</a><a href="#trips">◉<br>Trips</a><a href="#">🛕<br>Temple</a><a href="#">▶<br>Reels</a><a href="#enquire">✦<br>Enquire</a></nav>
+</body>
+</html>
