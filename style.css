@@ -417,3 +417,13 @@ footer a{display:block;margin:8px 0;font-size:14px}.copy{grid-column:1/-1;border
 .hero-visual-refresh .hero-inner{position:relative;z-index:2;}
 .visual-refresh-badge{display:inline-flex;align-items:center;gap:7px;margin-bottom:10px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.24);backdrop-filter:blur(8px);font-size:11px;font-weight:800;letter-spacing:.12em;color:#fff;}
 @media(max-width:600px){.hero-visual-refresh{min-height:390px!important;background-position:center!important}.visual-refresh-badge{font-size:10px;padding:5px 8px}.hero-visual-refresh:after{background:linear-gradient(180deg,rgba(7,26,46,.64),rgba(7,26,46,.46));}}
+
+/* V36 destination video section */
+.destination-videos{margin:28px 0;padding:26px;border-radius:24px;background:linear-gradient(135deg,#f7fbff,#fff);border:1px solid rgba(16,45,72,.10)}
+.destination-videos .video-head{display:flex;justify-content:space-between;gap:18px;align-items:end;margin-bottom:18px;flex-wrap:wrap}
+.destination-videos h2{margin:0;font-size:1.45rem;color:#102d48}.destination-videos p{margin:6px 0 0;color:#64748b}
+.destination-video-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.destination-video-card{position:relative;min-height:170px;padding:20px;border-radius:20px;overflow:hidden;background:linear-gradient(135deg,#0f2d48,#1c5675);color:#fff;display:flex;flex-direction:column;justify-content:flex-end;text-decoration:none;box-shadow:0 10px 28px rgba(16,45,72,.12)}
+.destination-video-card:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.22),transparent 35%),linear-gradient(180deg,transparent 25%,rgba(0,0,0,.62));}
+.destination-video-card>*{position:relative;z-index:1}.video-play{width:44px;height:44px;border-radius:50%;background:#fff;color:#102d48;display:grid;place-items:center;font-size:19px;margin-bottom:auto}.video-tag{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;opacity:.78}.destination-video-card h3{margin:5px 0 0;font-size:1.05rem}.destination-video-card span{font-size:.78rem;opacity:.9;margin-top:5px}
+@media(max-width:800px){.destination-video-grid{grid-template-columns:1fr}.destination-video-card{min-height:150px}}
