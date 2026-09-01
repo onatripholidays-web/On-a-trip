@@ -427,3 +427,25 @@ footer a{display:block;margin:8px 0;font-size:14px}.copy{grid-column:1/-1;border
 .destination-video-card:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.22),transparent 35%),linear-gradient(180deg,transparent 25%,rgba(0,0,0,.62));}
 .destination-video-card>*{position:relative;z-index:1}.video-play{width:44px;height:44px;border-radius:50%;background:#fff;color:#102d48;display:grid;place-items:center;font-size:19px;margin-bottom:auto}.video-tag{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;opacity:.78}.destination-video-card h3{margin:5px 0 0;font-size:1.05rem}.destination-video-card span{font-size:.78rem;opacity:.9;margin-top:5px}
 @media(max-width:800px){.destination-video-grid{grid-template-columns:1fr}.destination-video-card{min-height:150px}}
+
+/* Itinerary lead-capture download */
+.oat-itinerary-download-wrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:18px 0 6px}
+.oat-download-btn{appearance:none;border:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:13px 19px;border-radius:12px;background:#e85c35;color:#fff;font-weight:900;font-size:14px;box-shadow:0 8px 22px rgba(232,92,53,.18);transition:transform .15s,box-shadow .15s}
+.oat-download-btn:hover{transform:translateY(-1px);box-shadow:0 11px 26px rgba(232,92,53,.24)}
+.oat-download-note{font-size:12px;color:#72808c;font-weight:700}
+.oat-modal-backdrop{position:fixed;inset:0;background:rgba(10,24,38,.62);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:18px;z-index:9999}
+.oat-modal-backdrop.open{display:flex}
+.oat-modal{width:min(440px,100%);background:#fff;border-radius:24px;padding:26px;box-shadow:0 30px 80px rgba(0,0,0,.25);position:relative}
+.oat-modal-close{position:absolute;right:15px;top:12px;border:0;background:#f3f5f6;width:34px;height:34px;border-radius:50%;font-size:20px;cursor:pointer;color:#50606c}
+.oat-modal-kicker{font-size:11px;letter-spacing:.14em;font-weight:900;color:#e85c35;text-transform:uppercase}
+.oat-modal h3{font-size:25px;line-height:1.15;margin:7px 35px 7px 0;color:#14283d}
+.oat-modal p{color:#667580;font-size:13px;line-height:1.5;margin:0 0 18px}
+.oat-field{margin:12px 0}
+.oat-field label{display:block;font-size:12px;font-weight:900;color:#243b50;margin-bottom:6px}
+.oat-field input{width:100%;box-sizing:border-box;padding:13px 14px;border:1px solid #d8e0e6;border-radius:11px;font-size:15px;outline:none}
+.oat-field input:focus{border-color:#e85c35;box-shadow:0 0 0 3px rgba(232,92,53,.1)}
+.oat-submit{width:100%;border:0;border-radius:12px;background:#14283d;color:#fff;padding:14px;font-size:15px;font-weight:900;cursor:pointer;margin-top:5px}
+.oat-submit:disabled{opacity:.65;cursor:wait}
+.oat-privacy{font-size:10px!important;color:#8a969e!important;margin:12px 0 0!important}
+.oat-error{display:none;background:#fff0ee;border:1px solid #f0c8bf;color:#b33b23;padding:9px 11px;border-radius:9px;font-size:12px;font-weight:800;margin:8px 0}
+@media(max-width:600px){.oat-download-btn{width:100%}.oat-download-note{width:100%}}

@@ -37,4 +37,88 @@
   </div>
 </section>
 
-<footer><div><div class="footlogo"><img alt="On A Trip Holidays" src="assets/logo.png"/></div><p>Trusted travel company for Telangana &amp; Andhra Pradesh — Telugu-first support for pilgrimage, domestic, adventure and international holidays.</p></div><div><h4>Explore</h4><a href="packages.html">All Packages</a><a href="pilgrimage.html">Pilgrimage</a><a href="packages.html#batches">Batch Dates</a><a href="blogs.html">Travel Blog</a></div><div><h4>Popular</h4><a href="package-spiti.html">Spiti Valley</a><a href="package-char-dham.html">Char Dham</a><a href="package-kedarnath.html">Kedarnath</a><a href="package-thailand.html">Thailand</a></div><div><h4>Contact</h4><a href="tel:+919182894146">+91 91828 94146</a><a href="https://wa.me/919182894146">WhatsApp</a><a href="https://www.instagram.com/onatriphyd/">Instagram</a><a href="admin.html">Admin</a></div><div class="copy">© 2026 On A Trip Holidays. All rights reserved.</div></footer></body></html>
+<footer><div><div class="footlogo"><img alt="On A Trip Holidays" src="assets/logo.png"/></div><p>Trusted travel company for Telangana &amp; Andhra Pradesh — Telugu-first support for pilgrimage, domestic, adventure and international holidays.</p></div><div><h4>Explore</h4><a href="packages.html">All Packages</a><a href="pilgrimage.html">Pilgrimage</a><a href="packages.html#batches">Batch Dates</a><a href="blogs.html">Travel Blog</a></div><div><h4>Popular</h4><a href="package-spiti.html">Spiti Valley</a><a href="package-char-dham.html">Char Dham</a><a href="package-kedarnath.html">Kedarnath</a><a href="package-thailand.html">Thailand</a></div><div><h4>Contact</h4><a href="tel:+919182894146">+91 91828 94146</a><a href="https://wa.me/919182894146">WhatsApp</a><a href="https://www.instagram.com/onatriphyd/">Instagram</a><a href="admin.html">Admin</a></div><div class="copy">© 2026 On A Trip Holidays. All rights reserved.</div></footer>
+<script>
+(function(){
+  const PACKAGE_FILE = location.pathname.split('/').pop() || '';
+  const PACKAGE_NAME = (document.querySelector('.hero h1, .hero-visual-refresh h1, h1')?.textContent || document.title)
+    .replace(/\s+/g,' ').trim();
+  const PDF_URL = 'itineraries/' + PACKAGE_FILE.replace(/^package-/,'package-').replace(/\.html$/i,'.pdf');
+  const LEAD_KEY = 'oat_itinerary_leads_v1';
+
+  function addDownloadButtons(){
+    const block=document.getElementById('v29-itinerary');
+    if(!block || block.dataset.oatEnhanced) return;
+    block.dataset.oatEnhanced='1';
+    const heading=block.querySelector('.v29-heading');
+    if(heading){
+      const wrap=document.createElement('div');
+      wrap.className='oat-itinerary-download-wrap';
+      wrap.innerHTML='<button type="button" class="oat-download-btn" data-oat-download>📥 Download Itinerary</button><span class="oat-download-note">Free PDF • Mobile number required</span>';
+      heading.appendChild(wrap);
+    }
+    const cta=document.createElement('div');
+    cta.className='oat-itinerary-download-wrap';
+    cta.style.marginTop='22px';
+    cta.innerHTML='<button type="button" class="oat-download-btn" data-oat-download>📥 Download Full Itinerary PDF</button>';
+    block.appendChild(cta);
+  }
+
+  function addModal(){
+    if(document.getElementById('oatItineraryModal')) return;
+    const el=document.createElement('div');
+    el.id='oatItineraryModal';
+    el.className='oat-modal-backdrop';
+    el.innerHTML=`
+      <div class="oat-modal" role="dialog" aria-modal="true" aria-labelledby="oatModalTitle">
+        <button class="oat-modal-close" type="button" aria-label="Close" data-oat-close>×</button>
+        <div class="oat-modal-kicker">ON A TRIP HOLIDAYS</div>
+        <h3 id="oatModalTitle">Get Your Free Itinerary</h3>
+        <p>Enter your details to download the complete <strong>${escapeHtml(PACKAGE_NAME)}</strong> itinerary PDF.</p>
+        <form id="oatItineraryForm">
+          <div class="oat-field"><label for="oatName">Name *</label><input id="oatName" name="name" autocomplete="name" required maxlength="80" placeholder="Your name"></div>
+          <div class="oat-field"><label for="oatMobile">Mobile Number *</label><input id="oatMobile" name="mobile" type="tel" inputmode="numeric" autocomplete="tel" required maxlength="10" placeholder="10-digit mobile number"></div>
+          <div class="oat-field"><label for="oatEmail">Email (optional)</label><input id="oatEmail" name="email" type="email" autocomplete="email" maxlength="120" placeholder="you@example.com"></div>
+          <div class="oat-error" id="oatError"></div>
+          <button class="oat-submit" id="oatSubmit" type="submit">Continue & Download PDF</button>
+          <p class="oat-privacy">Your details are used by On A Trip Holidays to follow up on your travel enquiry. Please avoid entering sensitive personal information.</p>
+        </form>
+      </div>`;
+    document.body.appendChild(el);
+    el.addEventListener('click',e=>{if(e.target===el || e.target.closest('[data-oat-close]')) closeModal();});
+    document.getElementById('oatItineraryForm').addEventListener('submit',submitLead);
+  }
+  function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+  function openModal(){document.getElementById('oatItineraryModal').classList.add('open');document.getElementById('oatName').focus();}
+  function closeModal(){document.getElementById('oatItineraryModal').classList.remove('open');}
+  function saveLead(data){
+    let leads=[]; try{leads=JSON.parse(localStorage.getItem(LEAD_KEY)||'[]')}catch(e){}
+    leads.unshift(data); localStorage.setItem(LEAD_KEY,JSON.stringify(leads));
+    // Keep the existing admin enquiry module in sync.
+    try{
+      let existing=JSON.parse(localStorage.getItem('oat_leads')||'[]');
+      existing.unshift({name:data.name,phone:data.mobile,email:data.email||'',message:'Itinerary download: '+data.package,source:'Itinerary Download',date:new Date().toISOString()});
+      localStorage.setItem('oat_leads',JSON.stringify(existing));
+    }catch(e){}
+  }
+  function submitLead(e){
+    e.preventDefault();
+    const form=e.currentTarget, btn=document.getElementById('oatSubmit'), err=document.getElementById('oatError');
+    const name=form.name.value.trim(), mobile=form.mobile.value.replace(/\D/g,''), email=form.email.value.trim();
+    err.style.display='none';
+    if(name.length<2){err.textContent='Please enter your name.';err.style.display='block';return;}
+    if(!/^[6-9]\d{9}$/.test(mobile)){err.textContent='Please enter a valid 10-digit Indian mobile number.';err.style.display='block';return;}
+    if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent='Please enter a valid email address.';err.style.display='block';return;}
+    btn.disabled=true; btn.textContent='Saving details…';
+    saveLead({id:'ITN-'+Date.now(),name,mobile,email,package:PACKAGE_NAME,page:PACKAGE_FILE,source:'Itinerary Download',timestamp:new Date().toISOString()});
+    btn.textContent='Preparing PDF…';
+    setTimeout(()=>{ closeModal(); btn.disabled=false; btn.textContent='Continue & Download PDF'; form.reset(); const a=document.createElement('a'); a.href=PDF_URL; a.download=PDF_URL.split('/').pop(); document.body.appendChild(a); a.click(); a.remove(); },250);
+  }
+  document.addEventListener('click',e=>{if(e.target.closest('[data-oat-download]')) openModal();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape') closeModal();});
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>{addDownloadButtons();addModal();});
+  else {addDownloadButtons();addModal();}
+})();
+</script>
+
+</body></html>
