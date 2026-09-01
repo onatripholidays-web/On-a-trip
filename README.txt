@@ -1,11 +1,5 @@
-ON A TRIP HOLIDAYS — V17
-Homepage marketplace upgrade inspired by modern group-tour sites, without copying their design.
-Added:
-- Trip search bar: destination, month, travel style, budget
-- Travel-style discovery
-- Upcoming fixed departures with seat visibility
-- Events & festival trips
-- Strong Plan My Trip CTA
-- Existing V16 reviews, reels, interactive itinerary, trust section and smart enquiry retained
+On A Trip Holidays V18
 
-Replace the website files with the extracted project and deploy through Vercel.
+V18 homepage refresh based on the supplied mobile reference: hero, trust strip, search, travel-style categories, popular package cards, early-booking offer, stats, floating availability CTA and mobile bottom navigation.
+
+Open index.html in a browser. Existing package, blog, temple, CRM and admin pages are retained from V17.

@@ -1,273 +1,67 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>On A Trip Holidays | Telugu Travel Specialists</title><meta name="description" content="Group tours, pilgrimage yatras, domestic adventures and international holidays from Hyderabad with Telugu support."><link rel="stylesheet" href="style.css"></head><body>
-<nav class="nav"><a class="brand" href="index.html"><img src="assets/logo.jpeg" alt="On A Trip Holidays"></a><div class="navlinks"><a href="packages.html">Trips</a><a href="pilgrimage.html">On A Trip Temple</a><a href="packages.html#batches">Upcoming</a><a href="blogs.html">Travel Blog</a><a href="about.html">About</a></div><a class="wa" href="https://wa.me/919182894146?text=Hi%20On%20A%20Trip%20Holidays%2C%20I%20want%20to%20plan%20a%20trip">WhatsApp Us</a></nav>
-<section class="sale"><b>🔥 SEPTEMBER TRAVEL OFFERS</b><span>Limited seats • Ask for current batch pricing</span><a href="contact.html">Check offers →</a></section>
-<header class="hero hero-v8"><div class="hero-inner"><div class="eyebrow">Telugu travel specialists • Hyderabad</div><h1>Your next trip<br>starts here.</h1><p>Group tours, temple yatras, adventure circuits and international holidays — planned with Telugu-friendly support.</p><div class="hero-search"><div>🔎 <input id="tripSearch" placeholder="Search your destination…" oninput="filterQuick()"></div><button onclick="quickSearch()">Search Trips</button></div><div class="actions"><a class="btn" href="packages.html">Explore all trips</a><a class="btn light" href="contact.html">Plan a custom trip</a></div><div class="quickchips"><a href="package-spiti.html">🏔️ Spiti</a><a href="package-ladakh.html">🏍️ Ladakh</a><a href="package-char-dham.html">🛕 Char Dham</a><a href="package-thailand.html">✈️ Thailand</a><a href="package-kashmir.html">🏞️ Kashmir</a></div></div></header>
-<section class="trust v8trust"><div><b>10+ Years</b><span>Travel expertise</span></div><div><b>Telugu Support</b><span>Friendly assistance</span></div><div><b>Group & Private</b><span>Flexible travel styles</span></div><div><b>24/7 Support</b><span>Before & during trip</span></div></section>
-<section class="section"><div class="head"><div><div class="eyebrow" style="color:#e9522b">Explore</div><h2>Where do you want to go?</h2></div><p>Browse by travel style and discover your next journey.</p></div><div class="dest-tabs"><button class="active" onclick="showDest('all',this)">🌏 All</button><button onclick="showDest('pilgrimage',this)">🛕 Pilgrimage</button><button onclick="showDest('domestic',this)">🏔️ India</button><button onclick="showDest('international',this)">✈️ International</button><button onclick="showDest('weekend',this)">🚗 Weekend</button></div><div class="destination-grid" id="destinations">
-<a class="destination pilgrimage" href="package-char-dham.html"><span>🛕</span><b>Char Dham</b><small>Yatra packages</small></a><a class="destination domestic" href="package-spiti.html"><span>🏔️</span><b>Spiti Valley</b><small>Adventure circuits</small></a><a class="destination domestic" href="package-ladakh.html"><span>🏍️</span><b>Ladakh</b><small>Mountain adventures</small></a><a class="destination domestic" href="package-kashmir.html"><span>🏞️</span><b>Kashmir</b><small>Valley escapes</small></a><a class="destination international" href="package-thailand.html"><span>🌴</span><b>Thailand</b><small>International trips</small></a><a class="destination international" href="package-bali.html"><span>🌊</span><b>Bali</b><small>Island holidays</small></a><a class="destination international" href="package-vietnam.html"><span>🛶</span><b>Vietnam</b><small>Culture & adventure</small></a><a class="destination pilgrimage" href="package-ujjain.html"><span>🔱</span><b>Ujjain</b><small>Temple tours</small></a></div></section>
-<section class="section soft"><div class="head"><div><div class="eyebrow" style="color:#e9522b">Upcoming group trips</div><h2>Pick a date. Pack your bags.</h2></div><a class="small" href="packages.html#batches">View all departures →</a></div><div class="trip-grid">
-<article class="trip-card"><div class="trip-img spiti"></div><div class="trip-body"><div class="trip-top"><span>🔥 Limited seats</span><small>6N / 7D</small></div><h3>Spiti Valley Full Circuit</h3><p>Shimla → Kinnaur → Spiti → Manali</p><div class="dates"><b>25 Sep</b><b>01 Oct</b><b>15 Oct</b></div><div class="trip-bottom"><div><small>Starting from</small><strong>₹34,999</strong></div><a class="btn" href="package-spiti-manali.html">View trip</a></div></div></article>
-<article class="trip-card"><div class="trip-img ladakh"></div><div class="trip-body"><div class="trip-top"><span>⭐ Popular</span><small>7N / 8D</small></div><h3>Ladakh Adventure</h3><p>Leh → Nubra → Pangong → Leh</p><div class="dates"><b>02 Oct</b><b>09 Oct</b><b>16 Oct</b></div><div class="trip-bottom"><div><small>Starting from</small><strong>₹29,999</strong></div><a class="btn" href="package-ladakh.html">View trip</a></div></div></article>
-<article class="trip-card"><div class="trip-img kashmir"></div><div class="trip-body"><div class="trip-top"><span>💥 Offer</span><small>5N / 6D</small></div><h3>Kashmir Escape</h3><p>Srinagar → Pahalgam → Gulmarg</p><div class="dates"><b>05 Oct</b><b>12 Oct</b><b>19 Oct</b></div><div class="trip-bottom"><div><small>Starting from</small><strong>₹24,999</strong></div><a class="btn" href="package-kashmir.html">View trip</a></div></div></article>
-<article class="trip-card"><div class="trip-img thailand"></div><div class="trip-body"><div class="trip-top"><span>✈️ International</span><small>5N / 6D</small></div><h3>Thailand Getaway</h3><p>Bangkok → Pattaya → Island experiences</p><div class="dates"><b>15 Oct</b><b>29 Oct</b><b>12 Nov</b></div><div class="trip-bottom"><div><small>Starting from</small><strong>₹24,999</strong></div><a class="btn" href="package-thailand.html">View trip</a></div></div></article></div></section>
-<section class="section"><div class="head"><div><div class="eyebrow" style="color:#e9522b">On A Trip Temple</div><h2>Travel with faith.</h2></div><p>Our dedicated pilgrimage collection for Telugu travellers — with comfortable stays, transport and support.</p></div><div class="temple-grid"><a href="package-char-dham.html"><span>🕉️</span><b>Char Dham Yatra</b><small>From ₹30,500</small></a><a href="package-kedarnath.html"><span>🔱</span><b>Kedarnath Yatra</b><small>From ₹13,499</small></a><a href="package-do-dham.html"><span>🙏</span><b>Do Dham Yatra</b><small>From ₹22,000</small></a><a href="package-ujjain.html"><span>🛕</span><b>Ujjain & Omkareshwar</b><small>From ₹14,999</small></a></div></section>
-<section class="section dark confidence"><div class="head"><div><div class="eyebrow">Book with confidence</div><h2>Travel without the stress.</h2></div></div><div class="confidence-grid"><div><span>💳</span><b>Flexible booking</b><p>Reserve your place and discuss payment options with our team.</p></div><div><span>🚐</span><b>Planned transport</b><p>Vehicle options for private tours and group departures.</p></div><div><span>🏨</span><b>Trusted stays</b><p>Hotels, homestays and camps selected for each route.</p></div><div><span>📞</span><b>24/7 support</b><p>Telugu-friendly assistance before and during your trip.</p></div></div></section>
-<section class="section"><div class="head"><div><div class="eyebrow" style="color:#e9522b">Why On A Trip</div><h2>Your travel bestie from Hyderabad.</h2></div></div><div class="why v8why"><div><b>🗣️ Telugu-first support</b><p>Easy communication from enquiry to return journey.</p></div><div><b>👨‍👩‍👧 Group-friendly</b><p>Family, friends, couples and solo travellers welcome.</p></div><div><b>🧭 Route expertise</b><p>Detailed planning for mountain, temple and international routes.</p></div><div><b>🤝 Personal service</b><p>Real people helping you choose the right package.</p></div></div></section>
-<section class="section soft"><div class="head"><div><div class="eyebrow" style="color:#e9522b">Travellers say</div><h2>Real journeys. Real memories.</h2></div></div><div class="review-grid"><article><div>★★★★★</div><p>“The trip was well planned, coordination was smooth and the team was very supportive throughout.”</p><b>— On A Trip Traveller</b></article><article><div>★★★★★</div><p>“Comfortable stay, good transport and quick support. We felt confident throughout the journey.”</p><b>— Family Traveller</b></article><article><div>★★★★★</div><p>“The Telugu support made planning very easy for our group. Highly recommended.”</p><b>— Group Traveller</b></article></div></section>
-<section class="section"><div class="head"><div><div class="eyebrow" style="color:#e9522b">Travel guides</div><h2>Read before you go.</h2></div><a class="small" href="blogs.html">View all blogs →</a></div><div class="blog-grid"><a class="blog" href="blog-spiti.html"><span class="tag">SPITI</span><h3>Spiti Valley: complete travel guide</h3><p>Route, best season, stays and practical tips.</p></a><a class="blog" href="blog-ladakh.html"><span class="tag">LADAKH</span><h3>How to plan your Ladakh adventure</h3><p>Permits, route planning and what to pack.</p></a><a class="blog" href="blog-char-dham.html"><span class="tag">PILGRIMAGE</span><h3>Char Dham Yatra planning guide</h3><p>Route, stay, travel and darshan planning.</p></a></div></section>
-<section class="section faq"><div class="head"><div><div class="eyebrow" style="color:#e9522b">FAQs</div><h2>Before you book</h2></div></div><details><summary>Can I customise a package?</summary><p>Yes. Tell us your destination, dates, travellers and preferred hotel/vehicle category and our team can prepare a custom quote.</p></details><details><summary>Do you offer group departures?</summary><p>Yes. Selected destinations have scheduled batch dates with limited seats.</p></details><details><summary>Can Telugu travellers get support?</summary><p>Yes. On A Trip Holidays is focused on comfortable Telugu-friendly travel assistance.</p></details><details><summary>How do I enquire?</summary><p>Use the WhatsApp button or enquiry form and our team will respond with the current price and availability.</p></details></section>
-<section class="section"><div class="v13-wrap"><div class="head"><div><div class="eyebrow" style="color:#e52f25">NEW COLLECTIONS</div><h2>Explore more of India</h2></div><p>New North East circuits and easy weekend escapes for South India.</p></div><div class="v13-grid"><article class="v13-card"><div class="icon">🌿</div><h3>North East India</h3><p>Meghalaya, Assam, Arunachal, Sikkim, Nagaland and more.</p><a href="north-east.html">Explore North East →</a></article><article class="v13-card"><div class="icon">🌴</div><h3>South India Weekends</h3><p>Quick 2D/1N and 3D/2N getaways for your next weekend.</p><a href="south-weekends.html">Explore Weekend Trips →</a></article><article class="v13-card"><div class="icon">🧳</div><h3>80+ trip ideas</h3><p>Search by destination and travel style.</p><a href="packages.html">View All Trips →</a></article></div></div></section><section class="cta"><div><div class="eyebrow">Let's plan your next trip</div><h2>Tell us where you want to go.</h2><p>Destination + dates + travellers. We'll take it from there.</p></div><div class="actions"><a class="btn light" href="contact.html">Get a free quote</a><a class="btn" href="https://wa.me/919182894146?text=Hi%20On%20A%20Trip%20Holidays%2C%20I%20want%20to%20plan%20a%20trip">WhatsApp us</a></div></section>
-<footer><div><div class="footlogo"><img src="assets/logo.jpeg" alt="On A Trip Holidays"></div><p>Hyderabad-based Telugu travel specialists for pilgrimage, domestic, adventure and international holidays.</p></div><div><h4>Explore</h4><a href="packages.html">All Trips</a><a href="pilgrimage.html">On A Trip Temple</a><a href="packages.html#batches">Upcoming Batches</a><a href="blogs.html">Travel Blog</a></div><div><h4>Popular</h4><a href="package-spiti-manali.html">Spiti Valley</a><a href="package-ladakh.html">Ladakh</a><a href="package-char-dham.html">Char Dham</a><a href="package-thailand.html">Thailand</a></div><div><h4>Contact</h4><a href="tel:+919182894146">+91 91828 94146</a><a href="https://wa.me/919182894146">WhatsApp</a><a href="https://www.instagram.com/onatriphyd/">Instagram</a><a href="admin.html">Admin</a></div><div class="copy">© 2026 On A Trip Holidays. All rights reserved.</div></footer>
-<script>
-function showDest(cat,btn){document.querySelectorAll('.dest-tabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.destination').forEach(x=>x.style.display=(cat==='all'||x.classList.contains(cat))?'flex':'none')}
-function quickSearch(){const q=document.getElementById('tripSearch').value.trim();if(q) location.href='packages.html?search='+encodeURIComponent(q);else location.href='packages.html'}
-function filterQuick(){if(event.key==='Enter')quickSearch()}
-</script><a class="sticky-mobile-cta" href="https://wa.me/919182894146?text=Hi%20On%20A%20Trip%20Holidays%2C%20I%20want%20to%20check%20current%20trip%20availability">💬 Check Availability</a>
-<nav class="mobile-nav" aria-label="Mobile navigation">
-<a href="index.html">🏠<span>Home</span></a>
-<a href="packages.html">🧳<span>Trips</span></a>
-<a href="pilgrimage.html">🛕<span>Temple</span></a>
-<a href="blogs.html">📖<span>Blog</span></a>
-<a href="contact.html">📲<span>Enquire</span></a>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>On A Trip Holidays | Telugu Travel Specialists</title>
+<meta name="description" content="Premium group tours, pilgrimage journeys and unforgettable holidays with Telugu support from On A Trip Holidays.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="home-v18">
+<div class="v18-topbar"><div>📍 Hyderabad &nbsp;|&nbsp; Vijayawada &nbsp;|&nbsp; All India Batches</div><div>⭐ Trusted by 25,000+ Happy Travellers</div><div>Follow Us&nbsp; Instagram &nbsp; YouTube &nbsp; Facebook &nbsp; WhatsApp</div></div>
+<nav class="v18-header">
+  <a class="v18-logo" href="index.html"><img src="assets/logo.jpeg" alt="On A Trip Holidays"></a>
+  <div class="v18-links"><a class="active" href="index.html">Home</a><a href="packages.html">Destinations⌄</a><a href="packages.html">Packages</a><a href="pilgrimage.html">On A Trip Temple</a><a href="packages.html#batches">Upcoming Batches</a><a href="blogs.html">Reviews</a><a href="blogs.html">Travel Reels</a><a href="about.html">About Us</a><a href="contact.html">Contact Us</a></div>
+  <a class="v18-plan" href="contact.html">✈ Plan My Trip</a>
 </nav>
-<section class="branch-strip">
-  <div class="branch-wrap">
-    <h2>🇮🇳 Two Telugu States. One Trusted Travel Company.</h2>
-    <p>Travel support for Telangana & Andhra Pradesh — with branches in Hyderabad and Vijayawada.</p>
-    <div class="branch-grid">
-      <div class="branch-card"><b>📍 Hyderabad Branch</b><span>Telangana • Central support for Telugu travellers</span></div>
-      <div class="branch-card"><b>📍 Vijayawada Branch</b><span>Andhra Pradesh • Easy access for AP travellers</span></div>
+
+<section class="v18-hero">
+  <div class="v18-hero-bg"></div>
+  <div class="v18-hero-inner">
+    <div class="v18-hero-copy">
+      <div class="v18-pill">YOUR JOURNEY, OUR EXPERTISE</div>
+      <h1>Let’s explore the<br><em>magical</em> places</h1>
+      <p>Premium group tours, pilgrimage journeys & unforgettable holidays with <strong>Telugu support.</strong></p>
+      <div class="v18-benefits"><span>👥 <b>25,000+</b><small>Happy Travellers</small></span><span>🛡️ <b>100%</b><small>Safe & Trusted</small></span><span>🎧 <b>Telugu</b><small>Support Team</small></span><span>🏆 <b>10+</b><small>Years of Trust</small></span></div>
+      <div class="v18-actions"><a class="v18-cta-dark" href="packages.html">EXPLORE PACKAGES ✈</a><a class="v18-cta-light" href="blogs.html">WATCH VIDEO ▶</a></div>
     </div>
-    <div class="trust-line">Telugu-friendly support • Group tours • Pilgrimage • Domestic • International</div>
-  </div>
-</section>
-
-<!-- V15 START -->
-<section class="v15-trust">
-  <div class="v15-trust-grid">
-    <div>
-      <div class="v15-eyebrow" style="color:#ff9b79">ON A TRIP HOLIDAYS</div>
-      <h2>Two Telugu States. One Trusted Travel Company.</h2>
-      <p>Telugu-friendly travel support for holidays, pilgrimages, group tours, weekend escapes and international packages.</p>
+    <div class="v18-planner">
+      <h2>Where do you want to <em>go?</em></h2><p>Tell us your dream destination & we’ll plan it for you</p>
+      <div class="v18-planner-grid"><a href="packages.html"><i>🏔️</i><b>Mountains</b></a><a href="pilgrimage.html"><i>🛕</i><b>Temples</b></a><a href="packages.html"><i>🌴</i><b>Beaches</b></a><a href="packages.html"><i>🌍</i><b>International</b></a></div>
+      <a class="v18-planner-btn" href="contact.html">PLAN MY TRIP ✨</a><small>It’s Free & Takes Less than 30 Seconds</small>
     </div>
-    <div class="v15-branch"><b>📍 Hyderabad Branch</b><small>Telangana • Main Office</small></div>
-    <div class="v15-branch"><b>📍 Vijayawada Branch</b><small>Andhra Pradesh • Telugu Support</small></div>
   </div>
+  <div class="v18-float-tools"><a href="tel:+919182894146">☎<small>Call Us</small></a><a href="https://wa.me/919182894146?text=Hi%20On%20A%20Trip%20Holidays%2C%20I%20want%20to%20plan%20a%20trip">◉<small>WhatsApp</small></a><a href="contact.html">💬<small>Enquire</small></a></div>
 </section>
 
-<section class="v15-section v15-hot">
- <div class="v15-wrap">
-  <div class="v15-eyebrow">Trending now</div>
-  <h2 class="v15-title">🔥 Hot International Packages</h2>
-  <p class="v15-sub">Popular international holidays for families, groups and couples.</p>
-  <div class="v15-grid">
-   <article class="v15-card"><div class="v15-card-img" style="background-image:url('assets/thailand.jpg')"><span class="v15-card-badge">HOT</span></div><div class="v15-card-body"><h3>Thailand</h3><p>Bangkok • Pattaya • Phuket</p><a class="v15-link" href="package-thailand.html">Explore →</a></div></article>
-   <article class="v15-card"><div class="v15-card-img" style="background-image:url('assets/bali.jpg')"><span class="v15-card-badge">HOT</span></div><div class="v15-card-body"><h3>Bali</h3><p>Ubud • Kuta • Nusa Penida</p><a class="v15-link" href="package-bali.html">Explore →</a></div></article>
-   <article class="v15-card"><div class="v15-card-img" style="background-image:url('assets/dubai.jpg')"><span class="v15-card-badge">POPULAR</span></div><div class="v15-card-body"><h3>Dubai</h3><p>City tour • Desert safari</p><a class="v15-link" href="package-dubai.html">Explore →</a></div></article>
-   <article class="v15-card"><div class="v15-card-img" style="background-image:url('assets/vietnam.jpg')"><span class="v15-card-badge">HOT</span></div><div class="v15-card-body"><h3>Vietnam</h3><p>Hanoi • Ha Long Bay • Da Nang</p><a class="v15-link" href="package-vietnam.html">Explore →</a></div></article>
-   <article class="v15-card"><div class="v15-card-img" style="background-image:url('assets/nepal.jpg')"><span class="v15-card-badge">POPULAR</span></div><div class="v15-card-body"><h3>Nepal</h3><p>Kathmandu • Pokhara • Muktinath</p><a class="v15-link" href="package-nepal.html">Explore →</a></div></article>
-   <article class="v15-card"><div class="v15-card-img" style="background-image:url('assets/singapore.jpg')"><span class="v15-card-badge">HOT</span></div><div class="v15-card-body"><h3>Singapore</h3><p>City • Sentosa • Universal Studios</p><a class="v15-link" href="contact.html">Enquire →</a></div></article>
-  </div>
- </div>
+<section class="v18-destinations">
+  <a href="package-spiti.html"><div class="v18-dest spiti"><b>SPITI VALLEY</b><small>Offbeat. Raw. Real.</small><strong>From<br>₹16,999</strong></div></a>
+  <a href="package-ladakh.html"><div class="v18-dest ladakh"><b>LADAKH</b><small>Dream. Drive. Discover.</small><strong>From<br>₹19,999</strong></div></a>
+  <a href="package-kashmir.html"><div class="v18-dest kashmir"><b>KASHMIR</b><small>Heaven on Earth.</small><strong>From<br>₹18,999</strong></div></a>
+  <a href="package-char-dham.html"><div class="v18-dest chardham"><b>CHAR DHAM</b><small>Divine Journey.</small><strong>From<br>₹24,999</strong></div></a>
+  <a href="package-thailand.html"><div class="v18-dest thailand"><b>THAILAND</b><small>Fun. Food. Adventure.</small><strong>From<br>₹34,999</strong></div></a>
 </section>
 
-<section class="v15-section v15-couple">
- <div class="v15-wrap">
-  <div class="v15-eyebrow">For two</div><h2 class="v15-title">💑 Couple & Honeymoon Holidays</h2>
-  <p class="v15-sub">Romantic stays and custom trips designed for couples.</p>
-  <div class="v15-grid">
-   <article class="v15-card"><div class="v15-card-img" style="background-image:url('assets/maldives.jpg')"><span class="v15-card-badge">COUPLES</span></div><div class="v15-card-body"><h3>Maldives</h3><p>Island resort • Couple experiences</p><a class="v15-link" href="contact.html">Plan trip →</a></div></article>
-   <article class="v15-card"><div class="v15-card-img" style="background-image:url('assets/bali.jpg')"><span class="v15-card-badge">HONEYMOON</span></div><div class="v15-card-body"><h3>Bali</h3><p>Ubud • Beach • Private experiences</p><a class="v15-link" href="package-bali.html">Plan Bali →</a></div></article>
-   <article class="v15-card"><div class="v15-card-img" style="background-image:url('assets/dubai.jpg')"><span class="v15-card-badge">COUPLES</span></div><div class="v15-card-body"><h3>Dubai</h3><p>Premium stays • Desert safari</p><a class="v15-link" href="package-dubai.html">Plan Dubai →</a></div></article>
-   <article class="v15-card"><div class="v15-card-img" style="background-image:url('assets/thailand.jpg')"><span class="v15-card-badge">COUPLES</span></div><div class="v15-card-body"><h3>Thailand</h3><p>Beach time • Private options</p><a class="v15-link" href="package-thailand.html">Plan Thailand →</a></div></article>
-  </div>
- </div>
-</section>
+<section class="v18-featurebar"><div>👥 <b>Comfortable</b><small>Telugu Group Travel</small></div><div>🚆 <b>Nearest Railway Station</b><small>Pickup Available</small></div><div>🥗 <b>Satvik Veg Meals</b><small>Breakfast & Dinner</small></div><div>🙏 <b>Darshan Assistance</b><small>VIP & Priority</small></div><div>🏨 <b>Trusted Hotels</b><small>Clean & Comfortable</small></div><div>📞 <b>24/7 On Tour</b><small>Support</small></div></section>
 
-<section class="v15-section v15-weekend">
- <div class="v15-wrap">
-  <div class="v15-eyebrow">Short escapes</div><h2 class="v15-title">🌴 Weekend Trips from South India</h2>
-  <p class="v15-sub">Quick getaways for travellers from Telangana, Andhra Pradesh, Karnataka, Kerala and Tamil Nadu.</p>
-  <div class="v15-grid">
-   <article class="v15-card"><div class="v15-card-img" style="background-image:url('assets/araku.jpg')"></div><div class="v15-card-body"><h3>Araku Valley</h3><p>Vizag • Araku • Borra Caves</p><a class="v15-link" href="south-weekends.html">View weekends →</a></div></article>
-   <article class="v15-card"><div class="v15-card-img" style="background-image:url('assets/gokarna.jpg')"></div><div class="v15-card-body"><h3>Gokarna & Dandeli</h3><p>Beaches • Adventure • Nature</p><a class="v15-link" href="south-weekends.html">View weekends →</a></div></article>
-   <article class="v15-card"><div class="v15-card-img" style="background-image:url('assets/coorg.jpg')"></div><div class="v15-card-body"><h3>Coorg</h3><p>Plantations • Waterfalls • Hills</p><a class="v15-link" href="south-weekends.html">View weekends →</a></div></article>
-   <article class="v15-card"><div class="v15-card-img" style="background-image:url('assets/munnar.jpg')"></div><div class="v15-card-body"><h3>Munnar</h3><p>Tea gardens • Hills • Kerala</p><a class="v15-link" href="south-weekends.html">View weekends →</a></div></article>
-  </div>
- </div>
-</section>
+<section class="v18-section"><div class="v18-section-head"><div><label>UPCOMING BATCHES</label><h2>Plan Your Next <em>Adventure</em></h2></div><a href="packages.html#batches">VIEW ALL BATCHES →</a></div><div class="v18-batch-grid">
+<article><div class="batch-img spiti"></div><div class="batch-copy"><small>25 SEP 2026</small><span>Limited Seats</span><h3>Spiti Valley</h3><p>9D / 8N · Ex Delhi</p><strong>From ₹34,999</strong><a href="package-spiti-manali.html">View Trip →</a></div></article>
+<article><div class="batch-img ladakh"></div><div class="batch-copy"><small>01 OCT 2026</small><span>Filling Fast</span><h3>Ladakh</h3><p>7D / 6N · Ex Delhi</p><strong>From ₹29,999</strong><a href="package-ladakh.html">View Trip →</a></div></article>
+<article><div class="batch-img kashmir"></div><div class="batch-copy"><small>07 OCT 2026</small><span>Seats Available</span><h3>Kashmir</h3><p>6D / 5N · Ex Delhi</p><strong>From ₹24,999</strong><a href="package-kashmir.html">View Trip →</a></div></article>
+<article><div class="batch-img thailand"></div><div class="batch-copy"><small>15 OCT 2026</small><span>Filling Fast</span><h3>Thailand</h3><p>6D / 5N · Ex Hyderabad</p><strong>From ₹34,999</strong><a href="package-thailand.html">View Trip →</a></div></article>
+</div></section>
 
-<section class="v15-section v15-temple">
- <div class="v15-wrap">
-  <div class="v15-eyebrow">On A Trip Temple</div><h2 class="v15-title">🛕 Pilgrimage journeys made easier</h2>
-  <p class="v15-sub">Telugu group travel, darshan support and comfortable pilgrimage planning.</p>
-  <div class="v15-grid">
-   <article class="v15-card"><div class="v15-card-img" style="background-image:url('assets/kedarnath.jpg')"><span class="v15-card-badge">TOP</span></div><div class="v15-card-body"><h3>Char Dham</h3><p>Kedarnath • Badrinath • Gangotri • Yamunotri</p><a class="v15-link" href="package-char-dham.html">Explore →</a></div></article>
-   <article class="v15-card"><div class="v15-card-img" style="background-image:url('assets/ujjain.jpg')"></div><div class="v15-card-body"><h3>Ujjain</h3><p>Mahakaleshwar • Omkareshwar</p><a class="v15-link" href="package-ujjain.html">Explore →</a></div></article>
-   <article class="v15-card"><div class="v15-card-img" style="background-image:url('assets/amarnath.jpg')"></div><div class="v15-card-body"><h3>Amarnath Yatra</h3><p>Pilgrimage • Group travel • Support</p><a class="v15-link" href="package-amarnath.html">Explore →</a></div></article>
-   <article class="v15-card"><div class="v15-card-img" style="background-image:url('assets/vaishno-devi.jpg')"></div><div class="v15-card-body"><h3>Vaishno Devi</h3><p>Darshan-focused pilgrimage packages</p><a class="v15-link" href="package-vaishno-devi.html">Explore →</a></div></article>
-  </div>
- </div>
-</section>
-<!-- V15 END -->
+<section class="v18-temple"><div class="v18-section-head"><div><label>ON A TRIP TEMPLE</label><h2>Travel with <em>faith.</em></h2></div><a href="pilgrimage.html">EXPLORE TEMPLE TOURS →</a></div><p class="v18-lead">Dedicated pilgrimage journeys for Telugu travellers, with comfortable stays, transport, meals and on-tour support.</p><div class="v18-temple-grid"><a href="package-char-dham.html">🕉️<b>Char Dham Yatra</b><small>From ₹30,500</small></a><a href="package-kedarnath.html">🔱<b>Kedarnath Yatra</b><small>From ₹13,499</small></a><a href="package-do-dham.html">🙏<b>Do Dham Yatra</b><small>From ₹22,000</small></a><a href="package-ujjain.html">🛕<b>Ujjain & Omkareshwar</b><small>From ₹14,999</small></a></div></section>
 
+<section class="v18-travel-reels"><div class="v18-section-head"><div><label>TRAVEL REELS</label><h2>See the journey. <em>Feel the magic.</em></h2></div><a href="blogs.html">VIEW ALL REELS →</a></div><div class="v18-reels"><a href="blogs.html"><div class="reel-img r1"></div><b>Himalayan adventures</b><small>Watch short travel stories →</small></a><a href="blogs.html"><div class="reel-img r2"></div><b>Temple journeys</b><small>Real moments from our yatras →</small></a><a href="blogs.html"><div class="reel-img r3"></div><b>International escapes</b><small>Thailand, Bali & more →</small></a></div></section>
 
-<!-- V16 START -->
-<section class="v16" id="reviews">
- <div class="v16-wrap">
-  <div class="v16-eyebrow">Traveller stories</div><h2 class="v16-title">⭐ Trusted by travellers</h2>
-  <p class="v16-sub">Real review-style cards ready to connect to your verified Google reviews and customer media.</p>
-  <div class="v16-review-grid">
-   <article class="v16-review"><div class="stars">★★★★★</div><p>“The trip coordinator was very helpful from pickup to drop. Hotels and travel arrangements were smooth.”</p><div class="reviewer"><div class="avatar">RK</div><div><b>Ravi K.</b><div class="verified">✓ Verified Traveller • Kashmir</div></div></div></article>
-   <article class="v16-review"><div class="stars">★★★★★</div><p>“We booked as a family and got clear communication throughout the journey. Telugu support made it easy.”</p><div class="reviewer"><div class="avatar">SL</div><div><b>Srilatha L.</b><div class="verified">✓ Verified Traveller • Char Dham</div></div></div></article>
-   <article class="v16-review"><div class="stars">★★★★★</div><p>“Good planning and quick WhatsApp responses. We loved the Spiti route and the local experiences.”</p><div class="reviewer"><div class="avatar">AN</div><div><b>Anil N.</b><div class="verified">✓ Verified Traveller • Spiti</div></div></div></article>
-  </div>
- </div>
-</section>
+<section class="v18-confidence"><div class="v18-section-head"><div><label>WHY ON A TRIP</label><h2>Travel without the <em>stress.</em></h2></div></div><div class="v18-confidence-grid"><div>🗣️<b>Telugu-first support</b><p>Easy communication from enquiry to return journey.</p></div><div>🚐<b>Planned transport</b><p>Vehicle options for private tours and group departures.</p></div><div>🏨<b>Trusted stays</b><p>Hotels, homestays and camps selected for each route.</p></div><div>🤝<b>Personal service</b><p>Real people helping you choose the right package.</p></div></div></section>
 
-<section class="v16 v16-reels">
- <div class="v16-wrap">
-  <div class="v16-eyebrow" style="color:#ff9b79">On A Trip on Instagram</div><h2 class="v16-title">🎥 Travel Reels</h2>
-  <p class="v16-sub" style="color:#c5d2dc">Show your latest destination videos, customer moments and trip highlights here.</p>
-  <div class="reel-grid">
-   <a class="reel" href="https://www.instagram.com/" target="_blank"><div><b>🏔️ Spiti Valley</b><small>Watch trip highlights →</small></div></a>
-   <a class="reel" href="https://www.instagram.com/" target="_blank"><div><b>🏍️ Ladakh</b><small>Pangong • Nubra • Leh →</small></div></a>
-   <a class="reel" href="https://www.instagram.com/" target="_blank"><div><b>🛕 Char Dham</b><small>Yatra moments →</small></div></a>
-   <a class="reel" href="https://www.instagram.com/" target="_blank"><div><b>🇹🇭 Thailand</b><small>International escapes →</small></div></a>
-  </div>
- </div>
-</section>
+<section class="v18-reviews"><div class="v18-section-head"><div><label>TRAVELLER REVIEWS</label><h2>Real journeys. <em>Real memories.</em></h2></div></div><div class="review-grid"><article>★★★★★<p>“The trip was well planned, coordination was smooth and the team was supportive throughout.”</p><b>— On A Trip Traveller</b></article><article>★★★★★<p>“Comfortable stay, good transport and quick support. We felt confident throughout the journey.”</p><b>— Family Traveller</b></article><article>★★★★★<p>“The Telugu support made planning very easy for our group. Highly recommended.”</p><b>— Group Traveller</b></article></div></section>
 
-<section class="v16 v16-itinerary">
- <div class="v16-wrap">
-  <div class="v16-eyebrow">Example interactive route</div><h2 class="v16-title">🗺️ See your journey day by day</h2>
-  <p class="v16-sub">Tap each day to expand the itinerary.</p>
-  <div class="route"><span>Hyderabad</span><i>→</i><span>Delhi</span><i>→</i><span>Shimla</span><i>→</i><span>Kaza</span><i>→</i><span>Manali</span><i>→</i><span>Delhi</span></div>
-  <div class="day open"><button onclick="toggleDay(this)">Day 1 • Hyderabad → Delhi <b>⌃</b></button><div class="day-content">Travel to Delhi. Pickup coordination and overnight arrangement as per selected package.</div></div>
-  <div class="day"><button onclick="toggleDay(this)">Day 2 • Delhi → Shimla <b>⌄</b></button><div class="day-content">Depart for Shimla, hotel check-in and local evening time.</div></div>
-  <div class="day"><button onclick="toggleDay(this)">Day 3 • Shimla → Kaza <b>⌄</b></button><div class="day-content">Scenic mountain drive with planned stops and meals according to the package.</div></div>
-  <div class="day"><button onclick="toggleDay(this)">Day 4 • Kaza & local sights <b>⌄</b></button><div class="day-content">Explore Kaza and nearby attractions. Exact inclusions can be controlled from Admin.</div></div>
-  <div class="day"><button onclick="toggleDay(this)">Day 5 • Kaza → Manali <b>⌄</b></button><div class="day-content">Continue the circuit towards Manali with sightseeing stops.</div></div>
- </div>
-</section>
+<section class="v18-final"><div><label>READY TO TRAVEL?</label><h2>Your next magical place is waiting.</h2><p>Tell us your destination, dates, travellers and budget. We’ll plan the rest.</p></div><a href="contact.html">PLAN MY TRIP ✈</a></section>
 
-<section class="v16 v16-trust">
- <div class="v16-wrap">
-  <div class="v16-eyebrow">Why On A Trip</div><h2 class="v16-title">🛡️ Travel with confidence</h2>
-  <p class="v16-sub">Built for Telugu travellers from Telangana and Andhra Pradesh.</p>
-  <div class="trust-grid">
-   <div class="trust-item">🗣️<strong>Telugu Support</strong><span>Friendly assistance before and during your trip.</span></div>
-   <div class="trust-item">📍<strong>Hyderabad Office</strong><span>Telangana branch and local support.</span></div>
-   <div class="trust-item">📍<strong>Vijayawada Office</strong><span>Andhra Pradesh branch and local support.</span></div>
-   <div class="trust-item">🏨<strong>Verified Hotels</strong><span>Hotel options checked before confirmation.</span></div>
-   <div class="trust-item">🧑‍💼<strong>Trip Coordinators</strong><span>Dedicated coordination for group departures.</span></div>
-   <div class="trust-item">💰<strong>Transparent Pricing</strong><span>Clear inclusions and exclusions.</span></div>
-   <div class="trust-item">🚨<strong>24×7 Emergency Support</strong><span>Support channel for active trips.</span></div>
-   <div class="trust-item">🛕<strong>Temple & Group Travel</strong><span>Specialised pilgrimage and group journeys.</span></div>
-  </div>
- </div>
-</section>
-
-<section class="v16 v16-plan" id="plan-trip">
- <div class="v16-wrap">
-  <div class="v16-eyebrow">Personalised travel</div><h2 class="v16-title">🤖 Plan My Trip</h2>
-  <p class="v16-sub">Tell us what you want. We'll create the enquiry and send it to our travel team.</p>
-  <div class="plan-box">
-   <form onsubmit="submitPlan(event)">
-    <div class="plan-grid">
-     <label>Where do you want to go?<input id="planDest" required placeholder="Kashmir"></label>
-     <label>When?<input id="planDate" required placeholder="October 2026"></label>
-     <label>How many people?<input id="planTrav" required type="number" min="1" value="4"></label>
-     <label>Travel type<select id="planType"><option>Group</option><option>Couple</option><option>Family</option><option>Private</option></select></label>
-     <label>Budget per person<input id="planBudget" required placeholder="₹25,000"></label>
-     <label>Preferred branch<select id="planBranch"><option>Hyderabad</option><option>Vijayawada</option></select></label>
-     <label class="plan-full">Anything else?<input id="planNotes" placeholder="Hotel preference, pickup city, special requests..."></label>
-    </div>
-    <button class="plan-submit">✨ Plan My Trip</button>
-   </form>
-  </div>
- </div>
-</section>
-<script>
-function toggleDay(btn){btn.parentElement.classList.toggle("open");btn.querySelector("b").textContent=btn.parentElement.classList.contains("open")?"⌃":"⌄"}
-function submitPlan(e){
- e.preventDefault();
- const d=document.getElementById("planDest").value,t=document.getElementById("planTrav").value,dt=document.getElementById("planDate").value,b=document.getElementById("planBudget").value,type=document.getElementById("planType").value,br=document.getElementById("planBranch").value,n=document.getElementById("planNotes").value;
- const msg=`Hi On A Trip Holidays! I want to Plan My Trip.%0A%0ADestination: ${encodeURIComponent(d)}%0ATravellers: ${encodeURIComponent(t)}%0ADates: ${encodeURIComponent(dt)}%0AType: ${encodeURIComponent(type)}%0ABudget: ${encodeURIComponent(b)} per person%0ABranch: ${encodeURIComponent(br)}%0ANotes: ${encodeURIComponent(n)}`;
- window.open("https://wa.me/?text="+msg,"_blank");
-}
-</script>
-<!-- V16 END -->
-
-
-<!-- V17 START -->
-<section class="v17" id="explore">
- <div class="v17-wrap">
-  <div class="v17-kicker">Explore On A Trip Holidays</div>
-  <h2 class="v17-title">Find a trip that feels like you.</h2>
-  <p class="v17-sub">Search destinations, upcoming departures and travel styles — or tell us what you want and we'll plan it.</p>
-  <form class="v17-search" onsubmit="v17Search(event)">
-   <input id="v17Dest" placeholder="🔎 Search destination e.g. Kashmir">
-   <select id="v17Month"><option value="">Travel month</option><option>September 2026</option><option>October 2026</option><option>November 2026</option><option>December 2026</option></select>
-   <select id="v17Type"><option value="">Travel style</option><option>Group</option><option>Couple</option><option>Family</option><option>Private</option></select>
-   <select id="v17Budget"><option value="">Budget</option><option>Under ₹20,000</option><option>₹20,000–₹40,000</option><option>₹40,000–₹70,000</option><option>₹70,000+</option></select>
-   <button>Search Trips</button>
-  </form>
-  <div class="v17-pills"><a class="v17-pill" href="packages.html">🏔️ Adventure</a><a class="v17-pill" href="pilgrimage.html">🛕 Pilgrimage</a><a class="v17-pill" href="south-weekends.html">🌴 Weekend</a><a class="v17-pill" href="packages.html">💑 Couples</a><a class="v17-pill" href="north-east.html">🌿 North East</a><a class="v17-pill" href="packages.html">🌍 International</a></div>
- </div>
-</section>
-
-<section class="v17 v17-batches">
- <div class="v17-wrap">
-  <div class="v17-kicker" style="color:#ff9b79">Fixed departures</div><h2 class="v17-title">📅 Upcoming Trips</h2><p class="v17-sub" style="color:#c7d4dd">Pick your date and reserve before the batch fills.</p>
-  <div class="batch-grid">
-   <article class="batch-card"><div class="date">20 SEP 2026</div><h3>Char Dham</h3><p>📍 Hyderabad pickup • 11D/10N</p><div class="seats">🔥 6 seats left</div><div class="seats-bar"><i style="width:30%"></i></div></article>
-   <article class="batch-card"><div class="date">25 SEP 2026</div><h3>Spiti Valley</h3><p>📍 Delhi pickup • 9D/8N</p><div class="seats">🔥 5 seats left</div><div class="seats-bar"><i style="width:31%"></i></div></article>
-   <article class="batch-card"><div class="date">02 OCT 2026</div><h3>Ladakh</h3><p>📍 Delhi pickup • 7D/6N</p><div class="seats">11 seats available</div><div class="seats-bar"><i style="width:69%"></i></div></article>
-   <article class="batch-card"><div class="date">10 OCT 2026</div><h3>Tawang</h3><p>📍 Guwahati pickup • 8D/7N</p><div class="seats">🔥 4 seats left</div><div class="seats-bar"><i style="width:25%"></i></div></article>
-  </div>
- </div>
-</section>
-
-<section class="v17 v17-styles">
- <div class="v17-wrap">
-  <div class="v17-kicker">Travel your way</div><h2 class="v17-title">Explore by travel style</h2><p class="v17-sub">From quick weekends to once-in-a-lifetime journeys.</p>
-  <div class="v17-style-grid">
-   <a class="style-card" href="packages.html" style="text-decoration:none;color:inherit"><div class="style-icon">🏔️</div><h3>Adventure</h3><p>Spiti • Ladakh • Arunachal • Himalayan circuits</p></a>
-   <a class="style-card" href="pilgrimage.html" style="text-decoration:none;color:inherit"><div class="style-icon">🛕</div><h3>Pilgrimage</h3><p>Char Dham • Kedarnath • Ujjain • Vaishno Devi</p></a>
-   <a class="style-card" href="south-weekends.html" style="text-decoration:none;color:inherit"><div class="style-icon">🌴</div><h3>Weekend Getaways</h3><p>Araku • Gokarna • Coorg • Munnar</p></a>
-   <a class="style-card" href="packages.html" style="text-decoration:none;color:inherit"><div class="style-icon">👨‍👩‍👧</div><h3>Family Holidays</h3><p>Comfortable stays, flexible plans and group options</p></a>
-   <a class="style-card" href="packages.html" style="text-decoration:none;color:inherit"><div class="style-icon">💑</div><h3>Couples</h3><p>Maldives • Bali • Thailand • Dubai</p></a>
-   <a class="style-card" href="packages.html" style="text-decoration:none;color:inherit"><div class="style-icon">👥</div><h3>Group Trips</h3><p>Fixed departures with trip coordinators</p></a>
-   <a class="style-card" href="north-east.html" style="text-decoration:none;color:inherit"><div class="style-icon">🌿</div><h3>North East</h3><p>Tawang • Ziro • Sikkim • Meghalaya</p></a>
-   <a class="style-card" href="packages.html" style="text-decoration:none;color:inherit"><div class="style-icon">🌍</div><h3>International</h3><p>Thailand • Bali • Vietnam • Dubai and more</p></a>
-  </div>
- </div>
-</section>
-
-<section class="v17 v17-event">
- <div class="v17-wrap">
-  <div class="v17-kicker">Limited season departures</div><h2 class="v17-title">🎉 Events & Festival Trips</h2><p class="v17-sub">Special departures around festivals, holidays and major travel events.</p>
-  <div class="event-grid">
-   <article class="event-card"><div>🌸</div><h3>North East Festival Escapes</h3><p>Seasonal Meghalaya, Sikkim and Arunachal departures.</p></article>
-   <article class="event-card"><div>🎄</div><h3>Christmas & New Year</h3><p>Popular hill stations and international celebrations.</p></article>
-   <article class="event-card"><div>🏎️</div><h3>Event Holidays</h3><p>Build a package around the event you want to attend.</p></article>
-  </div>
- </div>
-</section>
-
-<section class="v17-cta">
- <h2>🤖 Tell us your dream trip.</h2><p>Destination • Dates • Travellers • Budget — our team will plan the rest.</p>
- <a href="#plan-trip">Plan My Trip →</a>
-</section>
-<script>
-function v17Search(e){
- e.preventDefault();
- const d=document.getElementById("v17Dest").value.trim(),m=document.getElementById("v17Month").value,t=document.getElementById("v17Type").value,b=document.getElementById("v17Budget").value;
- const params=new URLSearchParams({destination:d,month:m,type:t,budget:b});
- window.location.href="packages.html?"+params.toString();
-}
-</script>
-<!-- V17 END -->
-
-</body></html>
+<div class="v18-wa"><a href="https://wa.me/919182894146?text=Hi%20On%20A%20Trip%20Holidays%2C%20I%20want%20to%20plan%20a%20trip">◉</a></div>
+<nav class="v18-mobile"><a class="active" href="index.html">⌂<small>Home</small></a><a href="packages.html">🧳<small>Trips</small></a><a href="pilgrimage.html">🛕<small>Temple</small></a><a href="blogs.html">🎥<small>Reels</small></a><a href="contact.html">📲<small>Enquire</small></a></nav>
+</body>
+</html>
