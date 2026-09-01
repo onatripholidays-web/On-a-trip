@@ -1,0 +1,1 @@
+Instagram Reels + YouTube Shorts sections added to homepage and Meta landing pages. Replace placeholder links with exact Reel/Short URLs. For true embedded players, provide your actual channel/profile links.
