@@ -3,240 +3,44 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin Dashboard | On A Trip Holidays</title>
+<title>Admin Login | On A Trip Holidays</title>
 <link rel="stylesheet" href="style.css">
 <style>
-.admin-shell{max-width:1180px;margin:auto}
-.adminbar{position:sticky;top:0;z-index:60}
-.adminbar small{display:block;color:#b9c7d0;font-weight:500;margin-top:3px}
-.kpis{padding-top:28px;padding-bottom:20px}
-.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}
-.quick button{border:1px solid var(--line);background:#fff;border-radius:14px;padding:17px;text-align:left;font-weight:900;cursor:pointer}
-.quick button span{display:block;color:var(--red);font-size:22px;margin-bottom:6px}
-.module{display:none}.module.active{display:block}
-.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.searchbox{padding:12px;border:1px solid var(--line);border-radius:10px;min-width:240px}
-.notice{padding:12px 15px;border-radius:10px;background:#fff8e7;border:1px solid #f0d58a;color:#664d00;font-size:13px}
-.item-row{display:flex;justify-content:space-between;gap:12px;align-items:center;border:1px solid var(--line);padding:13px;border-radius:12px;margin-top:10px;background:#fff}
-.item-row small{color:var(--muted)}.danger{background:#fff0ee;color:#b3261e;border:1px solid #f1c5c0;padding:8px 11px;border-radius:8px;font-weight:800}
-.blog-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-textarea.writer{min-height:240px;width:100%;padding:14px;border:1px solid var(--line);border-radius:10px;line-height:1.55}
-@media(max-width:700px){.quick{grid-template-columns:1fr 1fr}.searchbox{width:100%;min-width:0}.item-row{align-items:flex-start}.adminbar{display:block}.adminnav{margin-top:10px}}
+:root{--orange:#e85c35;--ink:#14283d;--muted:#72808c;--line:#e4e9ed}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#f7f9fa,#fff 55%,#fff6f1);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);min-height:100vh}
+.login-wrap{min-height:100vh;display:grid;place-items:center;padding:24px}.login-card{width:min(430px,100%);background:#fff;border:1px solid var(--line);border-radius:28px;box-shadow:0 24px 70px rgba(20,40,61,.12);padding:34px}
+.logo{height:70px;max-width:250px;object-fit:contain;display:block;margin:0 auto 22px}.eyebrow{text-align:center;letter-spacing:.14em;font-size:11px;font-weight:900;color:var(--orange);text-transform:uppercase}.login-card h1{text-align:center;font-size:30px;margin:8px 0 8px}.sub{text-align:center;color:var(--muted);line-height:1.55;margin:0 0 26px}.field{margin:14px 0}.field label{display:block;font-size:13px;font-weight:800;margin-bottom:7px}.field input{width:100%;padding:14px 15px;border:1px solid #d8e0e6;border-radius:12px;font-size:16px;outline:none}.field input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(232,92,53,.1)}.login-btn{width:100%;border:0;border-radius:13px;background:var(--orange);color:#fff;padding:15px;font-size:16px;font-weight:900;cursor:pointer;margin-top:8px}.login-btn:active{transform:translateY(1px)}.error{display:none;background:#fff1ee;color:#b33b23;border:1px solid #f2c7bc;border-radius:10px;padding:11px 12px;margin:14px 0 0;font-size:13px;font-weight:700}.security{display:flex;gap:9px;align-items:flex-start;background:#f7fafb;border:1px solid var(--line);padding:12px;border-radius:12px;margin-top:18px;font-size:12px;color:#65727d;line-height:1.45}.back{text-align:center;margin-top:20px}.back a{color:var(--ink);font-weight:800;text-decoration:none}.footer{text-align:center;color:#94a0a8;font-size:11px;margin-top:22px}
 </style>
 </head>
 <body>
-<nav class="nav">
-<a class="brand" href="index.html"><img src="assets/logo.png" alt="On A Trip Holidays"></a>
-<div class="navlinks"><a href="packages.html">Packages</a><a href="pilgrimage.html">Pilgrimage</a><a href="blogs.html">Blogs</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
-<a class="wa" href="https://wa.me/919182894146?text=Hi%20On%20A%20Trip%20Holidays">WhatsApp Us</a>
-</nav>
-<section class="os-shell">
-  <div class="os-wrap">
-    <div class="os-kicker">ON A TRIP HOLIDAYS • TRAVEL BUSINESS OS</div>
-    <h1 class="os-title">Quotes, bookings, payments & enquiries — in one place.</h1>
-    <p class="os-sub">A mobile-first control centre for your travel team. Create packages, manage batches, send WhatsApp quotes and track every enquiry.</p>
-    <div class="os-pills">
-      <span>🧾 Quotes</span><span>📋 Bookings</span><span>💳 Payments</span><span>📲 WhatsApp Share</span><span>💰 Offer Pricing</span><span>📊 Team Follow-ups</span>
-    </div>
-    <div class="os-stats">
-      <div class="os-stat"><b>31+</b><span>Live packages</span></div>
-      <div class="os-stat"><b>1</b><span>Upcoming batches</span></div>
-      <div class="os-stat"><b>0</b><span>New enquiries</span></div>
-      <div class="os-stat"><b>1</b><span>Saved blogs</span></div>
-    </div>
-    <div class="os-actions">
-      <a class="os-action" href="#packages"><div>🧳</div><strong>Packages</strong><small>Add, edit and publish trips</small></a>
-      <a class="os-action" href="#batches"><div>📅</div><strong>Batches</strong><small>Dates, seats and pricing</small></a>
-      <a class="os-action" href="#enquiries"><div>📲</div><strong>Enquiries</strong><small>Follow up every lead</small></a>
-      <a class="os-action" href="#blogs"><div>✍️</div><strong>Blog & SEO</strong><small>Write and publish guides</small></a>
-    </div>
-    <div class="os-quick">
-      <h3>Quick actions</h3>
-      <div class="os-quick-grid">
-        <a href="packages.html">➕ Add package</a>
-        <a href="packages.html#batches">📅 Add batch</a>
-        <a href="contact.html">📲 Create enquiry</a>
-        <a href="blogs.html">✍️ Write blog</a>
-        <a href="package-char-dham.html">🧾 Create quote</a>
-        <a href="https://wa.me/919182894146?text=Hi%20On%20A%20Trip%20Holidays%2C%20please%20share%20the%20latest%20package%20details">💬 WhatsApp share</a>
-      </div>
-    </div>
+<div class="login-wrap">
+  <div class="login-card">
+    <img class="logo" src="assets/logo.png" alt="On A Trip Holidays">
+    <div class="eyebrow">ON A TRIP HOLIDAYS • ADMIN</div>
+    <h1>Welcome back</h1>
+    <p class="sub">Sign in to manage packages, itineraries, batches, enquiries and website content.</p>
+    <form onsubmit="login(event)">
+      <div class="field"><label for="user">Admin ID</label><input id="user" autocomplete="username" placeholder="Enter admin ID" required></div>
+      <div class="field"><label for="pass">Password</label><input id="pass" type="password" autocomplete="current-password" placeholder="Enter password" required></div>
+      <div id="error" class="error">Invalid admin ID or password.</div>
+      <button class="login-btn" type="submit">Sign In to Admin Panel</button>
+    </form>
+    <div class="security">🔐 <span><b>Admin-only area.</b> Keep your credentials private. This version includes a front-end login gate; for production-grade multi-device authentication and shared content, connect the panel to a secure backend/database.</span></div>
+    <div class="back"><a href="index.html">← Back to website</a></div>
+    <div class="footer">© 2026 On A Trip Holidays</div>
   </div>
-</section>
-
-
-<div class="adminbar">
-<div class="admin-shell"><strong>ON A TRIP HOLIDAYS • ADMIN DASHBOARD</strong>
-<small>Mobile-ready content manager • demo storage in this browser</small></div>
 </div>
-
-<main class="section admin-shell">
-<div class="statgrid">
-<div class="stat"><small>Packages</small><b id="packageCount">30+</b></div>
-<div class="stat"><small>Upcoming batches</small><b id="batchCount">0</b></div>
-<div class="stat"><small>Enquiries</small><b id="leadCount">0</b></div>
-<div class="stat"><small>Saved blogs</small><b id="blogCount">0</b></div>
-</div>
-
-<div class="quick">
-<button onclick="openModule('packages')"><span>🧳</span>Add / manage packages</button>
-<button onclick="openModule('batches')"><span>📅</span>Manage batch dates</button>
-<button onclick="openModule('enquiries')"><span>📲</span>View enquiries</button>
-<button onclick="openModule('blog')"><span>✍️</span>Write a blog</button>
-</div>
-
-<div class="panel" style="margin-top:22px">
-<div class="adminnav">
-<button class="active" onclick="openModule('overview',this)">Dashboard</button>
-<button onclick="openModule('packages',this)">Packages</button>
-<button onclick="openModule('batches',this)">Batches</button>
-<button onclick="openModule('enquiries',this)">Enquiries</button>
-<button onclick="openModule('blog',this)">Blog Writer</button>
-<button onclick="openModule('seo',this)">SEO</button>
-</div>
-</div>
-
-<section id="overview" class="panel module active">
-<h2>Website control centre</h2>
-<p>Use this page from your phone to prepare packages, batches, enquiries and blog content.</p>
-<div class="notice">⚠️ Current version stores changes in this browser only. The next production step is connecting Supabase so your whole team sees the same data securely.</div>
-<div class="why" style="margin-top:18px">
-<div><b>🔎 Package Search</b><p>Customer-facing destination and category filtering is ready.</p></div>
-<div><b>📅 Batch Management</b><p>Add dates, capacity, seats remaining and prices.</p></div>
-<div><b>📲 Lead Capture</b><p>WhatsApp enquiry flow is ready for customer conversations.</p></div>
-<div><b>✍️ Blog SEO</b><p>Create structured travel articles with titles and meta descriptions.</p></div>
-</div>
-</section>
-
-<section id="packages" class="panel module">
-<div class="toolbar"><div><h2>Package Manager</h2><p>Add packages for this browser demo.</p></div><input class="searchbox" id="packageSearch" placeholder="Search packages…" oninput="renderPackages()"></div>
-<form onsubmit="addPackage(event)" class="form" style="box-shadow:none;padding:0;margin:15px 0 0">
-<div class="formgrid">
-<input id="pn" required placeholder="Package name">
-<input id="pc" required placeholder="Category (Pilgrimage / Domestic / International)">
-<input id="pp" placeholder="Price e.g. ₹30,500">
-<input id="pd" placeholder="Duration e.g. 10N/11D">
-</div>
-<button class="btn">＋ Add Package</button>
-</form>
-<div id="packageList"></div>
-</section>
-
-<section id="batches" class="panel module">
-<h2>Batch Manager</h2>
-<form onsubmit="addBatch(event)" class="form" style="box-shadow:none;padding:0;margin:15px 0 0">
-<div class="formgrid">
-<input id="bn" required placeholder="Package name">
-<input id="bd" required type="date">
-<input id="bc" required type="number" min="1" placeholder="Capacity">
-<input id="bs" required type="number" min="0" placeholder="Seats available">
-<input id="bp" placeholder="Price">
-</div>
-<button class="btn">＋ Add Batch</button>
-</form>
-<div id="batchList"></div>
-</section>
-
-<section id="enquiries" class="panel module">
-<div class="toolbar"><div><h2>Enquiries</h2><p>Local demo enquiries saved by the website in this browser.</p></div><button class="danger" onclick="clearLeads()">Clear demo leads</button></div>
-<div style="overflow:auto"><table class="admin-table" id="leadTable"></table></div>
-</section>
-
-<section id="blog" class="panel module">
-<h2>Blog Writer</h2>
-<p>Draft a travel article, then save it in this browser for your team to review.</p>
-<input id="blogTopic" placeholder="Topic e.g. Best time to visit Spiti Valley" style="width:100%;padding:14px;border:1px solid #ddd;border-radius:10px">
-<div class="blog-actions"><button class="btn" onclick="draftBlog()">Generate Draft</button><button class="btn light" onclick="saveBlog()">Save Draft</button></div>
-<textarea id="draft" class="writer" style="margin-top:14px" placeholder="Your blog draft will appear here…"></textarea>
-<div id="savedBlogs"></div>
-</section>
-
-<section id="seo" class="panel module">
-<h2>SEO checklist</h2>
-<ul>
-<li>Unique title + meta description on every package page</li>
-<li>Use destination + duration + “from Hyderabad” naturally</li>
-<li>Link blogs to relevant package pages</li>
-<li>Add image alt text</li>
-<li>Create sitemap.xml and robots.txt</li>
-<li>Add TravelAgency / TouristTrip structured data</li>
-<li>Connect Google Search Console after the domain is live</li>
-</ul>
-</section>
-</main>
-
 <script>
-const KEY={packages:'oat_packages_v7',batches:'oat_batches_v7',leads:'oat_leads',blogs:'oat_blogs_v7'};
-const get=(k,d=[])=>JSON.parse(localStorage.getItem(k)||JSON.stringify(d));
-const set=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
-const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-
-function openModule(id,btn){
- document.querySelectorAll('.module').forEach(x=>x.classList.remove('active'));
- document.getElementById(id).classList.add('active');
- document.querySelectorAll('.adminnav button').forEach(x=>x.classList.remove('active'));
- if(btn) btn.classList.add('active');
- renderAll();
- window.scrollTo({top:document.getElementById(id).offsetTop-80,behavior:'smooth'});
-}
-function addPackage(e){
+// Temporary starter credentials for the static build. Change before publishing.
+const ADMIN_ID='admin';
+const ADMIN_PASSWORD='OnATrip@2026';
+function login(e){
  e.preventDefault();
- const a=get(KEY.packages); a.push({id:Date.now(),name:pn.value,cat:pc.value,price:pp.value||'Quote',duration:pd.value||'Custom'});
- set(KEY.packages,a); e.target.reset(); renderAll();
+ const ok=user.value.trim()===ADMIN_ID && pass.value===ADMIN_PASSWORD;
+ if(ok){sessionStorage.setItem('oat_admin_auth','1');location.href='admin-dashboard.html';}
+ else{error.style.display='block';}
 }
-function removePackage(id){set(KEY.packages,get(KEY.packages).filter(x=>x.id!==id));renderAll()}
-function renderPackages(){
- const q=(document.getElementById('packageSearch')?.value||'').toLowerCase();
- const a=get(KEY.packages).filter(x=>(x.name+' '+x.cat).toLowerCase().includes(q));
- packageList.innerHTML=a.length?a.map(x=>`<div class="item-row"><div><b>${esc(x.name)}</b><small>${esc(x.cat)} • ${esc(x.duration)} • ${esc(x.price)}</small></div><button class="danger" onclick="removePackage(${x.id})">Delete</button></div>`).join(''):'<p>No added packages yet.</p>';
-}
-function addBatch(e){
- e.preventDefault();
- const a=get(KEY.batches); a.push({id:Date.now(),name:bn.value,date:bd.value,capacity:+bc.value,seats:+bs.value,price:bp.value||'Quote'});
- set(KEY.batches,a); e.target.reset(); renderAll();
-}
-function removeBatch(id){set(KEY.batches,get(KEY.batches).filter(x=>x.id!==id));renderAll()}
-function renderBatches(){
- const a=get(KEY.batches);
- batchList.innerHTML=a.length?a.map(x=>`<div class="item-row"><div><b>${esc(x.name)}</b><small>${esc(x.date)} • Capacity ${x.capacity} • ${x.seats} seats left • ${esc(x.price)}</small></div><button class="danger" onclick="removeBatch(${x.id})">Delete</button></div>`).join(''):'<p>No batches added yet.</p>';
-}
-function renderLeads(){
- const a=get(KEY.leads);
- leadCount.textContent=a.length;
- leadTable.innerHTML='<tr><th>Name</th><th>Destination</th><th>Date</th><th>Travellers</th><th>Phone</th></tr>'+
- (a.length?a.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.destination)}</td><td>${esc(x.date)}</td><td>${esc(x.travelers)}</td><td>${esc(x.phone)}</td></tr>`).join(''):'<tr><td colspan="5">No demo enquiries yet.</td></tr>');
-}
-function clearLeads(){if(confirm('Clear demo enquiries from this browser?')){localStorage.removeItem(KEY.leads);renderAll()}}
-function draftBlog(){
- const t=blogTopic.value.trim()||'A Travel Guide';
- draft.value=`${t}\n\nIntroduction\nPlanning your next journey from Hyderabad? Here is a practical guide to help you choose the right season, route, stay and experiences.\n\nBest time to travel\nChoose your travel month based on weather, road conditions and local festivals. Always check current conditions before departure.\n\nWhat to plan\n• Transport and pickup point\n• Hotel category and meal plan\n• Sightseeing and permits where required\n• Emergency/local support\n• Budget and travel insurance\n\nWhy travel with On A Trip Holidays?\nWe help Telugu-speaking travellers plan comfortable group and private journeys with trusted stays, transport and local assistance.\n\nReady to plan?\nContact On A Trip Holidays for a customised quote and current batch availability.`;
-}
-function saveBlog(){
- const a=get(KEY.blogs); if(!draft.value.trim())return;
- a.unshift({id:Date.now(),title:(blogTopic.value.trim()||'Travel Guide'),text:draft.value});
- set(KEY.blogs,a); renderAll();
-}
-function renderBlogs(){
- const a=get(KEY.blogs); blogCount.textContent=a.length;
- savedBlogs.innerHTML=a.length?'<h3 style="margin-top:25px">Saved drafts</h3>'+a.map(x=>`<div class="item-row"><div><b>${esc(x.title)}</b><small>${esc(x.text).slice(0,180)}…</small></div></div>`).join(''):'';
-}
-function renderAll(){
- packageCount.textContent=(30+get(KEY.packages).length)+'+';
- batchCount.textContent=get(KEY.batches).length;
- renderPackages();renderBatches();renderLeads();renderBlogs();
-}
-renderAll();
+if(sessionStorage.getItem('oat_admin_auth')==='1') location.href='admin-dashboard.html';
 </script>
-
-<section style="padding:0 5% 70px"><div style="max-width:1180px;margin:auto">
-<div style="background:#fff;border:1px solid #eadbd5;border-radius:20px;padding:20px">
-<h2 style="color:#5b2b1e">Destination image library</h2>
-<p style="color:#7b6861">V12 maps package visuals to the actual destination instead of generic travel photos.</p>
-<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
-<div style="height:150px;border-radius:14px;background:url('https://commons.wikimedia.org/wiki/Special:Redirect/file/Chicham%20Bridge%20in%20Spiti.jpg') center/cover"><span style="background:#fff;padding:6px 9px;border-radius:8px;display:inline-block;margin:10px;font-weight:800">Spiti • Chicham Bridge</span></div>
-<div style="height:150px;border-radius:14px;background:url('https://commons.wikimedia.org/wiki/Special:Redirect/file:Pangong_tso.jpg') center/cover"><span style="background:#fff;padding:6px 9px;border-radius:8px;display:inline-block;margin:10px;font-weight:800">Ladakh • Pangong Tso</span></div>
-<div style="height:150px;border-radius:14px;background:url('https://commons.wikimedia.org/wiki/Special:Redirect/file:Kedarnath_Temple_Uttarakhand_India.webp') center/cover"><span style="background:#fff;padding:6px 9px;border-radius:8px;display:inline-block;margin:10px;font-weight:800">Char Dham • Kedarnath</span></div>
-<div style="height:150px;border-radius:14px;background:url('https://commons.wikimedia.org/wiki/Special:Redirect/file:DalLake.jpeg') center/cover"><span style="background:#fff;padding:6px 9px;border-radius:8px;display:inline-block;margin:10px;font-weight:800">Kashmir • Dal Lake</span></div>
-</div></div></div></section>
 </body>
 </html>
