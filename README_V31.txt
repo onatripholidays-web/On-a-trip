@@ -1,0 +1,1 @@
+V31 adds On A Trip Smart Plan, destination intelligence, Before You Book guidance, signature experiences, best-time/fit/pace facts, and mobile overlap spacing fixes across package pages. The Smart Plan is a lightweight browser-side planning check; it does not claim to be an AI service or replace human/local validation.
