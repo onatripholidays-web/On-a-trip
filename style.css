@@ -355,3 +355,20 @@ footer a{display:block;margin:8px 0;font-size:14px}.copy{grid-column:1/-1;border
  .v18-confidence-grid .benefit-icon{font-size:27px}
  .v18-reviews{padding-bottom:130px}
 }
+
+
+/* V24 — Mobile hero typography / wrap fix */
+.v18-hero h1{max-width:760px;text-wrap:balance;}
+@media(max-width:800px){
+  .v18-hero-inner{padding-top:30px;padding-bottom:34px;}
+  .v18-pill{display:block;width:100%;max-width:100%;padding:8px 10px;font-size:9px;line-height:1.25;letter-spacing:.75px;white-space:normal;text-align:center;}
+  .v18-hero h1{font-size:40px;line-height:1.02;letter-spacing:-1.5px;margin:15px 0 13px;max-width:340px;text-wrap:balance;}
+  .v18-hero p{font-size:13px;line-height:1.5;max-width:355px;}
+  .v18-benefits{gap:10px;margin:17px 0 21px;}
+  .v18-actions{gap:9px;}
+  .v18-cta-dark,.v18-cta-light{padding:13px 14px;font-size:11px;}
+}
+@media(max-width:380px){
+  .v18-hero h1{font-size:37px;max-width:320px;}
+  .v18-pill{font-size:8.5px;}
+}
