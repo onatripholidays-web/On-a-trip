@@ -1,0 +1,1 @@
+V34: Expanded original SEO content inspired by competitor information architecture. Added 12 Hyderabad destination landing pages and 24 original travel guides, strengthened internal linking, FAQ/Article/TouristDestination schema, and regenerated sitemap/robots. Content is original and should be reviewed for current pricing, dates and operational details before publishing.
