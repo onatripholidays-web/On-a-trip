@@ -410,3 +410,10 @@ footer a{display:block;margin:8px 0;font-size:14px}.copy{grid-column:1/-1;border
 
 /* V33 SEO content */
 .seo-guide-section{padding:56px 20px;background:#f7fafc}.seo-guide-inner{max-width:1120px;margin:auto}.seo-guide-section h2,.seo-article h1{color:#0a2740}.seo-links{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}.seo-links a,.seo-blog-card>a{font-weight:700;color:#0a6cff}.seo-article{max-width:900px;margin:0 auto;padding:70px 20px}.seo-article h1{font-size:clamp(34px,5vw,56px);line-height:1.05;margin:10px 0 20px}.seo-article h2{margin-top:36px;color:#0a2740}.seo-article .lead{font-size:20px;line-height:1.7;color:#4a5a67}.seo-article li{margin:10px 0}.seo-blog-grid{padding:60px 20px}.blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:24px}.seo-blog-card{background:#fff;border:1px solid #e5ebf0;border-radius:18px;padding:22px;box-shadow:0 8px 25px rgba(0,0,0,.05)}.seo-blog-card h3{margin:8px 0}.seo-blog-card h3 a{color:#0a2740;text-decoration:none}.seo-blog-card p{line-height:1.6;color:#52616d}@media(max-width:800px){.blog-grid{grid-template-columns:1fr}.seo-article{padding-top:45px}.seo-guide-section{padding:42px 16px}}
+
+/* V35 — 2026 destination visual refresh */
+.hero-visual-refresh{position:relative;overflow:hidden;background-position:center!important;background-size:cover!important;}
+.hero-visual-refresh:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,26,46,.86),rgba(7,26,46,.30) 62%,rgba(7,26,46,.18));pointer-events:none;}
+.hero-visual-refresh .hero-inner{position:relative;z-index:2;}
+.visual-refresh-badge{display:inline-flex;align-items:center;gap:7px;margin-bottom:10px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.24);backdrop-filter:blur(8px);font-size:11px;font-weight:800;letter-spacing:.12em;color:#fff;}
+@media(max-width:600px){.hero-visual-refresh{min-height:390px!important;background-position:center!important}.visual-refresh-badge{font-size:10px;padding:5px 8px}.hero-visual-refresh:after{background:linear-gradient(180deg,rgba(7,26,46,.64),rgba(7,26,46,.46));}}
