@@ -1,0 +1,1 @@
+V29: all destination package pages upgraded to a premium trip-detail itinerary layout inspired by modern travel booking pages. Content is original/reworked for On A Trip Holidays; competitor text and branding are not copied. Each page includes pickup/drop, duration, route, overview/highlights, detailed day-wise plan, inclusions, exclusions, other info and CTA.
