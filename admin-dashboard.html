@@ -210,8 +210,11 @@ function renderBatches(){
 function renderLeads(){
  const a=get(KEY.leads);
  leadCount.textContent=a.length;
- leadTable.innerHTML='<tr><th>Name</th><th>Destination</th><th>Date</th><th>Travellers</th><th>Phone</th></tr>'+
- (a.length?a.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.destination)}</td><td>${esc(x.date)}</td><td>${esc(x.travelers)}</td><td>${esc(x.phone)}</td></tr>`).join(''):'<tr><td colspan="5">No demo enquiries yet.</td></tr>');
+ leadTable.innerHTML='<tr><th>Name</th><th>Destination / Package</th><th>Source</th><th>Date</th><th>Phone</th><th>Email</th></tr>'+
+ (a.length?a.map(x=>{
+   const destination=x.destination||x.package||'—', phone=x.phone||x.mobile||'—', date=x.date||x.timestamp||'—', source=x.source||'Website Enquiry', email=x.email||'—';
+   return `<tr><td>${esc(x.name||'—')}</td><td>${esc(destination)}</td><td>${esc(source)}</td><td>${esc(date)}</td><td>${esc(phone)}</td><td>${esc(email)}</td></tr>`;
+ }).join(''):'<tr><td colspan="6">No enquiries yet.</td></tr>');
 }
 function clearLeads(){if(confirm('Clear demo enquiries from this browser?')){localStorage.removeItem(KEY.leads);renderAll()}}
 function draftBlog(){
