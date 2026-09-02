@@ -1,0 +1,15 @@
+On A Trip Holidays SEO upgrade
+
+Built using original content and structural learnings from competitor SERP pages. No competitor copy was reproduced.
+
+Updates:
+- Removed the vertical Call Us / WhatsApp / Enquire rail from homepage.
+- Added Hyderabad-focused local SEO hub and landing pages.
+- Added group tours and pilgrimage landing pages.
+- Added itinerary library page for package PDFs.
+- Added stronger canonical, robots, Open Graph and local business metadata.
+- Added sitemap.xml and llms.txt.
+- Added internal linking between Hyderabad pages, packages, blogs and itineraries.
+- Existing destination and blog pages retained.
+
+SEO note: rankings are not guaranteed; indexing, competition, Google Business Profile signals, reviews, backlinks and ongoing content updates also affect results.
