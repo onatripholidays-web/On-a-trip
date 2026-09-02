@@ -1,0 +1,13 @@
+ON A TRIP HOLIDAYS — FILE 1
+
+Current working master: File 1
+Latest update: V39 mobile-first floating actions + compact footer
+
+Applied:
+- Replaced homepage floating WhatsApp dot with a recognizable WhatsApp logo icon.
+- Added fixed Go-to-Top (⌃) button.
+- Added the same floating WhatsApp + Go-to-Top controls to other site HTML pages for consistency.
+- Reorganized mobile footer into a compact 3-column Explore / Popular / Contact layout with reduced vertical gaps.
+- Kept previous File 1 changes intact: updated logo, Mountains destinations, sixth Manali destination, Telugu trust section fixes, and itinerary overlap fixes.
+
+ZIP packaging: V39 update generated only when explicitly requested.
