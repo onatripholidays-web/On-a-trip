@@ -383,7 +383,7 @@ footer a{display:block;margin:8px 0;font-size:14px}.copy{grid-column:1/-1;border
 
 /* ===== V29 — Premium itinerary layout inspired by modern trip-detail pages ===== */
 .trip-details-v29{padding:0 5% 70px;background:#f6f9fb;color:#09233b}.trip-details-v29>*{max-width:1180px;margin-left:auto;margin-right:auto}
-.trip-facts-v29{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:-35px;position:relative;z-index:3}.trip-facts-v29>div{background:#fff;border:1px solid #e1e8ed;border-radius:16px;padding:18px;box-shadow:0 12px 30px #09233b10}.trip-facts-v29 span{display:block;font-size:22px;margin-bottom:8px}.trip-facts-v29 small{display:block;color:#7b8992;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:1px}.trip-facts-v29 b{display:block;margin-top:6px;font-size:14px;line-height:1.4}
+.trip-facts-v29{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px;position:relative;z-index:3}.trip-facts-v29>div{background:#fff;border:1px solid #e1e8ed;border-radius:16px;padding:18px;box-shadow:0 12px 30px #09233b10}.trip-facts-v29 span{display:block;font-size:22px;margin-bottom:8px}.trip-facts-v29 small{display:block;color:#7b8992;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:1px}.trip-facts-v29 b{display:block;margin-top:6px;font-size:14px;line-height:1.4}
 .trip-overview-v29{margin-top:34px;display:grid;grid-template-columns:1.05fr 1fr;gap:30px;align-items:stretch}.trip-overview-copy-v29{background:#fff;border:1px solid #e1e8ed;border-radius:22px;padding:30px}.trip-overview-copy-v29 h2{font-size:clamp(30px,4vw,46px);line-height:1.04;margin:8px 0 14px;letter-spacing:-1px}.trip-overview-copy-v29 p{color:#65747f;line-height:1.8;margin:0}.highlight-grid-v29{display:grid;grid-template-columns:1fr 1fr;gap:12px}.highlight-grid-v29>div{background:#09233b;color:#fff;border-radius:18px;padding:20px;display:flex;flex-direction:column;justify-content:center}.highlight-grid-v29 span{color:#f05a28;font-size:22px}.highlight-grid-v29 b{font-size:15px;margin-top:8px}.highlight-grid-v29 small{color:#b9c8d3;margin-top:6px;line-height:1.4}
 .v29-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:32px;padding:10px;background:#fff;border:1px solid #e1e8ed;border-radius:16px;position:sticky;top:8px;z-index:5;box-shadow:0 8px 22px #09233b0a}.v29-tabs a{padding:11px 15px;border-radius:10px;color:#09233b;text-decoration:none;font-size:11px;font-weight:900}.v29-tabs a:hover{background:#f1f5f7;color:#f05a28}
 .v29-block{margin-top:34px}.v29-heading{margin-bottom:18px}.v29-heading h2{font-size:32px;margin:6px 0}.v29-heading p{color:#73818a;margin:0}.v29-days{display:grid;gap:13px}.v29-day{display:grid;grid-template-columns:88px 1fr;background:#fff;border:1px solid #e0e7eb;border-radius:20px;overflow:hidden;box-shadow:0 8px 22px #09233b08}.v29-day-num{background:#09233b;color:#fff;display:flex;align-items:flex-start;justify-content:center;padding:25px 10px;font-size:12px;font-weight:950;letter-spacing:1px}.v29-day-body{padding:23px 25px}.v29-day-body h3{font-size:21px;margin:0 0 8px;color:#09233b}.v29-day-body p{margin:0;color:#687781;line-height:1.7}.v29-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.v29-meta span{background:#f5f8fa;border:1px solid #e4eaee;border-radius:9px;padding:8px 10px;font-size:10px;color:#62717b}.v29-meta b{color:#09233b}
@@ -449,3 +449,68 @@ footer a{display:block;margin:8px 0;font-size:14px}.copy{grid-column:1/-1;border
 .oat-privacy{font-size:10px!important;color:#8a969e!important;margin:12px 0 0!important}
 .oat-error{display:none;background:#fff0ee;border:1px solid #f0c8bf;color:#b33b23;padding:9px 11px;border-radius:9px;font-size:12px;font-weight:800;margin:8px 0}
 @media(max-width:600px){.oat-download-btn{width:100%}.oat-download-note{width:100%}}
+
+/* V29.2 — Itinerary summary/facts overlap fix */
+.package-summary-strip{position:relative;z-index:4;overflow:visible;}
+.summary-highlights,.summary-batch{min-width:0;}
+.summary-highlights{overflow:hidden;}
+.summary-pills{min-width:0;max-width:100%;}
+.trip-details-v29{position:relative;z-index:1;}
+@media(max-width:900px){.trip-facts-v29{margin-top:12px;}}
+
+
+/* V38 — Mobile-first homepage refinements */
+/* Keep the Two Telugu States section flush with the page so no white side gaps show. */
+.v19-telugu-trust{margin-left:0;margin-right:0;border-radius:0 0 24px 24px;}
+
+/* Ensure the 6 Years of Trust metric stays on one line on phones. */
+.v18-benefits span:last-child{white-space:nowrap;}
+.v18-benefits span:last-child b,.v18-benefits span:last-child small{white-space:nowrap;}
+
+/* Sixth destination card: completes the mobile 2-column grid. */
+.v18-dest.manali{background-image:linear-gradient(180deg,#0001,#0006),url('https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=900&q=85');background-size:cover;background-position:center;}
+
+@media(max-width:600px){
+  .v19-telugu-trust{margin-left:0;margin-right:0;border-radius:0 0 18px 18px;padding-left:5%;padding-right:5%;}
+  .v18-benefits{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;align-items:start;}
+  .v18-benefits span{min-width:0;grid-template-columns:24px minmax(0,1fr);column-gap:4px;}
+  .v18-benefits span:last-child{grid-template-columns:24px max-content;justify-content:start;}
+  .v18-benefits span:last-child small{grid-column:2;font-size:8px;}
+  .v18-destinations{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .v18-dest.manali{display:block;}
+}
+
+@media(max-width:380px){
+  .v18-benefits{gap:5px;}
+  .v18-benefits span:last-child small{font-size:7.5px;}
+}
+
+/* V39 — Mobile floating actions: recognizable WhatsApp + back-to-top */
+.v18-wa a{display:grid;place-items:center}
+.v18-wa a svg{width:29px;height:29px;display:block}
+.v18-page-top{position:fixed;right:22px;bottom:91px;z-index:100;display:block}
+.v18-page-top button{width:49px;height:49px;border:0;border-radius:50%;background:#0a9fd1;color:#fff;font-size:30px;line-height:1;font-weight:900;display:grid;place-items:center;cursor:pointer;box-shadow:0 8px 24px #0003}
+@media(max-width:800px){
+  .v18-page-top{right:18px;bottom:137px}
+  .v18-page-top button{width:43px;height:43px;font-size:27px}
+  .v18-wa{right:18px;bottom:80px}
+  .v18-wa a{width:49px;height:49px}
+  .v18-wa a svg{width:28px;height:28px}
+}
+
+/* V39 — Compact mobile footer organization, inspired by the supplied reference */
+@media(max-width:600px){
+  footer{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:20px 12px;
+    padding:30px 5% 24px;
+    text-align:left;
+  }
+  footer>div:first-child{grid-column:1/-1}
+  footer>div:nth-child(2),footer>div:nth-child(3),footer>div:nth-child(4){min-width:0}
+  footer h4{margin:0 0 10px;font-size:15px}
+  footer p{font-size:12px;line-height:1.5;margin:8px 0 0}
+  footer a{margin:7px 0;font-size:11px;line-height:1.25}
+  footer .footlogo img{max-width:190px;height:auto}
+  footer .copy{grid-column:1/-1;margin-top:2px;padding-top:15px;font-size:10px}
+}
