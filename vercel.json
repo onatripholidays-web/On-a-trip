@@ -1,0 +1,14 @@
+{
+  "redirects": [
+    {
+      "source": "/destinations/maldives",
+      "destination": "https://www.onatripholidays.com/package-char-dham.html",
+      "permanent": true
+    },
+    {
+      "source": "/destinations/maldives/",
+      "destination": "https://www.onatripholidays.com/package-char-dham.html",
+      "permanent": true
+    }
+  ]
+}
