@@ -1,0 +1,14 @@
+ON A TRIP HOLIDAYS — FINAL 1 SEO/BLOG UPDATE
+
+Added without removing existing website content:
+- Uploaded On A Trip Holidays logo added as assets/logo.png and used by existing site pages.
+- 10 original destination travel guides: Char Dham, Do Dham, Kedarnath, Shimla, Manali, Spiti, Ladakh, Kerala, Jammu & Kashmir, Delhi.
+- 10 Hyderabad-focused SEO/package landing pages for the same destinations.
+- New blog cluster and internal links added to existing blogs page.
+- FAQ, Article and TravelAgency structured data added to the new pages.
+- Sitemap regenerated.
+- Existing itinerary links corrected to the repository's existing itinerary/ directory convention.
+- Existing pages, packages, blogs, admin pages and other content retained.
+
+Content note:
+The new pages use original writing based on common travel-search intent and publicly visible Thomas Cook topic/structure research. Thomas Cook text has not been copied into the site.

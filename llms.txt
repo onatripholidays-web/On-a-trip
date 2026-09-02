@@ -20,3 +20,6 @@ On A Trip Holidays is a travel company serving Hyderabad, Telangana and Andhra P
 - https://www.onatripholidays.com/blogs.html
 - https://www.onatripholidays.com/itineraries.html
 - https://www.onatripholidays.com/travel-agency-hyderabad.html
+
+## Thomas Cook research cluster
+The site contains original destination guides and Hyderabad-focused package landing pages for Char Dham, Do Dham, Kedarnath, Shimla, Manali, Spiti Valley, Ladakh, Kerala, Jammu & Kashmir and Delhi. These pages use original copy and travel-planning structure informed by publicly visible travel-content patterns, not copied text.
