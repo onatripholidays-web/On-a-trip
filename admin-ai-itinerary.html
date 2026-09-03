@@ -42,7 +42,7 @@ textarea{min-height:72px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px
   .wrap{max-width:none;padding:0}.grid{display:block}.card{border:0;box-shadow:none;padding:0}
   .quote{display:none!important}.print-sheet{display:block}
   .print-header{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid var(--orange);padding-bottom:8px;margin-bottom:12px}
-  .print-header img{width:155px;height:auto;background:#ffd75a}
+  .print-header img{width:175px;height:auto;background:#fff;object-fit:contain}
   .print-company{text-align:right;font-size:10px;line-height:1.4}.print-company b{font-size:15px}
   .print-title{font-size:23px;font-weight:950;margin:5px 0}.print-sub{font-size:11px;color:#52636f}
   .guest-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;border:1px solid #ddd;padding:9px;margin:10px 0}
@@ -53,7 +53,7 @@ textarea{min-height:72px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px
   .print-box h4{margin:0 0 4px;font-size:11px}.print-box p,.print-box li{font-size:9.5px;line-height:1.35}
   .print-price{font-size:18px;font-weight:950}.payment{break-inside:avoid;margin-top:10px;border:2px solid #e6a33a;border-radius:8px;padding:10px}
   .payment h3{text-align:center;margin:0 0 8px;font-size:15px}.pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;font-size:9.5px}
-  .pay-grid b{color:#b12820}.qr-wrap{text-align:center;margin-top:7px}.qr-wrap img{width:115px;height:115px}
+  .pay-grid b{color:#b12820}.qr-wrap{text-align:center;margin-top:7px}.qr-wrap img{width:125px;height:125px;object-fit:contain}
   .how{font-size:9.5px;line-height:1.35;margin-top:7px}.print-footer{text-align:center;border-top:2px solid var(--orange);padding-top:6px;margin-top:10px;font-size:9px}
 }
 </style>
@@ -151,7 +151,31 @@ let last=null,lastQuote=null,editing=false;
 
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
 function formatDate(v){if(!v)return '';const d=new Date(v+'T00:00:00');return d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});}
-function updateDates(){const a=$('startDate').value,b=$('endDate').value;if(a&&b){const s=new Date(a+'T00:00:00'),e=new Date(b+'T00:00:00'),diff=Math.round((e-s)/86400000);if(diff>=0){$('days').value=diff+1;$('duration').value=`${diff} Night${diff===1?'':'s'} / ${diff+1} Day${diff===0?'':'s'}`;}else $('duration').value='End date must be after start date';}else $('duration').value='Select start & end dates';}
+function updateDates(){
+ const a=$('startDate').value,b=$('endDate').value;
+ if(a&&b){
+  const s=new Date(a+'T00:00:00'),e=new Date(b+'T00:00:00'),diff=Math.round((e-s)/86400000);
+  if(diff>=0){$('days').value=diff+1;$('duration').value=`${diff} Night${diff===1?'':'s'} / ${diff+1} Day${diff===0?'':'s'}`;return true;}
+  $('duration').value='End date must be on or after start date'; return false;
+ }
+ if(a){
+  const n=Math.max(1,Math.min(30,Number($('days').value)||1));
+  const s=new Date(a+'T00:00:00'); s.setDate(s.getDate()+n-1);
+  const end=s.toISOString().slice(0,10);
+  $('endDate').value=end;
+  $('duration').value=`${n-1} Night${n-1===1?'':'s'} / ${n} Day${n===1?'':'s'}`;
+  return true;
+ }
+ $('duration').value='Select start & end dates'; return true;
+}
+function validateDates(){
+ const a=$('startDate').value,b=$('endDate').value;
+ if(a&&b && new Date(b+'T00:00:00') < new Date(a+'T00:00:00')){
+  $('endDate').setCustomValidity('End date must be on or after start date.');
+  return false;
+ }
+ $('endDate').setCustomValidity(''); return true;
+}
 function readForm(){updateDates();return{
  guest:$('guest').value.trim()||'Guest',contact:$('contact').value.trim(),email:$('email').value.trim(),dest:$('dest').value.trim(),
  days:Math.max(1,Math.min(30,Number($('days').value)||1)),pax:Math.max(1,Number($('pax').value)||1),
@@ -189,10 +213,10 @@ function render(x,r){
 
 function showError(message){$('status').className='status error';$('status').textContent='● AI ERROR';$('err').style.display='block';$('err').textContent=message;$('msg').textContent='AI did not return a usable itinerary. Check the message and try again.';}
 
-$('startDate').addEventListener('change',updateDates);$('endDate').addEventListener('change',updateDates);
+$('startDate').addEventListener('change',()=>{updateDates();validateDates()});$('endDate').addEventListener('change',()=>{validateDates();updateDates()});$('days').addEventListener('change',()=>{updateDates();validateDates()});
 $('pax').addEventListener('change',()=>{const n=Number($('pax').value)||1;const opts=[['Sedan Car — up to 4 members',4],['Ertiga — up to 6 members',6],['Innova Crysta — up to 7 members',7],['Tempo Traveller — 12 Seater',12],['Tempo Traveller — 17 Seater',17],['Tempo Traveller — 20 Seater',20]];const current=$('vehicle').value;const match=opts.find(([_,cap])=>n<=cap);if(match && (current.startsWith('Sedan')||current.startsWith('Ertiga')||current.startsWith('Innova')||current.startsWith('Tempo'))) $('vehicle').value=match[0];});
 $('f').addEventListener('submit',async e=>{
- e.preventDefault();$('err').style.display='none';const r=readForm();
+ e.preventDefault();$('err').style.display='none';if(!validateDates()){showError('End date must be on or after the start date. Please correct the travel dates.');return}const r=readForm();if(r.startDate&&r.endDate&&new Date(r.endDate+'T00:00:00')<new Date(r.startDate+'T00:00:00')){showError('End date must be on or after the start date.');return}
  if(!r.dest){showError('Please enter a destination before generating the itinerary.');return}
  if(!r.contact){showError('Please enter the guest contact number.');return}
  last=r;$('msg').textContent='AI is preparing the itinerary…';
@@ -230,7 +254,7 @@ function syncPrint(){
  $('pTitle').textContent=x.title||`${r.dest} — ${r.days} Days`;
  $('pSummary').textContent=x.summary||'Customer-ready travel quotation and itinerary';
  $('pGuest').innerHTML=[
-  ['Guest',r.guest],['Contact',r.contact],['Email',r.email||'Not provided'],['Destination',r.dest],['Duration',r.days>1?`${r.days-1} Nights / ${r.days} Days`:`${r.days} Day`],['Travellers',r.pax],
+  ['Guest',r.guest],['Contact',r.contact],['Email',r.email||'Not provided'],['Destination',r.dest],['Duration',r.startDate&&r.endDate?`${Math.round((new Date(r.endDate+'T00:00:00')-new Date(r.startDate+'T00:00:00'))/86400000)} Nights / ${Math.round((new Date(r.endDate+'T00:00:00')-new Date(r.startDate+'T00:00:00'))/86400000)+1} Days`:(r.days>1?`${r.days-1} Nights / ${r.days} Days`:`${r.days} Day`)],['Travellers',r.pax],
   ['Start City',r.start],['Start Date',r.startDate?formatDate(r.startDate):'To be confirmed'],['End Date',r.endDate?formatDate(r.endDate):'To be confirmed'],['Trip Type',r.type],['Language',r.language]
  ].map(a=>`<div><b>${esc(a[0])}</b>${esc(a[1])}</div>`).join('');
  $('pDays').innerHTML=(x.days||[]).map(d=>`<div class="print-day"><h3>Day ${esc(d.day)}: ${esc(d.title)}</h3><p>${esc(d.summary||'')}</p><p><b>Hotel:</b> ${esc(d.hotel||'')}</p><p><b>Meals:</b> ${esc(d.meals||'')}</p></div>`).join('');
@@ -238,7 +262,7 @@ function syncPrint(){
  $('pInc').innerHTML=(x.inclusions||[]).map(i=>`<li>${esc(i)}</li>`).join('');$('pExc').innerHTML=(x.exclusions||[]).map(i=>`<li>${esc(i)}</li>`).join('');
  $('pPrice').textContent=x.price||r.budget||'Price to be quoted';$('pNotes').textContent=x.notes||'Final confirmation is subject to availability and supplier confirmation.';
 }
-function printQuote(){captureEdits();syncPrint();window.print()}
+function printQuote(){captureEdits();syncPrint();ensurePrintImages().then(()=>window.print())}
 function whatsapp(){
  captureEdits();syncPrint();if(!last||!lastQuote){alert('Generate a quote first.');return}
  const text=['ON A TRIP HOLIDAYS — CUSTOMER QUOTE','',`Guest: ${last.guest}`,`Contact: ${last.contact}`,...(last.email?[`Email: ${last.email}`]:[]),`Destination: ${last.dest}`,`Duration: ${last.days} Days`,`Travellers: ${last.pax}`,`Dates: ${last.dates||'TBC'}`,`Quote: ${lastQuote.price||last.budget||'TBC'}`,'','Detailed branded itinerary PDF can be shared by the travel team.'].join('\n');
