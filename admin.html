@@ -4,7 +4,6 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Admin Login | On A Trip Holidays</title>
 <meta name="robots" content="noindex,nofollow">
-<link rel="icon" type="image/png" href="assets/on-a-trip-logo.png">
 <style>
 :root{--navy:#062541;--navy2:#0b3457;--orange:#ef5b2a;--bg:#f3f6f8;--ink:#10283c;--muted:#71818d;--line:#dce5ea}
 *{box-sizing:border-box}body{margin:0;min-height:100vh;background:linear-gradient(135deg,#061d32,#0b3457);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial;color:var(--ink);display:grid;place-items:center;padding:22px}
@@ -13,7 +12,7 @@
 </head>
 <body>
 <div class="shell">
-  <section class="hero"><div><img class="logo" src="assets/on-a-trip-logo.png" alt="On A Trip Holidays"><div class="badge" style="margin-top:28px">Holidays Admin</div><h1>AI Quotation Maker</h1><p>Create professional travel quotations, edit itineraries, collect payment decisions and generate payment invoices from one secure admin workspace.</p></div><div class="brandline">On A Trip Holidays • Travel with us. Explore the magical places.</div></section>
+  <section class="hero"><div><img class="logo" src="assets/logo.png" alt="On A Trip Holidays"><div class="badge" style="margin-top:28px">Holidays Admin</div><h1>AI Quotation Maker</h1><p>Create professional travel quotations, edit itineraries, collect payment decisions and generate payment invoices from one secure admin workspace.</p></div><div class="brandline">On A Trip Holidays • Travel with us. Explore the magical places.</div></section>
   <section class="panel"><div class="panel-inner">
     <h2>Welcome back</h2><p class="sub">Sign in to your admin workspace.</p>
     <form id="login">
@@ -29,7 +28,7 @@
 const $=id=>document.getElementById(id);
 $('toggle').onclick=()=>{const p=$('password');p.type=p.type==='password'?'text':'password';$('toggle').textContent=p.type==='password'?'👁':'🙈'};
 $('forgot').onclick=e=>{e.preventDefault();$('msg').style.display='block';$('msg').style.background='#fff8e8';$('msg').style.color='#7a5310';$('msg').textContent='Password reset is handled by the account administrator. Please contact the administrator to reset your login securely.'};
-$('login').onsubmit=e=>{e.preventDefault();const email=$('email').value.trim();const password=$('password').value;if(!email||!password)return;sessionStorage.setItem('oat_admin_auth','1');if($('remember').checked)localStorage.setItem('oat_admin_email',email);location.href='admin-ai-itinerary.html'};
+$('login').onsubmit=e=>{e.preventDefault();const email=$('email').value.trim();const password=$('password').value;if(!email||!password)return;sessionStorage.setItem('oat_admin_auth','1');if($('remember').checked)localStorage.setItem('oat_admin_email',email);location.href='admin-dashboard.html'};
 const saved=localStorage.getItem('oat_admin_email');if(saved)$('email').value=saved;
 </script>
 </body></html>
