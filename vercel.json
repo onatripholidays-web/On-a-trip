@@ -1,1 +1,3 @@
-{"functions":{"api/generate-itinerary.js":{"runtime":"nodejs22.x"}}}
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json"
+}
