@@ -514,3 +514,7 @@ footer a{display:block;margin:8px 0;font-size:14px}.copy{grid-column:1/-1;border
   footer .footlogo img{max-width:190px;height:auto}
   footer .copy{grid-column:1/-1;margin-top:2px;padding-top:15px;font-size:10px}
 }
+
+/* V12 SEO + conversion sections */
+.seo-v12-section h2{margin-top:0}.seo-v12-section p,.seo-v12-section li{line-height:1.75}.seo-v12-section details{padding:14px 0;border-bottom:1px solid #e5e5e5}.seo-v12-section summary{cursor:pointer;font-weight:700}.seo-v12-section ul{padding-left:22px}
+@media(max-width:700px){.seo-v12-section{margin:22px 12px!important;padding:22px 17px!important}.seo-v12-section h2{font-size:1.35rem}}
