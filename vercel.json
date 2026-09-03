@@ -54,6 +54,11 @@
       "source": "/hyderabad-to-spiti-valley-tour.html",
       "destination": "https://www.onatripholidays.com/spiti-valley-tour-packages-from-hyderabad.html",
       "permanent": true
+    },
+    {
+      "source": "/wp-content/uploads/2024/03/2024-Chardham-.pdf",
+      "destination": "https://www.onatripholidays.com/char-dham-yatra-packages-from-hyderabad.html",
+      "permanent": true
     }
   ],
   "headers": [
