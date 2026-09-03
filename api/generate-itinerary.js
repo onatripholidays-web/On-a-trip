@@ -95,7 +95,7 @@ Build exactly ${days} days. Make each day specific to ${destination}.
           items: {
             type: "object",
             additionalProperties: false,
-            required: ["day", "title", "summary"],
+            required: ["day", "title", "summary", "hotel", "meals"],
             properties: {
               day: { type: "integer" },
               title: { type: "string" },
