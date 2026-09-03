@@ -1,148 +1,37 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI Itinerary Maker | On A Trip Holidays</title>
-<meta name="robots" content="noindex,nofollow,noarchive">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Itinerary Builder | On A Trip Holidays</title><meta name="robots" content="noindex,nofollow">
 <style>
-:root{--navy:#08233f;--navy2:#103d66;--orange:#ee5a2a;--bg:#f4f7f9;--text:#102335;--muted:#6c7b87;--white:#fff;--line:#dce4e9;--green:#18a66a;--shadow:0 8px 28px rgba(10,35,55,.08)}
-*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text)}
-button,input,select,textarea{font:inherit}button{cursor:pointer}
-.app{min-height:100vh;display:flex}.sidebar{width:250px;background:var(--navy);color:#fff;padding:22px 16px;position:fixed;inset:0 auto 0 0;z-index:10}
-.brand{display:flex;align-items:center;gap:10px;padding:8px 10px 26px;border-bottom:1px solid rgba(255,255,255,.12)}.brand-mark{width:38px;height:38px;border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--orange);font-weight:900}.brand b{font-size:17px}.brand small{display:block;color:#b9c8d4;margin-top:3px}
-.nav{margin-top:18px;display:grid;gap:7px}.nav a{border:0;background:transparent;color:#d9e5ee;text-align:left;padding:13px 14px;border-radius:10px;font-weight:700;text-decoration:none;display:block}.nav a.active,.nav a:hover{background:var(--orange);color:#fff}
-.main{margin-left:250px;width:calc(100% - 250px);padding:24px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:20px}.topbar h1{margin:0;font-size:28px}.topbar p{margin:5px 0 0;color:var(--muted)}
-.btn{border:0;border-radius:10px;padding:11px 16px;font-weight:800}.primary{background:var(--orange);color:#fff}.secondary{background:#fff;border:1px solid var(--line);color:var(--navy)}
-.grid{display:grid;grid-template-columns:390px minmax(0,1fr);gap:18px}.card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:20px}.card h2{margin:0 0 15px;font-size:19px}
-.form{display:grid;gap:12px}.form label{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.04em}.form input,.form select,.form textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 12px;background:#fff;outline:none}.form textarea{min-height:85px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}.chip{border:1px solid var(--line);background:#f8fafb;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800}.chip:hover{border-color:var(--orange);color:var(--orange)}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}.status{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:#087548;background:#e9f7f0;border-radius:999px;padding:7px 10px}
-.preview-head{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:16px}.preview-head h2{margin:0}.eyebrow{color:var(--orange);font-weight:900;font-size:11px;letter-spacing:.12em;text-transform:uppercase}.trip-title{font-size:26px;font-weight:950;margin:5px 0}.summary{color:var(--muted);line-height:1.5}
-.day{border:1px solid var(--line);border-radius:13px;padding:15px;margin:11px 0;background:#fff}.day-head{display:flex;justify-content:space-between;gap:10px}.day h3{margin:0;font-size:16px}.day small{color:var(--orange);font-weight:900}.day p{margin:9px 0;color:#334a5b;line-height:1.55}.meta{display:flex;gap:7px;flex-wrap:wrap}.meta span{background:#f3f6f8;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:800;color:#536572}
-.inclusions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}.box{background:#f8fafb;border:1px solid var(--line);border-radius:12px;padding:13px}.box h4{margin:0 0 8px}.box ul{margin:0;padding-left:18px;color:#536572;line-height:1.6;font-size:13px}
-.empty{padding:40px 20px;text-align:center;color:var(--muted)}.saved{margin-top:18px}.saved-item{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}.saved-item b{font-size:13px}.saved-item small{display:block;color:var(--muted);margin-top:3px}
-.note{font-size:11px;color:var(--muted);line-height:1.45;background:#fff8e7;border:1px solid #f0d58a;padding:10px;border-radius:9px}
-@media(max-width:950px){.grid{grid-template-columns:1fr}.sidebar{width:76px}.brand div:not(.brand-mark),.nav span{display:none}.nav a{text-align:center}.main{margin-left:76px;width:calc(100% - 76px)}}
-@media(max-width:600px){.sidebar{display:none}.main{margin:0;width:100%;padding:14px}.topbar{align-items:flex-start}.topbar h1{font-size:22px}.row,.inclusions{grid-template-columns:1fr}}
-</style>
-</head>
-<body>
-<script>(function(){if(sessionStorage.getItem('oat_admin_auth')!=='1')location.replace('admin.html')})()</script>
-<div class="app">
-<aside class="sidebar">
-  <div class="brand"><div class="brand-mark">✈</div><div><b>ON A TRIP</b><small>HOLIDAYS • ADMIN</small></div></div>
-  <div class="nav">
-    <a href="admin-v4-crm.html">📊 <span>Dashboard</span></a>
-    <a class="active" href="admin-ai-itinerary.html">✨ <span>AI Itinerary</span></a>
-    <a href="admin-v4-crm.html#packages">🧳 <span>Packages</span></a>
-    <a href="admin-v4-crm.html#batches">📅 <span>Batches</span></a>
-    <a href="admin-v4-crm.html#enquiries">📲 <span>Enquiries</span></a>
-  </div>
-</aside>
-<main class="main">
-<header class="topbar">
-  <div><div class="eyebrow">ON A TRIP HOLIDAYS • AI TRAVEL DESK</div><h1>AI Itinerary Maker</h1><p>Create a customer-ready itinerary draft in seconds, then review and edit before sharing.</p></div>
-  <div class="actions"><button class="btn secondary" onclick="window.print()">🖨 Print / Save PDF</button><button class="btn primary" onclick="saveItinerary()">💾 Save Draft</button></div>
-</header>
-
-<div class="grid">
-<section>
-<div class="card">
-<h2>Trip requirements</h2>
-<div class="chips">
-<button class="chip" onclick="preset('char-dham')">Char Dham</button>
-<button class="chip" onclick="preset('kedarnath')">Kedarnath</button>
-<button class="chip" onclick="preset('kashmir')">Kashmir</button>
-<button class="chip" onclick="preset('ladakh')">Ladakh</button>
-<button class="chip" onclick="preset('kerala')">Kerala</button>
-<button class="chip" onclick="preset('thailand')">Thailand</button>
-</div>
-<form id="tripForm" class="form" onsubmit="generate(event)">
-<label>Customer name</label><input id="customer" placeholder="e.g. Ravi Kumar">
-<div class="row"><div><label>Destination</label><input id="destination" placeholder="e.g. Kashmir"></div><div><label>Days</label><input id="days" type="number" min="1" max="30" value="6"></div></div>
-<div class="row"><div><label>Travellers</label><input id="travellers" type="number" min="1" value="4"></div><div><label>Start point</label><input id="start" value="Hyderabad"></div></div>
-<div class="row"><div><label>Trip style</label><select id="style"><option>Family</option><option>Pilgrimage</option><option>Adventure</option><option>Couples</option><option>Premium</option></select></div><div><label>Hotel</label><select id="hotel"><option>3 Star</option><option>4 Star</option><option>5 Star</option><option>Premium</option></select></div></div>
+:root{--n:#08233f;--o:#ed5b2a;--bg:#f4f7f9;--line:#dce5ea}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#12283b;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial}.top{background:var(--n);color:#fff;padding:17px 22px;display:flex;justify-content:space-between;align-items:center}.top a{color:#fff;text-decoration:none;font-weight:800}.wrap{max-width:1300px;margin:auto;padding:20px}.grid{display:grid;grid-template-columns:400px 1fr;gap:18px}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:19px;box-shadow:0 6px 24px #0a29420a}.form{display:grid;gap:11px}label{font-size:11px;text-transform:uppercase;font-weight:900;letter-spacing:.05em}input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;background:#fff}textarea{min-height:75px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.btn{border:0;border-radius:10px;padding:12px 15px;font-weight:900;cursor:pointer}.primary{background:var(--o);color:#fff}.secondary{background:#fff;border:1px solid var(--line)}.actions{display:flex;gap:8px;flex-wrap:wrap}.status{font-size:12px;color:#067247;background:#e8f7ef;padding:7px 10px;border-radius:99px;font-weight:900}.quote{background:#fff}.quote-head{border-bottom:2px solid #edf1f3;padding-bottom:15px;margin-bottom:15px}.quote-title{font-size:28px;font-weight:950}.muted{color:#71818d}.day{border:1px solid var(--line);border-radius:11px;padding:14px;margin:10px 0}.day h3{margin:0 0 6px}.day p{line-height:1.5;margin:6px 0}.box{background:#f8fafb;border-radius:10px;padding:12px;margin-top:12px}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.price{font-size:26px;font-weight:950}.note{font-size:11px;color:#657784;line-height:1.5}.spinner{display:none}.loading .spinner{display:inline}.loading .gen{display:none}@media(max-width:900px){.grid{grid-template-columns:1fr}}@media(max-width:600px){.row,.two{grid-template-columns:1fr}.wrap{padding:12px}.quote-title{font-size:22px}}
+@media print{body{background:#fff}.top,.builder,.actions,.no-print{display:none!important}.wrap{max-width:none;padding:0}.grid{display:block}.card{border:0;box-shadow:none;padding:0}.quote{display:block}}
+</style></head><body>
+<script>if(sessionStorage.getItem('oat_admin_auth')!=='1')location.replace('admin.html')</script>
+<header class="top"><b>✈ ON A TRIP HOLIDAYS</b><a href="admin-v4-crm.html">← Admin</a></header>
+<div class="wrap"><div class="grid">
+<section class="builder card"><h1>✨ AI Itinerary Builder</h1><p class="muted">Describe the guest's trip. AI creates a sales-ready itinerary and quote.</p>
+<form id="f" class="form">
+<label>Guest name</label><input id="guest" placeholder="Guest full name">
+<div class="row"><div><label>Destination</label><input id="dest" placeholder="Kashmir"></div><div><label>Days</label><input id="days" type="number" min="1" max="30" value="6"></div></div>
+<div class="row"><div><label>Travellers</label><input id="pax" type="number" min="1" value="4"></div><div><label>Start city</label><input id="start" value="Hyderabad"></div></div>
+<div class="row"><div><label>Travel dates</label><input id="dates" placeholder="25 Sep – 30 Sep 2026"></div><div><label>Language</label><select id="language"><option>English</option><option>Telugu</option><option>English + Telugu</option></select></div></div>
+<div class="row"><div><label>Trip type</label><select id="type"><option>Family</option><option>Pilgrimage</option><option>Adventure</option><option>Couples</option><option>Premium</option></select></div><div><label>Hotel</label><select id="hotel"><option>3 Star</option><option>4 Star</option><option>5 Star</option><option>Premium</option></select></div></div>
 <div class="row"><div><label>Vehicle</label><select id="vehicle"><option>Private Car</option><option>Ertiga</option><option>Innova Crysta</option><option>Tempo Traveller</option><option>20 Seater Tempo</option></select></div><div><label>Meals</label><select id="meals"><option>Breakfast & Dinner</option><option>Breakfast Only</option><option>All Meals</option><option>Satvik Veg Meals</option></select></div></div>
-<label>Travel dates</label><input id="dates" placeholder="e.g. 25 Sep 2026 – 30 Sep 2026">
-<label>Special requirements</label><textarea id="special" placeholder="Senior citizens, temple darshan, child-friendly pace, preferred hotels, activities..."></textarea>
-<div class="actions"><button class="btn primary" type="submit">✨ Generate Itinerary</button><button class="btn secondary" type="button" onclick="document.getElementById('tripForm').reset();document.getElementById('days').value=6">Reset</button></div>
-<p class="note">V23 includes an AI-ready itinerary workflow and a local draft generator so the admin panel remains usable on the current static site. A secure server endpoint can be connected later for live LLM generation without exposing an API key in the browser.</p>
-</form>
-</div>
-<div class="card saved"><h2>Saved drafts</h2><div id="saved"></div></div>
-</section>
+<label>Budget / quote</label><input id="budget" placeholder="e.g. ₹35,000 per person or leave blank">
+<label>Special requirements</label><textarea id="special" placeholder="Senior citizens, darshan, child-friendly, honeymoon, activities, preferred hotels..."></textarea>
+<label>Additional instruction</label><textarea id="instruction" placeholder="Anything the sales person wants AI to consider..."></textarea>
+<div class="actions"><button id="generateBtn" class="btn primary gen" type="submit">✨ Generate with AI</button><button class="btn secondary" type="button" onclick="window.print()">🖨 PDF</button></div>
+<div id="msg" class="note">Live AI requires the Vercel endpoint and OPENAI_API_KEY. This ZIP includes that endpoint; no API key is placed in the browser.</div>
+</form></section>
 
-<section class="card">
-<div class="preview-head"><div><div class="eyebrow">Customer-ready preview</div><h2 id="previewTitle">Your itinerary will appear here</h2></div><span class="status">● Draft</span></div>
-<div id="preview" class="empty">Enter trip requirements and click <b>Generate Itinerary</b>.</div>
-</section>
-</div>
-</main>
-</div>
-
+<section class="card quote"><div class="quote-head"><span class="status">● QUOTE DRAFT</span><div class="quote-title" id="qt">Your guest quote will appear here</div><div class="muted" id="qm"></div></div><div id="out"><div class="muted">Fill the form and click Generate with AI.</div></div></section>
+</div></div>
 <script>
-const $=id=>document.getElementById(id);
-const presets={
-"char-dham":{destination:"Char Dham Yatra",days:11,start:"Hyderabad",style:"Pilgrimage",hotel:"3 Star",vehicle:"Tempo Traveller",meals:"Satvik Veg Meals",special:"Senior-friendly pacing, temple darshan sequence, trek guidance and comfortable halts."},
-"kedarnath":{destination:"Kedarnath Yatra",days:5,start:"Haridwar",style:"Pilgrimage",hotel:"3 Star",vehicle:"Ertiga",meals:"Satvik Veg Meals",special:"Temple darshan, trek/heli guidance and early departure planning."},
-"kashmir":{destination:"Kashmir",days:6,start:"Srinagar",style:"Family",hotel:"4 Star",vehicle:"Innova Crysta",meals:"Breakfast & Dinner",special:"Family-friendly pace with Srinagar, Gulmarg, Pahalgam and Sonamarg."},
-"ladakh":{destination:"Ladakh",days:7,start:"Leh",style:"Adventure",hotel:"3 Star",vehicle:"Innova Crysta",meals:"Breakfast & Dinner",special:"Acclimatization first, realistic driving times and buffer for high-altitude travel."},
-"kerala":{destination:"Kerala",days:6,start:"Kochi",style:"Family",hotel:"4 Star",vehicle:"Innova Crysta",meals:"Breakfast & Dinner",special:"Munnar, Thekkady and Alleppey with a relaxed family pace."},
-"thailand":{destination:"Thailand",days:6,start:"Bangkok",style:"Couples",hotel:"4 Star",vehicle:"Private Car",meals:"Breakfast Only",special:"Bangkok and Phuket/Pattaya with free time for shopping and experiences."}
-};
-function preset(k){const p=presets[k];Object.entries(p).forEach(([key,val])=>{if($(key))$(key).value=val});}
-function safe(s){return String(s||"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
-function buildDays(dest,n,start,style){
- const db={
-  "Char Dham Yatra":["Arrival & briefing","Barkot / Yamunotri","Uttarkashi / Gangotri","Sonprayag transfer","Kedarnath Darshan","Kedarnath to Chamoli","Badrinath Darshan","Badrinath to Rishikesh","Rishikesh local","Haridwar / Delhi transfer","Departure"],
-  "Kedarnath Yatra":["Arrival & briefing","Haridwar / Guptkashi transfer","Sonprayag – Kedarnath Darshan","Return from Kedarnath","Departure"],
-  "Kashmir":["Srinagar arrival & local sightseeing","Gulmarg excursion","Pahalgam excursion","Sonamarg excursion","Srinagar leisure / shopping","Departure"],
-  "Ladakh":["Leh arrival & acclimatization","Leh local & monasteries","Nubra Valley","Pangong Lake","Pangong to Leh","Leh buffer / local","Departure"],
-  "Kerala":["Kochi arrival – Munnar","Munnar sightseeing","Munnar – Thekkady","Thekkady – Alleppey","Houseboat / Alleppey","Departure"],
-  "Thailand":["Arrival & Bangkok city","Bangkok temples & shopping","Bangkok – Pattaya / Phuket transfer","Island / beach experiences","Leisure & shopping","Departure"]
- };
- const names=db[dest]||Array.from({length:n},(_,i)=>`Day ${i+1} — ${dest} highlights`);
- return Array.from({length:n},(_,i)=>names[i]||`Day ${i+1} — ${dest} exploration`).map((title,i)=>{
-   let detail= i===0 ? `Arrive at ${start}, meet the driver/team, hotel check-in and briefing. Keep the first day comfortable.` :
-     i===n-1 ? `Breakfast, final local activity if time permits, check-out and departure as per the onward journey.` :
-     `Proceed with the planned ${safe(dest)} experience. Keep realistic travel time, meal breaks and rest periods.`;
-   if(style==="Pilgrimage") detail+=" Include darshan/temple timings, senior-friendly pacing and buffer time.";
-   if(style==="Adventure") detail+=" Prioritise acclimatization, road-condition buffers and early starts.";
-   if(style==="Family") detail+=" Keep the schedule comfortable with breaks and flexible sightseeing.";
-   return {i:i+1,title,detail};
- });
-}
-function generate(e){
- e.preventDefault();
- const d={customer:$("customer").value.trim()||"Customer",destination:$("destination").value.trim()||"Custom Trip",days:+$("days").value||1,travellers:+$("travellers").value||1,start:$("start").value.trim()||"Hyderabad",style:$("style").value,hotel:$("hotel").value,vehicle:$("vehicle").value,meals:$("meals").value,dates:$("dates").value.trim()||"Dates to be confirmed",special:$("special").value.trim()};
- const days=buildDays(d.destination,d.days,d.start,d.style);
- const data={...d,days,created:new Date().toISOString()};
- localStorage.setItem("oat_current_itinerary",JSON.stringify(data));
- render(data);renderSaved();
-}
-function render(d){
- $("previewTitle").textContent=`${d.destination} — ${d.days} Days / ${Math.max(d.days-1,0)} Nights`;
- $("preview").innerHTML=`<div class="eyebrow">Prepared for ${safe(d.customer)}</div>
- <div class="trip-title">${safe(d.destination)}</div>
- <div class="summary">${safe(d.dates)} • ${d.travellers} traveller${d.travellers===1?"":"s"} • ${safe(d.start)} • ${safe(d.style)}</div>
- <div class="meta" style="margin:14px 0"><span>🏨 ${safe(d.hotel)}</span><span>🚗 ${safe(d.vehicle)}</span><span>🍽 ${safe(d.meals)}</span></div>
- ${d.special?`<div class="box" style="margin-bottom:12px"><b>Special requirements</b><div class="summary">${safe(d.special)}</div></div>`:""}
- ${d.days.map(x=>`<article class="day"><div class="day-head"><h3>Day ${x.i} — ${safe(x.title)}</h3><small>${x.i===1?"ARRIVAL":x.i===d.days.length?"DEPARTURE":"DAY PLAN"}</small></div><p>${x.detail}</p><div class="meta"><span>⏱ Flexible pacing</span><span>🍽 ${safe(d.meals)}</span><span>🚗 ${safe(d.vehicle)}</span></div></article>`).join("")}
- <div class="inclusions"><div class="box"><h4>Inclusions</h4><ul><li>${safe(d.hotel)} accommodation</li><li>${safe(d.vehicle)} transfers / sightseeing</li><li>${safe(d.meals)}</li><li>Trip coordination by On A Trip Holidays</li></ul></div><div class="box"><h4>Exclusions</h4><ul><li>Personal expenses</li><li>Optional activities unless specified</li><li>Entry fees not listed in the quote</li><li>Anything not mentioned in inclusions</li></ul></div></div>
- <div class="note" style="margin-top:14px"><b>On A Trip Holidays</b> — Itinerary is a planning draft. Confirm hotel availability, permits, darshan/entry timings, road conditions and final inclusions before customer issue.</div>`;
-}
-function saveItinerary(){
- const raw=localStorage.getItem("oat_current_itinerary"); if(!raw){alert("Generate an itinerary first.");return}
- const d=JSON.parse(raw), list=JSON.parse(localStorage.getItem("oat_saved_itineraries")||"[]");
- list.unshift(d);localStorage.setItem("oat_saved_itineraries",JSON.stringify(list.slice(0,20)));renderSaved();alert("Itinerary saved as a draft.");
-}
-function loadSaved(i){const list=JSON.parse(localStorage.getItem("oat_saved_itineraries")||"[]");if(list[i]){localStorage.setItem("oat_current_itinerary",JSON.stringify(list[i]));render(list[i])}}
-function renderSaved(){
- const list=JSON.parse(localStorage.getItem("oat_saved_itineraries")||"[]");
- $("saved").innerHTML=list.length?list.map((d,i)=>`<div class="saved-item"><div><b>${safe(d.destination)}</b><small>${safe(d.customer)} • ${d.days}D • ${new Date(d.created).toLocaleDateString()}</small></div><button class="btn secondary" onclick="loadSaved(${i})">Open</button></div>`).join(""):`<div class="empty" style="padding:15px">No saved drafts yet.</div>`;
-}
-const cur=localStorage.getItem("oat_current_itinerary");if(cur)render(JSON.parse(cur));renderSaved();
-</script>
-</body>
-</html>
+const $=x=>document.getElementById(x);
+const fallback=(r)=>{let n=+r.days||1;let days=Array.from({length:n},(_,i)=>({day:i+1,title:i===0?`Arrival in ${r.destination}`:i===n-1?`Departure from ${r.destination}`:`${r.destination} sightseeing & experiences`,summary:i===0?`Arrive at ${r.start}, transfer to hotel, check-in and trip briefing.`:i===n-1?`Breakfast, check-out and transfer for onward journey.`:`Enjoy the day's planned sightseeing with realistic travel time, meal breaks and rest.`}));return {title:`${r.destination} — ${n} Days / ${Math.max(0,n-1)} Nights`,summary:`Prepared for ${r.guest} • ${r.pax} travellers • ${r.start} • ${r.dates||'Dates to be confirmed'}`,days,hotels:`${r.hotel} accommodation as per availability`,vehicle:r.vehicle,meals:r.meals,price:r.budget||'Price to be quoted',inclusions:['Accommodation','Transportation / sightseeing vehicle',r.meals,'On A Trip Holidays trip coordination'],exclusions:['Personal expenses','Optional activities','Entry fees unless specified','Anything not mentioned in inclusions'],notes:r.special||'Final hotel availability, timings and inclusions to be confirmed before issue.'};};
+function render(x,r){$('qt').textContent=x.title||`${r.dest} Itinerary`;$('qm').textContent=x.summary||'';$('out').innerHTML=`${(x.days||[]).map(d=>`<article class="day"><h3>Day ${d.day}: ${esc(d.title)}</h3><p>${esc(d.summary||d.details||'')}</p>${d.hotel?`<p><b>Hotel:</b> ${esc(d.hotel)}</p>`:''}${d.meals?`<p><b>Meals:</b> ${esc(d.meals)}</p>`:''}</article>`).join('')}<div class="two"><div class="box"><b>Accommodation</b><p>${esc(x.hotels||r.hotel)}</p></div><div class="box"><b>Transport</b><p>${esc(x.vehicle||r.vehicle)}</p></div></div><div class="box"><b>Meals</b><p>${esc(x.meals||r.meals)}</p></div><div class="two"><div class="box"><b>Inclusions</b><ul>${(x.inclusions||[]).map(i=>`<li>${esc(i)}</li>`).join('')}</ul></div><div class="box"><b>Exclusions</b><ul>${(x.exclusions||[]).map(i=>`<li>${esc(i)}</li>`).join('')}</ul></div></div><div class="box"><b>Quote</b><div class="price">${esc(x.price||r.budget||'Price to be quoted')}</div></div><div class="box"><b>Important notes</b><p class="note">${esc(x.notes||'Final confirmation is subject to availability and supplier confirmation.')}</p></div><div class="actions no-print" style="margin-top:15px"><button class="btn primary" onclick="printQuote()">🖨 Print / Save PDF</button><button class="btn secondary" onclick="whatsapp()">💬 Send Quote on WhatsApp</button><button class="btn secondary" onclick="saveDraft()">💾 Save Draft</button></div>`;}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
+let last=null;
+$('f').onsubmit=async e=>{e.preventDefault();let r={guest:$('guest').value||'Guest',dest:$('dest').value||'Custom Trip',days:+$('days').value||1,pax:+$('pax').value||1,start:$('start').value||'Hyderabad',dates:$('dates').value,language:$('language').value,type:$('type').value,hotel:$('hotel').value,vehicle:$('vehicle').value,meals:$('meals').value,budget:$('budget').value,special:$('special').value,instruction:$('instruction').value};last=r;document.body.classList.add('loading');$('msg').textContent='AI is preparing the itinerary…';try{let res=await fetch('/api/generate-itinerary',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(r)});if(!res.ok)throw new Error('AI endpoint not available');let x=await res.json();render(x,r);$('msg').textContent='AI itinerary generated. Review all dates, hotels, timings and price before sending.'}catch(err){let x=fallback(r);render(x,r);$('msg').textContent='Preview generated locally because the live AI endpoint is not deployed yet. Deploy this project on Vercel and add OPENAI_API_KEY to enable live AI.'}finally{document.body.classList.remove('loading')}};
+function printQuote(){window.print()}
+function whatsapp(){if(!last){alert('Generate a quote first.');return}let text=`On A Trip Holidays — Quote\\n\\nGuest: ${last.guest}\\nTrip: ${last.dest}\\nDuration: ${last.days} days\\nTravellers: ${last.pax}\\nDates: ${last.dates||'TBC'}\\n\\nPlease find your detailed itinerary & quotation attached/shared by our travel team.`;window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank')}
+function saveDraft(){if(!last)return;let a=JSON.parse(localStorage.getItem('oat_itinerary_drafts')||'[]');a.unshift({...last,saved:new Date().toISOString()});localStorage.setItem('oat_itinerary_drafts',JSON.stringify(a.slice(0,30)));alert('Draft saved.')}
+</script></body></html>
