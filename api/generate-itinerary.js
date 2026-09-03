@@ -128,7 +128,7 @@ Build exactly ${days} days. Make each day specific to ${destination}.
         "Authorization": `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: process.env.OPENAI_MODEL || "gpt-5.6",
+        model: process.env.OPENAI_MODEL || "gpt-5.6-luna",
         input: [
           {
             role: "system",
@@ -171,16 +171,45 @@ Build exactly ${days} days. Make each day specific to ${destination}.
       return res.status(502).json({ error: "AI provider returned invalid JSON." });
     }
 
-    const text = data.output_text;
+    // Raw Responses API HTTP responses contain generated text in
+    // output[].content[].text. output_text is an SDK convenience property
+    // and is not guaranteed in a direct fetch response.
+    let text = typeof data.output_text === "string" ? data.output_text : "";
+
+    if (!text && Array.isArray(data.output)) {
+      for (const item of data.output) {
+        if (!Array.isArray(item?.content)) continue;
+
+        for (const content of item.content) {
+          if (typeof content?.text === "string" && content.text.trim()) {
+            text = content.text;
+            break;
+          }
+        }
+
+        if (text) break;
+      }
+    }
+
     if (!text) {
-      console.error("No output_text:", raw);
-      return res.status(502).json({ error: "AI returned no itinerary." });
+      const refusal = data.output?.find?.((item) => item?.type === "message")?.content?.find?.(
+        (content) => content?.type === "refusal"
+      )?.refusal;
+
+      console.error("No generated itinerary text:", raw);
+
+      return res.status(502).json({
+        error: refusal
+          ? `AI refused to generate the itinerary: ${refusal}`
+          : "AI returned no itinerary text."
+      });
     }
 
     let itinerary;
     try {
       itinerary = JSON.parse(text);
     } catch (_) {
+      console.error("Malformed itinerary text:", text);
       return res.status(502).json({ error: "AI returned malformed itinerary JSON." });
     }
 
