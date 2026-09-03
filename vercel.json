@@ -49,6 +49,41 @@
       "source": "/wp-content/uploads/2024/03/2024-Chardham-.pdf",
       "destination": "https://www.onatripholidays.com/char-dham-yatra-packages-from-hyderabad.html",
       "permanent": true
+    },
+    {
+      "source": "/lp/thailand.html",
+      "destination": "https://www.onatripholidays.com/package-thailand.html",
+      "permanent": true
+    },
+    {
+      "source": "/lp/bali.html",
+      "destination": "https://www.onatripholidays.com/package-bali.html",
+      "permanent": true
+    },
+    {
+      "source": "/lp/dubai.html",
+      "destination": "https://www.onatripholidays.com/package-dubai.html",
+      "permanent": true
+    },
+    {
+      "source": "/lp/vietnam.html",
+      "destination": "https://www.onatripholidays.com/package-vietnam.html",
+      "permanent": true
+    },
+    {
+      "source": "/lp/kashmir.html",
+      "destination": "https://www.onatripholidays.com/kashmir-tour-packages-from-hyderabad.html",
+      "permanent": true
+    },
+    {
+      "source": "/lp/spiti.html",
+      "destination": "https://www.onatripholidays.com/spiti-valley-tour-packages-from-hyderabad.html",
+      "permanent": true
+    },
+    {
+      "source": "/hyderabad-to-amarnath-yatra.html",
+      "destination": "https://www.onatripholidays.com/package-amarnath.html",
+      "permanent": true
     }
   ],
   "headers": [

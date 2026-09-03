@@ -1,7 +1,8 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/>
 <title>On A Trip Holidays | CRM</title>
 <style>
 :root{--n:#08233f;--n2:#103d66;--o:#ee5a2a;--g:#18a66a;--r:#d64545;--bg:#f3f6f8;--line:#dce4e9;--muted:#6b7b87}
@@ -16,10 +17,10 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 @media(max-width:1000px){.stats{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:600px){.shell{padding:14px 10px}.stats{grid-template-columns:repeat(2,1fr)}.stat{padding:12px}.stat strong{font-size:22px}.toolbar input{width:100%;min-width:0}.board{grid-template-columns:repeat(7,185px)}.row{grid-template-columns:1fr}}
 </style>
-<meta name="robots" content="noindex,nofollow,noarchive">
+<meta content="noindex,nofollow,noarchive" name="robots"/>
 </head>
-<body>
-<header class="top"><div><b>ON A TRIP HOLIDAYS — CRM</b><small> • Sales & Lead Management</small></div><a href="admin.html">← Admin Dashboard</a></header>
+<body><h1>On A Trip Holidays CRM</h1>
+<header class="top"><div><b>ON A TRIP HOLIDAYS — CRM</b><small> • Sales &amp; Lead Management</small></div><a href="admin.html">← Admin Dashboard</a></header>
 <main class="shell">
 <section class="stats">
 <div class="stat"><small>Total Leads</small><strong id="sTotal">27</strong><em>↑ 18% this week</em></div>
@@ -29,37 +30,31 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <div class="stat"><small>Booked</small><strong id="sBooked">0</strong><em>Converted leads</em></div>
 <div class="stat"><small>Follow-ups Today</small><strong id="sFollow">4</strong><em>Call / WhatsApp</em></div>
 </section>
-
 <div class="toolbar">
-<input id="search" placeholder="🔎 Search name, phone, destination..." oninput="render()">
+<input id="search" oninput="render()" placeholder="🔎 Search name, phone, destination..."/>
 <select id="filterStatus" onchange="render()"><option value="">All stages</option><option>New</option><option>Contacted</option><option>Qualified</option><option>Hot</option><option>Quote Sent</option><option>Follow-up</option><option>Booked</option><option>Lost</option></select>
 <select id="filterBranch" onchange="render()"><option value="">All branches</option><option>Hyderabad</option><option>Vijayawada</option></select>
 <select id="filterSource" onchange="render()"><option value="">All sources</option><option>Meta Ads</option><option>Instagram</option><option>Facebook</option><option>WhatsApp</option><option>Website</option><option>Google</option><option>Walk-in</option></select>
 <button class="btn primary" onclick="openModal('leadModal')">＋ New Lead</button>
 <button class="btn secondary" onclick="exportCSV()">Export CSV</button>
 </div>
-
 <div class="board" id="board"></div>
-
 <div class="table-card">
 <h2 style="margin:2px 0 13px;font-size:19px">All Leads</h2>
 <table class="table"><thead><tr><th>Customer</th><th>Trip</th><th>Branch</th><th>Travel Date</th><th>Travellers</th><th>Value</th><th>Stage</th><th>Next Follow-up</th><th>Actions</th></tr></thead><tbody id="table"></tbody></table>
 </div>
 </main>
-
 <div class="modal" id="leadModal"><div class="box"><div class="head"><h2>New Lead</h2><button class="close" onclick="closeModal('leadModal')">×</button></div>
 <form class="form" onsubmit="addLead(event)">
-<div class="row"><div><label>Customer name</label><input id="name" required></div><div><label>Phone / WhatsApp</label><input id="phone" required></div></div>
-<div class="row"><div><label>Destination / package</label><input id="dest" required placeholder="Thailand"></div><div><label>Travellers</label><input id="trav" type="number" min="1" value="2"></div></div>
-<div class="row"><div><label>Travel date</label><input id="date" type="date"></div><div><label>Expected value</label><input id="value" placeholder="₹50,000"></div></div>
+<div class="row"><div><label>Customer name</label><input id="name" required=""/></div><div><label>Phone / WhatsApp</label><input id="phone" required=""/></div></div>
+<div class="row"><div><label>Destination / package</label><input id="dest" placeholder="Thailand" required=""/></div><div><label>Travellers</label><input id="trav" min="1" type="number" value="2"/></div></div>
+<div class="row"><div><label>Travel date</label><input id="date" type="date"/></div><div><label>Expected value</label><input id="value" placeholder="₹50,000"/></div></div>
 <div class="row"><div><label>Branch</label><select id="branch"><option>Hyderabad</option><option>Vijayawada</option></select></div><div><label>Source</label><select id="source"><option>Meta Ads</option><option>Instagram</option><option>Facebook</option><option>WhatsApp</option><option>Website</option><option>Google</option><option>Walk-in</option></select></div></div>
-<div class="row"><div><label>Priority</label><select id="priority"><option>Normal</option><option>High</option><option>Hot</option></select></div><div><label>Next follow-up</label><input id="follow" type="date"></div></div>
+<div class="row"><div><label>Priority</label><select id="priority"><option>Normal</option><option>High</option><option>Hot</option></select></div><div><label>Next follow-up</label><input id="follow" type="date"/></div></div>
 <label>Notes</label><textarea id="notes" placeholder="Requirements, budget, hotel preference..."></textarea>
 <button class="btn primary">Create Lead</button>
 </form></div></div>
-
 <div class="modal" id="detailsModal"><div class="box"><div class="head"><h2 id="detailTitle">Lead</h2><button class="close" onclick="closeModal('detailsModal')">×</button></div><div id="details"></div></div></div>
-
 <script>
 const stages=["New","Contacted","Qualified","Hot","Quote Sent","Follow-up","Booked","Lost"];
 let leads=[
@@ -92,6 +87,6 @@ function openModal(id){document.getElementById(id).classList.add("show")}functio
 function exportCSV(){const rows=[["Name","Phone","Destination","Travellers","Branch","Source","Priority","Status","Travel Date","Value","Follow-up"],...leads.map(l=>[l.name,l.phone,l.dest,l.trav,l.branch,l.source,l.priority,l.status,l.date,l.value,l.follow])];const csv=rows.map(r=>r.map(x=>`"${String(x??"").replace(/"/g,'""')}"`).join(",")).join("\\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download="on-a-trip-leads.csv";a.click()}
 render();
 </script>
-<div class="v18-page-top" aria-label="Go to top"><button type="button" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Go to top">⌃</button></div>
-<div class="v18-wa"><a href="https://wa.me/919182894146?text=Hi%20On%20A%20Trip%20Holidays%2C%20I%20want%20to%20plan%20a%20trip" aria-label="WhatsApp us"><svg viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M19.11 17.29c-.27-.14-1.58-.78-1.82-.87-.24-.09-.42-.14-.6.14-.18.27-.69.87-.85 1.05-.16.18-.31.2-.58.07-.27-.14-1.14-.42-2.17-1.34-.8-.71-1.34-1.59-1.5-1.86-.16-.27-.02-.42.12-.56.12-.12.27-.31.4-.47.13-.16.18-.27.27-.45.09-.18.04-.34-.02-.47-.07-.14-.6-1.44-.82-1.97-.22-.52-.44-.45-.6-.46h-.51c-.18 0-.47.07-.71.34-.24.27-.93.91-.93 2.22s.96 2.57 1.09 2.75c.13.18 1.89 2.88 4.58 4.04.64.28 1.14.44 1.53.56.64.2 1.22.17 1.68.1.51-.08 1.58-.65 1.8-1.27.22-.62.22-1.15.16-1.27-.07-.11-.24-.18-.51-.31z"/><path fill="currentColor" d="M16.03 3.2c-7.07 0-12.8 5.72-12.8 12.77 0 2.25.59 4.36 1.63 6.19L3.2 28.8l6.83-1.64a12.78 12.78 0 0 0 6 1.48h.01c7.06 0 12.79-5.73 12.79-12.78S23.1 3.2 16.03 3.2zm0 23.36h-.01a10.58 10.58 0 0 1-5.39-1.47l-.39-.23-4.05.97.98-3.95-.25-.41a10.56 10.56 0 1 1 9.11 5.09z"/></svg></a></div>
+<div aria-label="Go to top" class="v18-page-top"><button aria-label="Go to top" onclick="window.scrollTo({top:0,behavior:'smooth'})" type="button">⌃</button></div>
+<div class="v18-wa"><a aria-label="WhatsApp us" href="https://wa.me/919182894146?text=Hi%20On%20A%20Trip%20Holidays%2C%20I%20want%20to%20plan%20a%20trip"><svg aria-hidden="true" viewbox="0 0 32 32"><path d="M19.11 17.29c-.27-.14-1.58-.78-1.82-.87-.24-.09-.42-.14-.6.14-.18.27-.69.87-.85 1.05-.16.18-.31.2-.58.07-.27-.14-1.14-.42-2.17-1.34-.8-.71-1.34-1.59-1.5-1.86-.16-.27-.02-.42.12-.56.12-.12.27-.31.4-.47.13-.16.18-.27.27-.45.09-.18.04-.34-.02-.47-.07-.14-.6-1.44-.82-1.97-.22-.52-.44-.45-.6-.46h-.51c-.18 0-.47.07-.71.34-.24.27-.93.91-.93 2.22s.96 2.57 1.09 2.75c.13.18 1.89 2.88 4.58 4.04.64.28 1.14.44 1.53.56.64.2 1.22.17 1.68.1.51-.08 1.58-.65 1.8-1.27.22-.62.22-1.15.16-1.27-.07-.11-.24-.18-.51-.31z" fill="currentColor"></path><path d="M16.03 3.2c-7.07 0-12.8 5.72-12.8 12.77 0 2.25.59 4.36 1.63 6.19L3.2 28.8l6.83-1.64a12.78 12.78 0 0 0 6 1.48h.01c7.06 0 12.79-5.73 12.79-12.78S23.1 3.2 16.03 3.2zm0 23.36h-.01a10.58 10.58 0 0 1-5.39-1.47l-.39-.23-4.05.97.98-3.95-.25-.41a10.56 10.56 0 1 1 9.11 5.09z" fill="currentColor"></path></svg></a></div>
 </body></html>
