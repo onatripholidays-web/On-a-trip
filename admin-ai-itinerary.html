@@ -1,37 +1,254 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI Itinerary Builder | On A Trip Holidays</title><meta name="robots" content="noindex,nofollow">
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Itinerary Builder | On A Trip Holidays</title>
+<meta name="robots" content="noindex,nofollow">
 <style>
-:root{--n:#08233f;--o:#ed5b2a;--bg:#f4f7f9;--line:#dce5ea}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#12283b;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial}.top{background:var(--n);color:#fff;padding:17px 22px;display:flex;justify-content:space-between;align-items:center}.top a{color:#fff;text-decoration:none;font-weight:800}.wrap{max-width:1300px;margin:auto;padding:20px}.grid{display:grid;grid-template-columns:400px 1fr;gap:18px}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:19px;box-shadow:0 6px 24px #0a29420a}.form{display:grid;gap:11px}label{font-size:11px;text-transform:uppercase;font-weight:900;letter-spacing:.05em}input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;background:#fff}textarea{min-height:75px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.btn{border:0;border-radius:10px;padding:12px 15px;font-weight:900;cursor:pointer}.primary{background:var(--o);color:#fff}.secondary{background:#fff;border:1px solid var(--line)}.actions{display:flex;gap:8px;flex-wrap:wrap}.status{font-size:12px;color:#067247;background:#e8f7ef;padding:7px 10px;border-radius:99px;font-weight:900}.quote{background:#fff}.quote-head{border-bottom:2px solid #edf1f3;padding-bottom:15px;margin-bottom:15px}.quote-title{font-size:28px;font-weight:950}.muted{color:#71818d}.day{border:1px solid var(--line);border-radius:11px;padding:14px;margin:10px 0}.day h3{margin:0 0 6px}.day p{line-height:1.5;margin:6px 0}.box{background:#f8fafb;border-radius:10px;padding:12px;margin-top:12px}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.price{font-size:26px;font-weight:950}.note{font-size:11px;color:#657784;line-height:1.5}.spinner{display:none}.loading .spinner{display:inline}.loading .gen{display:none}@media(max-width:900px){.grid{grid-template-columns:1fr}}@media(max-width:600px){.row,.two{grid-template-columns:1fr}.wrap{padding:12px}.quote-title{font-size:22px}}
+:root{--n:#08233f;--o:#ed5b2a;--bg:#f4f7f9;--line:#dce5ea;--muted:#71818d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#12283b;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial}
+.top{background:var(--n);color:#fff;padding:17px 22px;display:flex;justify-content:space-between;align-items:center}.top a{color:#fff;text-decoration:none;font-weight:800}
+.wrap{max-width:1300px;margin:auto;padding:20px}.grid{display:grid;grid-template-columns:400px 1fr;gap:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:19px;box-shadow:0 6px 24px #0a29420a}
+.form{display:grid;gap:11px}label{font-size:11px;text-transform:uppercase;font-weight:900;letter-spacing:.05em}
+input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;background:#fff;font:inherit;color:#12283b}textarea{min-height:75px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.btn{border:0;border-radius:10px;padding:12px 15px;font-weight:900;cursor:pointer}
+.primary{background:var(--o);color:#fff}.secondary{background:#fff;border:1px solid var(--line)}.actions{display:flex;gap:8px;flex-wrap:wrap}
+.status{font-size:12px;color:#067247;background:#e8f7ef;padding:7px 10px;border-radius:99px;font-weight:900}
+.status.error{color:#a61b1b;background:#fdecec}.quote{background:#fff}.quote-head{border-bottom:2px solid #edf1f3;padding-bottom:15px;margin-bottom:15px}
+.quote-title{font-size:28px;font-weight:950}.muted{color:var(--muted)}.day{border:1px solid var(--line);border-radius:11px;padding:14px;margin:10px 0}
+.day h3{margin:0 0 6px}.day p{line-height:1.5;margin:6px 0}.box{background:#f8fafb;border-radius:10px;padding:12px;margin-top:12px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.price{font-size:26px;font-weight:950}.note{font-size:11px;color:#657784;line-height:1.5}
+.spinner{display:none}.loading .spinner{display:inline}.loading .gen{display:none}
+.loading .genloading{display:inline-block}.genloading{display:none}
+.errorbox{display:none;background:#fff0f0;border:1px solid #f2b8b8;color:#8c1d1d;border-radius:10px;padding:11px;margin-top:10px;font-size:13px;line-height:1.45}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}@media(max-width:600px){.row,.two{grid-template-columns:1fr}.wrap{padding:12px}.quote-title{font-size:22px}}
 @media print{body{background:#fff}.top,.builder,.actions,.no-print{display:none!important}.wrap{max-width:none;padding:0}.grid{display:block}.card{border:0;box-shadow:none;padding:0}.quote{display:block}}
-</style></head><body>
-<script>if(sessionStorage.getItem('oat_admin_auth')!=='1')location.replace('admin.html')</script>
-<header class="top"><b>✈ ON A TRIP HOLIDAYS</b><a href="admin-v4-crm.html">← Admin</a></header>
-<div class="wrap"><div class="grid">
-<section class="builder card"><h1>✨ AI Itinerary Builder</h1><p class="muted">Describe the guest's trip. AI creates a sales-ready itinerary and quote.</p>
-<form id="f" class="form">
-<label>Guest name</label><input id="guest" placeholder="Guest full name">
-<div class="row"><div><label>Destination</label><input id="dest" placeholder="Kashmir"></div><div><label>Days</label><input id="days" type="number" min="1" max="30" value="6"></div></div>
-<div class="row"><div><label>Travellers</label><input id="pax" type="number" min="1" value="4"></div><div><label>Start city</label><input id="start" value="Hyderabad"></div></div>
-<div class="row"><div><label>Travel dates</label><input id="dates" placeholder="25 Sep – 30 Sep 2026"></div><div><label>Language</label><select id="language"><option>English</option><option>Telugu</option><option>English + Telugu</option></select></div></div>
-<div class="row"><div><label>Trip type</label><select id="type"><option>Family</option><option>Pilgrimage</option><option>Adventure</option><option>Couples</option><option>Premium</option></select></div><div><label>Hotel</label><select id="hotel"><option>3 Star</option><option>4 Star</option><option>5 Star</option><option>Premium</option></select></div></div>
-<div class="row"><div><label>Vehicle</label><select id="vehicle"><option>Private Car</option><option>Ertiga</option><option>Innova Crysta</option><option>Tempo Traveller</option><option>20 Seater Tempo</option></select></div><div><label>Meals</label><select id="meals"><option>Breakfast & Dinner</option><option>Breakfast Only</option><option>All Meals</option><option>Satvik Veg Meals</option></select></div></div>
-<label>Budget / quote</label><input id="budget" placeholder="e.g. ₹35,000 per person or leave blank">
-<label>Special requirements</label><textarea id="special" placeholder="Senior citizens, darshan, child-friendly, honeymoon, activities, preferred hotels..."></textarea>
-<label>Additional instruction</label><textarea id="instruction" placeholder="Anything the sales person wants AI to consider..."></textarea>
-<div class="actions"><button id="generateBtn" class="btn primary gen" type="submit">✨ Generate with AI</button><button class="btn secondary" type="button" onclick="window.print()">🖨 PDF</button></div>
-<div id="msg" class="note">Live AI requires the Vercel endpoint and OPENAI_API_KEY. This ZIP includes that endpoint; no API key is placed in the browser.</div>
-</form></section>
-
-<section class="card quote"><div class="quote-head"><span class="status">● QUOTE DRAFT</span><div class="quote-title" id="qt">Your guest quote will appear here</div><div class="muted" id="qm"></div></div><div id="out"><div class="muted">Fill the form and click Generate with AI.</div></div></section>
-</div></div>
+</style>
+</head>
+<body>
 <script>
-const $=x=>document.getElementById(x);
-const fallback=(r)=>{let n=+r.days||1;let days=Array.from({length:n},(_,i)=>({day:i+1,title:i===0?`Arrival in ${r.destination}`:i===n-1?`Departure from ${r.destination}`:`${r.destination} sightseeing & experiences`,summary:i===0?`Arrive at ${r.start}, transfer to hotel, check-in and trip briefing.`:i===n-1?`Breakfast, check-out and transfer for onward journey.`:`Enjoy the day's planned sightseeing with realistic travel time, meal breaks and rest.`}));return {title:`${r.destination} — ${n} Days / ${Math.max(0,n-1)} Nights`,summary:`Prepared for ${r.guest} • ${r.pax} travellers • ${r.start} • ${r.dates||'Dates to be confirmed'}`,days,hotels:`${r.hotel} accommodation as per availability`,vehicle:r.vehicle,meals:r.meals,price:r.budget||'Price to be quoted',inclusions:['Accommodation','Transportation / sightseeing vehicle',r.meals,'On A Trip Holidays trip coordination'],exclusions:['Personal expenses','Optional activities','Entry fees unless specified','Anything not mentioned in inclusions'],notes:r.special||'Final hotel availability, timings and inclusions to be confirmed before issue.'};};
-function render(x,r){$('qt').textContent=x.title||`${r.dest} Itinerary`;$('qm').textContent=x.summary||'';$('out').innerHTML=`${(x.days||[]).map(d=>`<article class="day"><h3>Day ${d.day}: ${esc(d.title)}</h3><p>${esc(d.summary||d.details||'')}</p>${d.hotel?`<p><b>Hotel:</b> ${esc(d.hotel)}</p>`:''}${d.meals?`<p><b>Meals:</b> ${esc(d.meals)}</p>`:''}</article>`).join('')}<div class="two"><div class="box"><b>Accommodation</b><p>${esc(x.hotels||r.hotel)}</p></div><div class="box"><b>Transport</b><p>${esc(x.vehicle||r.vehicle)}</p></div></div><div class="box"><b>Meals</b><p>${esc(x.meals||r.meals)}</p></div><div class="two"><div class="box"><b>Inclusions</b><ul>${(x.inclusions||[]).map(i=>`<li>${esc(i)}</li>`).join('')}</ul></div><div class="box"><b>Exclusions</b><ul>${(x.exclusions||[]).map(i=>`<li>${esc(i)}</li>`).join('')}</ul></div></div><div class="box"><b>Quote</b><div class="price">${esc(x.price||r.budget||'Price to be quoted')}</div></div><div class="box"><b>Important notes</b><p class="note">${esc(x.notes||'Final confirmation is subject to availability and supplier confirmation.')}</p></div><div class="actions no-print" style="margin-top:15px"><button class="btn primary" onclick="printQuote()">🖨 Print / Save PDF</button><button class="btn secondary" onclick="whatsapp()">💬 Send Quote on WhatsApp</button><button class="btn secondary" onclick="saveDraft()">💾 Save Draft</button></div>`;}
+if(sessionStorage.getItem('oat_admin_auth')!=='1') location.replace('admin.html');
+</script>
+
+<header class="top">
+  <b>✈ ON A TRIP HOLIDAYS</b>
+  <a href="admin-v4-crm.html">← Admin</a>
+</header>
+
+<div class="wrap">
+<div class="grid">
+
+<section class="builder card">
+  <h1>✨ AI Itinerary Builder</h1>
+  <p class="muted">Create a customer-ready itinerary and quotation using the live AI service.</p>
+
+  <form id="f" class="form">
+    <label>Guest name</label>
+    <input id="guest" placeholder="Guest full name" autocomplete="name">
+
+    <div class="row">
+      <div><label>Destination</label><input id="dest" placeholder="Kedarnath"></div>
+      <div><label>Days</label><input id="days" type="number" min="1" max="30" value="5"></div>
+    </div>
+
+    <div class="row">
+      <div><label>Travellers</label><input id="pax" type="number" min="1" value="4"></div>
+      <div><label>Start city</label><input id="start" value="Hyderabad"></div>
+    </div>
+
+    <div class="row">
+      <div><label>Travel dates</label><input id="dates" placeholder="10 Oct – 14 Oct 2026"></div>
+      <div><label>Language</label>
+        <select id="language"><option>English</option><option>Telugu</option><option>English + Telugu</option></select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div><label>Trip type</label>
+        <select id="type"><option>Family</option><option>Pilgrimage</option><option>Adventure</option><option>Couples</option><option>Premium</option></select>
+      </div>
+      <div><label>Hotel</label>
+        <select id="hotel"><option>3 Star</option><option>4 Star</option><option>5 Star</option><option>Premium</option></select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div><label>Vehicle</label>
+        <select id="vehicle"><option>Private Car</option><option>Ertiga</option><option>Innova Crysta</option><option>Tempo Traveller</option><option>20 Seater Tempo</option></select>
+      </div>
+      <div><label>Meals</label>
+        <select id="meals"><option>Breakfast & Dinner</option><option>Breakfast Only</option><option>All Meals</option><option>Satvik Veg Meals</option></select>
+      </div>
+    </div>
+
+    <label>Budget / quote</label>
+    <input id="budget" placeholder="e.g. ₹59,999 total or ₹30,500 per person">
+
+    <label>Special requirements</label>
+    <textarea id="special" placeholder="Senior citizens, darshan, child-friendly, honeymoon, activities..."></textarea>
+
+    <label>Additional instruction</label>
+    <textarea id="instruction" placeholder="Anything the sales person wants AI to consider..."></textarea>
+
+    <div class="actions">
+      <button id="generateBtn" class="btn primary gen" type="submit">✨ Generate with AI</button>
+      <button class="btn primary genloading" type="button" disabled>⏳ Generating…</button>
+      <button class="btn secondary" type="button" onclick="window.print()">🖨 PDF</button>
+    </div>
+
+    <div id="msg" class="note">Live AI is connected through the secure Vercel endpoint. Your API key is never placed in the browser.</div>
+    <div id="err" class="errorbox"></div>
+  </form>
+</section>
+
+<section class="card quote">
+  <div class="quote-head">
+    <span id="status" class="status">● READY</span>
+    <div class="quote-title" id="qt">Your guest quote will appear here</div>
+    <div class="muted" id="qm"></div>
+  </div>
+  <div id="out"><div class="muted">Fill the form and click Generate with AI.</div></div>
+</section>
+
+</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+let last=null,lastQuote=null;
+
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
-let last=null;
-$('f').onsubmit=async e=>{e.preventDefault();let r={guest:$('guest').value||'Guest',dest:$('dest').value||'Custom Trip',days:+$('days').value||1,pax:+$('pax').value||1,start:$('start').value||'Hyderabad',dates:$('dates').value,language:$('language').value,type:$('type').value,hotel:$('hotel').value,vehicle:$('vehicle').value,meals:$('meals').value,budget:$('budget').value,special:$('special').value,instruction:$('instruction').value};last=r;document.body.classList.add('loading');$('msg').textContent='AI is preparing the itinerary…';try{let res=await fetch('/api/generate-itinerary',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(r)});if(!res.ok)throw new Error('AI endpoint not available');let x=await res.json();render(x,r);$('msg').textContent='AI itinerary generated. Review all dates, hotels, timings and price before sending.'}catch(err){let x=fallback(r);render(x,r);$('msg').textContent='Preview generated locally because the live AI endpoint is not deployed yet. Deploy this project on Vercel and add OPENAI_API_KEY to enable live AI.'}finally{document.body.classList.remove('loading')}};
+
+function readForm(){
+  return {
+    guest:$('guest').value.trim()||'Guest',
+    dest:$('dest').value.trim(),
+    days:Math.max(1,Math.min(30,Number($('days').value)||1)),
+    pax:Math.max(1,Number($('pax').value)||1),
+    start:$('start').value.trim()||'Hyderabad',
+    dates:$('dates').value.trim(),
+    language:$('language').value,
+    type:$('type').value,
+    hotel:$('hotel').value,
+    vehicle:$('vehicle').value,
+    meals:$('meals').value,
+    budget:$('budget').value.trim(),
+    special:$('special').value.trim(),
+    instruction:$('instruction').value.trim()
+  };
+}
+
+function render(x,r){
+  lastQuote=x;
+  $('status').className='status';
+  $('status').textContent='● AI QUOTE DRAFT';
+  $('qt').textContent=x.title||`${r.dest} — ${r.days} Days`;
+  $('qm').textContent=x.summary||`Prepared for ${r.guest} • ${r.pax} travellers • ${r.start} • ${r.dates||'Dates to be confirmed'}`;
+
+  const days=(x.days||[]).map(d=>`
+    <article class="day">
+      <h3>Day ${esc(d.day)}: ${esc(d.title)}</h3>
+      <p>${esc(d.summary||d.details||'')}</p>
+      ${d.hotel?`<p><b>Hotel:</b> ${esc(d.hotel)}</p>`:''}
+      ${d.meals?`<p><b>Meals:</b> ${esc(d.meals)}</p>`:''}
+    </article>`).join('');
+
+  $('out').innerHTML=`
+    ${days}
+    <div class="two">
+      <div class="box"><b>Accommodation</b><p>${esc(x.hotels||r.hotel)}</p></div>
+      <div class="box"><b>Transport</b><p>${esc(x.vehicle||r.vehicle)}</p></div>
+    </div>
+    <div class="box"><b>Meals</b><p>${esc(x.meals||r.meals)}</p></div>
+    <div class="two">
+      <div class="box"><b>Inclusions</b><ul>${(x.inclusions||[]).map(i=>`<li>${esc(i)}</li>`).join('')}</ul></div>
+      <div class="box"><b>Exclusions</b><ul>${(x.exclusions||[]).map(i=>`<li>${esc(i)}</li>`).join('')}</ul></div>
+    </div>
+    <div class="box"><b>Quote</b><div class="price">${esc(x.price||r.budget||'Price to be quoted')}</div></div>
+    <div class="box"><b>Important notes</b><p class="note">${esc(x.notes||'Final confirmation is subject to availability and supplier confirmation.')}</p></div>
+    <div class="actions no-print" style="margin-top:15px">
+      <button class="btn primary" onclick="printQuote()">🖨 Print / Save PDF</button>
+      <button class="btn secondary" onclick="whatsapp()">💬 Send Quote on WhatsApp</button>
+      <button class="btn secondary" onclick="saveDraft()">💾 Save Draft</button>
+    </div>`;
+}
+
+function showError(message){
+  $('status').className='status error';
+  $('status').textContent='● AI ERROR';
+  $('err').style.display='block';
+  $('err').textContent=message;
+  $('msg').textContent='Live AI did not return a quote. Fix the message above and try again.';
+}
+
+$('f').onsubmit=async e=>{
+  e.preventDefault();
+  $('err').style.display='none';
+
+  const r=readForm();
+  if(!r.dest){
+    showError('Please enter a destination before generating the itinerary.');
+    return;
+  }
+
+  last=r;
+  document.body.classList.add('loading');
+  $('msg').textContent='AI is preparing the itinerary…';
+
+  try{
+    const res=await fetch('/api/generate-itinerary',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify(r)
+    });
+
+    let data={};
+    try{data=await res.json();}catch(_){}
+
+    if(!res.ok){
+      throw new Error(data.error||`AI service returned HTTP ${res.status}.`);
+    }
+    if(!data.title || !Array.isArray(data.days)){
+      throw new Error('AI returned an incomplete itinerary. Please try again.');
+    }
+
+    render(data,r);
+    $('msg').textContent='AI itinerary generated. Review dates, hotels, timings and price before sending.';
+  }catch(err){
+    showError(err.message||'Unable to generate the itinerary.');
+  }finally{
+    document.body.classList.remove('loading');
+  }
+};
+
 function printQuote(){window.print()}
-function whatsapp(){if(!last){alert('Generate a quote first.');return}let text=`On A Trip Holidays — Quote\\n\\nGuest: ${last.guest}\\nTrip: ${last.dest}\\nDuration: ${last.days} days\\nTravellers: ${last.pax}\\nDates: ${last.dates||'TBC'}\\n\\nPlease find your detailed itinerary & quotation attached/shared by our travel team.`;window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank')}
-function saveDraft(){if(!last)return;let a=JSON.parse(localStorage.getItem('oat_itinerary_drafts')||'[]');a.unshift({...last,saved:new Date().toISOString()});localStorage.setItem('oat_itinerary_drafts',JSON.stringify(a.slice(0,30)));alert('Draft saved.')}
-</script></body></html>
+
+function whatsapp(){
+  if(!last||!lastQuote){alert('Generate a quote first.');return}
+  const text=[
+    'On A Trip Holidays — Quote',
+    '',
+    `Guest: ${last.guest}`,
+    `Trip: ${last.dest}`,
+    `Duration: ${last.days} days`,
+    `Travellers: ${last.pax}`,
+    `Dates: ${last.dates||'TBC'}`,
+    `Quote: ${lastQuote.price||last.budget||'TBC'}`,
+    '',
+    'Detailed itinerary & quotation will be shared by our travel team.'
+  ].join('\n');
+  window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
+}
+
+function saveDraft(){
+  if(!last)return;
+  const a=JSON.parse(localStorage.getItem('oat_itinerary_drafts')||'[]');
+  a.unshift({...last,quote:lastQuote,saved:new Date().toISOString()});
+  localStorage.setItem('oat_itinerary_drafts',JSON.stringify(a.slice(0,30)));
+  alert('Draft saved.');
+}
+</script>
+</body>
+</html>
