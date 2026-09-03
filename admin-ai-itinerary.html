@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<link rel="icon" type="image/png" href="assets/on-a-trip-logo.png">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI Itinerary Builder | On A Trip Holidays</title>
+<title>AI Quotation Maker | On A Trip Holidays</title>
 <meta name="robots" content="noindex,nofollow">
 <style>
 :root{--navy:#08233f;--orange:#ed5b2a;--gold:#f7bd45;--bg:#f4f7f9;--line:#dce5ea;--muted:#71818d;--green:#08744a}
@@ -11,7 +12,7 @@
 body{margin:0;background:var(--bg);color:#12283b;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial}
 .top{background:var(--navy);color:#fff;padding:15px 22px;display:flex;justify-content:space-between;align-items:center}
 .top a{color:#fff;text-decoration:none;font-weight:800}
-.brand{display:flex;align-items:center;gap:10px}.brand img{width:112px;height:auto;background:#ffd75a;border-radius:5px}
+.brand{display:flex;align-items:center;gap:10px}.brand img{width:112px;height:auto;background:#fff;border-radius:8px;padding:4px;object-fit:contain}
 .wrap{max-width:1350px;margin:auto;padding:18px}.grid{display:grid;grid-template-columns:390px 1fr;gap:18px}
 .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 6px 24px #0a29420a}
 .form{display:grid;gap:10px}label{font-size:11px;text-transform:uppercase;font-weight:900;letter-spacing:.05em}
@@ -32,6 +33,8 @@ textarea{min-height:72px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px
 .empty{padding:30px 10px;text-align:center;color:var(--muted)}
 .print-sheet{display:none}
 
+
+.quote-workflow{margin-top:16px;border:1px solid var(--line);border-radius:16px;padding:16px;background:#fbfcfd}.workflow-head{display:flex;justify-content:space-between;gap:12px;align-items:center}.workflow-status{font-size:11px;font-weight:900;padding:7px 10px;border-radius:999px;background:#fff3df;color:#9b5c00}.workflow-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.payment-panel,.negotiate-panel{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}.payment-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.payment-actions{margin-top:10px}.invoice-preview{margin-top:12px;padding:14px;border:1px dashed #d4a13b;border-radius:12px;background:#fffaf0}@media(max-width:600px){.payment-grid{grid-template-columns:1fr}}
 @media(max-width:950px){.grid{grid-template-columns:1fr}}
 @media(max-width:600px){.row,.two{grid-template-columns:1fr}.wrap{padding:12px}.quote-title{font-size:22px}.top{padding:12px 14px}.brand img{width:92px}}
 
@@ -62,15 +65,15 @@ textarea{min-height:72px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px
 <script>if(sessionStorage.getItem('oat_admin_auth')!=='1') location.replace('admin.html');</script>
 
 <header class="top">
-  <div class="brand"><img src="assets/on-a-trip-logo.png" alt="On A Trip Holidays logo"><b>AI ITINERARY BUILDER</b></div>
+  <div class="brand"><img src="assets/on-a-trip-logo.png" alt="On A Trip Holidays logo"><b>AI QUOTATION MAKER</b></div>
   <a href="admin-v4-crm.html">← Admin</a>
 </header>
 
 <div class="wrap">
 <div class="grid">
 <section class="builder card">
-  <h1>✨ AI Itinerary Builder</h1>
-  <p class="muted">Generate, edit and prepare a branded customer quotation.</p>
+  <h1>AI Quotation Maker</h1>
+  <p class="muted">Create, edit, negotiate and convert travel quotations into payment invoices.</p>
   <form id="f" class="form">
     <div class="row"><div><label>Guest name</label><input id="guest" placeholder="Guest full name" autocomplete="name"></div><div><label>Guest contact number *</label><input id="contact" type="tel" placeholder="10-digit mobile number" autocomplete="tel" required></div></div>
     <div class="row"><div><label>Email ID (optional)</label><input id="email" type="email" placeholder="guest@example.com" autocomplete="email"></div><div></div></div>
@@ -102,6 +105,19 @@ textarea{min-height:72px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px
     <button class="btn secondary" type="button" onclick="saveDraft()">💾 Save Draft</button>
   </div>
   <div id="out"><div class="empty">Fill the form and click Generate with AI.</div></div>
+  <div class="quote-workflow" id="quoteWorkflow" style="display:none">
+    <div class="workflow-head"><div><b>Quotation Response</b><div class="muted">Every quotation must have a sales decision.</div></div><span class="workflow-status" id="workflowStatus">AWAITING RESPONSE</span></div>
+    <div class="workflow-actions">
+      <button class="btn primary" type="button" onclick="setQuoteResponse('prepay')">💳 Customer agrees — Pay Advance</button>
+      <button class="btn secondary" type="button" onclick="setQuoteResponse('negotiate')">🤝 Customer wants to Negotiate</button>
+    </div>
+    <div class="payment-panel" id="paymentPanel" style="display:none">
+      <div class="payment-grid"><div><label>Payment status</label><select id="paymentStatus"><option value="pending">Pending</option><option value="partial">Partially Paid</option><option value="paid">Paid</option></select></div><div><label>Amount paid</label><input id="amountPaid" placeholder="₹ 0"></div></div>
+      <div class="payment-actions"><button class="btn primary" type="button" onclick="markPaidAndInvoice()">🧾 Mark Paid & Create Payment Invoice</button></div>
+      <div id="invoiceMsg" class="note"></div>
+    </div>
+    <div class="negotiate-panel" id="negotiatePanel" style="display:none"><label>Negotiation note</label><textarea id="negotiationNote" placeholder="Enter customer's requested price or change..."></textarea><button class="btn secondary" type="button" onclick="saveNegotiation()">Save Negotiation Request</button></div>
+  </div>
 </section>
 
 <section class="print-sheet" id="printSheet">
@@ -208,6 +224,7 @@ function render(x,r){
    <div class="box"><b>Quote</b><div class="price editable" data-path="price" contenteditable="false">${esc(x.price||r.budget||'Price to be quoted')}</div></div>
    <div class="box"><b>Important notes</b><p class="note editable" data-path="notes" contenteditable="false">${esc(x.notes||'Final confirmation is subject to availability and supplier confirmation.')}</p></div>`;
  $('screenActions').style.display='flex';
+ $('quoteWorkflow').style.display='block'; $('paymentPanel').style.display='none'; $('negotiatePanel').style.display='none'; $('workflowStatus').textContent='AWAITING RESPONSE'; $('workflowStatus').style.background='#fff3df'; $('workflowStatus').style.color='#9b5c00';
  syncPrint();
 }
 
@@ -268,6 +285,31 @@ function whatsapp(){
  const text=['ON A TRIP HOLIDAYS — CUSTOMER QUOTE','',`Guest: ${last.guest}`,`Contact: ${last.contact}`,...(last.email?[`Email: ${last.email}`]:[]),`Destination: ${last.dest}`,`Duration: ${last.days} Days`,`Travellers: ${last.pax}`,`Dates: ${last.dates||'TBC'}`,`Quote: ${lastQuote.price||last.budget||'TBC'}`,'','Detailed branded itinerary PDF can be shared by the travel team.'].join('\n');
  window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
 }
+function setQuoteResponse(type){
+ if(!last||!lastQuote){alert('Generate a quotation first.');return}
+ $('quoteWorkflow').style.display='block';$('paymentPanel').style.display=type==='prepay'?'block':'none';$('negotiatePanel').style.display=type==='negotiate'?'block':'none';
+ $('workflowStatus').textContent=type==='prepay'?'READY FOR PAYMENT':'NEGOTIATION REQUESTED';
+ $('workflowStatus').style.background=type==='prepay'?'#e8f7ef':'#fff3df';$('workflowStatus').style.color=type==='prepay'?'#08744a':'#9b5c00';
+ last.paymentResponse=type;
+}
+function saveNegotiation(){
+ const note=$('negotiationNote').value.trim();if(!note){alert('Add the customer negotiation request.');return}last.negotiationNote=note;$('workflowStatus').textContent='NEGOTIATION SAVED';$('msg').textContent='Negotiation request saved with this quotation.';saveDraft();
+}
+function markPaidAndInvoice(){
+ const status=$('paymentStatus').value, amount=$('amountPaid').value.trim();
+ if(status!=='paid'){alert('Set Payment status to Paid before creating the payment invoice.');return}
+ if(!amount){alert('Enter the amount paid.');return}
+ last.paymentStatus='paid';last.amountPaid=amount;last.paymentDate=new Date().toLocaleDateString('en-IN');
+ $('workflowStatus').textContent='PAID';$('workflowStatus').style.background='#e8f7ef';$('workflowStatus').style.color='#08744a';
+ $('invoiceMsg').innerHTML='<div class="invoice-preview"><b>Payment Invoice Ready</b><br>Guest: '+esc(last.guest)+'<br>Amount Paid: '+esc(amount)+'<br>Date: '+esc(last.paymentDate)+'<br><button class="btn secondary" type="button" style="margin-top:10px" onclick="printPaymentInvoice()">🧾 Print Payment Invoice</button></div>';
+}
+function printPaymentInvoice(){
+ if(!last||last.paymentStatus!=='paid'){alert('Mark the quotation as Paid first.');return}
+ const w=window.open('','_blank','width=800,height=900');
+ if(!w){alert('Please allow pop-ups to create the payment invoice.');return}
+ w.document.write('<!doctype html><html><head><title>Payment Invoice - On A Trip Holidays</title><style>body{font-family:Arial;margin:40px;color:#10283c}header{display:flex;justify-content:space-between;border-bottom:3px solid #ef5b2a;padding-bottom:15px}img{width:180px}.box{border:1px solid #ddd;border-radius:10px;padding:18px;margin-top:22px}.total{font-size:25px;font-weight:800}.foot{margin-top:40px;border-top:2px solid #ef5b2a;padding-top:10px;font-size:12px}</style></head><body><header><img src="'+location.origin+'/assets/on-a-trip-logo.png"><div style="text-align:right"><b>ON A TRIP HOLIDAYS</b><br>Payment Invoice</div></header><div class="box"><h2>Payment Received</h2><p><b>Guest:</b> '+esc(last.guest)+'</p><p><b>Contact:</b> '+esc(last.contact)+'</p>'+(last.email?'<p><b>Email:</b> '+esc(last.email)+'</p>':'')+'<p><b>Destination:</b> '+esc(last.dest)+'</p><p><b>Payment Date:</b> '+esc(last.paymentDate)+'</p><p class="total">Amount Paid: '+esc(last.amountPaid)+'</p><p>Status: <b>PAID</b></p></div><div class="foot">ON A TRIP HOLIDAYS • +91-8125248909 • www.onatripholidays.com</div></body></html>');w.document.close();w.focus();w.print();
+}
+
 function saveDraft(){
  captureEdits();if(!last||!lastQuote){alert('Generate a quote first.');return}
  const a=JSON.parse(localStorage.getItem('oat_itinerary_drafts')||'[]');a.unshift({...last,quote:lastQuote,saved:new Date().toISOString()});

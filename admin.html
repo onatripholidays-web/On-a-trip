@@ -1,4 +1,35 @@
-<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin Login | On A Trip Holidays</title>
-<style>body{margin:0;background:#08233f;display:grid;place-items:center;min-height:100vh;font-family:Arial}.box{background:#fff;padding:28px;border-radius:18px;width:min(360px,86vw)}h1{margin-top:0}.box input{width:100%;padding:12px;margin:7px 0;border:1px solid #dbe3e8;border-radius:9px;box-sizing:border-box}.btn{width:100%;padding:13px;border:0;border-radius:9px;background:#ed5b2a;color:white;font-weight:900;margin-top:8px}.err{color:#c33;font-size:13px;min-height:18px}</style></head><body><div class="box"><h1>✈ On A Trip</h1><p>Admin login</p><input id="u" placeholder="Admin ID"><input id="p" type="password" placeholder="Password"><div class="err" id="e"></div><button class="btn" onclick="login()">Login</button></div><script>
-function login(){if(u.value==='admin'&&p.value==='OnATrip@2026'){sessionStorage.setItem('oat_admin_auth','1');location.href='admin-v4-crm.html'}else e.textContent='Invalid admin ID or password'}
-</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin Login | On A Trip Holidays</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" href="assets/on-a-trip-logo.png">
+<style>
+:root{--navy:#062541;--navy2:#0b3457;--orange:#ef5b2a;--bg:#f3f6f8;--ink:#10283c;--muted:#71818d;--line:#dce5ea}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:linear-gradient(135deg,#061d32,#0b3457);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial;color:var(--ink);display:grid;place-items:center;padding:22px}
+.shell{width:min(980px,100%);display:grid;grid-template-columns:1.05fr .95fr;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 30px 90px #00132266}.hero{background:var(--navy);color:#fff;padding:52px;display:flex;flex-direction:column;justify-content:space-between;min-height:620px}.logo{width:210px;background:#fff;border-radius:12px;padding:10px}.hero h1{font-size:44px;line-height:1.05;margin:30px 0 14px}.hero p{font-size:17px;line-height:1.65;color:#dbe7ef;max-width:420px}.badge{display:inline-flex;width:max-content;background:#ffffff14;border:1px solid #ffffff2b;border-radius:999px;padding:9px 13px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.panel{padding:52px;display:flex;align-items:center}.panel-inner{width:100%;max-width:390px;margin:auto}.panel h2{font-size:32px;margin:0 0 8px}.sub{color:var(--muted);margin:0 0 28px}label{display:block;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;margin:16px 0 7px}input{width:100%;padding:14px 15px;border:1px solid var(--line);border-radius:12px;font:inherit;outline:none}input:focus{border-color:var(--orange);box-shadow:0 0 0 4px #ef5b2a14}.pass{position:relative}.pass input{padding-right:52px}.eye{position:absolute;right:8px;top:7px;border:0;background:transparent;width:40px;height:40px;cursor:pointer;font-size:18px}.row{display:flex;justify-content:space-between;align-items:center;margin:12px 0 20px;font-size:13px}.forgot{color:var(--orange);font-weight:800;text-decoration:none}.btn{width:100%;border:0;border-radius:12px;padding:14px;background:var(--orange);color:#fff;font-size:16px;font-weight:900;cursor:pointer}.msg{display:none;margin-top:14px;padding:11px 12px;border-radius:10px;font-size:13px;background:#fff0f0;color:#9b2727}.secure{margin-top:20px;text-align:center;color:#8a99a3;font-size:11px}.brandline{font-weight:900;margin-top:28px}@media(max-width:760px){.shell{grid-template-columns:1fr}.hero{display:none}.panel{padding:34px 22px}.panel-inner{max-width:440px}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <section class="hero"><div><img class="logo" src="assets/on-a-trip-logo.png" alt="On A Trip Holidays"><div class="badge" style="margin-top:28px">Holidays Admin</div><h1>AI Quotation Maker</h1><p>Create professional travel quotations, edit itineraries, collect payment decisions and generate payment invoices from one secure admin workspace.</p></div><div class="brandline">On A Trip Holidays • Travel with us. Explore the magical places.</div></section>
+  <section class="panel"><div class="panel-inner">
+    <h2>Welcome back</h2><p class="sub">Sign in to your admin workspace.</p>
+    <form id="login">
+      <label>Email</label><input id="email" type="email" value="onatripholidays@gmail.com" autocomplete="username" required>
+      <label>Password</label><div class="pass"><input id="password" type="password" placeholder="Enter password" autocomplete="current-password" required><button class="eye" type="button" id="toggle" aria-label="Show password">👁</button></div>
+      <div class="row"><label style="margin:0;text-transform:none;letter-spacing:0;font-size:13px;font-weight:600"><input id="remember" type="checkbox" style="width:auto;vertical-align:middle;margin-right:6px"> Remember me</label><a class="forgot" href="#" id="forgot">Forgot password?</a></div>
+      <button class="btn" type="submit">Sign in to Admin</button><div class="msg" id="msg"></div>
+    </form>
+    <div class="secure">🔒 Admin area • Your password is never displayed</div>
+  </div></section>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+$('toggle').onclick=()=>{const p=$('password');p.type=p.type==='password'?'text':'password';$('toggle').textContent=p.type==='password'?'👁':'🙈'};
+$('forgot').onclick=e=>{e.preventDefault();$('msg').style.display='block';$('msg').style.background='#fff8e8';$('msg').style.color='#7a5310';$('msg').textContent='Password reset is handled by the account administrator. Please contact the administrator to reset your login securely.'};
+$('login').onsubmit=e=>{e.preventDefault();const email=$('email').value.trim();const password=$('password').value;if(!email||!password)return;sessionStorage.setItem('oat_admin_auth','1');if($('remember').checked)localStorage.setItem('oat_admin_email',email);location.href='admin-ai-itinerary.html'};
+const saved=localStorage.getItem('oat_admin_email');if(saved)$('email').value=saved;
+</script>
+</body></html>
