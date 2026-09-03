@@ -1,145 +1,19 @@
 {
   "redirects": [
     {
+      "source": "/destinations/maldives",
+      "destination": "https://www.onatripholidays.com/package-char-dham.html",
+      "permanent": true
+    },
+    {
+      "source": "/destinations/maldives/",
+      "destination": "https://www.onatripholidays.com/package-char-dham.html",
+      "permanent": true
+    },
+    {
       "source": "/index.html",
       "destination": "https://www.onatripholidays.com/",
       "permanent": true
-    },
-    {
-      "source": "/hyderabad-to-char-dham-yatra.html",
-      "destination": "https://www.onatripholidays.com/char-dham-yatra-packages-from-hyderabad.html",
-      "permanent": true
-    },
-    {
-      "source": "/hyderabad-to-kedarnath-yatra.html",
-      "destination": "https://www.onatripholidays.com/kedarnath-yatra-packages-from-hyderabad.html",
-      "permanent": true
-    },
-    {
-      "source": "/hyderabad-to-kashmir-tour-packages.html",
-      "destination": "https://www.onatripholidays.com/kashmir-tour-packages-from-hyderabad.html",
-      "permanent": true
-    },
-    {
-      "source": "/hyderabad-to-kerala-tour-packages.html",
-      "destination": "https://www.onatripholidays.com/kerala-tour-packages-from-hyderabad.html",
-      "permanent": true
-    },
-    {
-      "source": "/hyderabad-to-ladakh-tour-packages.html",
-      "destination": "https://www.onatripholidays.com/ladakh-tour-packages-from-hyderabad.html",
-      "permanent": true
-    },
-    {
-      "source": "/hyderabad-to-sikkim-tour-packages.html",
-      "destination": "https://www.onatripholidays.com/sikkim-tour-packages-from-hyderabad.html",
-      "permanent": true
-    },
-    {
-      "source": "/hyderabad-to-manali-tour-packages.html",
-      "destination": "https://www.onatripholidays.com/manali-tour-packages-from-hyderabad.html",
-      "permanent": true
-    },
-    {
-      "source": "/hyderabad-to-spiti-valley-tour.html",
-      "destination": "https://www.onatripholidays.com/spiti-valley-tour-packages-from-hyderabad.html",
-      "permanent": true
-    },
-    {
-      "source": "/wp-content/uploads/2024/03/2024-Chardham-.pdf",
-      "destination": "https://www.onatripholidays.com/char-dham-yatra-packages-from-hyderabad.html",
-      "permanent": true
-    },
-    {
-      "source": "/lp/thailand.html",
-      "destination": "https://www.onatripholidays.com/package-thailand.html",
-      "permanent": true
-    },
-    {
-      "source": "/lp/bali.html",
-      "destination": "https://www.onatripholidays.com/package-bali.html",
-      "permanent": true
-    },
-    {
-      "source": "/lp/dubai.html",
-      "destination": "https://www.onatripholidays.com/package-dubai.html",
-      "permanent": true
-    },
-    {
-      "source": "/lp/vietnam.html",
-      "destination": "https://www.onatripholidays.com/package-vietnam.html",
-      "permanent": true
-    },
-    {
-      "source": "/lp/kashmir.html",
-      "destination": "https://www.onatripholidays.com/kashmir-tour-packages-from-hyderabad.html",
-      "permanent": true
-    },
-    {
-      "source": "/lp/spiti.html",
-      "destination": "https://www.onatripholidays.com/spiti-valley-tour-packages-from-hyderabad.html",
-      "permanent": true
-    },
-    {
-      "source": "/hyderabad-to-amarnath-yatra.html",
-      "destination": "https://www.onatripholidays.com/package-amarnath.html",
-      "permanent": true
-    }
-  ],
-  "headers": [
-    {
-      "source": "/itinerary/(.*)",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, follow"
-        }
-      ]
-    },
-    {
-      "source": "/admin",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow, noarchive"
-        }
-      ]
-    },
-    {
-      "source": "/admin-(.*)",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow, noarchive"
-        }
-      ]
-    },
-    {
-      "source": "/crm",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow, noarchive"
-        }
-      ]
-    },
-    {
-      "source": "/admin.html",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow, noarchive"
-        }
-      ]
-    },
-    {
-      "source": "/crm.html",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow, noarchive"
-        }
-      ]
     }
   ]
 }
