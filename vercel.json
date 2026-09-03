@@ -1,3 +1,10 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json"
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "buildCommand": null,
+  "functions": {
+    "api/generate-itinerary.js": {
+      "maxDuration": 60
+    }
+  }
 }
