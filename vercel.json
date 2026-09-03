@@ -1,16 +1,6 @@
 {
   "redirects": [
     {
-      "source": "/destinations/maldives",
-      "destination": "https://www.onatripholidays.com/package-char-dham.html",
-      "permanent": true
-    },
-    {
-      "source": "/destinations/maldives/",
-      "destination": "https://www.onatripholidays.com/package-char-dham.html",
-      "permanent": true
-    },
-    {
       "source": "/index.html",
       "destination": "https://www.onatripholidays.com/",
       "permanent": true
@@ -91,6 +81,24 @@
     },
     {
       "source": "/crm",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
+      ]
+    },
+    {
+      "source": "/admin.html",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
+      ]
+    },
+    {
+      "source": "/crm.html",
       "headers": [
         {
           "key": "X-Robots-Tag",
