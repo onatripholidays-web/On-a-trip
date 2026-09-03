@@ -1,6 +1,10 @@
 User-agent: *
 Allow: /
 Disallow: /admin
+Disallow: /admin.html
+Disallow: /admin-dashboard.html
+Disallow: /admin-v2.html
+Disallow: /admin-v4-crm.html
 Disallow: /crm
-Disallow: /admin-dashboard
+Disallow: /crm.html
 Sitemap: https://www.onatripholidays.com/sitemap.xml
