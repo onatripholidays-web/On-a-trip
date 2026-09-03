@@ -6,248 +6,248 @@
 <title>AI Itinerary Builder | On A Trip Holidays</title>
 <meta name="robots" content="noindex,nofollow">
 <style>
-:root{--n:#08233f;--o:#ed5b2a;--bg:#f4f7f9;--line:#dce5ea;--muted:#71818d}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#12283b;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial}
-.top{background:var(--n);color:#fff;padding:17px 22px;display:flex;justify-content:space-between;align-items:center}.top a{color:#fff;text-decoration:none;font-weight:800}
-.wrap{max-width:1300px;margin:auto;padding:20px}.grid{display:grid;grid-template-columns:400px 1fr;gap:18px}
-.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:19px;box-shadow:0 6px 24px #0a29420a}
-.form{display:grid;gap:11px}label{font-size:11px;text-transform:uppercase;font-weight:900;letter-spacing:.05em}
-input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;background:#fff;font:inherit;color:#12283b}textarea{min-height:75px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.btn{border:0;border-radius:10px;padding:12px 15px;font-weight:900;cursor:pointer}
-.primary{background:var(--o);color:#fff}.secondary{background:#fff;border:1px solid var(--line)}.actions{display:flex;gap:8px;flex-wrap:wrap}
-.status{font-size:12px;color:#067247;background:#e8f7ef;padding:7px 10px;border-radius:99px;font-weight:900}
-.status.error{color:#a61b1b;background:#fdecec}.quote{background:#fff}.quote-head{border-bottom:2px solid #edf1f3;padding-bottom:15px;margin-bottom:15px}
-.quote-title{font-size:28px;font-weight:950}.muted{color:var(--muted)}.day{border:1px solid var(--line);border-radius:11px;padding:14px;margin:10px 0}
-.day h3{margin:0 0 6px}.day p{line-height:1.5;margin:6px 0}.box{background:#f8fafb;border-radius:10px;padding:12px;margin-top:12px}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.price{font-size:26px;font-weight:950}.note{font-size:11px;color:#657784;line-height:1.5}
-.spinner{display:none}.loading .spinner{display:inline}.loading .gen{display:none}
-.loading .genloading{display:inline-block}.genloading{display:none}
+:root{--navy:#08233f;--orange:#ed5b2a;--gold:#f7bd45;--bg:#f4f7f9;--line:#dce5ea;--muted:#71818d;--green:#08744a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:#12283b;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial}
+.top{background:var(--navy);color:#fff;padding:15px 22px;display:flex;justify-content:space-between;align-items:center}
+.top a{color:#fff;text-decoration:none;font-weight:800}
+.brand{display:flex;align-items:center;gap:10px}.brand img{width:112px;height:auto;background:#ffd75a;border-radius:5px}
+.wrap{max-width:1350px;margin:auto;padding:18px}.grid{display:grid;grid-template-columns:390px 1fr;gap:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 6px 24px #0a29420a}
+.form{display:grid;gap:10px}label{font-size:11px;text-transform:uppercase;font-weight:900;letter-spacing:.05em}
+input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;background:#fff;font:inherit;color:#12283b}
+textarea{min-height:72px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.btn{border:0;border-radius:10px;padding:11px 14px;font-weight:900;cursor:pointer;min-height:44px}
+.primary{background:var(--orange);color:#fff}.secondary{background:#fff;border:1px solid var(--line)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.status{font-size:12px;color:#067247;background:#e8f7ef;padding:7px 10px;border-radius:99px;font-weight:900;display:inline-block}
+.status.error{color:#a61b1b;background:#fdecec}.muted{color:var(--muted)}
+.quote-head{border-bottom:2px solid #edf1f3;padding-bottom:14px;margin-bottom:14px}
+.quote-title{font-size:28px;font-weight:950;margin-top:8px}.day{border:1px solid var(--line);border-radius:11px;padding:14px;margin:10px 0}
+.day h3{margin:0 0 7px}.day p{line-height:1.5;margin:6px 0}
+.box{background:#f8fafb;border-radius:10px;padding:12px;margin-top:11px}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.price{font-size:28px;font-weight:950}.note{font-size:11px;color:#657784;line-height:1.5}
 .errorbox{display:none;background:#fff0f0;border:1px solid #f2b8b8;color:#8c1d1d;border-radius:10px;padding:11px;margin-top:10px;font-size:13px;line-height:1.45}
-@media(max-width:900px){.grid{grid-template-columns:1fr}}@media(max-width:600px){.row,.two{grid-template-columns:1fr}.wrap{padding:12px}.quote-title{font-size:22px}}
-@media print{body{background:#fff}.top,.builder,.actions,.no-print{display:none!important}.wrap{max-width:none;padding:0}.grid{display:block}.card{border:0;box-shadow:none;padding:0}.quote{display:block}}
+.editable{outline:2px dashed transparent;border-radius:6px;padding:2px}.editing .editable{outline-color:#f0b24d;background:#fffaf0}
+.editbar{display:none;background:#fff8e8;border:1px solid #f1d28b;border-radius:10px;padding:10px;margin:10px 0}.editing .editbar{display:block}
+.empty{padding:30px 10px;text-align:center;color:var(--muted)}
+.print-sheet{display:none}
+
+@media(max-width:950px){.grid{grid-template-columns:1fr}}
+@media(max-width:600px){.row,.two{grid-template-columns:1fr}.wrap{padding:12px}.quote-title{font-size:22px}.top{padding:12px 14px}.brand img{width:92px}}
+
+@media print{
+  @page{size:A4;margin:10mm}
+  body{background:#fff}
+  .top,.builder,.quote-head,.screen-actions,.editbar,.no-print{display:none!important}
+  .wrap{max-width:none;padding:0}.grid{display:block}.card{border:0;box-shadow:none;padding:0}
+  .quote{display:none!important}.print-sheet{display:block}
+  .print-header{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid var(--orange);padding-bottom:8px;margin-bottom:12px}
+  .print-header img{width:155px;height:auto;background:#ffd75a}
+  .print-company{text-align:right;font-size:10px;line-height:1.4}.print-company b{font-size:15px}
+  .print-title{font-size:23px;font-weight:950;margin:5px 0}.print-sub{font-size:11px;color:#52636f}
+  .guest-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;border:1px solid #ddd;padding:9px;margin:10px 0}
+  .guest-grid div{font-size:10px}.guest-grid b{display:block;font-size:9px;text-transform:uppercase;color:#657784}
+  .print-day{break-inside:avoid;border:1px solid #ddd;border-radius:7px;padding:8px;margin:7px 0}
+  .print-day h3{font-size:12px;margin:0 0 4px}.print-day p{font-size:10px;line-height:1.35;margin:3px 0}
+  .print-two{display:grid;grid-template-columns:1fr 1fr;gap:7px}.print-box{break-inside:avoid;border:1px solid #ddd;padding:8px;border-radius:7px;margin:7px 0}
+  .print-box h4{margin:0 0 4px;font-size:11px}.print-box p,.print-box li{font-size:9.5px;line-height:1.35}
+  .print-price{font-size:18px;font-weight:950}.payment{break-inside:avoid;margin-top:10px;border:2px solid #e6a33a;border-radius:8px;padding:10px}
+  .payment h3{text-align:center;margin:0 0 8px;font-size:15px}.pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;font-size:9.5px}
+  .pay-grid b{color:#b12820}.qr-wrap{text-align:center;margin-top:7px}.qr-wrap img{width:115px;height:115px}
+  .how{font-size:9.5px;line-height:1.35;margin-top:7px}.print-footer{text-align:center;border-top:2px solid var(--orange);padding-top:6px;margin-top:10px;font-size:9px}
+}
 </style>
 </head>
 <body>
-<script>
-if(sessionStorage.getItem('oat_admin_auth')!=='1') location.replace('admin.html');
-</script>
+<script>if(sessionStorage.getItem('oat_admin_auth')!=='1') location.replace('admin.html');</script>
 
 <header class="top">
-  <b>✈ ON A TRIP HOLIDAYS</b>
+  <div class="brand"><img src="assets/on-a-trip-logo.png" alt="On A Trip Holidays logo"><b>AI ITINERARY BUILDER</b></div>
   <a href="admin-v4-crm.html">← Admin</a>
 </header>
 
 <div class="wrap">
 <div class="grid">
-
 <section class="builder card">
   <h1>✨ AI Itinerary Builder</h1>
-  <p class="muted">Create a customer-ready itinerary and quotation using the live AI service.</p>
-
+  <p class="muted">Generate, edit and prepare a branded customer quotation.</p>
   <form id="f" class="form">
-    <label>Guest name</label>
-    <input id="guest" placeholder="Guest full name" autocomplete="name">
-
-    <div class="row">
-      <div><label>Destination</label><input id="dest" placeholder="Kedarnath"></div>
-      <div><label>Days</label><input id="days" type="number" min="1" max="30" value="5"></div>
-    </div>
-
-    <div class="row">
-      <div><label>Travellers</label><input id="pax" type="number" min="1" value="4"></div>
-      <div><label>Start city</label><input id="start" value="Hyderabad"></div>
-    </div>
-
-    <div class="row">
-      <div><label>Travel dates</label><input id="dates" placeholder="10 Oct – 14 Oct 2026"></div>
-      <div><label>Language</label>
-        <select id="language"><option>English</option><option>Telugu</option><option>English + Telugu</option></select>
-      </div>
-    </div>
-
-    <div class="row">
-      <div><label>Trip type</label>
-        <select id="type"><option>Family</option><option>Pilgrimage</option><option>Adventure</option><option>Couples</option><option>Premium</option></select>
-      </div>
-      <div><label>Hotel</label>
-        <select id="hotel"><option>3 Star</option><option>4 Star</option><option>5 Star</option><option>Premium</option></select>
-      </div>
-    </div>
-
-    <div class="row">
-      <div><label>Vehicle</label>
-        <select id="vehicle"><option>Private Car</option><option>Ertiga</option><option>Innova Crysta</option><option>Tempo Traveller</option><option>20 Seater Tempo</option></select>
-      </div>
-      <div><label>Meals</label>
-        <select id="meals"><option>Breakfast & Dinner</option><option>Breakfast Only</option><option>All Meals</option><option>Satvik Veg Meals</option></select>
-      </div>
-    </div>
-
-    <label>Budget / quote</label>
-    <input id="budget" placeholder="e.g. ₹59,999 total or ₹30,500 per person">
-
-    <label>Special requirements</label>
-    <textarea id="special" placeholder="Senior citizens, darshan, child-friendly, honeymoon, activities..."></textarea>
-
-    <label>Additional instruction</label>
-    <textarea id="instruction" placeholder="Anything the sales person wants AI to consider..."></textarea>
-
+    <div class="row"><div><label>Guest name</label><input id="guest" placeholder="Guest full name" autocomplete="name"></div><div><label>Guest contact number *</label><input id="contact" type="tel" placeholder="10-digit mobile number" autocomplete="tel" required></div></div>
+    <div class="row"><div><label>Email ID (optional)</label><input id="email" type="email" placeholder="guest@example.com" autocomplete="email"></div><div></div></div>
+    <div class="row"><div><label>Destination</label><input id="dest" placeholder="Kedarnath"></div><div><label>Days</label><input id="days" type="number" min="1" max="30" value="5"></div></div>
+    <div class="row"><div><label>Travellers</label><input id="pax" type="number" min="1" value="4"></div><div><label>Start city</label><input id="start" value="Hyderabad"></div></div>
+    <div class="row"><div><label>Start date</label><input id="startDate" type="date"></div><div><label>End date</label><input id="endDate" type="date"></div></div>
+    <div class="row"><div><label>Duration</label><input id="duration" readonly placeholder="Select start & end dates"></div><div><label>Language</label><select id="language"><option>English</option><option>Telugu</option><option>English + Telugu</option></select></div></div>
+    <div class="row"><div><label>Trip type</label><select id="type"><option>Family</option><option>Pilgrimage</option><option>Adventure</option><option>Couples</option><option>Premium</option></select></div><div><label>Hotel</label><select id="hotel"><option>3 Star</option><option>4 Star</option><option>5 Star</option><option>Premium</option></select></div></div>
+    <div class="row"><div><label>Vehicle</label><select id="vehicle"><option>Sedan Car — up to 4 members</option><option>Ertiga — up to 6 members</option><option>Innova Crysta — up to 7 members</option><option>Tempo Traveller — 12 Seater</option><option>Tempo Traveller — 17 Seater</option><option>Tempo Traveller — 20 Seater</option></select></div><div><label>Meals</label><select id="meals"><option>Breakfast & Dinner</option><option>Breakfast Only</option><option>All Meals</option><option>Satvik Veg Meals</option></select></div></div>
+    <label>Budget / quote</label><input id="budget" placeholder="e.g. ₹59,999 total or ₹30,500 per person">
+    <label>Special requirements</label><textarea id="special" placeholder="Senior citizens, darshan, child-friendly, honeymoon, activities..."></textarea>
+    <label>Additional instruction</label><textarea id="instruction" placeholder="Anything the sales person wants AI to consider..."></textarea>
     <div class="actions">
-      <button id="generateBtn" class="btn primary gen" type="submit">✨ Generate with AI</button>
-      <button class="btn primary genloading" type="button" disabled>⏳ Generating…</button>
-      <button class="btn secondary" type="button" onclick="window.print()">🖨 PDF</button>
+      <button class="btn primary" type="submit">✨ Generate with AI</button>
+      <button class="btn secondary" type="button" onclick="printQuote()">🖨 Create PDF</button>
     </div>
-
-    <div id="msg" class="note">Live AI is connected through the secure Vercel endpoint. Your API key is never placed in the browser.</div>
+    <div id="msg" class="note">Live AI is connected through the secure Vercel endpoint.</div>
     <div id="err" class="errorbox"></div>
   </form>
 </section>
 
-<section class="card quote">
-  <div class="quote-head">
-    <span id="status" class="status">● READY</span>
-    <div class="quote-title" id="qt">Your guest quote will appear here</div>
-    <div class="muted" id="qm"></div>
+<section class="card quote" id="quoteCard">
+  <div class="quote-head"><span id="status" class="status">● READY</span><div class="quote-title" id="qt">Your guest quote will appear here</div><div class="muted" id="qm"></div></div>
+  <div id="editbar" class="editbar"><b>✏️ Edit mode</b> — Tap any highlighted itinerary text to change it. Click <b>Save Edits</b> when finished.</div>
+  <div class="actions screen-actions" id="screenActions" style="display:none;margin-bottom:10px">
+    <button class="btn secondary" type="button" onclick="toggleEdit()">✏️ Edit Itinerary</button>
+    <button class="btn primary" type="button" onclick="printQuote()">🖨 Create Branded PDF</button>
+    <button class="btn secondary" type="button" onclick="whatsapp()">💬 WhatsApp</button>
+    <button class="btn secondary" type="button" onclick="saveDraft()">💾 Save Draft</button>
   </div>
-  <div id="out"><div class="muted">Fill the form and click Generate with AI.</div></div>
+  <div id="out"><div class="empty">Fill the form and click Generate with AI.</div></div>
 </section>
 
+<section class="print-sheet" id="printSheet">
+  <div class="print-header">
+    <img src="assets/on-a-trip-logo.png" alt="On A Trip Holidays">
+    <div class="print-company"><b>ON A TRIP HOLIDAYS</b><br>Travel with us. Explore the magical places.<br>www.onatripholidays.com</div>
+  </div>
+  <div class="print-title" id="pTitle">Travel Quotation & Itinerary</div>
+  <div class="print-sub" id="pSummary"></div>
+  <div class="guest-grid" id="pGuest"></div>
+  <div id="pDays"></div>
+  <div class="print-two">
+    <div class="print-box"><h4>Accommodation</h4><p id="pHotels"></p></div>
+    <div class="print-box"><h4>Transport</h4><p id="pVehicle"></p></div>
+  </div>
+  <div class="print-box"><h4>Meals</h4><p id="pMeals"></p></div>
+  <div class="print-two">
+    <div class="print-box"><h4>Inclusions</h4><ul id="pInc"></ul></div>
+    <div class="print-box"><h4>Exclusions</h4><ul id="pExc"></ul></div>
+  </div>
+  <div class="print-box"><h4>Package Quote</h4><div class="print-price" id="pPrice"></div></div>
+  <div class="print-box"><h4>Important Notes</h4><p id="pNotes"></p></div>
+
+  <div class="payment">
+    <h3>Payment Details</h3>
+    <div class="pay-grid">
+      <div><b>Account Name</b><br>ON A TRIP HOLIDAYS.</div>
+      <div><b>Account Number</b><br>2602261212328370</div>
+      <div><b>Account Type</b><br>Current Account</div>
+      <div><b>IFSC Code</b><br>AUBL0002612</div>
+      <div style="grid-column:1/-1"><b>Branch Address</b><br>House No 25 A, GF, Nandanavanam Complex, SR Nagar Main Rd, Vengal Rao Nagar, Sunder Nagar, Hyderabad, Telangana 500038</div>
+      <div><b>UPI No.</b><br>8125248909</div>
+      <div><b>UPI ID</b><br>onatripholidays0976@aubank</div>
+    </div>
+    <div class="qr-wrap"><img src="assets/payment-qr.png" alt="On A Trip Holidays payment QR"></div>
+    <div class="how"><b>HOW TO BOOK:</b> Pay advance of <b>Rs. 5000/- per person</b> to reserve your seat by any payment method mentioned above. Remaining amount shall be payable 7 days prior to the trip. Once payment is done, kindly call +91-8125248909 to re-confirm or e-mail a copy of the Bank Deposit slip.</div>
+  </div>
+
+  <div class="print-footer">ON A TRIP HOLIDAYS • +91-8125248909 • www.onatripholidays.com</div>
+</section>
 </div>
 </div>
 
 <script>
 const $=id=>document.getElementById(id);
-let last=null,lastQuote=null;
+let last=null,lastQuote=null,editing=false;
 
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
-
-function readForm(){
-  return {
-    guest:$('guest').value.trim()||'Guest',
-    dest:$('dest').value.trim(),
-    days:Math.max(1,Math.min(30,Number($('days').value)||1)),
-    pax:Math.max(1,Number($('pax').value)||1),
-    start:$('start').value.trim()||'Hyderabad',
-    dates:$('dates').value.trim(),
-    language:$('language').value,
-    type:$('type').value,
-    hotel:$('hotel').value,
-    vehicle:$('vehicle').value,
-    meals:$('meals').value,
-    budget:$('budget').value.trim(),
-    special:$('special').value.trim(),
-    instruction:$('instruction').value.trim()
-  };
-}
+function formatDate(v){if(!v)return '';const d=new Date(v+'T00:00:00');return d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});}
+function updateDates(){const a=$('startDate').value,b=$('endDate').value;if(a&&b){const s=new Date(a+'T00:00:00'),e=new Date(b+'T00:00:00'),diff=Math.round((e-s)/86400000);if(diff>=0){$('days').value=diff+1;$('duration').value=`${diff} Night${diff===1?'':'s'} / ${diff+1} Day${diff===0?'':'s'}`;}else $('duration').value='End date must be after start date';}else $('duration').value='Select start & end dates';}
+function readForm(){updateDates();return{
+ guest:$('guest').value.trim()||'Guest',contact:$('contact').value.trim(),email:$('email').value.trim(),dest:$('dest').value.trim(),
+ days:Math.max(1,Math.min(30,Number($('days').value)||1)),pax:Math.max(1,Number($('pax').value)||1),
+ start:$('start').value.trim()||'Hyderabad',startDate:$('startDate').value,endDate:$('endDate').value,dates:$('startDate').value&&$('endDate').value?`${formatDate($('startDate').value)} – ${formatDate($('endDate').value)}`:'',language:$('language').value,
+ type:$('type').value,hotel:$('hotel').value,vehicle:$('vehicle').value,meals:$('meals').value,
+ budget:$('budget').value.trim(),special:$('special').value.trim(),instruction:$('instruction').value.trim()
+};}
 
 function render(x,r){
-  lastQuote=x;
-  $('status').className='status';
-  $('status').textContent='● AI QUOTE DRAFT';
-  $('qt').textContent=x.title||`${r.dest} — ${r.days} Days`;
-  $('qm').textContent=x.summary||`Prepared for ${r.guest} • ${r.pax} travellers • ${r.start} • ${r.dates||'Dates to be confirmed'}`;
-
-  const days=(x.days||[]).map(d=>`
-    <article class="day">
-      <h3>Day ${esc(d.day)}: ${esc(d.title)}</h3>
-      <p>${esc(d.summary||d.details||'')}</p>
-      ${d.hotel?`<p><b>Hotel:</b> ${esc(d.hotel)}</p>`:''}
-      ${d.meals?`<p><b>Meals:</b> ${esc(d.meals)}</p>`:''}
-    </article>`).join('');
-
-  $('out').innerHTML=`
-    ${days}
-    <div class="two">
-      <div class="box"><b>Accommodation</b><p>${esc(x.hotels||r.hotel)}</p></div>
-      <div class="box"><b>Transport</b><p>${esc(x.vehicle||r.vehicle)}</p></div>
-    </div>
-    <div class="box"><b>Meals</b><p>${esc(x.meals||r.meals)}</p></div>
-    <div class="two">
-      <div class="box"><b>Inclusions</b><ul>${(x.inclusions||[]).map(i=>`<li>${esc(i)}</li>`).join('')}</ul></div>
-      <div class="box"><b>Exclusions</b><ul>${(x.exclusions||[]).map(i=>`<li>${esc(i)}</li>`).join('')}</ul></div>
-    </div>
-    <div class="box"><b>Quote</b><div class="price">${esc(x.price||r.budget||'Price to be quoted')}</div></div>
-    <div class="box"><b>Important notes</b><p class="note">${esc(x.notes||'Final confirmation is subject to availability and supplier confirmation.')}</p></div>
-    <div class="actions no-print" style="margin-top:15px">
-      <button class="btn primary" onclick="printQuote()">🖨 Print / Save PDF</button>
-      <button class="btn secondary" onclick="whatsapp()">💬 Send Quote on WhatsApp</button>
-      <button class="btn secondary" onclick="saveDraft()">💾 Save Draft</button>
-    </div>`;
+ lastQuote=JSON.parse(JSON.stringify(x));
+ $('status').className='status';$('status').textContent='● AI QUOTE DRAFT';
+ $('qt').textContent=x.title||`${r.dest} — ${r.days} Days`;
+ $('qm').textContent=x.summary||`Prepared for ${r.guest} • ${r.pax} travellers • ${r.start} • ${r.dates||'Dates to be confirmed'}`;
+ const days=(x.days||[]).map((d,i)=>`<article class="day">
+   <h3 class="editable" data-path="days.${i}.title" contenteditable="false">Day ${esc(d.day)}: ${esc(d.title)}</h3>
+   <p class="editable" data-path="days.${i}.summary" contenteditable="false">${esc(d.summary||d.details||'')}</p>
+   <p><b>Hotel:</b> <span class="editable" data-path="days.${i}.hotel" contenteditable="false">${esc(d.hotel||'')}</span></p>
+   <p><b>Meals:</b> <span class="editable" data-path="days.${i}.meals" contenteditable="false">${esc(d.meals||'')}</span></p>
+ </article>`).join('');
+ $('out').innerHTML=days+`
+   <div class="two">
+    <div class="box"><b>Accommodation</b><p class="editable" data-path="hotels" contenteditable="false">${esc(x.hotels||r.hotel)}</p></div>
+    <div class="box"><b>Transport</b><p class="editable" data-path="vehicle" contenteditable="false">${esc(x.vehicle||r.vehicle)}</p></div>
+   </div>
+   <div class="box"><b>Meals</b><p class="editable" data-path="meals" contenteditable="false">${esc(x.meals||r.meals)}</p></div>
+   <div class="two">
+    <div class="box"><b>Inclusions</b><ul class="editable" data-path="inclusions" contenteditable="false">${(x.inclusions||[]).map(i=>`<li>${esc(i)}</li>`).join('')}</ul></div>
+    <div class="box"><b>Exclusions</b><ul class="editable" data-path="exclusions" contenteditable="false">${(x.exclusions||[]).map(i=>`<li>${esc(i)}</li>`).join('')}</ul></div>
+   </div>
+   <div class="box"><b>Quote</b><div class="price editable" data-path="price" contenteditable="false">${esc(x.price||r.budget||'Price to be quoted')}</div></div>
+   <div class="box"><b>Important notes</b><p class="note editable" data-path="notes" contenteditable="false">${esc(x.notes||'Final confirmation is subject to availability and supplier confirmation.')}</p></div>`;
+ $('screenActions').style.display='flex';
+ syncPrint();
 }
 
-function showError(message){
-  $('status').className='status error';
-  $('status').textContent='● AI ERROR';
-  $('err').style.display='block';
-  $('err').textContent=message;
-  $('msg').textContent='Live AI did not return a quote. Fix the message above and try again.';
+function showError(message){$('status').className='status error';$('status').textContent='● AI ERROR';$('err').style.display='block';$('err').textContent=message;$('msg').textContent='AI did not return a usable itinerary. Check the message and try again.';}
+
+$('startDate').addEventListener('change',updateDates);$('endDate').addEventListener('change',updateDates);
+$('pax').addEventListener('change',()=>{const n=Number($('pax').value)||1;const opts=[['Sedan Car — up to 4 members',4],['Ertiga — up to 6 members',6],['Innova Crysta — up to 7 members',7],['Tempo Traveller — 12 Seater',12],['Tempo Traveller — 17 Seater',17],['Tempo Traveller — 20 Seater',20]];const current=$('vehicle').value;const match=opts.find(([_,cap])=>n<=cap);if(match && (current.startsWith('Sedan')||current.startsWith('Ertiga')||current.startsWith('Innova')||current.startsWith('Tempo'))) $('vehicle').value=match[0];});
+$('f').addEventListener('submit',async e=>{
+ e.preventDefault();$('err').style.display='none';const r=readForm();
+ if(!r.dest){showError('Please enter a destination before generating the itinerary.');return}
+ if(!r.contact){showError('Please enter the guest contact number.');return}
+ last=r;$('msg').textContent='AI is preparing the itinerary…';
+ document.body.classList.add('loading');
+ try{
+  const res=await fetch('/api/generate-itinerary',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(r)});
+  let data={};try{data=await res.json()}catch(_){}
+  if(!res.ok)throw new Error(data.error||`AI service returned HTTP ${res.status}.`);
+  if(!data.title||!Array.isArray(data.days))throw new Error('AI returned an incomplete itinerary. Please try again.');
+  if(data.days.length!==r.days)throw new Error(`AI returned ${data.days.length} days instead of ${r.days}.`);
+  lastQuote=data;render(data,r);$('msg').textContent='Generated successfully. You can edit the itinerary before creating the PDF.';
+ }catch(err){showError(err.message||'Unable to generate the itinerary.')}
+ finally{document.body.classList.remove('loading')}
+});
+
+function toggleEdit(){
+ editing=!editing;$('quoteCard').classList.toggle('editing',editing);
+ document.querySelectorAll('.editable').forEach(el=>el.contentEditable=editing?'true':'false');
+ $('screenActions').querySelector('button').textContent=editing?'💾 Save Edits':'✏️ Edit Itinerary';
+ if(!editing){captureEdits();syncPrint();$('msg').textContent='Edits saved to this quote. Review and create the PDF.'}
 }
-
-$('f').onsubmit=async e=>{
-  e.preventDefault();
-  $('err').style.display='none';
-
-  const r=readForm();
-  if(!r.dest){
-    showError('Please enter a destination before generating the itinerary.');
-    return;
-  }
-
-  last=r;
-  document.body.classList.add('loading');
-  $('msg').textContent='AI is preparing the itinerary…';
-
-  try{
-    const res=await fetch('/api/generate-itinerary',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify(r)
-    });
-
-    let data={};
-    try{data=await res.json();}catch(_){}
-
-    if(!res.ok){
-      throw new Error(data.error||`AI service returned HTTP ${res.status}.`);
-    }
-    if(!data.title || !Array.isArray(data.days)){
-      throw new Error('AI returned an incomplete itinerary. Please try again.');
-    }
-
-    render(data,r);
-    $('msg').textContent='AI itinerary generated. Review dates, hotels, timings and price before sending.';
-  }catch(err){
-    showError(err.message||'Unable to generate the itinerary.');
-  }finally{
-    document.body.classList.remove('loading');
-  }
-};
-
-function printQuote(){window.print()}
-
+function captureEdits(){
+ if(!lastQuote)return;
+ document.querySelectorAll('.editable').forEach(el=>{
+  const p=el.dataset.path;if(!p)return;
+  const parts=p.split('.');let value=el.innerText.trim();
+  if(parts[0]==='days'){const i=Number(parts[1]);const key=parts[2];if(key==='title'&&value.startsWith('Day '))value=value.replace(/^Day\s+\d+\s*:\s*/,'');lastQuote.days[i][key]=value}
+  else if(p==='inclusions'||p==='exclusions'){lastQuote[p]=Array.from(el.querySelectorAll('li')).map(li=>li.innerText.trim()).filter(Boolean)}
+  else lastQuote[p]=value;
+ });
+}
+function syncPrint(){
+ if(!last||!lastQuote)return;
+ const x=lastQuote,r=last;
+ $('pTitle').textContent=x.title||`${r.dest} — ${r.days} Days`;
+ $('pSummary').textContent=x.summary||'Customer-ready travel quotation and itinerary';
+ $('pGuest').innerHTML=[
+  ['Guest',r.guest],['Contact',r.contact],['Email',r.email||'Not provided'],['Destination',r.dest],['Duration',r.days>1?`${r.days-1} Nights / ${r.days} Days`:`${r.days} Day`],['Travellers',r.pax],
+  ['Start City',r.start],['Start Date',r.startDate?formatDate(r.startDate):'To be confirmed'],['End Date',r.endDate?formatDate(r.endDate):'To be confirmed'],['Trip Type',r.type],['Language',r.language]
+ ].map(a=>`<div><b>${esc(a[0])}</b>${esc(a[1])}</div>`).join('');
+ $('pDays').innerHTML=(x.days||[]).map(d=>`<div class="print-day"><h3>Day ${esc(d.day)}: ${esc(d.title)}</h3><p>${esc(d.summary||'')}</p><p><b>Hotel:</b> ${esc(d.hotel||'')}</p><p><b>Meals:</b> ${esc(d.meals||'')}</p></div>`).join('');
+ $('pHotels').textContent=x.hotels||r.hotel;$('pVehicle').textContent=x.vehicle||r.vehicle;$('pMeals').textContent=x.meals||r.meals;
+ $('pInc').innerHTML=(x.inclusions||[]).map(i=>`<li>${esc(i)}</li>`).join('');$('pExc').innerHTML=(x.exclusions||[]).map(i=>`<li>${esc(i)}</li>`).join('');
+ $('pPrice').textContent=x.price||r.budget||'Price to be quoted';$('pNotes').textContent=x.notes||'Final confirmation is subject to availability and supplier confirmation.';
+}
+function printQuote(){captureEdits();syncPrint();window.print()}
 function whatsapp(){
-  if(!last||!lastQuote){alert('Generate a quote first.');return}
-  const text=[
-    'On A Trip Holidays — Quote',
-    '',
-    `Guest: ${last.guest}`,
-    `Trip: ${last.dest}`,
-    `Duration: ${last.days} days`,
-    `Travellers: ${last.pax}`,
-    `Dates: ${last.dates||'TBC'}`,
-    `Quote: ${lastQuote.price||last.budget||'TBC'}`,
-    '',
-    'Detailed itinerary & quotation will be shared by our travel team.'
-  ].join('\n');
-  window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
+ captureEdits();syncPrint();if(!last||!lastQuote){alert('Generate a quote first.');return}
+ const text=['ON A TRIP HOLIDAYS — CUSTOMER QUOTE','',`Guest: ${last.guest}`,`Contact: ${last.contact}`,...(last.email?[`Email: ${last.email}`]:[]),`Destination: ${last.dest}`,`Duration: ${last.days} Days`,`Travellers: ${last.pax}`,`Dates: ${last.dates||'TBC'}`,`Quote: ${lastQuote.price||last.budget||'TBC'}`,'','Detailed branded itinerary PDF can be shared by the travel team.'].join('\n');
+ window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
 }
-
 function saveDraft(){
-  if(!last)return;
-  const a=JSON.parse(localStorage.getItem('oat_itinerary_drafts')||'[]');
-  a.unshift({...last,quote:lastQuote,saved:new Date().toISOString()});
-  localStorage.setItem('oat_itinerary_drafts',JSON.stringify(a.slice(0,30)));
-  alert('Draft saved.');
+ captureEdits();if(!last||!lastQuote){alert('Generate a quote first.');return}
+ const a=JSON.parse(localStorage.getItem('oat_itinerary_drafts')||'[]');a.unshift({...last,quote:lastQuote,saved:new Date().toISOString()});
+ localStorage.setItem('oat_itinerary_drafts',JSON.stringify(a.slice(0,30)));alert('Draft saved.');
 }
 </script>
 </body>
