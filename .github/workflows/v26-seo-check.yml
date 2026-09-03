@@ -1,0 +1,54 @@
+name: V26 SEO Sanity Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  seo-sanity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check required SEO files
+        shell: bash
+        run: |
+          test -f robots.txt
+          test -f sitemap.xml
+          test -f 404.html
+          test -f index.html
+
+      - name: Check homepage canonical
+        shell: bash
+        run: |
+          grep -qi 'rel="canonical"' index.html
+          grep -qi 'onatripholidays.com' index.html
+
+      - name: Check homepage title and H1
+        shell: bash
+        run: |
+          grep -qi '<title>' index.html
+          grep -qi '<h1' index.html
+
+      - name: Check sitemap declaration
+        shell: bash
+        run: |
+          grep -qi 'sitemap' robots.txt
+
+      - name: Check accidental localhost references
+        shell: bash
+        run: |
+          if grep -RniE 'localhost|127\.0\.0\.1' --include='*.html' --include='*.xml' --include='*.txt' .; then
+            echo 'Localhost reference detected'
+            exit 1
+          fi
+
+      - name: Check accidental noindex on homepage
+        shell: bash
+        run: |
+          if grep -qi 'name="robots"[^>]*noindex' index.html; then
+            echo 'Homepage contains noindex'
+            exit 1
+          fi
