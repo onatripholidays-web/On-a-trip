@@ -1,0 +1,23 @@
+ON A TRIP HOLIDAYS — FINAL PREMIUM PRESERVATION-FIRST BUILD
+
+Source preservation:
+- Homepage content preserved from the latest supplied/index source.
+- SEO and destination pages from the final SEO package are retained.
+- Package pages, blog pages, admin/CRM pages, sitemap, robots.txt, llms.txt and logo are retained.
+- No homepage copy, package copy, pricing, reviews, navigation labels or SEO metadata were rewritten for the visual upgrade.
+
+Visual upgrade:
+- style.css added as the unified premium visual system.
+- Typography uses Manrope + DM Sans + Playfair Display with responsive clamp sizing.
+- Headings, labels, captions, prices, CTAs and body copy have separate typographic roles.
+- Mixed weights (300/400/500/600/700/800), uppercase editorial labels and serif italic accents are used intentionally.
+- Desktop/tablet/mobile layouts were tuned with responsive breakpoints.
+- Cards, forms, navigation, hero, destination tiles, trust sections, reviews and package surfaces were refined.
+- Existing brand palette is preserved: deep navy + orange with restrained gold accents.
+
+Routing:
+- /destinations/maldives -> official Char Dham page (permanent redirect retained).
+- /index.html -> official root homepage (permanent redirect added).
+
+Note:
+- The repository snapshot available for this build did not include the separate itinerary PDF directory, so no invented or placeholder PDFs were added.
