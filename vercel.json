@@ -14,6 +14,46 @@
       "source": "/index.html",
       "destination": "https://www.onatripholidays.com/",
       "permanent": true
+    },
+    {
+      "source": "/hyderabad-to-char-dham-yatra.html",
+      "destination": "https://www.onatripholidays.com/char-dham-yatra-packages-from-hyderabad.html",
+      "permanent": true
+    },
+    {
+      "source": "/hyderabad-to-kedarnath-yatra.html",
+      "destination": "https://www.onatripholidays.com/kedarnath-yatra-packages-from-hyderabad.html",
+      "permanent": true
+    },
+    {
+      "source": "/hyderabad-to-kashmir-tour-packages.html",
+      "destination": "https://www.onatripholidays.com/kashmir-tour-packages-from-hyderabad.html",
+      "permanent": true
+    },
+    {
+      "source": "/hyderabad-to-kerala-tour-packages.html",
+      "destination": "https://www.onatripholidays.com/kerala-tour-packages-from-hyderabad.html",
+      "permanent": true
+    },
+    {
+      "source": "/hyderabad-to-ladakh-tour-packages.html",
+      "destination": "https://www.onatripholidays.com/ladakh-tour-packages-from-hyderabad.html",
+      "permanent": true
+    },
+    {
+      "source": "/hyderabad-to-sikkim-tour-packages.html",
+      "destination": "https://www.onatripholidays.com/sikkim-tour-packages-from-hyderabad.html",
+      "permanent": true
+    },
+    {
+      "source": "/hyderabad-to-manali-tour-packages.html",
+      "destination": "https://www.onatripholidays.com/manali-tour-packages-from-hyderabad.html",
+      "permanent": true
+    },
+    {
+      "source": "/hyderabad-to-spiti-valley-tour.html",
+      "destination": "https://www.onatripholidays.com/spiti-valley-tour-packages-from-hyderabad.html",
+      "permanent": true
     }
   ],
   "headers": [
