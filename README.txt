@@ -1,20 +1,13 @@
-V38 — BILLING FIX CHANGES ONLY
+ON A TRIP HOLIDAYS — ADMIN DASHBOARD V5
 
-Files:
-- payment-invoicer.html
-- admin-v4-crm.html
-- admin.html
-- admin-ai-itinerary.html
-- assets/logo.png
+This ZIP contains the redesigned responsive admin dashboard:
+admin-v4-crm-redesigned.html
 
-Fixes:
-- Billing page now requires the existing admin session.
-- Payment Invoicer is linked from the Admin Dashboard.
-- Dashboard link is available from the invoice page.
-- UPI dynamically shows UTR and requires it before update/print.
-- Booking and payment date/time are populated and rendered into the invoice.
-- Salesperson is required and rendered.
-- Payment status is rendered and automatically becomes PAID IN FULL when balance reaches zero.
-- 707 × 2423 px print canvas retained.
-- Customer Name (Destination) is applied as the browser print document title for the PDF filename suggestion.
-- Main logo retained.
+INSTALL:
+1. Replace the existing repository file named admin-v4-crm-redesigned.html with this file.
+2. Keep your existing admin.html and crm.html files.
+3. Keep the existing admin-v4-crm-final.html wrapper. It already points to admin-v4-crm-redesigned.html.
+4. Commit the replacement file to the main branch and redeploy/wait for Vercel.
+
+The page keeps the existing sessionStorage authentication gate and the CRM link to crm.html.
+The dashboard is intentionally frontend-ready; live counts should be connected to Supabase/CRM data next.
