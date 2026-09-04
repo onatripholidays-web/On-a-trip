@@ -15,7 +15,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans
 button,input,select,textarea{font:inherit}
 button{cursor:pointer}
 .app{min-height:100vh;display:flex}
-.sidebar{width:250px;background:var(--navy);color:#fff;padding:22px 16px;position:fixed;inset:0 auto 0 0;z-index:10}
+.sidebar{width:250px;background:var(--navy);color:#fff;padding:18px 16px;position:fixed;inset:0 auto 0 0;z-index:10}.brand-logo{display:block;width:132px;max-width:100%;height:auto;max-height:62px;object-fit:contain;object-position:left center;margin:0 0 12px;border-radius:8px;background:#fff;padding:5px}
 .brand{display:flex;align-items:center;gap:10px;padding:8px 10px 26px;border-bottom:1px solid rgba(255,255,255,.12)}
 .brand-mark{width:38px;height:38px;border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--orange);font-weight:900}
 .brand b{font-size:17px}.brand small{display:block;color:#b9c8d4;margin-top:3px}
@@ -41,6 +41,17 @@ button{cursor:pointer}
 .notice{padding:13px 15px;background:#fff8e9;border:1px solid #f5dfaa;border-radius:11px;color:#7b5b14;font-size:13px;margin-bottom:16px}
 .branch{display:flex;gap:12px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:12px;margin-bottom:10px}.branch-icon{width:42px;height:42px;border-radius:10px;background:#fff0ea;display:grid;place-items:center;color:var(--orange);font-weight:900}
 @media(max-width:900px){.sidebar{width:76px}.brand div:not(.brand-mark),.nav span{display:none}.main{margin-left:76px;width:calc(100% - 76px)}.nav button{text-align:center}.stats{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.package-grid{grid-template-columns:repeat(2,1fr)}}
+/* V40 simple admin dashboard */
+.simple-dashboard{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+.simple-tool{display:flex;align-items:center;gap:13px;padding:18px;border:1px solid var(--line);border-radius:16px;background:#fff;text-decoration:none;color:var(--navy);box-shadow:0 4px 16px rgba(10,35,55,.05);font-weight:900;min-height:76px}
+.simple-tool:hover{border-color:#f0a080;transform:translateY(-1px)}
+.simple-tool .simple-icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:#fff0ea;font-size:22px;flex:0 0 auto}
+.simple-tool small{display:block;color:var(--muted);font-weight:600;margin-top:3px}
+.simple-welcome{padding:20px;border-radius:16px;background:linear-gradient(135deg,#fff,#fff7f2);border:1px solid var(--line);margin-bottom:18px}
+.simple-welcome h2{margin-bottom:5px}
+@media(max-width:900px){.simple-dashboard{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.simple-dashboard{grid-template-columns:1fr}.simple-tool{min-height:68px;padding:15px}}
+
 @media(max-width:600px){.sidebar{display:none}.main{margin:0;width:100%;padding:15px}.topbar{align-items:flex-start}.topbar h1{font-size:22px}.stats{grid-template-columns:1fr 1fr;gap:10px}.stat{padding:14px}.stat strong{font-size:25px}.package-grid{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}.actions .secondary{display:none}}
 
 .dashboard-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:18px;margin-top:18px}
@@ -116,7 +127,7 @@ button{cursor:pointer}
 <script>if(sessionStorage.getItem('oat_admin_auth')!=='1') location.replace('admin.html');</script>
 <div class="app">
 <aside class="sidebar">
-  <div class="brand"><div class="brand-mark">✈</div><div><b>ON A TRIP</b><small>HOLIDAYS • ADMIN</small></div></div>
+  <div class="brand"><img class="brand-logo" src="assets/logo.png" alt="On A Trip Holidays"><div class="brand-mark">✈</div><div><b>ON A TRIP</b><small>HOLIDAYS • ADMIN</small></div></div>
   <div class="nav">
     <button class="active" data-view="dashboard">📊 <span>Dashboard</span></button>
     <button type="button" onclick="location.href='admin-ai-itinerary.html'">✨ <span>AI Quotation Maker</span></button>
@@ -137,19 +148,9 @@ button{cursor:pointer}
 </header>
 
 <section id="dashboard" class="view active">
-  <div class="tools-card">
-    <h2>Admin Tools</h2>
-    <p>Quick access to quotation creation and payment billing.</p>
-    <div class="admin-tools">
-      <a class="admin-tool" href="admin-ai-itinerary.html">
-        <div class="tool-icon">✨</div>
-        <div><div>AI Quotation Maker</div><small>Create and send customer quotations & itineraries</small></div>
-      </a>
-      <a class="admin-tool" href="payment-invoicer.html">
-        <div class="tool-icon">🧾</div>
-        <div><div>Payment Invoicer</div><small>Create billing invoices after payment</small></div>
-      </a>
-    </div>
+  <div class="simple-welcome">
+    <h2>Welcome to On A Trip Holidays</h2>
+    <div class="mini-note">Simple admin control centre • manage packages, batches, enquiries, quotations and invoices.</div>
   </div>
 
   <div class="stats">
@@ -160,72 +161,20 @@ button{cursor:pointer}
   </div>
 
   <div class="card">
-    <div class="section-head">
-      <div><h2 style="margin-bottom:4px">Business overview</h2><div class="mini-note">September 2026 • live-ready dashboard structure</div></div>
-      <button class="btn secondary" onclick="alert('Export report — connect to backend in the next version.')">Export Report</button>
-    </div>
-    <div class="kpi-row">
-      <div class="kpi"><div class="label">Sales value</div><div class="value">₹8.42L</div><div class="delta">↑ 21% vs last month</div></div>
-      <div class="kpi"><div class="label">Conversion</div><div class="value">18.4%</div><div class="delta">↑ 3.2 pts</div></div>
-      <div class="kpi"><div class="label">Avg booking</div><div class="value">₹46.8K</div><div class="delta">Healthy mix</div></div>
-    </div>
-  </div>
-
-  <div class="dashboard-grid">
-    <div class="card">
-      <div class="section-head"><h2>Lead funnel</h2><span class="badge">27 new leads</span></div>
-      <div class="funnel">
-        <div class="funnel-row"><b>New</b><div class="progress"><i style="width:100%"></i></div><b>27</b></div>
-        <div class="funnel-row"><b>Contacted</b><div class="progress"><i style="width:70%"></i></div><b>19</b></div>
-        <div class="funnel-row"><b>Qualified</b><div class="progress"><i style="width:44%"></i></div><b>12</b></div>
-        <div class="funnel-row"><b>Hot</b><div class="progress"><i style="width:33%"></i></div><b>9</b></div>
-        <div class="funnel-row"><b>Booked</b><div class="progress"><i style="width:22%"></i></div><b>6</b></div>
-      </div>
-      <div style="margin-top:16px"><button class="btn primary" onclick="showView('enquiries')">Open lead manager →</button></div>
-    </div>
-
-    <div class="card">
-      <div class="section-head"><h2>Attention today</h2><span class="badge hot">5 items</span></div>
-      <div class="alert-list">
-        <div class="alert-item"><div class="alert-icon">🔥</div><div><b>9 hot leads</b><div class="mini-note">Follow up before evening</div></div></div>
-        <div class="alert-item"><div class="alert-icon">🪑</div><div><b>3 batches filling fast</b><div class="mini-note">Seats below 5</div></div></div>
-        <div class="alert-item"><div class="alert-icon">📸</div><div><b>4 packages need images</b><div class="mini-note">Check assets folder</div></div></div>
-        <div class="alert-item"><div class="alert-icon">📝</div><div><b>2 blogs need SEO</b><div class="mini-note">Meta + internal links</div></div></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="section-head"><h2>Upcoming batches</h2><button class="btn secondary" onclick="showView('batches')">View all</button></div>
-      <div class="table-wrap"><table class="table"><thead><tr><th>Trip</th><th>Date</th><th>Seats</th><th>Status</th></tr></thead><tbody id="dashboardBatchTable"><tr><td colspan="4">Loading saved batches…</td></tr></tbody></table></div>
-    </div>
-
-    <div class="card">
-      <div class="section-head"><h2>Top packages</h2><span class="mini-note">Enquiry demand</span></div>
-      <div class="rank"><span class="rank-num">01</span><div><b>Thailand</b><div class="mini-note">18 enquiries</div></div><b>32%</b></div>
-      <div class="rank"><span class="rank-num">02</span><div><b>Char Dham Yatra</b><div class="mini-note">15 enquiries</div></div><b>27%</b></div>
-      <div class="rank"><span class="rank-num">03</span><div><b>Kashmir Deluxe</b><div class="mini-note">12 enquiries</div></div><b>22%</b></div>
-      <div class="rank"><span class="rank-num">04</span><div><b>Spiti Valley</b><div class="mini-note">10 enquiries</div></div><b>18%</b></div>
+    <div class="section-head"><h2>Admin Tools</h2><span class="badge">Quick access</span></div>
+    <div class="simple-dashboard">
+      <a class="simple-tool" href="javascript:void(0)" onclick="showView('packages')"><div class="simple-icon">🧳</div><div>Package Manager<small>Add, edit and manage packages</small></div></a>
+      <a class="simple-tool" href="javascript:void(0)" onclick="showView('batches')"><div class="simple-icon">📅</div><div>Batch & Seats<small>Update dates and availability</small></div></a>
+      <a class="simple-tool" href="javascript:void(0)" onclick="showView('enquiries')"><div class="simple-icon">📲</div><div>CRM Enquiries<small>Manage leads and follow-ups</small></div></a>
+      <a class="simple-tool" href="admin-ai-itinerary.html"><div class="simple-icon">✨</div><div>Quotation Maker<small>Create customer quotations</small></div></a>
+      <a class="simple-tool" href="payment-invoicer.html"><div class="simple-icon">🧾</div><div>Invoice Maker<small>Create payment invoices</small></div></a>
+      <a class="simple-tool" href="javascript:void(0)" onclick="showView('settings')"><div class="simple-icon">⚙️</div><div>Website Settings<small>Control website content</small></div></a>
     </div>
   </div>
 
   <div class="card" style="margin-top:18px">
-    <div class="section-head"><h2>Branch performance</h2><span class="badge">2 active branches</span></div>
-    <div class="branch-cards">
-      <div class="branch-stat"><h3>📍 Hyderabad</h3><div class="mini-note">Telangana • Main Office</div><div class="big">₹5.76L</div><div class="mini-note">12 bookings • 18 leads</div><div class="progress"><i style="width:68%"></i></div></div>
-      <div class="branch-stat"><h3>📍 Vijayawada</h3><div class="mini-note">Andhra Pradesh • Telugu Support</div><div class="big">₹2.66L</div><div class="mini-note">6 bookings • 9 leads</div><div class="progress"><i style="width:32%"></i></div></div>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:18px">
-    <h2>Quick actions</h2>
-    <div class="quick">
-      <button onclick="showView('packages')">🧳 Manage packages</button>
-      <button onclick="showView('batches')">📅 Update batch seats</button>
-      <button onclick="showView('enquiries')">📲 Check enquiries</button>
-      <button onclick="showView('blog')">✍️ Create SEO blog</button>
-      <button onclick="showView('branches')">📍 Manage branches</button>
-      <button onclick="openModal('offerModal')">💥 Create offer</button>
-    </div>
+    <div class="section-head"><h2>Upcoming Batches</h2><button class="btn secondary" onclick="showView('batches')">View all →</button></div>
+    <div class="table-wrap"><table class="table"><thead><tr><th>Trip</th><th>Date</th><th>Seats</th><th>Status</th></tr></thead><tbody id="dashboardBatchTable"><tr><td colspan="4">Loading saved batches…</td></tr></tbody></table></div>
   </div>
 </section>
 
