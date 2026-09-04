@@ -1,15 +1,12 @@
-ON A TRIP HOLIDAYS — AI ITINERARY + QUOTATION BUILDER V4
+ON A TRIP HOLIDAYS — AI ITINERARY + QUOTATION BUILDER V5
 
-Changes:
-- Removed Website Batches → AI Quotation tab completely.
-- Removed website batch/date extraction logic.
-- One clean workflow only: AI Itinerary + Quotation.
-- Payment/advance fields remain removed.
-- Price and GST remain.
-- Print / Save as PDF remains.
+PDF/print updates from the supplied On A Trip Holidays quotation:
+- Added the supplied On A Trip Holidays logo.
+- Added office address, phone/WhatsApp number and website.
+- Added a branded Payment Details section.
+- Added bank account details, IFSC, UPI number and UPI ID.
+- Added the supplied payment QR image.
+- Payment is clearly presented as post-quotation approval / booking payment, not as a field in the quote form.
+- Print / Save as PDF remains available.
 
-Upload:
-ai-itinerary-quotation-builder.html
-
-URL:
-https://www.onatripholidays.com/ai-itinerary-quotation-builder.html
+Source details were taken from the uploaded Char Dham Yatra PDF, especially its Payment Details page (page 12) and website footer.
