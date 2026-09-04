@@ -1,191 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>On A Trip Holidays | CRM</title>
-<meta name="robots" content="noindex,nofollow,noarchive">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>On A Trip Holidays — Admin</title>
 <style>
-:root{--n:#08233f;--n2:#103d66;--o:#ee5a2a;--g:#18a66a;--r:#d64545;--bg:#f3f6f8;--line:#dce4e9;--muted:#6b7b87}
-*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#102335}
-button,input,select,textarea{font:inherit}button{cursor:pointer}
-.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,#08233f,#103d66)}
-.login-box{background:#fff;width:min(420px,100%);padding:32px;border-radius:20px;box-shadow:0 20px 60px #0005}
-.login-box h1{margin:0 0 5px;color:var(--n)}.login-box p{color:var(--muted);margin:0 0 22px}
-.login-box label{display:block;font-size:13px;font-weight:800;margin:12px 0 6px}.login-box input{width:100%;padding:13px;border:1px solid var(--line);border-radius:10px}
-.login-btn{width:100%;margin-top:18px;padding:13px;border:0;border-radius:10px;background:var(--o);color:#fff;font-weight:900}.error{color:var(--r);font-size:13px;margin-top:12px;display:none}
-#app{display:none}.top{background:var(--n);color:#fff;padding:14px 5%;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
-.top b{font-size:18px}.top small{color:#bdcad4}.top-actions{display:flex;gap:8px}.top button,.top a{color:#fff;text-decoration:none;background:var(--o);padding:9px 13px;border-radius:9px;font-weight:800;border:0}.top .logout{background:#ffffff20}
-.shell{max-width:1280px;margin:auto;padding:22px 18px}.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:16px}
-.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px}.stat small{color:var(--muted);font-weight:800}.stat strong{display:block;font-size:25px;margin:5px 0}.stat em{font-style:normal;color:var(--g);font-size:11px;font-weight:800}
-.toolbar{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px;display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}
-.toolbar input,.toolbar select{padding:11px;border:1px solid var(--line);border-radius:9px;background:#fff}.toolbar input{min-width:260px}
-.btn{border:0;border-radius:9px;padding:11px 14px;font-weight:900}.primary{background:var(--o);color:#fff}.secondary{background:#fff;border:1px solid var(--line);color:var(--n)}
-.board{display:grid;grid-template-columns:repeat(8,1fr);gap:10px;overflow-x:auto}.column{min-width:185px;background:#eaf0f3;border-radius:12px;padding:9px}.column h3{font-size:12px;margin:3px 4px 9px;text-transform:uppercase}.count{float:right;background:#fff;border-radius:12px;padding:2px 7px}
-.lead{background:#fff;border:1px solid var(--line);border-radius:11px;padding:12px;margin-bottom:9px;box-shadow:0 3px 12px #00000008}.lead b{font-size:14px}.lead .muted{font-size:11px;color:var(--muted);margin-top:3px}.lead .trip{color:var(--o);font-weight:800;font-size:12px;margin-top:8px}.lead .actions{display:flex;gap:5px;margin-top:9px}.lead .actions button{border:1px solid var(--line);background:#fff;border-radius:7px;padding:6px 7px;font-size:11px;font-weight:800}.lead .actions .wa{background:#eaf8f0;color:#087548;border-color:#ccebdc}.lead .actions .call{background:#eef6ff;color:#1266d4;border-color:#cfe3ff}.lead .actions button{cursor:pointer}.lead .actions button:first-child,.lead .actions .call{min-width:42px}.icon-svg{width:17px;height:17px;vertical-align:-3px;display:inline-block}.wa-logo{width:17px;height:17px;vertical-align:-3px}.top .role-link{display:inline-flex;align-items:center;gap:5px}
-.badge{display:inline-block;padding:4px 7px;border-radius:7px;background:#eef2f5;font-size:10px;font-weight:800;margin-top:6px}
-.table-card{background:#fff;border:1px solid var(--line);border-radius:14px;margin-top:18px;padding:15px;overflow:auto}.table{width:100%;border-collapse:collapse;min-width:1120px}.table th,.table td{padding:11px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}.table th{font-size:11px;color:var(--muted);text-transform:uppercase}.table select{padding:7px;border:1px solid var(--line);border-radius:7px}
-.modal{position:fixed;inset:0;background:#0008;display:none;place-items:center;padding:18px;z-index:30}.modal.show{display:grid}.box{background:#fff;width:min(680px,100%);max-height:92vh;overflow:auto;border-radius:17px;padding:20px}.head{display:flex;justify-content:space-between;align-items:center}.close{border:0;background:#eef2f5;border-radius:50%;width:35px;height:35px}
-.form{display:grid;gap:9px}.form label{font-size:12px;font-weight:900}.form input,.form select,.form textarea{padding:11px;border:1px solid var(--line);border-radius:9px}.form textarea{min-height:90px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px}.detail{background:#f7f9fa;padding:12px;border-radius:10px}.detail small{display:block;color:var(--muted);font-weight:800;font-size:10px;text-transform:uppercase}.detail b{display:block;margin-top:4px}
-.loading{padding:40px;text-align:center;color:var(--muted)}
-@media(max-width:1000px){.stats{grid-template-columns:repeat(3,1fr)}}@media(max-width:600px){.shell{padding:14px 10px}.stats{grid-template-columns:repeat(2,1fr)}.stat{padding:12px}.stat strong{font-size:22px}.toolbar input{width:100%;min-width:0}.board{grid-template-columns:repeat(8,185px)}.row,.detail-grid{grid-template-columns:1fr}.top{padding:12px}.top small{display:none}}
+:root{
+  --navy:#08233f;--navy2:#103d66;--orange:#ee5a2a;--bg:#f4f7f9;
+  --text:#102335;--muted:#6c7b87;--white:#fff;--line:#dce4e9;
+  --green:#18a66a;--red:#d64545;--shadow:0 8px 28px rgba(10,35,55,.08);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{min-height:100vh;display:flex}
+.sidebar{width:250px;background:var(--navy);color:#fff;padding:22px 16px;position:fixed;inset:0 auto 0 0;z-index:10}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 10px 26px;border-bottom:1px solid rgba(255,255,255,.12)}
+.brand-mark{width:38px;height:38px;border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--orange);font-weight:900}
+.brand b{font-size:17px}.brand small{display:block;color:#b9c8d4;margin-top:3px}
+.nav{margin-top:18px;display:grid;gap:7px}.nav button{border:0;background:transparent;color:#d9e5ee;text-align:left;padding:13px 14px;border-radius:10px;font-weight:700}
+.nav button.active,.nav button:hover{background:var(--orange);color:#fff}
+.main{margin-left:250px;width:calc(100% - 250px);padding:24px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.topbar h1{margin:0;font-size:28px}.topbar p{margin:5px 0 0;color:var(--muted)}
+.actions{display:flex;gap:10px}.btn{border:0;border-radius:10px;padding:11px 16px;font-weight:800}.primary{background:var(--orange);color:#fff}.secondary{background:#fff;border:1px solid var(--line);color:var(--navy)}
+.view{display:none}.view.active{display:block}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:20px}
+.stat,.card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.stat{padding:20px}.stat span{color:var(--muted);font-weight:700}.stat strong{display:block;font-size:31px;margin-top:7px}.stat em{font-style:normal;color:var(--green);font-size:13px;font-weight:800}
+.grid2{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}.card{padding:20px}.card h2{margin:0 0 15px;font-size:19px}
+.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:13px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}.table th{font-size:12px;text-transform:uppercase;color:var(--muted)}
+.badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#e9f7f0;color:#087548;font-size:12px;font-weight:800}.badge.hot{background:#fff0ea;color:#d84e24}.badge.gray{background:#eef2f5;color:#62717d}
+.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.quick button{padding:18px;text-align:left;background:#f8fafb;border:1px solid var(--line);border-radius:12px;font-weight:800;color:var(--navy)}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}.filters input,.filters select,.form input,.form select,.form textarea{border:1px solid var(--line);border-radius:10px;padding:11px 12px;background:#fff;outline:none}.filters input{min-width:230px}
+.package-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.pkg{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}.pkg img{width:100%;height:145px;object-fit:cover;background:#edf2f5}.pkg-body{padding:15px}.pkg-body h3{margin:0 0 7px}.pkg-body p{margin:4px 0;color:var(--muted);font-size:14px}.pkg-foot{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.form{display:grid;gap:12px}.form label{font-size:13px;font-weight:800}.form textarea{min-height:100px;resize:vertical}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.48);display:none;place-items:center;padding:20px;z-index:30}.modal.show{display:grid}.modal-box{background:#fff;border-radius:18px;width:min(680px,100%);max-height:90vh;overflow:auto;padding:22px}.modal-head{display:flex;justify-content:space-between;align-items:center}.close{border:0;background:#eef2f5;border-radius:50%;width:38px;height:38px;font-size:20px}
+.notice{padding:13px 15px;background:#fff8e9;border:1px solid #f5dfaa;border-radius:11px;color:#7b5b14;font-size:13px;margin-bottom:16px}
+.branch{display:flex;gap:12px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:12px;margin-bottom:10px}.branch-icon{width:42px;height:42px;border-radius:10px;background:#fff0ea;display:grid;place-items:center;color:var(--orange);font-weight:900}
+@media(max-width:900px){.sidebar{width:76px}.brand div:not(.brand-mark),.nav span{display:none}.main{margin-left:76px;width:calc(100% - 76px)}.nav button{text-align:center}.stats{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.package-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.sidebar{display:none}.main{margin:0;width:100%;padding:15px}.topbar{align-items:flex-start}.topbar h1{font-size:22px}.stats{grid-template-columns:1fr 1fr;gap:10px}.stat{padding:14px}.stat strong{font-size:25px}.package-grid{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}.actions .secondary{display:none}}
+
+.dashboard-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:18px;margin-top:18px}
+.kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.kpi{padding:16px;border:1px solid var(--line);border-radius:13px;background:#fff}
+.kpi .label{font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase}
+.kpi .value{font-size:24px;font-weight:900;margin:7px 0 3px}
+.kpi .delta{font-size:12px;font-weight:800;color:var(--green)}
+.kpi .delta.warn{color:var(--orange)}
+.progress{height:8px;background:#edf1f4;border-radius:20px;overflow:hidden;margin:8px 0}
+.progress i{display:block;height:100%;background:var(--orange);border-radius:20px}
+.funnel{display:grid;gap:10px}
+.funnel-row{display:grid;grid-template-columns:100px 1fr 45px;gap:9px;align-items:center;font-size:13px}
+.funnel-row b{font-size:12px}
+.alert-list{display:grid;gap:9px}
+.alert-item{display:flex;gap:10px;align-items:flex-start;padding:11px;border-radius:11px;background:#f8fafb;border:1px solid var(--line)}
+.alert-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:9px;background:#fff0ea}
+.rank{display:grid;grid-template-columns:28px 1fr auto;gap:9px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.rank:last-child{border-bottom:0}
+.rank-num{font-weight:900;color:var(--orange)}
+.mini-note{font-size:12px;color:var(--muted)}
+.branch-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.branch-stat{border:1px solid var(--line);border-radius:13px;padding:15px}
+.branch-stat h3{margin:0 0 4px}
+.branch-stat .big{font-size:24px;font-weight:900}
+@media(max-width:900px){.dashboard-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.kpi-row{grid-template-columns:1fr 1fr}.branch-cards{grid-template-columns:1fr}.funnel-row{grid-template-columns:90px 1fr 35px}}
+
+
+
+
+/* Clean mobile-first admin refresh */
+.crm-tools-card{margin:18px 0}.crm-tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.crm-tool{display:flex;align-items:center;gap:12px;text-align:left;border:1px solid var(--line);border-radius:16px;padding:16px;background:#fff;min-height:92px;transition:.15s;box-shadow:0 5px 18px rgba(10,35,55,.05)}.crm-tool:hover{transform:translateY(-1px);box-shadow:0 9px 24px rgba(10,35,55,.09)}.crm-tool .tool-icon{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:24px;flex:0 0 48px}.crm-tool.quote{background:linear-gradient(135deg,#fff7f3,#fff);border-color:#f6d7ca}.crm-tool.quote .tool-icon{background:#fff0e9}.crm-tool.invoice{background:linear-gradient(135deg,#f2f7ff,#fff);border-color:#d9e7fb}.crm-tool.invoice .tool-icon{background:#e8f2ff}.tool-copy{display:grid;gap:5px;min-width:0}.tool-copy b{font-size:16px;color:var(--navy)}.tool-copy small{font-size:12px;color:var(--muted);font-weight:700}.tool-arrow{margin-left:auto;font-size:30px;color:var(--muted);line-height:1}.stats{grid-template-columns:repeat(3,1fr)}
+@media(max-width:600px){.main{padding:12px}.topbar{padding:4px 2px 10px}.topbar h1{font-size:22px}.topbar p{font-size:12px}.actions .primary{display:none}.stats{grid-template-columns:repeat(3,1fr);gap:8px}.stat{padding:12px;border-radius:14px}.stat span{font-size:11px}.stat strong{font-size:23px}.stat em{font-size:10px}.crm-tools-card{padding:14px;margin-top:12px}.crm-tools-grid{grid-template-columns:1fr;gap:10px}.crm-tool{min-height:78px;padding:12px}.crm-tool .tool-icon{width:44px;height:44px;flex-basis:44px}.tool-copy b{font-size:15px}.tool-copy small{font-size:11px}.sidebar{display:none}}
 </style>
+
+<style>
+/* Photo-free CRM redesign */
+body{background:#f5f8fa}
+.crm-shell,.crm-container,.crm-page{max-width:1200px;margin:auto}
+.crm-hero,.crm-banner,.crm-welcome{background:linear-gradient(135deg,#08233f,#123f67);color:#fff;border-radius:24px;padding:24px;margin-bottom:18px}
+.crm-hero h1,.crm-banner h1,.crm-welcome h1{margin:0 0 6px;font-size:28px}
+.crm-hero p,.crm-banner p,.crm-welcome p{margin:0;color:#dce8f1}
+.crm-quick-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}
+.crm-quick-actions a,.crm-quick-actions button{border:1px solid #dce4e9;border-radius:16px;background:#fff;padding:17px;text-align:left;font-weight:900;color:#08233f;box-shadow:0 5px 18px rgba(8,35,63,.06)}
+.crm-quick-actions a:first-child,.crm-quick-actions button:first-child{background:#fff3ed}
+.crm-quick-actions a:nth-child(2),.crm-quick-actions button:nth-child(2){background:#eef5ff}
+.crm-tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.crm-tool{display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #dce4e9;border-radius:16px;background:#fff;text-decoration:none;color:#08233f;font-weight:900}
+.crm-tool-icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:22px;background:#f1f5f7}
+.crm-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.crm-stat-card{background:#fff;border:1px solid #dce4e9;border-radius:18px;padding:18px}
+.crm-stat-card .label{color:#6c7b87;font-weight:800}
+.crm-stat-card .value{font-size:30px;font-weight:900;margin-top:5px;color:#102335}
+.crm-stat-card .hint{color:#18a66a;font-weight:800;font-size:13px}
+@media(max-width:700px){
+ .crm-stat-grid{grid-template-columns:1fr 1fr}
+ .crm-quick-actions,.crm-tools-grid{grid-template-columns:1fr}
+ .crm-hero,.crm-banner,.crm-welcome{border-radius:18px;padding:20px}
+ .crm-hero h1,.crm-banner h1,.crm-welcome h1{font-size:24px}
+}
+</style>
+
 </head>
 <body>
-<section class="login" id="loginScreen"><div class="login-box">
-<h1>On A Trip Holidays</h1><p>CRM • Admin & Salesperson Access</p>
-<label>Email</label><input id="loginEmail" type="email" placeholder="CRM email" autocomplete="username">
-<label>Password</label><input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password">
-<button class="login-btn" onclick="login()">Login to CRM</button><div class="error" id="loginError"></div>
-</div></section>
+<script>if(sessionStorage.getItem('oat_admin_auth')!=='1') location.replace('admin.html');</script>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><div class="brand-mark">✈</div><div><b>ON A TRIP</b><small>HOLIDAYS • ADMIN</small></div></div>
+  <div class="nav">
+    <button class="active" data-view="dashboard">📊 <span>Dashboard</span></button>
+    <button data-view="packages">🧳 <span>Packages</span></button>
+    <button data-view="batches">📅 <span>Batches & Seats</span></button>
+    <button type="button" onclick="location.href='crm.html'">🔐 <span>CRM Login</span></button>
+    <button data-view="branches">📍 <span>Branches</span></button>
+    <button data-view="settings">⚙️ <span>Website Settings</span></button>
+  </div>
+</aside>
 
-<div id="app">
-<header class="top"><div><b>ON A TRIP HOLIDAYS — CRM</b><small> • Sales & Lead Management</small></div>
-<div class="top-actions"><a id="roleLink" class="role-link" href="admin.html">← Admin</a><button class="logout" onclick="logout()">Logout</button></div></header>
-<main class="shell">
-<section class="stats">
-<div class="stat"><small>Total Leads</small><strong id="sTotal">0</strong><em>All enquiries</em></div>
-<div class="stat"><small>New</small><strong id="sNew">0</strong><em>Needs first contact</em></div>
-<div class="stat"><small>Hot</small><strong id="sHot">0</strong><em>Priority follow-up</em></div>
-<div class="stat"><small>Quotes Sent</small><strong id="sQuote">0</strong><em>Awaiting decision</em></div>
-<div class="stat"><small>Booked</small><strong id="sBooked">0</strong><em>Converted leads</em></div>
-<div class="stat"><small>Follow-ups</small><strong id="sFollow">0</strong><em>Upcoming</em></div>
+<main class="main">
+<header class="topbar">
+  <div><h1 id="pageTitle">Dashboard</h1><p>On A Trip Holidays • Hyderabad & Vijayawada</p></div>
+  <div class="actions"><button class="btn secondary" onclick="location.href='crm.html'">🔐 CRM Login</button><button class="btn primary" onclick="openModal('packageModal')">＋ Add Package</button></div>
+</header>
+
+<section id="dashboard" class="view active">
+  <div class="stats">
+    <div class="stat"><span>Total Packages</span><strong>36</strong><em>+5 this month</em></div>
+    <div class="stat"><span>Upcoming Batches</span><strong>14</strong><em>8 filling fast</em></div>
+    <div class="stat"><span>Bookings This Month</span><strong>18</strong><em>₹8.42L value</em></div>
+  </div>
+
+  <div class="card">
+    <div class="section-head">
+      <div><h2 style="margin-bottom:4px">Business overview</h2><div class="mini-note">September 2026 • live-ready dashboard structure</div></div>
+      <button class="btn secondary" onclick="alert('Export report — connect to backend in the next version.')">Export Report</button>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi"><div class="label">Sales value</div><div class="value">₹8.42L</div><div class="delta">↑ 21% vs last month</div></div>
+      <div class="kpi"><div class="label">Conversion</div><div class="value">18.4%</div><div class="delta">↑ 3.2 pts</div></div>
+      <div class="kpi"><div class="label">Avg booking</div><div class="value">₹46.8K</div><div class="delta">Healthy mix</div></div>
+    </div>
+  </div>
+
+  <div class="dashboard-grid">
+    <div class="card">
+      <div class="section-head"><h2>Lead funnel</h2><span class="badge">27 new leads</span></div>
+      <div class="funnel">
+        <div class="funnel-row"><b>New</b><div class="progress"><i style="width:100%"></i></div><b>27</b></div>
+        <div class="funnel-row"><b>Contacted</b><div class="progress"><i style="width:70%"></i></div><b>19</b></div>
+        <div class="funnel-row"><b>Qualified</b><div class="progress"><i style="width:44%"></i></div><b>12</b></div>
+        <div class="funnel-row"><b>Hot</b><div class="progress"><i style="width:33%"></i></div><b>9</b></div>
+        <div class="funnel-row"><b>Booked</b><div class="progress"><i style="width:22%"></i></div><b>6</b></div>
+      </div>
+      <div style="margin-top:16px"><button class="btn primary" onclick="location.href='crm.html'">Open CRM Login →</button></div>
+    </div>
+
+    <div class="card">
+      <div class="section-head"><h2>Attention today</h2><span class="badge hot">5 items</span></div>
+      <div class="alert-list">
+        <div class="alert-item"><div class="alert-icon">🔥</div><div><b>9 hot leads</b><div class="mini-note">Follow up before evening</div></div></div>
+        <div class="alert-item"><div class="alert-icon">🪑</div><div><b>3 batches filling fast</b><div class="mini-note">Seats below 5</div></div></div>
+        <div class="alert-item"><div class="alert-icon">📸</div><div><b>4 packages need images</b><div class="mini-note">Check assets folder</div></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-head"><h2>Upcoming batches</h2><button class="btn secondary" onclick="showView('batches')">View all</button></div>
+      <div class="table-wrap"><table class="table"><thead><tr><th>Trip</th><th>Date</th><th>Seats</th><th>Status</th></tr></thead><tbody>
+        <tr><td><b>Char Dham</b></td><td>20 Sep</td><td>6/20</td><td><span class="badge hot">Filling Fast</span></td></tr>
+        <tr><td><b>Spiti Valley</b></td><td>25 Sep</td><td>5/16</td><td><span class="badge hot">Filling Fast</span></td></tr>
+        <tr><td><b>Ladakh</b></td><td>02 Oct</td><td>11/16</td><td><span class="badge">Available</span></td></tr>
+        <tr><td><b>Tawang</b></td><td>10 Oct</td><td>4/16</td><td><span class="badge hot">Filling Fast</span></td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="card">
+      <div class="section-head"><h2>Top packages</h2><span class="mini-note">Enquiry demand</span></div>
+      <div class="rank"><span class="rank-num">01</span><div><b>Thailand</b><div class="mini-note">18 enquiries</div></div><b>32%</b></div>
+      <div class="rank"><span class="rank-num">02</span><div><b>Char Dham Yatra</b><div class="mini-note">15 enquiries</div></div><b>27%</b></div>
+      <div class="rank"><span class="rank-num">03</span><div><b>Kashmir Deluxe</b><div class="mini-note">12 enquiries</div></div><b>22%</b></div>
+      <div class="rank"><span class="rank-num">04</span><div><b>Spiti Valley</b><div class="mini-note">10 enquiries</div></div><b>18%</b></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <div class="section-head"><h2>Branch performance</h2><span class="badge">2 active branches</span></div>
+    <div class="branch-cards">
+      <div class="branch-stat"><h3>📍 Hyderabad</h3><div class="mini-note">Telangana • Main Office</div><div class="big">₹5.76L</div><div class="mini-note">12 bookings • 18 leads</div><div class="progress"><i style="width:68%"></i></div></div>
+      <div class="branch-stat"><h3>📍 Vijayawada</h3><div class="mini-note">Andhra Pradesh • Telugu Support</div><div class="big">₹2.66L</div><div class="mini-note">6 bookings • 9 leads</div><div class="progress"><i style="width:32%"></i></div></div>
+    </div>
+  </div>
+
 </section>
 
-<div class="toolbar">
-<input id="search" oninput="render()" placeholder="🔎 Search name, phone, destination...">
-<select id="filterStatus" onchange="render()"><option value="">All stages</option><option>New</option><option>Contacted</option><option>Qualified</option><option>Hot</option><option>Quote Sent</option><option>Follow-up</option><option>Booked</option><option>Lost</option></select>
-<select id="filterBranch" onchange="render()"><option value="">All branches</option><option>Hyderabad</option><option>Vijayawada</option></select>
-<select id="filterSalesperson" onchange="render()"><option value="">All salespeople</option></select>
-<select id="filterSource" onchange="render()"><option value="">All sources</option><option>Meta Ads</option><option>Instagram</option><option>Facebook</option><option>WhatsApp</option><option>Website</option><option>Google</option><option>Walk-in</option></select>
-<button class="btn primary" onclick="openModal('leadModal')">＋ New Lead</button>
-<button class="btn secondary" onclick="exportCSV()">Export CSV</button>
-</div>
+<section id="crm-tools" class="card crm-tools-card">
+  <div class="section-head">
+    <div><h2 style="margin-bottom:4px">Quick Actions</h2><div class="mini-note">Create customer documents faster</div></div>
+  </div>
+  <div class="crm-tools-grid">
+    <button class="crm-tool quote" onclick="location.href='admin-ai-itinerary.html'">
+      <span class="tool-icon">✨</span><span class="tool-copy"><b>Quotation Maker</b><small>Create & share quotations</small></span><span class="tool-arrow">›</span>
+    </button>
+    <button class="crm-tool invoice" onclick="location.href='payment-invoicer.html'">
+      <span class="tool-icon">🧾</span><span class="tool-copy"><b>Invoice Maker</b><small>Generate payment invoices</small></span><span class="tool-arrow">›</span>
+    </button>
+  </div>
+</section>
 
-<div class="board" id="board"><div class="loading">Loading enquiries...</div></div>
+<section id="packages" class="view">
+  <div class="section-head"><h2>Package Manager</h2><button class="btn primary" onclick="openModal('packageModal')">＋ Add Package</button></div>
+  <div class="filters"><input id="pkgSearch" placeholder="Search destination..." oninput="filterPackages()"><select id="pkgType" onchange="filterPackages()"><option value="">All categories</option><option>Pilgrimage</option><option>India</option><option>North East</option><option>International</option><option>Couples</option><option>Weekend</option></select></div>
+  <div class="package-grid" id="packageGrid"></div>
+</section>
 
-<div class="table-card"><h2 style="margin:2px 0 13px;font-size:19px">All Real Enquiries</h2>
-<table class="table"><thead><tr><th>Customer</th><th>Trip</th><th>Branch</th><th>Salesperson</th><th>Travel Date</th><th>Travellers</th><th>Value</th><th>Stage</th><th>Follow-up</th><th>Actions</th></tr></thead>
-<tbody id="table"></tbody></table></div>
+<section id="batches" class="view">
+ <div class="section-head"><h2>Batch Dates & Seat Availability</h2><button class="btn primary" onclick="openModal('batchModal')">＋ Add Batch</button></div>
+ <div class="notice">Update seats here and the website can show <b>Available / Filling Fast / Sold Out</b> status.</div>
+ <div class="card table-wrap"><table class="table"><thead><tr><th>Package</th><th>Date</th><th>From</th><th>Seats</th><th>Status</th><th>Action</th></tr></thead><tbody id="batchTable"></tbody></table></div>
+</section>
+
+
+<section id="branches" class="view">
+ <div class="section-head"><h2>Our Branches</h2><button class="btn primary" onclick="openModal('branchModal')">＋ Add Branch</button></div>
+ <div class="card"><div class="branch"><div class="branch-icon">HYD</div><div><b>Hyderabad</b><div style="color:var(--muted)">Telangana • Main Office • Telugu Support</div></div><span class="badge" style="margin-left:auto">Active</span></div>
+ <div class="branch"><div class="branch-icon">VJA</div><div><b>Vijayawada</b><div style="color:var(--muted)">Andhra Pradesh • Telugu Support</div></div><span class="badge" style="margin-left:auto">Active</span></div></div>
+ <div class="notice" style="margin-top:16px">Brand message: <b>Two Telugu States • One Trusted Travel Company.</b></div>
+</section>
+
+<section id="settings" class="view">
+ <div class="card"><h2>Website Control Centre</h2><div class="form">
+ <label>September Offer Banner</label><input value="🔥 SEPTEMBER TRAVEL OFFERS • Limited seats • Ask for current batch pricing">
+ <label>WhatsApp Number</label><input value="+91 ">
+ <label>Homepage headline</label><input value="Your next trip starts here.">
+ <label>Trust line</label><input value="The two Telugu states trusted travel company">
+ <label>Featured international packages</label><input value="Thailand, Bali, Dubai, Vietnam, Nepal, Singapore">
+ <label>Featured North East packages</label><input value="Tawang, Ziro Valley, Arunachal, Sikkim, Meghalaya">
+ <button class="btn primary" onclick="alert('Demo settings saved in this browser.')">Save Website Settings</button>
+ </div></div>
+</section>
 </main>
-
-<div class="modal" id="leadModal"><div class="box"><div class="head"><h2>New Lead</h2><button class="close" onclick="closeModal('leadModal')">×</button></div>
-<form class="form" onsubmit="addLead(event)">
-<div class="row"><div><label>Customer name</label><input id="name" required></div><div><label>Phone / WhatsApp</label><input id="phone" required></div></div>
-<div class="row"><div><label>Destination / Package</label><input id="dest" placeholder="Thailand" required></div><div><label>Travellers</label><input id="trav" type="number" min="1" value="2"></div></div>
-<div class="row"><div><label>Travel date</label><input id="date" type="date"></div><div><label>Expected value</label><input id="value" placeholder="₹50,000"></div></div>
-<div class="row admin-only"><div><label>Branch</label><select id="branch"><option>Hyderabad</option><option>Vijayawada</option></select></div>
-<div><label>Salesperson</label><select id="salesperson"></select></div></div>
-<div class="row"><div><label>Source</label><select id="source"><option>Website</option><option>Meta Ads</option><option>Instagram</option><option>Facebook</option><option>WhatsApp</option><option>Google</option><option>Walk-in</option></select></div>
-<div><label>Priority</label><select id="priority"><option>Normal</option><option>High</option><option>Hot</option></select></div></div>
-<div class="row"><div><label>Next follow-up</label><input id="follow" type="date"></div><div></div></div>
-<label>Notes</label><textarea id="notes" placeholder="Requirements, budget, hotel preference..."></textarea>
-<button class="btn primary">Create Lead</button>
-</form></div></div>
-
-<div class="modal" id="detailsModal"><div class="box"><div class="head"><h2 id="detailTitle">Lead</h2><button class="close" onclick="closeModal('detailsModal')">×</button></div><div id="details"></div></div></div>
 </div>
+
+<div class="modal" id="packageModal"><div class="modal-box"><div class="modal-head"><h2>Add / Edit Package</h2><button class="close" onclick="closeModal('packageModal')">×</button></div><form class="form" onsubmit="addPackage(event)"><div class="form-row"><div><label>Destination</label><input id="pName" required placeholder="Thailand"></div><div><label>Category</label><select id="pType"><option>International</option><option>India</option><option>North East</option><option>Pilgrimage</option><option>Couples</option><option>Weekend</option></select></div></div><div class="form-row"><div><label>Duration</label><input id="pDuration" placeholder="6D/5N"></div><div><label>Starting price</label><input id="pPrice" placeholder="₹39,999"></div></div><label>Image path</label><input id="pImage" placeholder="assets/thailand.jpg"><label>Highlights</label><textarea id="pHighlights" placeholder="Bangkok • Pattaya • Phuket"></textarea><button class="btn primary">Save Package</button></form></div></div>
+
+<div class="modal" id="batchModal"><div class="modal-box"><div class="modal-head"><h2>Add Batch</h2><button class="close" onclick="closeModal('batchModal')">×</button></div><form class="form" onsubmit="addBatch(event)"><label>Package</label><input id="bPackage" required placeholder="Spiti Valley"><div class="form-row"><div><label>Date</label><input id="bDate" type="date" required></div><div><label>Pickup</label><input id="bFrom" placeholder="Delhi"></div></div><div class="form-row"><div><label>Total seats</label><input id="bTotal" type="number" value="16"></div><div><label>Available seats</label><input id="bSeats" type="number" value="8"></div></div><button class="btn primary">Save Batch</button></form></div></div>
+
+
+<div class="modal" id="offerModal"><div class="modal-box"><div class="modal-head"><h2>Create Offer</h2><button class="close" onclick="closeModal('offerModal')">×</button></div><form class="form" onsubmit="event.preventDefault();closeModal('offerModal');alert('Offer saved in this browser.')"><label>Offer headline</label><input value="🔥 September Travel Offers"></label><label>Offer text</label><input value="Limited seats • Ask for current batch pricing"></label><button class="btn primary">Save Offer</button></form></div></div>
 
 <script>
-const SUPABASE_URL="https://esezxiatffjihwikfzbz.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY="sb_publishable_VdPfeaWm6BsPk6ArHsI3iA_GxwPqd1d";
-const {createClient}=supabase; const db=createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
-const stages=["New","Contacted","Qualified","Hot","Quote Sent","Follow-up","Booked","Lost"];
-const salespeople=["Unassigned","Rohini","Harshika","Godavari","Vanditha"];
-let leads=[];
-let currentUser=null;
-let currentRole="admin";
-let currentSalesperson="";
-function getUserProfile(user){
-  const meta=user?.user_metadata||{};
-  const role=(meta.crm_role||meta.role||"admin").toLowerCase();
-  const salesperson=meta.salesperson||meta.crm_salesperson||"";
-  return {role:role==="salesperson"?"salesperson":"admin",salesperson};
+const packages=[
+{name:"Char Dham Yatra",type:"Pilgrimage",duration:"11D/10N",price:"₹30,500",image:"assets/char-dham.jpg",high:"Kedarnath • Badrinath • Gangotri • Yamunotri",tag:"BESTSELLER"},
+{name:"Spiti Valley",type:"India",duration:"9D/8N",price:"₹29,999",image:"assets/spiti.jpg",high:"Kaza • Chicham • Kibber • Tabo",tag:"HOT"},
+{name:"Ladakh",type:"India",duration:"7D/6N",price:"₹24,999",image:"assets/ladakh.jpg",high:"Leh • Nubra • Pangong • Khardung La",tag:"POPULAR"},
+{name:"Kashmir Deluxe",type:"India",duration:"6D/5N",price:"₹19,999",image:"assets/kashmir.jpg",high:"Srinagar • Gulmarg • Pahalgam • Sonmarg",tag:"POPULAR"},
+{name:"Tawang + Bomdila",type:"North East",duration:"8D/7N",price:"₹24,999",image:"assets/tawang.jpg",high:"Guwahati • Bomdila • Tawang",tag:"HOT"},
+{name:"Ziro Valley Escape",type:"North East",duration:"5D/4N",price:"₹18,999",image:"assets/ziro.jpg",high:"Itanagar • Ziro • Daporijo",tag:"NEW"},
+{name:"Arunachal Explorer",type:"North East",duration:"9D/8N",price:"₹28,999",image:"assets/arunachal.jpg",high:"Itanagar • Ziro • Bomdila • Tawang",tag:"POPULAR"},
+{name:"Sikkim & Gangtok",type:"North East",duration:"5D/4N",price:"₹16,999",image:"assets/sikkim.jpg",high:"Gangtok • Tsomgo Lake • Nathula",tag:"HOT"},
+{name:"Thailand",type:"International",duration:"6D/5N",price:"₹39,999",image:"assets/thailand.jpg",high:"Bangkok • Pattaya • Phuket",tag:"HOT"},
+{name:"Bali",type:"International",duration:"6D/5N",price:"₹42,999",image:"assets/bali.jpg",high:"Ubud • Kuta • Nusa Penida",tag:"HOT"},
+{name:"Dubai",type:"International",duration:"5D/4N",price:"₹44,999",image:"assets/dubai.jpg",high:"City Tour • Desert Safari • Burj Khalifa",tag:"POPULAR"},
+{name:"Vietnam",type:"International",duration:"6D/5N",price:"₹49,999",image:"assets/vietnam.jpg",high:"Hanoi • Ha Long Bay • Da Nang",tag:"HOT"},
+{name:"Nepal",type:"International",duration:"7D/6N",price:"₹32,999",image:"assets/nepal.jpg",high:"Kathmandu • Pokhara • Muktinath",tag:"POPULAR"},
+{name:"Singapore",type:"International",duration:"5D/4N",price:"₹52,999",image:"assets/singapore.jpg",high:"City • Sentosa • Universal Studios",tag:"HOT"},
+{name:"Maldives Couple Escape",type:"Couples",duration:"5D/4N",price:"₹69,999",image:"assets/maldives.jpg",high:"Resort • Island • Couple experiences",tag:"COUPLES"},
+{name:"Kerala Couple",type:"Couples",duration:"6D/5N",price:"₹39,500",image:"assets/kerala.jpg",high:"Munnar • Thekkady • Alleppey",tag:"COUPLES"}
+];
+let batches=[
+["Char Dham Yatra","20 Sep 2026","Hyderabad",20,6],["Spiti Valley","25 Sep 2026","Delhi",16,5],
+["Ladakh","02 Oct 2026","Delhi",16,11],["Tawang + Bomdila","10 Oct 2026","Guwahati",16,4],
+["Thailand","17 Oct 2026","Hyderabad",20,13],["Kashmir Deluxe","24 Oct 2026","Srinagar",12,2]
+];
+
+function showView(id){
+ document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
+ const names={dashboard:"Dashboard",packages:"Packages",batches:"Batches & Seats",branches:"Branches",settings:"Website Settings"};
+ document.getElementById('pageTitle').textContent=names[id];
+ window.scrollTo({top:0,behavior:'smooth'});
 }
-function applyAccessUI(){
-  const isAdmin=currentRole==="admin";
-  const roleLink=document.getElementById('roleLink');
-  document.querySelector('.top small').textContent=isAdmin?' • Admin • Sales & Lead Management':(' • '+(currentSalesperson||'Salesperson')+' • My Leads');
-  if(roleLink){
-    roleLink.textContent=isAdmin?'← Admin':('👤 '+(currentSalesperson||'Salesperson'));
-    roleLink.href=isAdmin?'admin.html':'#';
-    roleLink.style.pointerEvents=isAdmin?'':'none';
-    roleLink.style.opacity=isAdmin?'1':'.95';
-  }
-  document.getElementById('filterBranch').style.display=isAdmin?'':'none';
-  document.getElementById('filterSalesperson').style.display=isAdmin?'':'none';
-  const newLeadBtn=document.querySelector('button[onclick="openModal(\'leadModal\')"]'); if(newLeadBtn)newLeadBtn.style.display=isAdmin?'':'none';
-  const exportBtn=document.querySelector('button[onclick="exportCSV()"]'); if(exportBtn)exportBtn.style.display=isAdmin?'':'none';
-  document.querySelectorAll('.admin-only').forEach(x=>x.style.display=isAdmin?'':'none');
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>showView(b.dataset.view));
+
+function renderPackages(list=packages){
+ document.getElementById('packageGrid').innerHTML=list.map((p,i)=>`
+ <article class="pkg">
+ <div class="pkg-body"><span class="badge ${p.tag==='HOT'?'hot':''}">${p.tag}</span><h3>${p.name}</h3>
+ <p>${p.type} • ${p.duration}</p><p>${p.high}</p><div class="pkg-foot"><b style="color:var(--orange)">${p.price}</b><button class="btn secondary" onclick="alert('Edit ${p.name}')">Edit</button></div></div></article>`).join('');
 }
-function visibleLeads(){return currentRole==="salesperson"?leads.filter(l=>l.salesperson===currentSalesperson):leads;}
-
-function fillSalespeople(){
-  ["salesperson","filterSalesperson"].forEach(id=>{
-    const el=document.getElementById(id); if(!el)return;
-    const current=el.value;
-    el.innerHTML=(id==="filterSalesperson"?'<option value="">All salespeople</option>':"")+salespeople.map(x=>`<option>${esc(x)}</option>`).join("");
-    if(current)el.value=current;
-  });
-}
-async function checkSession(){const {data:{session}}=await db.auth.getSession();if(session){currentUser=session.user;const p=getUserProfile(currentUser);currentRole=p.role;currentSalesperson=p.salesperson;showApp()}else showLogin()}
-function showLogin(){loginScreen.style.display="grid";app.style.display="none"}
-function showApp(){loginScreen.style.display="none";app.style.display="block";fillSalespeople();applyAccessUI();loadLeads()}
-async function login(){const email=loginEmail.value.trim(),password=loginPassword.value,error=loginError;error.style.display="none";if(!email||!password){error.textContent="Please enter email and password.";error.style.display="block";return}const {data,error:e}=await db.auth.signInWithPassword({email,password});if(e){error.textContent=e.message;error.style.display="block";return}currentUser=data.user;const p=getUserProfile(currentUser);currentRole=p.role;currentSalesperson=p.salesperson;if(currentRole==="salesperson"&&!currentSalesperson){error.textContent="This CRM account is not assigned to a salesperson. Ask Admin to set salesperson in the user's Auth metadata.";error.style.display="block";await db.auth.signOut();return}showApp()}
-async function logout(){await db.auth.signOut();leads=[];currentUser=null;currentRole="admin";currentSalesperson="";showLogin()}
-
-async function loadLeads(){
- board.innerHTML='<div class="loading">Loading enquiries...</div>';
- const {data,error}=await db.from("enquiries").select("*").order("created_at",{ascending:false});
- if(error){console.error(error);board.innerHTML='<div class="loading">Unable to load enquiries.</div>';alert("Could not load enquiries: "+error.message);return}
- leads=(data||[]).map(normalizeLead);render();
-}
-function normalizeLead(x){return {id:x.id,name:x.name||"Unknown",phone:x.phone||"",dest:x.destination||"",trav:Number(x.travellers||0),branch:x.branch||"",salesperson:x.salesperson||"Unassigned",source:x.source||"Website",priority:x.priority||"Normal",status:x.status||"New",date:x.travel_date||"",value:x.value||"",follow:x.follow_up||"",notes:x.notes||"",message:x.message||"",type:x.enquiry_type||"",created:x.created_at||""}}
-
-function render(){
- const q=search.value.toLowerCase(),st=filterStatus.value,br=filterBranch.value,sp=filterSalesperson.value,so=filterSource.value;
- const base=visibleLeads();
- const list=base.filter(l=>(l.name+" "+l.phone+" "+l.dest+" "+l.salesperson).toLowerCase().includes(q)&&(!st||l.status===st)&&(!br||l.branch===br)&&(!sp||l.salesperson===sp)&&(!so||l.source===so));
- const counts={};stages.forEach(s=>counts[s]=0);base.forEach(l=>counts[l.status]=(counts[l.status]||0)+1);
- sTotal.textContent=base.length;sNew.textContent=counts.New||0;sHot.textContent=counts.Hot||0;sQuote.textContent=counts["Quote Sent"]||0;sBooked.textContent=counts.Booked||0;
- const today=new Date().toISOString().slice(0,10);sFollow.textContent=base.filter(l=>l.follow&&l.follow<=today&&l.status!=="Booked"&&l.status!=="Lost").length;
- board.innerHTML=stages.map(s=>`<div class="column"><h3>${s}<span class="count">${counts[s]||0}</span></h3>${list.filter(l=>l.status===s).map(card).join("")}</div>`).join("");
- table.innerHTML=list.map(row).join("")||'<tr><td colspan="10">No matching enquiries.</td></tr>';
-}
-const WA_ICON='<img class="wa-logo" src="https://cdn.simpleicons.org/whatsapp/25D366" alt="WhatsApp">';
-const CALL_ICON='<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92z"/></svg>';
-
-function card(l){return `<div class="lead"><b>${esc(l.name)}</b><div class="muted">${esc(l.phone)} • ${esc(l.branch||"Branch not assigned")}</div><div class="trip">${esc(l.dest||"Destination not specified")}</div><div class="muted">${l.trav||0} travellers • ${esc(l.value||"Value not set")}</div><span class="badge">👤 ${esc(l.salesperson)}</span><div class="actions"><button class="wa" title="WhatsApp" aria-label="WhatsApp" onclick="wa(${l.id})">${WA_ICON} WA</button><button class="call" title="Call customer" aria-label="Call customer" onclick="callCustomer('${esc(l.phone)}')">${CALL_ICON} Call</button><button onclick="details(${l.id})">View</button></div></div>`}
-function row(l){const assignment=currentRole==="admin"?`<select onchange="assign(${l.id},this.value)">${salespeople.map(s=>`<option ${s===l.salesperson?"selected":""}>${esc(s)}</option>`).join("")}</select>`:`<span>${esc(l.salesperson)}</span>`;return `<tr><td><b>${esc(l.name)}</b><div style="color:var(--muted);font-size:11px">${esc(l.phone)}</div></td><td>${esc(l.dest||"—")}</td><td>${esc(l.branch||"—")}</td><td>${assignment}</td><td>${esc(l.date||"—")}</td><td>${l.trav||"—"}</td><td><b>${esc(l.value||"—")}</b></td><td><select onchange="stage(${l.id},this.value)">${stages.map(s=>`<option value="${esc(s)}" ${s===l.status?"selected":""}>${s}</option>`).join("")}</select></td><td style="color:var(--o);font-weight:800">${esc(l.follow||"—")}</td><td><button class="btn secondary" title="WhatsApp" aria-label="WhatsApp" onclick="wa(${l.id})">${WA_ICON} WA</button> <button class="btn secondary" title="Call customer" aria-label="Call customer" onclick="callCustomer('${esc(l.phone)}')">${CALL_ICON}</button> <button class="btn secondary" onclick="details(${l.id})">View</button></td></tr>`}
-
-async function stage(id,status){const l=leads.find(x=>x.id===id);if(currentRole!=="admin"&&l?.salesperson!==currentSalesperson){alert("You can only update your assigned leads.");return}if(!l)return;const old=l.status;l.status=status;const {error}=await db.from("enquiries").update({status}).eq("id",id);if(error){l.status=old;alert("Could not update status: "+error.message)}render()}
-async function assign(id,salesperson){if(currentRole!=="admin"){alert("Only Admin can reassign leads.");return}const l=leads.find(x=>x.id===id);if(!l)return;const old=l.salesperson;l.salesperson=salesperson;const {error}=await db.from("enquiries").update({salesperson}).eq("id",id);if(error){l.salesperson=old;alert("Could not update salesperson: "+error.message)}render()}
-
-function wa(id){const l=leads.find(x=>x.id===id);if(!l)return;let phone=(l.phone||"").replace(/\D/g,"");if(phone.length===10)phone="91"+phone;const msg=`Hi ${l.name}, this is On A Trip Holidays. Regarding your ${l.dest||"travel"} enquiry for ${l.trav||""} travellers. I can share the latest package, batch and offer details.`;window.open("https://wa.me/"+phone+"?text="+encodeURIComponent(msg),"_blank")}
-function callCustomer(phone){const p=(phone||"").replace(/\s/g,"");if(p)window.location.href="tel:"+p}
-
-function details(id){const l=leads.find(x=>x.id===id);if(!l)return;detailTitle.textContent=l.name;document.getElementById("details").innerHTML=`<div class="detail-grid">
-<div class="detail"><small>Phone</small><b>${esc(l.phone)}</b></div><div class="detail"><small>Destination</small><b>${esc(l.dest||"—")}</b></div>
-<div class="detail"><small>Travel Date</small><b>${esc(l.date||"—")}</b></div><div class="detail"><small>Travellers</small><b>${l.trav||"—"}</b></div>
-<div class="detail"><small>Status</small><b>${esc(l.status)}</b></div><div class="detail"><small>Priority</small><b>${esc(l.priority)}</b></div>
-<div class="detail"><small>Branch</small><b>${esc(l.branch||"—")}</b></div><div class="detail"><small>Salesperson</small><b>${esc(l.salesperson)}</b></div>
-<div class="detail"><small>Source</small><b>${esc(l.source||"—")}</b></div><div class="detail"><small>Expected Value</small><b>${esc(l.value||"—")}</b></div>
-<div class="detail"><small>Follow-up</small><b>${esc(l.follow||"—")}</b></div></div>
-<div style="margin-top:18px"><b>Notes</b><p>${esc(l.notes||"No notes added.")}</p></div>
-<div style="margin-top:18px"><b>Customer Message</b><p>${esc(l.message||"No message.")}</p></div>
-<div style="display:flex;gap:8px;margin-top:18px"><button class="btn primary" onclick="wa(${l.id})">${WA_ICON} WhatsApp</button><button class="btn secondary" onclick="callCustomer('${esc(l.phone)}')">${CALL_ICON} Call Customer</button></div>`;
-openModal("detailsModal")}
-
-async function addLead(e){e.preventDefault();const lead={name:name.value.trim(),phone:phone.value.trim(),destination:dest.value.trim(),travel_date:date.value||null,travellers:Number(trav.value||0),branch:branch.value,salesperson:salesperson.value||"Unassigned",source:source.value,priority:priority.value,status:"New",value:value.value.trim(),follow_up:follow.value||null,notes:notes.value.trim()};
-const {data,error}=await db.from("enquiries").insert(lead).select().single();if(error){alert("Could not create lead: "+error.message);return}leads.unshift(normalizeLead(data));closeModal("leadModal");e.target.reset();fillSalespeople();render()}
-
-function exportCSV(){if(currentRole!=="admin"){alert("Only Admin can export all leads.");return}const headers=["Name","Phone","Destination","Travel Date","Travellers","Branch","Salesperson","Source","Priority","Status","Value","Follow-up","Notes"];const rows=leads.map(l=>[l.name,l.phone,l.dest,l.date,l.trav,l.branch,l.salesperson,l.source,l.priority,l.status,l.value,l.follow,l.notes]);const csv=[headers,...rows].map(r=>r.map(csvCell).join(",")).join("\n");const blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="on-a-trip-crm-leads.csv";a.click();URL.revokeObjectURL(url)}
-function csvCell(v){return `"${String(v??"").replace(/"/g,'""')}"`}
-function openModal(id){document.getElementById(id).classList.add("show")}function closeModal(id){document.getElementById(id).classList.remove("show")}
-function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
-checkSession();
+function filterPackages(){const q=document.getElementById('pkgSearch').value.toLowerCase(),t=document.getElementById('pkgType').value;renderPackages(packages.filter(p=>(p.name.toLowerCase().includes(q)||p.high.toLowerCase().includes(q))&&(!t||p.type===t)))}
+function renderBatches(){document.getElementById('batchTable').innerHTML=batches.map((b,i)=>{let s=b[4],status=s===0?'Sold Out':s<=3?'Filling Fast':'Available';return `<tr><td><b>${b[0]}</b></td><td>${b[1]}</td><td>${b[2]}</td><td>${s}/${b[3]}</td><td><span class="badge ${s<=3?'hot':''}">${status}</span></td><td><button class="btn secondary" onclick="editSeats(${i})">Update</button></td></tr>`}).join('')}
+function editSeats(i){let v=prompt('Available seats:',batches[i][4]);if(v!==null&&!isNaN(v)){batches[i][4]=Math.max(0,+v);renderBatches()}}
+function openModal(id){document.getElementById(id).classList.add('show')}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+function addPackage(e){e.preventDefault();packages.unshift({name:pName.value,type:pType.value,duration:pDuration.value||"Custom",price:pPrice.value||"Ask",image:pImage.value||"assets/placeholder.jpg",high:pHighlights.value||"Custom itinerary",tag:"NEW"});renderPackages();closeModal('packageModal');e.target.reset();showView('packages')}
+function addBatch(e){e.preventDefault();batches.unshift([bPackage.value,bDate.value,bFrom.value,bTotal.value,+bSeats.value]);renderBatches();closeModal('batchModal');e.target.reset();showView('batches')}
+renderPackages();renderBatches();
 </script>
 </body>
 </html>
