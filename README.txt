@@ -1,7 +1,8 @@
-On A Trip Holidays V18
-
-V18 homepage refresh based on the supplied mobile reference: hero, trust strip, search, travel-style categories, popular package cards, early-booking offer, stats, floating availability CTA and mobile bottom navigation.
-
-Open index.html in a browser. Existing package, blog, temple, CRM and admin pages are retained from V17.
-
-V28 update: day-wise itineraries added to all destination package pages. Itinerary content is original/reworked for On A Trip Holidays and should be confirmed operationally before publishing.
+V37 BILLING CHANGES ONLY
+- Payment invoice billing canvas is 707 x 2423 px in print CSS.
+- PDF document title/print filename is set to Customer Name (Destination).pdf.
+- UPI payment requires UTR / Transaction ID and displays it on the invoice.
+- Booking date/time and payment date/time are captured.
+- Salesperson name is required and printed on the invoice.
+- Main On A Trip Holidays logo is used.
+- Replace/add payment-invoicer.html and assets/logo.png in the existing project.
