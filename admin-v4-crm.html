@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>On A Trip Holidays — Admin</title>
+<style>
+:root{
+  --navy:#08233f;--navy2:#103d66;--orange:#ee5a2a;--bg:#f4f7f9;
+  --text:#102335;--muted:#6c7b87;--white:#fff;--line:#dce4e9;
+  --green:#18a66a;--red:#d64545;--shadow:0 8px 28px rgba(10,35,55,.08);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{min-height:100vh;display:flex}
+.sidebar{width:250px;background:var(--navy);color:#fff;padding:18px 16px;position:fixed;inset:0 auto 0 0;z-index:10}.brand-logo{display:block;width:132px;max-width:100%;height:auto;max-height:62px;object-fit:contain;object-position:left center;margin:0 0 12px;border-radius:8px;background:#fff;padding:5px}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 10px 26px;border-bottom:1px solid rgba(255,255,255,.12)}
+.brand-mark{width:38px;height:38px;border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--orange);font-weight:900}
+.brand b{font-size:17px}.brand small{display:block;color:#b9c8d4;margin-top:3px}
+.nav{margin-top:18px;display:grid;gap:7px}.nav button{border:0;background:transparent;color:#d9e5ee;text-align:left;padding:13px 14px;border-radius:10px;font-weight:700}
+.nav button.active,.nav button:hover{background:var(--orange);color:#fff}
+.main{margin-left:250px;width:calc(100% - 250px);padding:24px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.topbar h1{margin:0;font-size:28px}.topbar p{margin:5px 0 0;color:var(--muted)}
+.actions{display:flex;gap:10px}.btn{border:0;border-radius:10px;padding:11px 16px;font-weight:800}.primary{background:var(--orange);color:#fff}.secondary{background:#fff;border:1px solid var(--line);color:var(--navy)}
+.view{display:none}.view.active{display:block}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:20px}
+.stat,.card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.stat{padding:20px}.stat span{color:var(--muted);font-weight:700}.stat strong{display:block;font-size:31px;margin-top:7px}.stat em{font-style:normal;color:var(--green);font-size:13px;font-weight:800}
+.grid2{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}.card{padding:20px}.card h2{margin:0 0 15px;font-size:19px}
+.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:13px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}.table th{font-size:12px;text-transform:uppercase;color:var(--muted)}
+.badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#e9f7f0;color:#087548;font-size:12px;font-weight:800}.badge.hot{background:#fff0ea;color:#d84e24}.badge.gray{background:#eef2f5;color:#62717d}
+.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.quick button{padding:18px;text-align:left;background:#f8fafb;border:1px solid var(--line);border-radius:12px;font-weight:800;color:var(--navy)}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}.filters input,.filters select,.form input,.form select,.form textarea{border:1px solid var(--line);border-radius:10px;padding:11px 12px;background:#fff;outline:none}.filters input{min-width:230px}
+.package-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.pkg{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}.pkg img{width:100%;height:145px;object-fit:cover;background:#edf2f5}.pkg-body{padding:15px}.pkg-body h3{margin:0 0 7px}.pkg-body p{margin:4px 0;color:var(--muted);font-size:14px}.pkg-foot{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.form{display:grid;gap:12px}.form label{font-size:13px;font-weight:800}.form textarea{min-height:100px;resize:vertical}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.48);display:none;place-items:center;padding:20px;z-index:30}.modal.show{display:grid}.modal-box{background:#fff;border-radius:18px;width:min(680px,100%);max-height:90vh;overflow:auto;padding:22px}.modal-head{display:flex;justify-content:space-between;align-items:center}.close{border:0;background:#eef2f5;border-radius:50%;width:38px;height:38px;font-size:20px}
+.notice{padding:13px 15px;background:#fff8e9;border:1px solid #f5dfaa;border-radius:11px;color:#7b5b14;font-size:13px;margin-bottom:16px}
+.branch{display:flex;gap:12px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:12px;margin-bottom:10px}.branch-icon{width:42px;height:42px;border-radius:10px;background:#fff0ea;display:grid;place-items:center;color:var(--orange);font-weight:900}
+@media(max-width:900px){.sidebar{width:76px}.brand div:not(.brand-mark),.nav span{display:none}.main{margin-left:76px;width:calc(100% - 76px)}.nav button{text-align:center}.stats{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.package-grid{grid-template-columns:repeat(2,1fr)}}
+/* V40 simple admin dashboard */
+.simple-dashboard{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+.simple-tool{display:flex;align-items:center;gap:13px;padding:18px;border:1px solid var(--line);border-radius:16px;background:#fff;text-decoration:none;color:var(--navy);box-shadow:0 4px 16px rgba(10,35,55,.05);font-weight:900;min-height:76px}
+.simple-tool:hover{border-color:#f0a080;transform:translateY(-1px)}
+.simple-tool .simple-icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:#fff0ea;font-size:22px;flex:0 0 auto}
+.simple-tool small{display:block;color:var(--muted);font-weight:600;margin-top:3px}
+.simple-welcome{padding:20px;border-radius:16px;background:linear-gradient(135deg,#fff,#fff7f2);border:1px solid var(--line);margin-bottom:18px}
+.simple-welcome h2{margin-bottom:5px}
+@media(max-width:900px){.simple-dashboard{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.simple-dashboard{grid-template-columns:1fr}.simple-tool{min-height:68px;padding:15px}}
+
+@media(max-width:600px){.sidebar{display:none}.main{margin:0;width:100%;padding:15px}.topbar{align-items:flex-start}.topbar h1{font-size:22px}.stats{grid-template-columns:1fr 1fr;gap:10px}.stat{padding:14px}.stat strong{font-size:25px}.package-grid{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}.actions .secondary{display:none}}
+
+.dashboard-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:18px;margin-top:18px}
+.kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.kpi{padding:16px;border:1px solid var(--line);border-radius:13px;background:#fff}
+.kpi .label{font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase}
+.kpi .value{font-size:24px;font-weight:900;margin:7px 0 3px}
+.kpi .delta{font-size:12px;font-weight:800;color:var(--green)}
+.kpi .delta.warn{color:var(--orange)}
+.progress{height:8px;background:#edf1f4;border-radius:20px;overflow:hidden;margin:8px 0}
+.progress i{display:block;height:100%;background:var(--orange);border-radius:20px}
+.funnel{display:grid;gap:10px}
+.funnel-row{display:grid;grid-template-columns:100px 1fr 45px;gap:9px;align-items:center;font-size:13px}
+.funnel-row b{font-size:12px}
+.alert-list{display:grid;gap:9px}
+.alert-item{display:flex;gap:10px;align-items:flex-start;padding:11px;border-radius:11px;background:#f8fafb;border:1px solid var(--line)}
+.alert-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:9px;background:#fff0ea}
+.rank{display:grid;grid-template-columns:28px 1fr auto;gap:9px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.rank:last-child{border-bottom:0}
+.rank-num{font-weight:900;color:var(--orange)}
+.mini-note{font-size:12px;color:var(--muted)}
+.branch-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.branch-stat{border:1px solid var(--line);border-radius:13px;padding:15px}
+.branch-stat h3{margin:0 0 4px}
+.branch-stat .big{font-size:24px;font-weight:900}
+@media(max-width:900px){.dashboard-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.kpi-row{grid-template-columns:1fr 1fr}.branch-cards{grid-template-columns:1fr}.funnel-row{grid-template-columns:90px 1fr 35px}}
+
+
+.crm-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:15px}
+.crm-toolbar input,.crm-toolbar select{padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.crm-pipeline{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px}
+.pipeline-card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:14px}
+.pipeline-card b{display:block;font-size:22px;margin-top:5px}
+.pipeline-card small{color:var(--muted)}
+.crm-table td{vertical-align:top}
+.lead-name{font-weight:900}.lead-sub{font-size:12px;color:var(--muted);margin-top:3px}
+.status-select{border:1px solid var(--line);border-radius:8px;padding:7px;background:#fff;font-weight:800}
+.priority{font-size:11px;font-weight:900;padding:5px 8px;border-radius:999px;background:#eef2f5}
+.priority.hot{background:#fff0ea;color:#c94722}.priority.high{background:#fff7df;color:#8a6510}
+.followup{font-size:12px;font-weight:800;color:var(--orange)}
+.crm-actions{display:flex;gap:6px;flex-wrap:wrap}
+.crm-actions button{padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:#fff;font-weight:800}
+.crm-actions .wa{background:#eaf8f0;color:#087548;border-color:#ccebdc}
+.timeline{display:grid;gap:10px;margin-top:12px}
+.timeline-item{border-left:3px solid var(--orange);padding:7px 0 7px 12px}
+.timeline-item small{color:var(--muted)}
+@media(max-width:900px){.crm-pipeline{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.crm-pipeline{grid-template-columns:repeat(2,1fr)}.crm-toolbar>*{width:100%}.crm-table{min-width:800px}}
+
+
+.tools-card{margin:18px 0;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:18px}
+.tools-card h2{margin:0 0 6px;font-size:20px}.tools-card p{margin:0 0 14px;color:var(--muted);font-size:13px}
+.admin-tools{display:grid;grid-template-columns:1fr 1fr;gap:12px}.admin-tool{display:flex;align-items:center;gap:12px;padding:15px 16px;border:1px solid var(--line);border-radius:13px;text-decoration:none;color:var(--navy);background:#f8fafb;font-weight:900;transition:.15s}.admin-tool:hover{transform:translateY(-1px);border-color:#f0a080;background:#fff5f0}.admin-tool .tool-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:11px;background:#fff0ea;font-size:22px}.admin-tool small{display:block;color:var(--muted);font-weight:600;margin-top:3px}
+@media(max-width:600px){.admin-tools{grid-template-columns:1fr}}
+
+/* V39.2 compact mobile admin quick navigation */
+.admin-bottom-nav{display:none}
+@media(max-width:700px){
+  body{padding-bottom:78px}
+  .admin-bottom-nav{position:fixed;left:12px;right:12px;bottom:10px;height:58px;padding:3px 4px;background:rgba(255,255,255,.98);border:1px solid #dce4e9;border-radius:22px;box-shadow:0 8px 28px rgba(10,35,55,.16);display:grid;grid-template-columns:repeat(4,1fr);align-items:stretch;z-index:50}
+  .admin-bottom-nav a{min-width:0;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;text-decoration:none;color:#102335;font-weight:900;font-size:10px;line-height:1.05;text-align:center}
+  .admin-bottom-nav .bn-icon{font-size:19px;line-height:1}
+  .admin-bottom-nav a.active{color:#ee5a2a}
+  .admin-bottom-nav a:active{transform:scale(.97)}
+}
+/* Modals must always sit above the compact navigation. */
+.modal{z-index:1000!important}
+</style>
+<meta name="robots" content="noindex,nofollow,noarchive">
+</head>
+<body>
+<script>if(sessionStorage.getItem('oat_admin_auth')!=='1') location.replace('admin.html');</script>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><img class="brand-logo" src="assets/logo.png" alt="On A Trip Holidays"><div class="brand-mark">✈</div><div><b>ON A TRIP</b><small>HOLIDAYS • ADMIN</small></div></div>
+  <div class="nav">
+    <button class="active" data-view="dashboard">📊 <span>Dashboard</span></button>
+    <button type="button" onclick="location.href='admin-ai-itinerary.html'">✨ <span>AI Itinerary & Quotation</span></button>
+    <button type="button" onclick="location.href='payment-invoicer.html'">🧾 <span>Payment Invoicer</span></button>
+    <button data-view="packages">🧳 <span>Packages</span></button>
+    <button data-view="batches">📅 <span>Batches & Seats</span></button>
+    <button data-view="enquiries">📲 <span>Enquiries</span></button>
+    <button data-view="blog">✍️ <span>Blog / SEO</span></button>
+    <button data-view="branches">📍 <span>Branches</span></button>
+    <button data-view="settings">⚙️ <span>Website Settings</span></button>
+  </div>
+</aside>
+
+<main class="main">
+
+<section id="dashboard" class="view active">
+  <div class="simple-welcome">
+    <h2>Welcome to On A Trip Holidays</h2>
+    <div class="mini-note">Simple admin control centre • manage packages, batches, enquiries, quotations and invoices.</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><span>Total Packages</span><strong id="statPackages">0</strong><em>Saved packages</em></div>
+    <div class="stat"><span>Upcoming Batches</span><strong id="statBatches">0</strong><em id="statBatchSub">0 filling fast</em></div>
+    <div class="stat"><span>New Enquiries</span><strong id="statLeads">0</strong><em>Saved CRM leads</em></div>
+    <div class="stat"><span>Bookings This Month</span><strong id="statBooked">0</strong><em id="statBookedSub">CRM booked leads</em></div>
+  </div>
+
+  <div class="card">
+    <div class="section-head"><h2>Admin Tools</h2><span class="badge">Quick access</span></div>
+    <div class="simple-dashboard">
+      <a class="simple-tool" href="javascript:void(0)" onclick="showView('packages')"><div class="simple-icon">🧳</div><div>Package Manager<small>Add, edit and manage packages</small></div></a>
+      <a class="simple-tool" href="javascript:void(0)" onclick="showView('batches')"><div class="simple-icon">📅</div><div>Batch & Seats<small>Update dates and availability</small></div></a>
+      <a class="simple-tool" href="javascript:void(0)" onclick="showView('enquiries')"><div class="simple-icon">📲</div><div>CRM Enquiries<small>Manage leads and follow-ups</small></div></a>
+      <a class="simple-tool" href="admin-ai-itinerary.html"><div class="simple-icon">✨</div><div>AI Itinerary & Quotation<small>Generate itinerary → quotation → PDF</small></div></a>
+      <a class="simple-tool" href="payment-invoicer.html"><div class="simple-icon">🧾</div><div>Invoice Maker<small>Create payment invoices</small></div></a>
+      <a class="simple-tool" href="javascript:void(0)" onclick="showView('settings')"><div class="simple-icon">⚙️</div><div>Website Settings<small>Control website content</small></div></a>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <div class="section-head"><h2>Upcoming Batches</h2><button class="btn secondary" onclick="showView('batches')">View all →</button></div>
+    <div class="table-wrap"><table class="table"><thead><tr><th>Trip</th><th>Date</th><th>Seats</th><th>Status</th></tr></thead><tbody id="dashboardBatchTable"><tr><td colspan="4">Loading saved batches…</td></tr></tbody></table></div>
+  </div>
+</section>
+
+<section id="packages" class="view">
+  <div class="section-head"><h2>Package Manager</h2><button class="btn primary" onclick="openModal('packageModal')">＋ Add Package</button></div>
+  <div class="filters"><input id="pkgSearch" placeholder="Search destination..." oninput="filterPackages()"><select id="pkgType" onchange="filterPackages()"><option value="">All categories</option><option>Pilgrimage</option><option>India</option><option>North East</option><option>International</option><option>Couples</option><option>Weekend</option></select></div>
+  <div class="package-grid" id="packageGrid"></div>
+</section>
+
+<section id="batches" class="view">
+ <div class="section-head"><h2>Batch Dates & Seat Availability</h2><button class="btn primary" onclick="openModal('batchModal')">＋ Add Batch</button></div>
+ <div class="notice">Update seats here and the website can show <b>Available / Filling Fast / Sold Out</b> status. <b>✓ Changes save automatically in this browser.</b></div>
+ <div class="card table-wrap"><table class="table"><thead><tr><th>Package</th><th>Date</th><th>From</th><th>Seats</th><th>Status</th><th>Action</th></tr></thead><tbody id="batchTable"></tbody></table></div>
+</section>
+
+<section id="enquiries" class="view">
+ <div class="section-head">
+   <div><h2>Lead Manager CRM</h2><div class="mini-note">Capture → qualify → follow up → quote → booking</div></div>
+   <button class="btn primary" onclick="openModal('leadModal')">＋ Add Lead</button>
+ </div>
+
+ <div class="crm-pipeline">
+  <div class="pipeline-card"><small>New</small><b id="crmNew">0</b><span class="mini-note">Fresh enquiries</span></div>
+  <div class="pipeline-card"><small>Contacted</small><b id="crmContacted">0</b><span class="mini-note">Conversation started</span></div>
+  <div class="pipeline-card"><small>Hot</small><b id="crmHot">0</b><span class="mini-note">Needs follow-up</span></div>
+  <div class="pipeline-card"><small>Quote Sent</small><b id="crmQuote">0</b><span class="mini-note">Awaiting decision</span></div>
+  <div class="pipeline-card"><small>Booked</small><b id="crmBooked">0</b><span class="mini-note">Converted</span></div>
+ </div>
+
+ <div class="card">
+  <div class="crm-toolbar">
+   <input id="crmSearch" placeholder="🔎 Search name, phone, destination..." oninput="renderCRM()">
+   <select id="crmStatus" onchange="renderCRM()"><option value="">All statuses</option><option>New</option><option>Contacted</option><option>Hot</option><option>Quote Sent</option><option>Booked</option><option>Lost</option></select>
+   <select id="crmSource" onchange="renderCRM()"><option value="">All sources</option><option>WhatsApp</option><option>Instagram</option><option>Facebook</option><option>Website</option><option>Google</option></select>
+   <button class="btn secondary" onclick="exportCRM()">Export CSV</button>
+  </div>
+  <div class="notice">💡 Every lead should have a <b>next follow-up date</b>. Use WhatsApp for the first contact and move the status as the conversation progresses.</div>
+  <div class="table-wrap">
+   <table class="table crm-table">
+    <thead><tr><th>Lead</th><th>Trip</th><th>Travellers</th><th>Source</th><th>Priority</th><th>Status</th><th>Next follow-up</th><th>Actions</th></tr></thead>
+    <tbody id="crmTable"></tbody>
+   </table>
+  </div>
+ </div>
+</section>
+<section id="blog" class="view">
+ <div class="section-head"><h2>Blog & SEO Manager</h2><button class="btn primary" onclick="openModal('blogModal')">＋ New Blog</button></div>
+ <div class="grid2"><div class="card"><h2>Published / Drafts</h2><div id="blogList"></div></div>
+ <div class="card"><h2>SEO checklist</h2><p>✅ Unique page title</p><p>✅ Meta description</p><p>✅ Destination keywords</p><p>✅ Internal links to packages</p><p>✅ WhatsApp CTA</p><p>⚠️ Add destination image alt text</p></div></div>
+</section>
+
+<section id="branches" class="view">
+ <div class="section-head"><h2>Our Branches</h2><button class="btn primary" onclick="openModal('branchModal')">＋ Add Branch</button></div>
+ <div class="card"><div class="branch"><div class="branch-icon">HYD</div><div><b>Hyderabad</b><div style="color:var(--muted)">Telangana • Main Office • Telugu Support</div></div><span class="badge" style="margin-left:auto">Active</span></div>
+ <div class="branch"><div class="branch-icon">VJA</div><div><b>Vijayawada</b><div style="color:var(--muted)">Andhra Pradesh • Telugu Support</div></div><span class="badge" style="margin-left:auto">Active</span></div></div>
+ <div class="notice" style="margin-top:16px">Brand message: <b>Two Telugu States • One Trusted Travel Company.</b></div>
+</section>
+
+<section id="settings" class="view">
+ <div class="card"><h2>Website Control Centre</h2><div class="form">
+ <label>September Offer Banner</label><input value="🔥 SEPTEMBER TRAVEL OFFERS • Limited seats • Ask for current batch pricing">
+ <label>WhatsApp Number</label><input value="+91 ">
+ <label>Homepage headline</label><input value="Your next trip starts here.">
+ <label>Trust line</label><input value="The two Telugu states trusted travel company">
+ <label>Featured international packages</label><input value="Thailand, Bali, Dubai, Vietnam, Nepal, Singapore">
+ <label>Featured North East packages</label><input value="Tawang, Ziro Valley, Arunachal, Sikkim, Meghalaya">
+ <button class="btn primary" onclick="alert('Demo settings saved in this browser.')">Save Website Settings</button>
+ </div></div>
+</section>
+</main>
+<nav class="admin-bottom-nav" aria-label="Admin quick navigation">
+  <a href="javascript:void(0)" class="active" onclick="quickNavHome()"><span class="bn-icon">⌂</span><span>Home</span></a>
+  <a href="payment-invoicer.html"><span class="bn-icon">🧾</span><span>Invoice</span></a>
+  <a href="admin-ai-itinerary.html"><span class="bn-icon">✨</span><span>Quotation</span></a>
+  <a href="javascript:void(0)" onclick="quickNavBack()"><span class="bn-icon">‹</span><span>Back</span></a>
+</nav>
+</div>
+
+<div class="modal" id="packageModal"><div class="modal-box"><div class="modal-head"><h2>Add / Edit Package</h2><button class="close" onclick="closeModal('packageModal')">×</button></div><form class="form" onsubmit="savePackage(event)"><input id="pEditIndex" type="hidden" value="-1"><div class="form-row"><div><label>Destination</label><input id="pName" required placeholder="Thailand"></div><div><label>Category</label><select id="pType"><option>International</option><option>India</option><option>North East</option><option>Pilgrimage</option><option>Couples</option><option>Weekend</option></select></div></div><div class="form-row"><div><label>Duration</label><input id="pDuration" placeholder="6D/5N"></div><div><label>Starting price</label><input id="pPrice" placeholder="₹39,999"></div></div><label>Image path</label><input id="pImage" placeholder="assets/thailand.jpg"><label>Highlights</label><textarea id="pHighlights" placeholder="Bangkok • Pattaya • Phuket"></textarea><button class="btn primary">Save Package</button></form></div></div>
+
+<div class="modal" id="batchModal"><div class="modal-box"><div class="modal-head"><h2 id="batchModalTitle">Add Batch</h2><button class="close" onclick="closeModal('batchModal')">×</button></div><form class="form" onsubmit="saveBatch(event)"><input id="bEditIndex" type="hidden" value="-1"><label>Package</label><input id="bPackage" required placeholder="Spiti Valley"><div class="form-row"><div><label>Date</label><input id="bDate" type="date" required></div><div><label>Pickup</label><input id="bFrom" placeholder="Delhi"></div></div><div class="form-row"><div><label>Total seats</label><input id="bTotal" type="number" value="16"></div><div><label>Available seats</label><input id="bSeats" type="number" value="8"></div></div><button class="btn primary">Save Batch</button></form></div></div>
+
+<div class="modal" id="leadModal"><div class="modal-box"><div class="modal-head"><h2>Add Lead</h2><button class="close" onclick="closeModal('leadModal')">×</button></div><form class="form" onsubmit="addLead(event)"><div class="form-row"><div><label>Name</label><input id="lName" required></div><div><label>Phone / WhatsApp</label><input id="lPhone"></div></div><div class="form-row"><div><label>Destination</label><input id="lDest" placeholder="Kashmir"></div><div><label>Travellers</label><input id="lTrav" value="2"></div></div>
+<label>Travel date</label><input id="lDate" type="date">
+<div class="form-row"><div><label>Priority</label><select id="lPriority"><option>Normal</option><option>High</option><option>Hot</option></select></div><div><label>Next follow-up</label><input id="lFollow" type="date"></div></div>
+<div class="form-row"><div><label>Expected value</label><input id="lValue" placeholder="₹79,998"></div><div><label>Email</label><input id="lEmail" type="email" placeholder="customer@email.com"></div></div><label>Notes</label><textarea id="lNotes" placeholder="Customer requirement, hotel preference, follow-up notes…"></textarea><label>Source</label><select id="lSource"><option>WhatsApp</option><option>Instagram</option><option>Facebook</option><option>Website</option><option>Google</option></select><button class="btn primary">Save Lead</button></form></div></div>
+
+<div class="modal" id="blogModal"><div class="modal-box"><div class="modal-head"><h2>Create SEO Blog</h2><button class="close" onclick="closeModal('blogModal')">×</button></div><form class="form" onsubmit="addBlog(event)"><label>Blog title</label><input id="blogTitle" required placeholder="Best time to visit Spiti Valley"></label><label>Target keyword</label><input id="blogKeyword" placeholder="Spiti Valley tour from Hyderabad"><label>Meta description</label><textarea id="blogMeta"></textarea><button class="btn primary">Save Draft</button></form></div></div>
+
+<div class="modal" id="offerModal"><div class="modal-box"><div class="modal-head"><h2>Create Offer</h2><button class="close" onclick="closeModal('offerModal')">×</button></div><form class="form" onsubmit="event.preventDefault();closeModal('offerModal');alert('Offer saved in this browser.')"><label>Offer headline</label><input value="🔥 September Travel Offers"></label><label>Offer text</label><input value="Limited seats • Ask for current batch pricing"></label><button class="btn primary">Save Offer</button></form></div></div>
+
+<script>
+const STORE_KEY='oat_admin_db_v39';
+const seedPackages=[
+{name:"Char Dham Yatra",type:"Pilgrimage",duration:"11D/10N",price:"₹30,500",image:"assets/char-dham.jpg",high:"Kedarnath • Badrinath • Gangotri • Yamunotri",tag:"BESTSELLER"},
+{name:"Spiti Valley",type:"India",duration:"9D/8N",price:"₹29,999",image:"assets/spiti.jpg",high:"Kaza • Chicham • Kibber • Tabo",tag:"HOT"},
+{name:"Ladakh",type:"India",duration:"7D/6N",price:"₹24,999",image:"assets/ladakh.jpg",high:"Leh • Nubra • Pangong • Khardung La",tag:"POPULAR"},
+{name:"Kashmir Deluxe",type:"India",duration:"6D/5N",price:"₹19,999",image:"assets/kashmir.jpg",high:"Srinagar • Gulmarg • Pahalgam • Sonmarg",tag:"POPULAR"},
+{name:"Tawang + Bomdila",type:"North East",duration:"8D/7N",price:"₹24,999",image:"assets/tawang.jpg",high:"Guwahati • Bomdila • Tawang",tag:"HOT"},
+{name:"Ziro Valley Escape",type:"North East",duration:"5D/4N",price:"₹18,999",image:"assets/ziro.jpg",high:"Itanagar • Ziro • Daporijo",tag:"NEW"},
+{name:"Arunachal Explorer",type:"North East",duration:"9D/8N",price:"₹28,999",image:"assets/arunachal.jpg",high:"Itanagar • Ziro • Bomdila • Tawang",tag:"POPULAR"},
+{name:"Sikkim & Gangtok",type:"North East",duration:"5D/4N",price:"₹16,999",image:"assets/sikkim.jpg",high:"Gangtok • Tsomgo Lake • Nathula",tag:"HOT"},
+{name:"Thailand",type:"International",duration:"6D/5N",price:"₹39,999",image:"assets/thailand.jpg",high:"Bangkok • Pattaya • Phuket",tag:"HOT"},
+{name:"Bali",type:"International",duration:"6D/5N",price:"₹42,999",image:"assets/bali.jpg",high:"Ubud • Kuta • Nusa Penida",tag:"HOT"},
+{name:"Dubai",type:"International",duration:"5D/4N",price:"₹44,999",image:"assets/dubai.jpg",high:"City Tour • Desert Safari • Burj Khalifa",tag:"POPULAR"},
+{name:"Vietnam",type:"International",duration:"6D/5N",price:"₹49,999",image:"assets/vietnam.jpg",high:"Hanoi • Ha Long Bay • Da Nang",tag:"HOT"},
+{name:"Nepal",type:"International",duration:"7D/6N",price:"₹32,999",image:"assets/nepal.jpg",high:"Kathmandu • Pokhara • Muktinath",tag:"POPULAR"},
+{name:"Singapore",type:"International",duration:"5D/4N",price:"₹52,999",image:"assets/singapore.jpg",high:"City • Sentosa • Universal Studios",tag:"HOT"},
+{name:"Maldives Couple Escape",type:"Couples",duration:"5D/4N",price:"₹69,999",image:"assets/maldives.jpg",high:"Resort • Island • Couple experiences",tag:"COUPLES"},
+{name:"Kerala Couple",type:"Couples",duration:"6D/5N",price:"₹39,500",image:"assets/kerala.jpg",high:"Munnar • Thekkady • Alleppey",tag:"COUPLES"}
+];
+const seedBatches=[
+{id:1,package:"Char Dham Yatra",date:"2026-09-20",from:"Hyderabad",total:20,seats:6},
+{id:2,package:"Spiti Valley",date:"2026-09-25",from:"Delhi",total:16,seats:5},
+{id:3,package:"Ladakh",date:"2026-10-02",from:"Delhi",total:16,seats:11},
+{id:4,package:"Tawang + Bomdila",date:"2026-10-10",from:"Guwahati",total:16,seats:4},
+{id:5,package:"Thailand",date:"2026-10-17",from:"Hyderabad",total:20,seats:13},
+{id:6,package:"Kashmir Deluxe",date:"2026-10-24",from:"Srinagar",total:12,seats:2}
+];
+const seedLeads=[
+{id:1,name:"Ravi Kumar",phone:"+91 98XXXXXX12",email:"",dest:"Kashmir",trav:4,source:"Instagram",priority:"Hot",status:"Hot",follow:"2026-09-02",date:"2026-10-10",value:"",notes:""},
+{id:2,name:"Srinivas",phone:"+91 99XXXXXX21",email:"",dest:"Thailand",trav:2,source:"WhatsApp",priority:"High",status:"New",follow:"2026-09-01",date:"2026-10-17",value:"₹79,998",notes:"Couple package."},
+{id:3,name:"Lakshmi",phone:"+91 97XXXXXX31",email:"",dest:"Char Dham",trav:3,source:"Website",priority:"High",status:"Contacted",follow:"2026-09-03",date:"2026-09-20",value:"",notes:""},
+{id:4,name:"Anil",phone:"+91 96XXXXXX41",email:"",dest:"Spiti Valley",trav:6,source:"Facebook",priority:"Hot",status:"Hot",follow:"2026-09-01",date:"2026-09-25",value:"",notes:""},
+{id:5,name:"Priya",phone:"+91 95XXXXXX51",email:"",dest:"Bali",trav:2,source:"Google",priority:"Normal",status:"Quote Sent",follow:"2026-09-04",date:"2026-10-24",value:"",notes:""}
+];
+const seedBlogs=[["Spiti Valley: Complete Travel Guide","Spiti Valley tour from Hyderabad","Published"],["Char Dham Yatra Guide","Char Dham Yatra from Hyderabad","Published"],["Best Time to Visit Ladakh","Ladakh tour packages","Draft"]];
+function loadDB(){
+  try{
+    const x=JSON.parse(localStorage.getItem(STORE_KEY)||'null');
+    if(x&&Array.isArray(x.packages)&&Array.isArray(x.batches)&&Array.isArray(x.leads))return x;
+  }catch(e){console.warn('Primary admin storage unavailable',e)}
+  try{
+    const fp=JSON.parse(localStorage.getItem('oat_packages_v39')||'null');
+    const fb=JSON.parse(localStorage.getItem('oat_batches_v39')||'null');
+    const fl=JSON.parse(localStorage.getItem('oat_leads_v39')||'null');
+    if(Array.isArray(fp)&&Array.isArray(fb)&&Array.isArray(fl)) return {packages:fp,batches:fb,leads:fl,blogs:JSON.parse(localStorage.getItem('oat_blogs_v39')||'null')||seedBlogs};
+  }catch(e){console.warn('Fallback admin storage unavailable',e)}
+  let oldB=null,oldL=null;
+  try{oldB=JSON.parse(localStorage.getItem('oat_batches')||'null')}catch(e){}
+  try{oldL=JSON.parse(localStorage.getItem('oat_leads')||'null')}catch(e){}
+  const db0={
+    packages:seedPackages.map(p=>({...p})),
+    batches:(Array.isArray(oldB)&&oldB.length?oldB.map((b,i)=>Array.isArray(b)?{id:Date.now()+i,package:b[0],date:normaliseDate(b[1]),from:b[2],total:+b[3]||16,seats:+b[4]||0}:b):seedBatches.map(b=>({...b}))),
+    leads:(Array.isArray(oldL)&&oldL.length?oldL.map(l=>({...l})):seedLeads.map(l=>({...l}))),
+    blogs:seedBlogs.map(b=>[...b])
+  };
+  return db0;
+}
+let db=loadDB();
+try{ if(!localStorage.getItem(STORE_KEY)) saveDB(db); }catch(e){}
+function saveDB(next=db){
+  const candidate={
+    packages:Array.isArray(next?.packages)?next.packages:[],
+    batches:Array.isArray(next?.batches)?next.batches:[],
+    leads:Array.isArray(next?.leads)?next.leads:[],
+    blogs:Array.isArray(next?.blogs)?next.blogs:[]
+  };
+  const payload=JSON.stringify(candidate);
+  try{
+    // Write the complete database first, then the legacy mirrors used by older pages.
+    localStorage.setItem(STORE_KEY,payload);
+    const verify=localStorage.getItem(STORE_KEY);
+    if(verify!==payload) throw new Error('Storage verification failed');
+    localStorage.setItem('oat_batches',JSON.stringify(candidate.batches.map(b=>[b.package,b.date,b.from,b.total,b.seats])));
+    localStorage.setItem('oat_leads',JSON.stringify(candidate.leads));
+    db=candidate;
+    return true;
+  }catch(err){
+    console.error('On A Trip admin storage error:',err);
+    // Try a compact per-collection fallback if the combined object cannot be written.
+    try{
+      localStorage.setItem('oat_packages_v39',JSON.stringify(candidate.packages));
+      localStorage.setItem('oat_batches_v39',JSON.stringify(candidate.batches));
+      localStorage.setItem('oat_leads_v39',JSON.stringify(candidate.leads));
+      localStorage.setItem('oat_blogs_v39',JSON.stringify(candidate.blogs));
+      db=candidate;
+      return true;
+    }catch(err2){
+      console.error('Fallback storage error:',err2);
+      alert('Data could not be saved. Please check browser site-storage permissions and try again.');
+      return false;
+    }
+  }
+}
+function readEl(id){return document.getElementById(id)}
+function valueOf(id){const el=readEl(id);return el?String(el.value||'').trim():''}
+function numberOf(id,fallback=0){const n=Number(valueOf(id));return Number.isFinite(n)?n:fallback}
+function quickNavHome(){
+  document.querySelectorAll('.admin-bottom-nav a').forEach(a=>a.classList.remove('active'));
+  const home=document.querySelector('.admin-bottom-nav a:first-child');if(home)home.classList.add('active');
+  showView('dashboard');
+}
+function quickNavBack(){
+  const active=document.querySelector('.view.active');
+  if(active && active.id!=='dashboard'){showView('dashboard');return}
+  if(history.length>1)history.back();else location.href='admin.html';
+}
+
+function normaliseDate(v){if(!v)return ''; if(/^\d{4}-\d{2}-\d{2}$/.test(v))return v; const m=String(v).match(/(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})/i); if(!m)return String(v); const months={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12}; return `${m[3]}-${String(months[m[2].slice(0,3).toLowerCase()]).padStart(2,'0')}-${String(m[1]).padStart(2,'0')}`;}
+function displayDate(v){if(!v)return 'TBC';const d=new Date(v+'T00:00:00');return isNaN(d)?v:d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function statusFor(b){const s=Number(b.seats)||0,t=Number(b.total)||0;return s<=0?'Sold Out':s<=Math.max(3,Math.ceil(t*.2))?'Filling Fast':'Available';}
+function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));const names={dashboard:'Dashboard',packages:'Packages',batches:'Batches & Seats',enquiries:'Enquiries',blog:'Blog / SEO',branches:'Branches',settings:'Website Settings'};const pageTitle=document.getElementById('pageTitle');if(pageTitle)pageTitle.textContent=names[id];window.scrollTo({top:0,behavior:'smooth'});if(id==='dashboard')renderDashboard();}
+document.querySelectorAll('.nav button').forEach(b=>{if(b.dataset.view)b.onclick=()=>showView(b.dataset.view)});
+function renderPackages(list=db.packages){document.getElementById('packageGrid').innerHTML=list.map((p)=>{const i=db.packages.indexOf(p);return `<article class="pkg"><img src="${esc(p.image)}" onerror="this.style.opacity='.15'" alt="${esc(p.name)}"><div class="pkg-body"><span class="badge ${p.tag==='HOT'?'hot':''}">${esc(p.tag)}</span><h3>${esc(p.name)}</h3><p>${esc(p.type)} • ${esc(p.duration)}</p><p>${esc(p.high)}</p><div class="pkg-foot"><b style="color:var(--orange)">${esc(p.price)}</b><div style="display:flex;gap:6px"><button class="btn secondary" onclick="editPackage(${i})">Edit</button><button class="btn secondary" onclick="deletePackage(${i})">Delete</button></div></div></div></article>`}).join('')||'<div class="card">No packages saved.</div>';}
+function filterPackages(){const q=document.getElementById('pkgSearch').value.toLowerCase(),t=document.getElementById('pkgType').value;renderPackages(db.packages.filter(p=>(p.name+' '+p.high).toLowerCase().includes(q)&&(!t||p.type===t)))}
+function renderBatches(){document.getElementById('batchTable').innerHTML=db.batches.length?db.batches.map((b,i)=>{const st=statusFor(b);return `<tr><td><b>${esc(b.package)}</b></td><td>${esc(displayDate(b.date))}</td><td>${esc(b.from)}</td><td>${b.seats}/${b.total}</td><td><span class="badge ${st!=='Available'?'hot':''}">${st}</span></td><td><div style="display:flex;gap:6px"><button class="btn secondary" onclick="editBatch(${i})">Update</button><button class="btn secondary" onclick="deleteBatch(${i})">Delete</button></div></td></tr>`}).join(''):'<tr><td colspan="6">No batches saved.</td></tr>';renderDashboard();}
+function renderDashboard(){
+ const fast=db.batches.filter(b=>statusFor(b)==='Filling Fast').length;
+ const booked=db.leads.filter(l=>l.status==='Booked').length;
+ document.getElementById('statPackages').textContent=db.packages.length;
+ document.getElementById('statBatches').textContent=db.batches.length;
+ document.getElementById('statBatchSub').textContent=fast+' filling fast';
+ document.getElementById('statLeads').textContent=db.leads.length;
+ document.getElementById('statBooked').textContent=booked;
+ document.getElementById('statBookedSub').textContent=booked+' booked leads';
+ const body=document.getElementById('dashboardBatchTable');
+ body.innerHTML=db.batches.slice(0,5).map(b=>{const st=statusFor(b);return `<tr><td><b>${esc(b.package)}</b></td><td>${esc(displayDate(b.date))}</td><td>${b.seats}/${b.total}</td><td><span class="badge ${st!=='Available'?'hot':''}">${st}</span></td></tr>`}).join('')||'<tr><td colspan="4">No saved batches.</td></tr>';
+ const newN=db.leads.filter(l=>l.status==='New').length, contacted=db.leads.filter(l=>l.status==='Contacted').length, hot=db.leads.filter(l=>l.status==='Hot').length, quote=db.leads.filter(l=>l.status==='Quote Sent').length;
+ const vals=[newN,contacted,hot,booked]; document.querySelectorAll('.funnel-row b:last-child').forEach((el,i)=>{if(vals[i]!==undefined)el.textContent=vals[i]});
+ const badge=document.querySelector('#dashboard .dashboard-grid .card .section-head .badge');if(badge)badge.textContent=db.leads.length+' leads';
+}
+function openBatchModal(){document.getElementById('batchModalTitle').textContent='Add Batch';document.getElementById('bEditIndex').value='-1';document.getElementById('batchModal').querySelector('form').reset();document.getElementById('bTotal').value=16;document.getElementById('bSeats').value=8;openModal('batchModal');}
+function editBatch(i){const b=db.batches[i];document.getElementById('batchModalTitle').textContent='Update Batch';document.getElementById('bEditIndex').value=i;document.getElementById('bPackage').value=b.package;document.getElementById('bDate').value=normaliseDate(b.date);document.getElementById('bFrom').value=b.from;document.getElementById('bTotal').value=b.total;document.getElementById('bSeats').value=b.seats;openModal('batchModal');}
+function saveBatch(e){
+  e.preventDefault();
+  try{
+    const pkg=valueOf('bPackage');
+    const date=valueOf('bDate');
+    if(!pkg || !date){alert('Package and date are required.');return false;}
+    const total=Math.max(1,Math.floor(numberOf('bTotal',1)));
+    let seats=Math.max(0,Math.floor(numberOf('bSeats',0)));
+    if(seats>total)seats=total;
+    const edit=Number(valueOf('bEditIndex'));
+    const item={id:Date.now(),package:pkg,date,from:valueOf('bFrom')||'Delhi',total,seats};
+    const nextBatches=db.batches.slice();
+    if(Number.isInteger(edit) && edit>=0 && edit<nextBatches.length){item.id=nextBatches[edit].id;nextBatches[edit]=item;}
+    else nextBatches.unshift(item);
+    if(!saveDB({...db,batches:nextBatches}))return false;
+    renderBatches();
+    closeModal('batchModal');
+    e.target.reset();
+    readEl('bEditIndex').value='-1';
+    readEl('batchModalTitle').textContent='Add Batch';
+    showView('batches');
+    alert('Batch saved successfully.');
+  }catch(err){console.error(err);alert('Batch could not be saved. Please try again.');}
+  return false;
+}
+function deleteBatch(i){if(confirm('Delete this batch?')){db.batches.splice(i,1);saveDB();renderBatches();}}
+function openPackageModal(){document.getElementById('pEditIndex').value='-1';document.getElementById('packageModal').querySelector('form').reset();openModal('packageModal');}
+function editPackage(i){const p=db.packages[i];document.getElementById('pEditIndex').value=i;document.getElementById('pName').value=p.name;document.getElementById('pType').value=p.type;document.getElementById('pDuration').value=p.duration;document.getElementById('pPrice').value=p.price;document.getElementById('pImage').value=p.image;document.getElementById('pHighlights').value=p.high;openModal('packageModal');}
+function savePackage(e){
+  e.preventDefault();
+  try{
+    const item={name:valueOf('pName'),type:valueOf('pType')||'India',duration:valueOf('pDuration')||'Custom',price:valueOf('pPrice')||'Ask',image:valueOf('pImage')||'assets/placeholder.jpg',high:valueOf('pHighlights')||'Custom itinerary',tag:'NEW'};
+    if(!item.name){alert('Destination is required.');return false;}
+    const idx=Number(valueOf('pEditIndex'));
+    const nextPackages=db.packages.slice();
+    if(Number.isInteger(idx) && idx>=0 && idx<nextPackages.length){item.tag=nextPackages[idx].tag||'NEW';nextPackages[idx]=item;}
+    else nextPackages.unshift(item);
+    if(!saveDB({...db,packages:nextPackages}))return false;
+    renderPackages();renderDashboard();closeModal('packageModal');e.target.reset();readEl('pEditIndex').value='-1';showView('packages');alert('Package saved successfully.');
+  }catch(err){console.error(err);alert('Package could not be saved. Please try again.');}
+  return false;
+}
+function deletePackage(i){if(confirm('Delete '+db.packages[i].name+'?')){db.packages.splice(i,1);saveDB();renderPackages();renderDashboard();}}
+function renderCRM(){const q=(document.getElementById('crmSearch')?.value||'').toLowerCase(),st=document.getElementById('crmStatus')?.value||'',so=document.getElementById('crmSource')?.value||'';const list=db.leads.filter(l=>(l.name+' '+l.phone+' '+l.dest+' '+(l.email||'')).toLowerCase().includes(q)&&(!st||l.status===st)&&(!so||l.source===so));const counts={New:0,Contacted:0,Hot:0,'Quote Sent':0,Booked:0};db.leads.forEach(l=>{if(counts[l.status]!==undefined)counts[l.status]++});crmNew.textContent=counts.New;crmContacted.textContent=counts.Contacted;crmHot.textContent=counts.Hot;crmQuote.textContent=counts['Quote Sent'];crmBooked.textContent=counts.Booked;crmTable.innerHTML=list.length?list.map(l=>`<tr><td><div class="lead-name">${esc(l.name)}</div><div class="lead-sub">${esc(l.phone)}${l.email?' • '+esc(l.email):''}</div></td><td><b>${esc(l.dest)}</b><div class="lead-sub">${esc(displayDate(l.date)||'Date not set')}</div></td><td>${esc(l.trav)}</td><td>${esc(l.source)}</td><td><span class="priority ${l.priority==='Hot'?'hot':l.priority==='High'?'high':''}">${esc(l.priority)}</span></td><td><select class="status-select" onchange="changeLeadStatus(${l.id},this.value)">${['New','Contacted','Hot','Quote Sent','Booked','Lost'].map(s=>`<option ${s===l.status?'selected':''}>${s}</option>`).join('')}</select></td><td><span class="followup">${esc(displayDate(l.follow)||'Set date')}</span></td><td><div class="crm-actions"><button class="wa" onclick="whatsappLead(${l.id})">WhatsApp</button><button onclick="leadDetails(${l.id})">Details</button><button onclick="editLead(${l.id})">Edit</button><button onclick="deleteLead(${l.id})">Delete</button></div></td></tr>`).join(''):'<tr><td colspan="8">No leads match your filters.</td></tr>';renderDashboard();}
+function changeLeadStatus(id,status){const l=db.leads.find(x=>x.id===id);if(l){l.status=status;saveDB();renderCRM();}}
+function whatsappLead(id){const l=db.leads.find(x=>x.id===id);if(!l)return;const phone=(l.phone||'').replace(/\D/g,'');const msg=`Hi ${l.name}, this is On A Trip Holidays. Regarding your ${l.dest} trip enquiry for ${l.trav} travellers. Shall I share the latest package and batch details?`;window.open((phone?'https://wa.me/'+phone+'?text=':'https://wa.me/?text=')+encodeURIComponent(msg),'_blank')}
+function leadDetails(id){const l=db.leads.find(x=>x.id===id);if(!l)return;alert(`${l.name}\n${l.dest} • ${l.trav} travellers\nPhone: ${l.phone}\nSource: ${l.source}\nStatus: ${l.status}\nNext follow-up: ${l.follow||'Not set'}\nExpected value: ${l.value||'Not set'}\nNotes: ${l.notes||'No notes'}`)}
+function editLead(id){const l=db.leads.find(x=>x.id===id);if(!l)return;document.getElementById('lEditId').value=id;document.getElementById('lName').value=l.name;document.getElementById('lPhone').value=l.phone;document.getElementById('lEmail').value=l.email||'';document.getElementById('lDest').value=l.dest;document.getElementById('lTrav').value=l.trav;document.getElementById('lDate').value=normaliseDate(l.date);document.getElementById('lPriority').value=l.priority;document.getElementById('lFollow').value=normaliseDate(l.follow);document.getElementById('lValue').value=l.value||'';document.getElementById('lNotes').value=l.notes||'';document.getElementById('lSource').value=l.source;document.getElementById('leadModalTitle').textContent='Edit Lead';openModal('leadModal');}
+function saveLead(e){
+  e.preventDefault();
+  try{
+    const item={id:Date.now(),name:valueOf('lName'),phone:valueOf('lPhone'),email:valueOf('lEmail'),dest:valueOf('lDest')||'Custom Trip',trav:Math.max(1,Math.floor(numberOf('lTrav',1))),source:valueOf('lSource')||'WhatsApp',priority:valueOf('lPriority')||'Normal',status:'New',follow:valueOf('lFollow'),date:valueOf('lDate'),value:valueOf('lValue'),notes:valueOf('lNotes')};
+    if(!item.name){alert('Name is required.');return false;}
+    const editId=Number(valueOf('lEditId'));
+    let nextLeads;
+    if(editId){const old=db.leads.find(x=>x.id===editId);item.id=editId;item.status=old?.status||'New';nextLeads=db.leads.map(x=>x.id===editId?item:x);}
+    else nextLeads=[item,...db.leads];
+    if(!saveDB({...db,leads:nextLeads}))return false;
+    renderCRM();renderDashboard();closeModal('leadModal');e.target.reset();readEl('lEditId').value='';readEl('leadModalTitle').textContent='Add Lead';showView('enquiries');alert('Lead saved successfully.');
+  }catch(err){console.error(err);alert('Lead could not be saved. Please try again.');}
+  return false;
+}
+function deleteLead(id){if(confirm('Delete this lead?')){db.leads=db.leads.filter(x=>x.id!==id);saveDB();renderCRM();}}
+function exportCRM(){const rows=[['Name','Phone','Email','Destination','Travellers','Source','Priority','Status','Travel Date','Value','Follow-up','Notes'],...db.leads.map(l=>[l.name,l.phone,l.email,l.dest,l.trav,l.source,l.priority,l.status,l.date,l.value,l.follow,l.notes])];const csv=rows.map(r=>r.map(x=>`"${String(x??'').replace(/"/g,'""')}"`).join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='on-a-trip-leads.csv';a.click();}
+function renderBlogs(){document.getElementById('blogList').innerHTML=db.blogs.map(b=>`<div style="padding:13px 0;border-bottom:1px solid var(--line)"><b>${esc(b[0])}</b><div style="color:var(--muted);font-size:13px">${esc(b[1])}</div><span class="badge" style="margin-top:7px">${esc(b[2])}</span></div>`).join('')}
+function addBlog(e){e.preventDefault();db.blogs.unshift([blogTitle.value.trim(),blogKeyword.value.trim()||'—','Draft']);saveDB();renderBlogs();closeModal('blogModal');e.target.reset();showView('blog');alert('Blog draft saved successfully.');}
+function openModal(id){document.getElementById(id).classList.add('show')}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+// Wire forms after DOM load
+const batchForm=document.querySelector('#batchModal form');if(batchForm)batchForm.onsubmit=saveBatch;
+const packageForm=document.querySelector('#packageModal form');if(packageForm)packageForm.onsubmit=savePackage;
+const leadForm=document.querySelector('#leadModal form');if(leadForm)leadForm.onsubmit=saveLead;
+// Make top buttons use reset/open helpers
+const addBtns=document.querySelectorAll('button[onclick="openModal(\'packageModal\')"]');addBtns.forEach(b=>b.onclick=openPackageModal);
+const batchBtns=document.querySelectorAll('button[onclick="openModal(\'batchModal\')"]');batchBtns.forEach(b=>b.onclick=openBatchModal);
+// Add hidden edit controls dynamically if missing
+(function ensureLeadEditControls(){const f=document.querySelector('#leadModal form');if(!f)return;if(!document.getElementById('lEditId')){const h=document.createElement('input');h.type='hidden';h.id='lEditId';h.value='';f.prepend(h)}const h2=document.querySelector('#leadModal h2');if(h2&&!h2.id)h2.id='leadModalTitle';})();
+renderPackages();renderBatches();renderCRM();renderBlogs();renderDashboard();
+</script>
+</body>
+</html>
