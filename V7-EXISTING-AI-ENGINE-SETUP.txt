@@ -1,0 +1,22 @@
+ON A TRIP HOLIDAYS — AI ITINERARY + QUOTATION BUILDER V7
+
+This version attaches the UI to the EXISTING AI engine endpoint:
+
+POST /api/generate-itinerary
+
+The frontend sends the same field names expected by the supplied handler:
+guest, dest, days, pax, start, dates, language, type, hotel, vehicle, meals, budget, special, instruction.
+
+No new AI engine is included.
+No Supabase Edge Function is required for the AI call.
+Your existing OPENAI_API_KEY remains server-side in the existing Vercel/serverless function.
+
+Deploy:
+1. Keep your existing /api/generate-itinerary.js (or equivalent serverless route).
+2. Replace the existing admin-ai-itinerary.html with this V7 file.
+3. Keep on-a-trip-logo.png in the same folder if used by the branded design.
+4. Ensure the page is served from the same Vercel deployment as /api/generate-itinerary so /api/generate-itinerary resolves correctly.
+5. Test with Destination + Days + Travellers and click Generate with AI.
+
+The builder validates that the response contains exactly the requested number of days.
+It displays the existing engine's title, summary, day-wise itinerary, hotels, vehicle, meals, price, inclusions, exclusions and notes.

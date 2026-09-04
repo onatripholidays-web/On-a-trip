@@ -1,12 +1,12 @@
-ON A TRIP HOLIDAYS — AI ITINERARY + QUOTATION BUILDER V6
+ON A TRIP HOLIDAYS — AI ITINERARY + QUOTATION BUILDER V5
 
-Fixed:
-- Generate button now explicitly creates the itinerary + quotation.
-- Generate opens a full-screen mobile-friendly preview.
-- Preview / PDF opens the same preview.
-- Destination-aware itinerary templates for Char Dham, Kedarnath, Kashmir, Ladakh, Manali and Kerala, with a general fallback.
-- No advance-paid or payment-mode input fields.
-- Branded PDF includes logo/contact/payment details and QR from the supplied quotation PDF.
+PDF/print updates from the supplied On A Trip Holidays quotation:
+- Added the supplied On A Trip Holidays logo.
+- Added office address, phone/WhatsApp number and website.
+- Added a branded Payment Details section.
+- Added bank account details, IFSC, UPI number and UPI ID.
+- Added the supplied payment QR image.
+- Payment is clearly presented as post-quotation approval / booking payment, not as a field in the quote form.
+- Print / Save as PDF remains available.
 
-Production note:
-This is client-side generation. For true model-generated AI content, connect a secure server-side AI endpoint; never expose an API key in this HTML.
+Source details were taken from the uploaded Char Dham Yatra PDF, especially its Payment Details page (page 12) and website footer.

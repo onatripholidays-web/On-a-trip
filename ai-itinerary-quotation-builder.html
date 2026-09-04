@@ -23,12 +23,36 @@
 .doc-contact{font-size:8px;color:#71809a;line-height:1.45;margin-top:4px}
 @media(max-width:520px){.payment-body{grid-template-columns:1fr 120px}.payment-qr{width:110px;height:110px}}
 @media print{.payment-details{break-inside:avoid}.doc{padding:22px}}
-
-.preview-modal{position:fixed;inset:0;background:rgba(10,25,50,.72);backdrop-filter:blur(6px);z-index:9999;display:none;padding:12px;overflow:auto}
-.preview-modal.show{display:block}.preview-shell{max-width:850px;margin:20px auto;background:#f5f8fc;border-radius:18px;padding:12px;position:relative}.preview-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.preview-top b{color:#fff;font-size:15px}.preview-close{border:0;border-radius:50%;width:42px;height:42px;font-size:22px;cursor:pointer}.preview-actions{display:flex;gap:8px}.preview-actions .btn{flex:1}
-.ai-result{margin-top:12px;background:#eff8f4;border:1px solid #cdebdc;border-radius:12px;padding:10px;font-size:10px;color:#176b4c}.ai-result b{font-size:12px}
-@media(max-width:520px){.preview-shell{margin:5px auto;padding:8px}.preview-top{position:sticky;top:0;z-index:2;padding:4px}.preview-actions{position:sticky;bottom:0;background:#f5f8fc;padding-top:8px}}
 </style>
+
+<style>
+.oat-ai-result{font-family:Inter,Arial,sans-serif;color:#172033}
+.oat-kicker{font-size:12px;font-weight:800;letter-spacing:.08em;opacity:.7}
+.oat-result-head h2{margin:6px 0;font-size:28px}
+.oat-result-head p{color:#5e6978;line-height:1.6}
+.oat-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}
+.oat-meta span{background:#f5f7fa;padding:12px;border-radius:10px;font-size:13px}
+.oat-meta b,.oat-day-meta b{display:block;font-size:11px;text-transform:uppercase;opacity:.65;margin-bottom:3px}
+.oat-ai-result h3{margin-top:22px;border-bottom:2px solid #eef1f5;padding-bottom:8px}
+.oat-day{display:grid;grid-template-columns:90px 1fr;gap:14px;padding:14px 0;border-bottom:1px solid #edf0f4}
+.oat-day-no{font-weight:900}
+.oat-day-body h4{margin:0 0 6px}
+.oat-day-body p,.oat-ai-result li{line-height:1.55;color:#505b6b}
+.oat-day-meta{display:flex;gap:25px;margin-top:10px;font-size:12px}
+.oat-day-meta b{display:inline;opacity:.65}
+.oat-two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.oat-price{font-size:24px;font-weight:900}
+.oat-footer{margin-top:25px;padding-top:15px;border-top:1px solid #e7ebf0}
+button:disabled{opacity:.6;cursor:wait}
+@media(max-width:700px){
+ .oat-meta,.oat-two{grid-template-columns:1fr}
+ .oat-day{grid-template-columns:1fr}
+}
+@media print{
+ .oat-ai-result{font-size:12px}
+}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -48,87 +72,199 @@
   <div class="field"><label>Travel Style</label><div class="chips"><span class="chip on" onclick="pick(this)">Pilgrimage</span><span class="chip" onclick="pick(this)">Family</span><span class="chip" onclick="pick(this)">Adventure</span><span class="chip" onclick="pick(this)">Luxury</span><span class="chip" onclick="pick(this)">Budget</span></div></div>
   <div class="field"><label>Special Requirements</label><textarea id="requirements" placeholder="Veg meals, elderly travellers, room preference, darshan, pickup, etc."></textarea></div>
   <div class="row"><div class="field"><label>Price / Traveller (₹)</label><input id="price" type="number" value="24999"></div><div class="field"><label>GST %</label><input id="gst" type="number" value="5"></div></div><div class="ai" style="margin-top:0"><b>ℹ️ Payment will be collected after quotation approval</b><p>Payment and advance details are intentionally not included in the quotation builder. They can be collected after the customer accepts the quotation.</p></div>
-  <div class="row"><button class="btn primary" onclick="generate()">✨ Generate AI Itinerary + Quotation</button><button class="btn light" onclick="openPreview()">👁 Preview / PDF</button></div>
+  <div class="row"><button class="btn primary" onclick="generate()">✨ Generate AI Document</button><button class="btn light" onclick="window.print()">Preview / PDF</button></div>
  </div>
 </section>
 <section class="card preview" id="preview"></section>
 </div>
 </div>
+
 <script>
-let current='builder', websiteBatches=[];
-const $=id=>document.getElementById(id);
-function mode(m){current='builder';$('t1').classList.add('active');generate()}
-function pick(el){document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));el.classList.add('on')}
-function money(n){return new Intl.NumberFormat('en-IN',{maximumFractionDigits:0}).format(Math.round(n))}
-function dateText(){const v=$('date').value;if(!v)return 'Travel date to be confirmed';return new Date(v+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})}
-function dayPlan(dest,day,style){
- let names=['Arrival & Local Exploration','Sightseeing & Experiences','Culture / Temple Visit','Nature & Leisure','Adventure & Highlights','Free Day & Shopping','Departure'];
- let n=names[(day-1)%names.length];
- if(style==='Pilgrimage'&&day===2)n='Temple / Darshan Day';
- if(style==='Adventure'&&day===2)n='Adventure & Scenic Drive';
- return n;
-}
-function generate(){
- const c=$('customer').value||'Valued Guest', mob=$('mobile').value||'—', dest=$('destination').value||'Your Destination';
- const tr=+$('travellers').value||1,nights=+$('nights').value||1,price=+$('price').value||0,gst=+$('gst').value||0;
- const style=document.querySelector('.chip.on')?.textContent||'Family';
- const subtotal=tr*price,tax=subtotal*gst/100,total=subtotal+tax,days=nights+1;
- const req=$('requirements').value||'As discussed with the guest.';
- const vehicle=$('vehicle').value, hotel=$('hotel').value;
+const API_ENDPOINT = "/api/generate-itinerary";
+let latestItinerary = null;
 
- const destinationHints = {
-   'chardham':['Haridwar & Ganga Aarti','Yamunotri Darshan','Gangotri Darshan','Kedarnath Yatra','Badrinath Darshan & Mana Village'],
-   'kedarnath':['Haridwar / Rishikesh','Sonprayag transfer','Kedarnath trek & darshan','Return to Sonprayag','Local sightseeing / departure'],
-   'kashmir':['Srinagar arrival & Dal Lake','Gulmarg excursion','Pahalgam valley','Sonamarg / scenic drive','Srinagar leisure & departure'],
-   'ladakh':['Leh arrival & acclimatization','Leh local sightseeing','Nubra Valley','Pangong Lake','Return to Leh & departure'],
-   'manali':['Manali arrival & leisure','Solang Valley','Manali local sightseeing','Kullu / Naggar','Departure'],
-   'kerala':['Kochi arrival','Munnar sightseeing','Munnar tea gardens','Thekkady / wildlife','Alleppey houseboat','Departure']
- };
- let key=dest.toLowerCase().replace(/[^a-z]/g,'');
- let hints=Object.keys(destinationHints).find(k=>key.includes(k)) ? destinationHints[Object.keys(destinationHints).find(k=>key.includes(k))] : ['Arrival & local exploration','Major sightseeing & experiences','Culture, nature & local attractions','Leisure / optional activities','Departure'];
- let itinerary='';
- for(let d=1;d<=days;d++){
-   let title=hints[(d-1)%hints.length];
-   let body=d===1?`Arrive at ${dest}, meet the driver and check in to ${hotel}. Relax and begin a comfortable ${style.toLowerCase()} experience.`:
-     d===days?`Breakfast, complete the planned final experience and proceed for departure / drop-off as per the confirmed travel schedule.`:
-     `After breakfast, proceed for ${title.toLowerCase()}. Enjoy sightseeing with your ${vehicle}, suitable breaks and time for local experiences.`;
-   if(req.toLowerCase().includes('veg')) body+=' Vegetarian meal preference noted.';
-   itinerary+=`<div class="day"><b>Day ${d} — ${title}</b><p>${body}</p></div>`;
- }
- const doc=`<div class="doc">
- <div class="doc-head"><div class="doc-brand"><img class="brand-logo" src="${document.querySelector('.brand-logo')?.src||''}" alt="On A Trip Holidays logo"><b>ON A TRIP HOLIDAYS</b><small>TRAVEL MORE • CREATE MEMORIES</small><div class="doc-contact">House No 25 A, GF, Nandanavanam Complex, SR Nagar Main Rd, Vengal Rao Nagar, Sunder Nagar, Hyderabad, Telangana 500038<br>Phone / WhatsApp: +91-8125248909<br>www.onatripholidays.com</div></div><div class="doc-title"><h1>ITINERARY + QUOTATION</h1><small>Prepared for ${c}</small></div></div>
- <div class="client"><div class="box"><small>Customer</small><b>${c}</b><span style="font-size:10px;color:#71809a">${mob}</span></div><div class="box"><small>Journey</small><b>${dest}</b><span style="font-size:10px;color:#71809a">${dateText()} • ${tr} Traveller${tr>1?'s':''}</span></div></div>
- <div class="heroquote"><small>${style.toUpperCase()} • ${nights} NIGHTS / ${days} DAYS</small><b>${dest} — ${style} Journey</b></div>
- <div class="ai-result"><b>✨ AI Itinerary Generated</b><br>Built from destination, duration, travel style, traveller count and your special requirements.</div>
- <div class="section"><h3>🗺️ DAY-BY-DAY ITINERARY</h3>${itinerary}</div>
- <div class="section"><h3>🏨 STAY & TRAVEL</h3><p style="font-size:10px;line-height:1.6;color:#5f708b"><b>Hotel:</b> ${hotel}<br><b>Vehicle:</b> ${vehicle}<br><b>Special Requirements:</b> ${req}</p></div>
- <div class="section"><h3>💰 QUOTATION SUMMARY</h3><table class="price"><tr><td>Package price (${tr} × ₹${money(price)})</td><td>₹${money(subtotal)}</td></tr><tr><td>GST (${gst}%)</td><td>₹${money(tax)}</td></tr><tr class="total"><td>Grand Total</td><td>₹${money(total)}</td></tr><tr><td>Payment</td><td>To be collected after quotation approval</td></tr></table></div>
- <div class="section"><h3>✅ INCLUSIONS</h3><p class="note">Accommodation as selected • Private vehicle as selected • Driver assistance • Sightseeing as per itinerary • Breakfast / meals as agreed • Applicable taxes. Final inclusions are subject to the confirmed package.</p></div>
- <div class="payment-details"><div class="payment-head">💳 PAYMENT DETAILS — FOR BOOKING AFTER QUOTATION APPROVAL</div><div class="payment-body"><table class="payment-table"><tr><td>Account Name</td><td>ON A TRIP HOLIDAYS.</td></tr><tr><td>Account Number</td><td>2602261212328370</td></tr><tr><td>Account Type</td><td>Current Account</td></tr><tr><td>Branch Address</td><td>House No 25 A, GF, Nandanavanam Complex, SR Nagar Main Rd, Vengal Rao Nagar, Sunder Nagar, Hyderabad, Telangana 500038</td></tr><tr><td>IFSC Code</td><td>AUBL0002612</td></tr><tr><td>UPI No.</td><td>8125248909</td></tr><tr><td>UPI ID</td><td>onatripholidays0976@aubank</td></tr></table><img class="payment-qr" src="${document.querySelector('.payment-qr')?.src||''}" alt="Payment QR code"></div></div>
- <div class="section"><h3>📌 TERMS</h3><p class="note">This is a travel quotation and not a confirmed booking. Payment is to be made only after the customer approves the quotation and the booking is confirmed in writing. Rates may change based on availability. Cancellation and amendment charges apply as per the confirmed booking terms.</p></div>
- <p class="note" style="text-align:center;margin-top:25px">Thank you for choosing On A Trip Holidays • Travel More, Create Memories</p></div>`;
- $('preview').innerHTML=doc;
- return doc;
-}
-function openPreview(){const doc=generate();$('modalPreview').innerHTML=doc;$('previewModal').classList.add('show');document.body.style.overflow='hidden'}
-function closePreview(){$('previewModal').classList.remove('show');document.body.style.overflow=''}
+const $ = id => document.getElementById(id);
+const val = id => ($(id)?.value ?? "").trim();
 
-function resetAll(){document.querySelectorAll('input,textarea').forEach(x=>{if(!['travellers','nights','price','gst'].includes(x.id))x.value=''});$('travellers').value=2;$('nights').value=5;$('price').value=24999;$('gst').value=5;generate()}
-generate();
+function esc(s){
+  return String(s ?? "").replace(/[&<>"']/g, m => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[m]));
+}
+
+function collectPayload(){
+  return {
+    guest: val("customer") || val("guest") || "Guest",
+    dest: val("destination"),
+    days: Number(val("days")) || 1,
+    pax: Number(val("travellers")) || Number(val("pax")) || 1,
+    start: val("startCity") || val("start"),
+    dates: val("startDate") && val("endDate")
+      ? `${val("startDate")} to ${val("endDate")}`
+      : (val("startDate") || val("dates") || "TBC"),
+    language: val("language") || "English",
+    type: val("tripType") || val("type") || "Custom",
+    hotel: val("hotel") || "3 Star",
+    vehicle: val("vehicle") || "Private Car",
+    meals: val("meals") || "Breakfast & Dinner",
+    budget: val("price") ? `₹ ${val("price")} per person` : (val("budget") || "Price to be quoted"),
+    special: val("special") || "None",
+    instruction: val("instruction") || "None"
+  };
+}
+
+function setStatus(message, error=false){
+  const candidates = ["status","message","successMessage"];
+  for(const id of candidates){
+    const el=$(id);
+    if(el){
+      el.textContent=message;
+      el.style.display="block";
+      el.classList.toggle("error", error);
+      return;
+    }
+  }
+}
+
+function findPreview(){
+  return $("preview") || $("previewContent") || $("itineraryPreview") ||
+    document.querySelector(".preview-content") ||
+    document.querySelector(".preview");
+}
+
+function renderItinerary(d){
+  latestItinerary=d;
+  const target=findPreview();
+  if(!target) return;
+
+  const days=Array.isArray(d.days)?d.days:[];
+  const html=`
+    <div class="oat-ai-result">
+      <div class="oat-result-head">
+        <div>
+          <div class="oat-kicker">CUSTOMER QUOTATION</div>
+          <h2>${esc(d.title)}</h2>
+          <p>${esc(d.summary)}</p>
+        </div>
+      </div>
+
+      <div class="oat-meta">
+        <span><b>Guest</b>${esc(payloadCache.guest)}</span>
+        <span><b>Destination</b>${esc(payloadCache.dest)}</span>
+        <span><b>Travellers</b>${esc(payloadCache.pax)}</span>
+        <span><b>Duration</b>${days.length} Days</span>
+      </div>
+
+      <h3>DAY WISE ITINERARY</h3>
+      ${days.map(x=>`
+        <div class="oat-day">
+          <div class="oat-day-no">DAY ${esc(x.day)}</div>
+          <div class="oat-day-body">
+            <h4>${esc(x.title)}</h4>
+            <p>${esc(x.summary)}</p>
+            <div class="oat-day-meta">
+              <span><b>Hotel:</b> ${esc(x.hotel)}</span>
+              <span><b>Meals:</b> ${esc(x.meals)}</span>
+            </div>
+          </div>
+        </div>
+      `).join("")}
+
+      <div class="oat-two">
+        <div><h3>ACCOMMODATION</h3><p>${esc(d.hotels)}</p></div>
+        <div><h3>TRANSPORT</h3><p>${esc(d.vehicle)}</p></div>
+      </div>
+      <div class="oat-two">
+        <div><h3>MEALS</h3><p>${esc(d.meals)}</p></div>
+        <div><h3>PACKAGE QUOTE</h3><p class="oat-price">${esc(d.price)}</p></div>
+      </div>
+
+      <div class="oat-two">
+        <div><h3>INCLUSIONS</h3><ul>${(d.inclusions||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
+        <div><h3>EXCLUSIONS</h3><ul>${(d.exclusions||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
+      </div>
+
+      <div><h3>IMPORTANT NOTES</h3><p>${esc(d.notes)}</p></div>
+
+      <div class="oat-footer">
+        <b>On A Trip Holidays</b><br>
+        +91-8125248909 · www.onatripholidays.com
+      </div>
+    </div>`;
+
+  target.innerHTML=html;
+}
+
+let payloadCache={};
+
+async function generateWithExistingEngine(){
+  payloadCache=collectPayload();
+  if(!payloadCache.dest){
+    setStatus("Destination is required.", true);
+    return;
+  }
+
+  setStatus("✨ Generating your itinerary with the existing On A Trip AI engine…");
+  const buttons=[...document.querySelectorAll("button")];
+  buttons.forEach(b=>{ if(/generate.*ai|generate with ai|generate ai document/i.test(b.textContent)) b.disabled=true; });
+
+  try{
+    const response=await fetch(API_ENDPOINT,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(payloadCache)
+    });
+
+    const raw=await response.text();
+    let data;
+    try{ data=JSON.parse(raw); }
+    catch{ throw new Error("AI server returned an invalid response."); }
+
+    if(!response.ok) throw new Error(data.error || `AI request failed (${response.status})`);
+
+    if(!data.title || !Array.isArray(data.days) || data.days.length !== payloadCache.days){
+      throw new Error("AI returned an incomplete itinerary.");
+    }
+
+    renderItinerary(data);
+    setStatus("✅ AI itinerary generated successfully. You can edit/print the quotation.");
+  }catch(err){
+    console.error(err);
+    setStatus("❌ "+err.message, true);
+  }finally{
+    buttons.forEach(b=>b.disabled=false);
+  }
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+  const selectors=[
+    "#generate","#generateAI","#generateAi","#generateDocument",
+    "[data-action='generate-ai']"
+  ];
+  let attached=false;
+  for(const s of selectors){
+    document.querySelectorAll(s).forEach(btn=>{
+      btn.addEventListener("click",generateWithExistingEngine);
+      attached=true;
+    });
+  }
+
+  if(!attached){
+    document.querySelectorAll("button").forEach(btn=>{
+      if(/generate.*ai|generate with ai|generate ai document/i.test(btn.textContent)){
+        btn.addEventListener("click",generateWithExistingEngine);
+      }
+    });
+  }
+
+  // Print/PDF buttons continue to use the browser's professional print output.
+  document.querySelectorAll("button").forEach(btn=>{
+    if(/generate pdf|preview.*pdf|print.*pdf|print \/ save pdf/i.test(btn.textContent)){
+      btn.addEventListener("click",()=>window.print());
+    }
+  });
+});
 </script>
 
-<div id="previewModal" class="preview-modal">
-  <div class="preview-shell">
-    <div class="preview-top">
-      <b>On A Trip Holidays — Document Preview</b>
-      <button class="preview-close" onclick="closePreview()">×</button>
-    </div>
-    <div id="modalPreview"></div>
-    <div class="preview-actions">
-      <button class="btn light" onclick="closePreview()">Edit</button>
-      <button class="btn primary" onclick="window.print()">🖨 Save / Print PDF</button>
-    </div>
-  </div>
-</div>
 </body>
 </html>
