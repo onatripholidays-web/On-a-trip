@@ -20,6 +20,15 @@ function applyAdminMenuFix(){
     const d=frame.contentDocument;
     if(!d)return;
 
+    // Keep the Admin Tools page focused: CRM is the home for quotations/invoices.
+    [...d.querySelectorAll('.admin-tool,.simple-tool,a,button')].forEach(el=>{
+      const text=(el.textContent||'').trim();
+      if(/Quotation Maker|AI Quotation Maker|Invoice Maker|Payment Invoicer/i.test(text)){
+        const tool=el.closest('.admin-tool,.simple-tool') || el;
+        if(tool) tool.remove();
+      }
+    });
+
     [...d.querySelectorAll('.nav button')].forEach(b=>{
       const text=(b.textContent||'').trim();
       if(/Blog\s*\/\s*SEO/i.test(text)){b.remove();return;}
@@ -27,7 +36,7 @@ function applyAdminMenuFix(){
         const n=d.createElement('button');
         n.type='button';
         n.innerHTML='🔐 <span>CRM Login</span>';
-        n.onclick=()=>d.defaultView.location.href='crm.html';
+        n.onclick=()=>d.defaultView.location.href='crm-tools.html';
         b.replaceWith(n);
       }
     });
@@ -37,7 +46,7 @@ function applyAdminMenuFix(){
       if(/Create SEO blog|Blog & SEO|Blog \/ SEO/i.test(text)){el.remove();return;}
       if(/Check enquiries|CRM Enquiries|Open lead manager/i.test(text)){
         el.textContent='🔐 CRM Login';
-        el.onclick=()=>d.defaultView.location.href='crm.html';
+        el.onclick=()=>d.defaultView.location.href='crm-tools.html';
         if(el.tagName==='A')el.href='crm.html';
       }
     });
@@ -45,7 +54,7 @@ function applyAdminMenuFix(){
     [...d.querySelectorAll('button')].forEach(el=>{
       if(/Quick Lead/i.test(el.textContent||'')){
         el.textContent='🔐 CRM Login';
-        el.onclick=()=>d.defaultView.location.href='crm.html';
+        el.onclick=()=>d.defaultView.location.href='crm-tools.html';
       }
     });
 
@@ -53,7 +62,7 @@ function applyAdminMenuFix(){
     if(old&&!d.defaultView.__crmMenuPatched){
       d.defaultView.showView=function(id){
         if(id==='enquiries'||id==='blog'){
-          d.defaultView.location.href='crm.html';
+          d.defaultView.location.href='crm-tools.html';
           return;
         }
         return old(id);
@@ -65,6 +74,7 @@ function applyAdminMenuFix(){
 frame.addEventListener('load',()=>{
   applyAdminMenuFix();
   setTimeout(applyAdminMenuFix,150);
+  setTimeout(applyAdminMenuFix,500);
 });
 </script>
 </body>
