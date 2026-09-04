@@ -100,6 +100,7 @@ button{cursor:pointer}
 <meta name="robots" content="noindex,nofollow,noarchive">
 </head>
 <body>
+<script>if(sessionStorage.getItem('oat_admin_auth')!=='1') location.replace('admin.html');</script>
 <div class="app">
 <aside class="sidebar">
   <div class="brand"><div class="brand-mark">✈</div><div><b>ON A TRIP</b><small>HOLIDAYS • ADMIN</small></div></div>
@@ -139,10 +140,10 @@ button{cursor:pointer}
   </div>
 
   <div class="stats">
-    <div class="stat"><span>Total Packages</span><strong>36</strong><em>+5 this month</em></div>
-    <div class="stat"><span>Upcoming Batches</span><strong>14</strong><em>8 filling fast</em></div>
-    <div class="stat"><span>New Enquiries</span><strong>27</strong><em>+18% this week</em></div>
-    <div class="stat"><span>Bookings This Month</span><strong>18</strong><em>₹8.42L value</em></div>
+    <div class="stat"><span>Total Packages</span><strong id="statPackages">0</strong><em>Saved packages</em></div>
+    <div class="stat"><span>Upcoming Batches</span><strong id="statBatches">0</strong><em id="statBatchSub">0 filling fast</em></div>
+    <div class="stat"><span>New Enquiries</span><strong id="statLeads">0</strong><em>Saved CRM leads</em></div>
+    <div class="stat"><span>Bookings This Month</span><strong id="statBooked">0</strong><em id="statBookedSub">CRM booked leads</em></div>
   </div>
 
   <div class="card">
@@ -182,12 +183,7 @@ button{cursor:pointer}
 
     <div class="card">
       <div class="section-head"><h2>Upcoming batches</h2><button class="btn secondary" onclick="showView('batches')">View all</button></div>
-      <div class="table-wrap"><table class="table"><thead><tr><th>Trip</th><th>Date</th><th>Seats</th><th>Status</th></tr></thead><tbody>
-        <tr><td><b>Char Dham</b></td><td>20 Sep</td><td>6/20</td><td><span class="badge hot">Filling Fast</span></td></tr>
-        <tr><td><b>Spiti Valley</b></td><td>25 Sep</td><td>5/16</td><td><span class="badge hot">Filling Fast</span></td></tr>
-        <tr><td><b>Ladakh</b></td><td>02 Oct</td><td>11/16</td><td><span class="badge">Available</span></td></tr>
-        <tr><td><b>Tawang</b></td><td>10 Oct</td><td>4/16</td><td><span class="badge hot">Filling Fast</span></td></tr>
-      </tbody></table></div>
+      <div class="table-wrap"><table class="table"><thead><tr><th>Trip</th><th>Date</th><th>Seats</th><th>Status</th></tr></thead><tbody id="dashboardBatchTable"><tr><td colspan="4">Loading saved batches…</td></tr></tbody></table></div>
     </div>
 
     <div class="card">
@@ -228,7 +224,7 @@ button{cursor:pointer}
 
 <section id="batches" class="view">
  <div class="section-head"><h2>Batch Dates & Seat Availability</h2><button class="btn primary" onclick="openModal('batchModal')">＋ Add Batch</button></div>
- <div class="notice">Update seats here and the website can show <b>Available / Filling Fast / Sold Out</b> status.</div>
+ <div class="notice">Update seats here and the website can show <b>Available / Filling Fast / Sold Out</b> status. <b>✓ Changes save automatically in this browser.</b></div>
  <div class="card table-wrap"><table class="table"><thead><tr><th>Package</th><th>Date</th><th>From</th><th>Seats</th><th>Status</th><th>Action</th></tr></thead><tbody id="batchTable"></tbody></table></div>
 </section>
 
@@ -289,21 +285,22 @@ button{cursor:pointer}
 </main>
 </div>
 
-<div class="modal" id="packageModal"><div class="modal-box"><div class="modal-head"><h2>Add / Edit Package</h2><button class="close" onclick="closeModal('packageModal')">×</button></div><form class="form" onsubmit="addPackage(event)"><div class="form-row"><div><label>Destination</label><input id="pName" required placeholder="Thailand"></div><div><label>Category</label><select id="pType"><option>International</option><option>India</option><option>North East</option><option>Pilgrimage</option><option>Couples</option><option>Weekend</option></select></div></div><div class="form-row"><div><label>Duration</label><input id="pDuration" placeholder="6D/5N"></div><div><label>Starting price</label><input id="pPrice" placeholder="₹39,999"></div></div><label>Image path</label><input id="pImage" placeholder="assets/thailand.jpg"><label>Highlights</label><textarea id="pHighlights" placeholder="Bangkok • Pattaya • Phuket"></textarea><button class="btn primary">Save Package</button></form></div></div>
+<div class="modal" id="packageModal"><div class="modal-box"><div class="modal-head"><h2>Add / Edit Package</h2><button class="close" onclick="closeModal('packageModal')">×</button></div><form class="form" onsubmit="savePackage(event)"><input id="pEditIndex" type="hidden" value="-1"><div class="form-row"><div><label>Destination</label><input id="pName" required placeholder="Thailand"></div><div><label>Category</label><select id="pType"><option>International</option><option>India</option><option>North East</option><option>Pilgrimage</option><option>Couples</option><option>Weekend</option></select></div></div><div class="form-row"><div><label>Duration</label><input id="pDuration" placeholder="6D/5N"></div><div><label>Starting price</label><input id="pPrice" placeholder="₹39,999"></div></div><label>Image path</label><input id="pImage" placeholder="assets/thailand.jpg"><label>Highlights</label><textarea id="pHighlights" placeholder="Bangkok • Pattaya • Phuket"></textarea><button class="btn primary">Save Package</button></form></div></div>
 
-<div class="modal" id="batchModal"><div class="modal-box"><div class="modal-head"><h2>Add Batch</h2><button class="close" onclick="closeModal('batchModal')">×</button></div><form class="form" onsubmit="addBatch(event)"><label>Package</label><input id="bPackage" required placeholder="Spiti Valley"><div class="form-row"><div><label>Date</label><input id="bDate" type="date" required></div><div><label>Pickup</label><input id="bFrom" placeholder="Delhi"></div></div><div class="form-row"><div><label>Total seats</label><input id="bTotal" type="number" value="16"></div><div><label>Available seats</label><input id="bSeats" type="number" value="8"></div></div><button class="btn primary">Save Batch</button></form></div></div>
+<div class="modal" id="batchModal"><div class="modal-box"><div class="modal-head"><h2 id="batchModalTitle">Add Batch</h2><button class="close" onclick="closeModal('batchModal')">×</button></div><form class="form" onsubmit="saveBatch(event)"><input id="bEditIndex" type="hidden" value="-1"><label>Package</label><input id="bPackage" required placeholder="Spiti Valley"><div class="form-row"><div><label>Date</label><input id="bDate" type="date" required></div><div><label>Pickup</label><input id="bFrom" placeholder="Delhi"></div></div><div class="form-row"><div><label>Total seats</label><input id="bTotal" type="number" value="16"></div><div><label>Available seats</label><input id="bSeats" type="number" value="8"></div></div><button class="btn primary">Save Batch</button></form></div></div>
 
 <div class="modal" id="leadModal"><div class="modal-box"><div class="modal-head"><h2>Add Lead</h2><button class="close" onclick="closeModal('leadModal')">×</button></div><form class="form" onsubmit="addLead(event)"><div class="form-row"><div><label>Name</label><input id="lName" required></div><div><label>Phone / WhatsApp</label><input id="lPhone"></div></div><div class="form-row"><div><label>Destination</label><input id="lDest" placeholder="Kashmir"></div><div><label>Travellers</label><input id="lTrav" value="2"></div></div>
 <label>Travel date</label><input id="lDate" type="date">
 <div class="form-row"><div><label>Priority</label><select id="lPriority"><option>Normal</option><option>High</option><option>Hot</option></select></div><div><label>Next follow-up</label><input id="lFollow" type="date"></div></div>
-<label>Source</label><select id="lSource"><option>WhatsApp</option><option>Instagram</option><option>Facebook</option><option>Website</option><option>Google</option></select><button class="btn primary">Save Lead</button></form></div></div>
+<div class="form-row"><div><label>Expected value</label><input id="lValue" placeholder="₹79,998"></div><div><label>Email</label><input id="lEmail" type="email" placeholder="customer@email.com"></div></div><label>Notes</label><textarea id="lNotes" placeholder="Customer requirement, hotel preference, follow-up notes…"></textarea><label>Source</label><select id="lSource"><option>WhatsApp</option><option>Instagram</option><option>Facebook</option><option>Website</option><option>Google</option></select><button class="btn primary">Save Lead</button></form></div></div>
 
 <div class="modal" id="blogModal"><div class="modal-box"><div class="modal-head"><h2>Create SEO Blog</h2><button class="close" onclick="closeModal('blogModal')">×</button></div><form class="form" onsubmit="addBlog(event)"><label>Blog title</label><input id="blogTitle" required placeholder="Best time to visit Spiti Valley"></label><label>Target keyword</label><input id="blogKeyword" placeholder="Spiti Valley tour from Hyderabad"><label>Meta description</label><textarea id="blogMeta"></textarea><button class="btn primary">Save Draft</button></form></div></div>
 
 <div class="modal" id="offerModal"><div class="modal-box"><div class="modal-head"><h2>Create Offer</h2><button class="close" onclick="closeModal('offerModal')">×</button></div><form class="form" onsubmit="event.preventDefault();closeModal('offerModal');alert('Offer saved in this browser.')"><label>Offer headline</label><input value="🔥 September Travel Offers"></label><label>Offer text</label><input value="Limited seats • Ask for current batch pricing"></label><button class="btn primary">Save Offer</button></form></div></div>
 
 <script>
-const packages=[
+const STORE_KEY='oat_admin_db_v39';
+const seedPackages=[
 {name:"Char Dham Yatra",type:"Pilgrimage",duration:"11D/10N",price:"₹30,500",image:"assets/char-dham.jpg",high:"Kedarnath • Badrinath • Gangotri • Yamunotri",tag:"BESTSELLER"},
 {name:"Spiti Valley",type:"India",duration:"9D/8N",price:"₹29,999",image:"assets/spiti.jpg",high:"Kaza • Chicham • Kibber • Tabo",tag:"HOT"},
 {name:"Ladakh",type:"India",duration:"7D/6N",price:"₹24,999",image:"assets/ladakh.jpg",high:"Leh • Nubra • Pangong • Khardung La",tag:"POPULAR"},
@@ -321,74 +318,85 @@ const packages=[
 {name:"Maldives Couple Escape",type:"Couples",duration:"5D/4N",price:"₹69,999",image:"assets/maldives.jpg",high:"Resort • Island • Couple experiences",tag:"COUPLES"},
 {name:"Kerala Couple",type:"Couples",duration:"6D/5N",price:"₹39,500",image:"assets/kerala.jpg",high:"Munnar • Thekkady • Alleppey",tag:"COUPLES"}
 ];
-let batches=[
-["Char Dham Yatra","20 Sep 2026","Hyderabad",20,6],["Spiti Valley","25 Sep 2026","Delhi",16,5],
-["Ladakh","02 Oct 2026","Delhi",16,11],["Tawang + Bomdila","10 Oct 2026","Guwahati",16,4],
-["Thailand","17 Oct 2026","Hyderabad",20,13],["Kashmir Deluxe","24 Oct 2026","Srinagar",12,2]
+const seedBatches=[
+{id:1,package:"Char Dham Yatra",date:"2026-09-20",from:"Hyderabad",total:20,seats:6},
+{id:2,package:"Spiti Valley",date:"2026-09-25",from:"Delhi",total:16,seats:5},
+{id:3,package:"Ladakh",date:"2026-10-02",from:"Delhi",total:16,seats:11},
+{id:4,package:"Tawang + Bomdila",date:"2026-10-10",from:"Guwahati",total:16,seats:4},
+{id:5,package:"Thailand",date:"2026-10-17",from:"Hyderabad",total:20,seats:13},
+{id:6,package:"Kashmir Deluxe",date:"2026-10-24",from:"Srinagar",total:12,seats:2}
 ];
-let leads=[
-{id:1,name:"Ravi Kumar",phone:"+91 98XXXXXX12",dest:"Kashmir",trav:4,source:"Instagram",priority:"Hot",status:"Hot",follow:"2026-09-02",date:"2026-10-10"},
-{id:2,name:"Srinivas",phone:"+91 99XXXXXX21",dest:"Thailand",trav:2,source:"WhatsApp",priority:"High",status:"New",follow:"2026-09-01",date:"2026-10-17"},
-{id:3,name:"Lakshmi",phone:"+91 97XXXXXX31",dest:"Char Dham",trav:3,source:"Website",priority:"High",status:"Contacted",follow:"2026-09-03",date:"2026-09-20"},
-{id:4,name:"Anil",phone:"+91 96XXXXXX41",dest:"Spiti Valley",trav:6,source:"Facebook",priority:"Hot",status:"Hot",follow:"2026-09-01",date:"2026-09-25"},
-{id:5,name:"Priya",phone:"+91 95XXXXXX51",dest:"Bali",trav:2,source:"Google",priority:"Normal",status:"Quote Sent",follow:"2026-09-04",date:"2026-10-24"}
+const seedLeads=[
+{id:1,name:"Ravi Kumar",phone:"+91 98XXXXXX12",email:"",dest:"Kashmir",trav:4,source:"Instagram",priority:"Hot",status:"Hot",follow:"2026-09-02",date:"2026-10-10",value:"",notes:""},
+{id:2,name:"Srinivas",phone:"+91 99XXXXXX21",email:"",dest:"Thailand",trav:2,source:"WhatsApp",priority:"High",status:"New",follow:"2026-09-01",date:"2026-10-17",value:"₹79,998",notes:"Couple package."},
+{id:3,name:"Lakshmi",phone:"+91 97XXXXXX31",email:"",dest:"Char Dham",trav:3,source:"Website",priority:"High",status:"Contacted",follow:"2026-09-03",date:"2026-09-20",value:"",notes:""},
+{id:4,name:"Anil",phone:"+91 96XXXXXX41",email:"",dest:"Spiti Valley",trav:6,source:"Facebook",priority:"Hot",status:"Hot",follow:"2026-09-01",date:"2026-09-25",value:"",notes:""},
+{id:5,name:"Priya",phone:"+91 95XXXXXX51",email:"",dest:"Bali",trav:2,source:"Google",priority:"Normal",status:"Quote Sent",follow:"2026-09-04",date:"2026-10-24",value:"",notes:""}
 ];
-let blogs=[["Spiti Valley: Complete Travel Guide","Spiti Valley tour from Hyderabad","Published"],["Char Dham Yatra Guide","Char Dham Yatra from Hyderabad","Published"],["Best Time to Visit Ladakh","Ladakh tour packages","Draft"]];
-
-function showView(id){
- document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
- document.getElementById(id).classList.add('active');
- document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
- const names={dashboard:"Dashboard",packages:"Packages",batches:"Batches & Seats",enquiries:"Enquiries",blog:"Blog / SEO",branches:"Branches",settings:"Website Settings"};
- document.getElementById('pageTitle').textContent=names[id];
- window.scrollTo({top:0,behavior:'smooth'});
+const seedBlogs=[["Spiti Valley: Complete Travel Guide","Spiti Valley tour from Hyderabad","Published"],["Char Dham Yatra Guide","Char Dham Yatra from Hyderabad","Published"],["Best Time to Visit Ladakh","Ladakh tour packages","Draft"]];
+function loadDB(){
+ try{const x=JSON.parse(localStorage.getItem(STORE_KEY));if(x&&Array.isArray(x.packages)&&Array.isArray(x.batches)&&Array.isArray(x.leads))return x}catch(e){}
+ const oldB=JSON.parse(localStorage.getItem('oat_batches')||'null');
+ const oldL=JSON.parse(localStorage.getItem('oat_leads')||'null');
+ const db={packages:seedPackages,batches:(Array.isArray(oldB)&&oldB.length?oldB.map((b,i)=>Array.isArray(b)?{id:Date.now()+i,package:b[0],date:normaliseDate(b[1]),from:b[2],total:+b[3]||16,seats:+b[4]||0}:b):seedBatches),leads:(Array.isArray(oldL)&&oldL.length?oldL:seedLeads),blogs:seedBlogs};
+ saveDB(db); return db;
 }
-document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>showView(b.dataset.view));
-
-function renderPackages(list=packages){
- document.getElementById('packageGrid').innerHTML=list.map((p,i)=>`
- <article class="pkg"><img src="${p.image}" onerror="this.style.opacity='.15'" alt="${p.name}">
- <div class="pkg-body"><span class="badge ${p.tag==='HOT'?'hot':''}">${p.tag}</span><h3>${p.name}</h3>
- <p>${p.type} • ${p.duration}</p><p>${p.high}</p><div class="pkg-foot"><b style="color:var(--orange)">${p.price}</b><button class="btn secondary" onclick="alert('Edit ${p.name}')">Edit</button></div></div></article>`).join('');
+let db=loadDB();
+function saveDB(next=db){db=next;localStorage.setItem(STORE_KEY,JSON.stringify(db));localStorage.setItem('oat_batches',JSON.stringify(db.batches.map(b=>[b.package,displayDate(b.date),b.from,b.total,b.seats])));localStorage.setItem('oat_leads',JSON.stringify(db.leads));}
+function normaliseDate(v){if(!v)return ''; if(/^\d{4}-\d{2}-\d{2}$/.test(v))return v; const m=String(v).match(/(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})/i); if(!m)return String(v); const months={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12}; return `${m[3]}-${String(months[m[2].slice(0,3).toLowerCase()]).padStart(2,'0')}-${String(m[1]).padStart(2,'0')}`;}
+function displayDate(v){if(!v)return 'TBC';const d=new Date(v+'T00:00:00');return isNaN(d)?v:d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function statusFor(b){const s=Number(b.seats)||0,t=Number(b.total)||0;return s<=0?'Sold Out':s<=Math.max(3,Math.ceil(t*.2))?'Filling Fast':'Available';}
+function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));const names={dashboard:'Dashboard',packages:'Packages',batches:'Batches & Seats',enquiries:'Enquiries',blog:'Blog / SEO',branches:'Branches',settings:'Website Settings'};document.getElementById('pageTitle').textContent=names[id];window.scrollTo({top:0,behavior:'smooth'});if(id==='dashboard')renderDashboard();}
+document.querySelectorAll('.nav button').forEach(b=>{if(b.dataset.view)b.onclick=()=>showView(b.dataset.view)});
+function renderPackages(list=db.packages){document.getElementById('packageGrid').innerHTML=list.map((p)=>{const i=db.packages.indexOf(p);return `<article class="pkg"><img src="${esc(p.image)}" onerror="this.style.opacity='.15'" alt="${esc(p.name)}"><div class="pkg-body"><span class="badge ${p.tag==='HOT'?'hot':''}">${esc(p.tag)}</span><h3>${esc(p.name)}</h3><p>${esc(p.type)} • ${esc(p.duration)}</p><p>${esc(p.high)}</p><div class="pkg-foot"><b style="color:var(--orange)">${esc(p.price)}</b><div style="display:flex;gap:6px"><button class="btn secondary" onclick="editPackage(${i})">Edit</button><button class="btn secondary" onclick="deletePackage(${i})">Delete</button></div></div></div></article>`}).join('')||'<div class="card">No packages saved.</div>';}
+function filterPackages(){const q=document.getElementById('pkgSearch').value.toLowerCase(),t=document.getElementById('pkgType').value;renderPackages(db.packages.filter(p=>(p.name+' '+p.high).toLowerCase().includes(q)&&(!t||p.type===t)))}
+function renderBatches(){document.getElementById('batchTable').innerHTML=db.batches.length?db.batches.map((b,i)=>{const st=statusFor(b);return `<tr><td><b>${esc(b.package)}</b></td><td>${esc(displayDate(b.date))}</td><td>${esc(b.from)}</td><td>${b.seats}/${b.total}</td><td><span class="badge ${st!=='Available'?'hot':''}">${st}</span></td><td><div style="display:flex;gap:6px"><button class="btn secondary" onclick="editBatch(${i})">Update</button><button class="btn secondary" onclick="deleteBatch(${i})">Delete</button></div></td></tr>`}).join(''):'<tr><td colspan="6">No batches saved.</td></tr>';renderDashboard();}
+function renderDashboard(){
+ const fast=db.batches.filter(b=>statusFor(b)==='Filling Fast').length;
+ const booked=db.leads.filter(l=>l.status==='Booked').length;
+ document.getElementById('statPackages').textContent=db.packages.length;
+ document.getElementById('statBatches').textContent=db.batches.length;
+ document.getElementById('statBatchSub').textContent=fast+' filling fast';
+ document.getElementById('statLeads').textContent=db.leads.length;
+ document.getElementById('statBooked').textContent=booked;
+ document.getElementById('statBookedSub').textContent=booked+' booked leads';
+ const body=document.getElementById('dashboardBatchTable');
+ body.innerHTML=db.batches.slice(0,5).map(b=>{const st=statusFor(b);return `<tr><td><b>${esc(b.package)}</b></td><td>${esc(displayDate(b.date))}</td><td>${b.seats}/${b.total}</td><td><span class="badge ${st!=='Available'?'hot':''}">${st}</span></td></tr>`}).join('')||'<tr><td colspan="4">No saved batches.</td></tr>';
+ const newN=db.leads.filter(l=>l.status==='New').length, contacted=db.leads.filter(l=>l.status==='Contacted').length, hot=db.leads.filter(l=>l.status==='Hot').length, quote=db.leads.filter(l=>l.status==='Quote Sent').length;
+ const vals=[newN,contacted,hot,booked]; document.querySelectorAll('.funnel-row b:last-child').forEach((el,i)=>{if(vals[i]!==undefined)el.textContent=vals[i]});
+ const badge=document.querySelector('#dashboard .dashboard-grid .card .section-head .badge');if(badge)badge.textContent=db.leads.length+' leads';
 }
-function filterPackages(){const q=document.getElementById('pkgSearch').value.toLowerCase(),t=document.getElementById('pkgType').value;renderPackages(packages.filter(p=>(p.name.toLowerCase().includes(q)||p.high.toLowerCase().includes(q))&&(!t||p.type===t)))}
-function renderBatches(){document.getElementById('batchTable').innerHTML=batches.map((b,i)=>{let s=b[4],status=s===0?'Sold Out':s<=3?'Filling Fast':'Available';return `<tr><td><b>${b[0]}</b></td><td>${b[1]}</td><td>${b[2]}</td><td>${s}/${b[3]}</td><td><span class="badge ${s<=3?'hot':''}">${status}</span></td><td><button class="btn secondary" onclick="editSeats(${i})">Update</button></td></tr>`}).join('')}
-function editSeats(i){let v=prompt('Available seats:',batches[i][4]);if(v!==null&&!isNaN(v)){batches[i][4]=Math.max(0,+v);renderBatches()}}
-function renderCRM(){
- const q=(document.getElementById('crmSearch')?.value||'').toLowerCase();
- const st=document.getElementById('crmStatus')?.value||'';
- const so=document.getElementById('crmSource')?.value||'';
- const list=leads.filter(l=>(l.name+" "+l.phone+" "+l.dest).toLowerCase().includes(q)&&(!st||l.status===st)&&(!so||l.source===so));
- const counts={New:0,Contacted:0,Hot:0,"Quote Sent":0,Booked:0}; leads.forEach(l=>{if(counts[l.status]!==undefined)counts[l.status]++});
- crmNew.textContent=counts.New;crmContacted.textContent=counts.Contacted;crmHot.textContent=counts.Hot;crmQuote.textContent=counts["Quote Sent"];crmBooked.textContent=counts.Booked;
- crmTable.innerHTML=list.length?list.map(l=>`<tr>
- <td><div class="lead-name">${esc(l.name)}</div><div class="lead-sub">${esc(l.phone)}</div></td>
- <td><b>${esc(l.dest)}</b><div class="lead-sub">${esc(l.date||"Date not set")}</div></td>
- <td>${esc(l.trav)}</td><td>${esc(l.source)}</td>
- <td><span class="priority ${l.priority==='Hot'?'hot':l.priority==='High'?'high':''}">${esc(l.priority)}</span></td>
- <td><select class="status-select" onchange="changeLeadStatus(${l.id},this.value)">${["New","Contacted","Hot","Quote Sent","Booked","Lost"].map(s=>`<option ${s===l.status?'selected':''}>${s}</option>`).join('')}</select></td>
- <td><span class="followup">${esc(l.follow||"Set date")}</span></td>
- <td><div class="crm-actions"><button class="wa" onclick="whatsappLead(${l.id})">WhatsApp</button><button onclick="leadDetails(${l.id})">Details</button></div></td>
- </tr>`).join(''):'<tr><td colspan="8">No leads match your filters.</td></tr>';
-}
-function changeLeadStatus(id,status){const l=leads.find(x=>x.id===id);if(l){l.status=status;renderCRM()}}
-function whatsappLead(id){const l=leads.find(x=>x.id===id);if(!l)return;const msg=`Hi ${l.name}, this is On A Trip Holidays. Regarding your ${l.dest} trip enquiry for ${l.trav} travellers. Shall I share the latest package and batch details?`;window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank")}
-function leadDetails(id){const l=leads.find(x=>x.id===id);if(!l)return;alert(`${l.name}\\n${l.dest} • ${l.trav} travellers\\nSource: ${l.source}\\nStatus: ${l.status}\\nNext follow-up: ${l.follow||"Not set"}`)}
-function renderLeads(list=leads){renderCRM()}
-function filterLeads(q){document.getElementById('crmSearch').value=q;renderCRM()}
-function exportCRM(){
- const rows=[["Name","Phone","Destination","Travellers","Source","Priority","Status","Follow-up"],...leads.map(l=>[l.name,l.phone,l.dest,l.trav,l.source,l.priority,l.status,l.follow])];
- const csv=rows.map(r=>r.map(x=>`"${String(x??"").replace(/"/g,'""')}"`).join(",")).join("\\n");
- const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download="on-a-trip-leads.csv";a.click();
-}
-function renderBlogs(){document.getElementById('blogList').innerHTML=blogs.map(b=>`<div style="padding:13px 0;border-bottom:1px solid var(--line)"><b>${b[0]}</b><div style="color:var(--muted);font-size:13px">${b[1]}</div><span class="badge" style="margin-top:7px">${b[2]}</span></div>`).join('')}
+function openBatchModal(){document.getElementById('batchModalTitle').textContent='Add Batch';document.getElementById('bEditIndex').value='-1';document.getElementById('batchModal').querySelector('form').reset();document.getElementById('bTotal').value=16;document.getElementById('bSeats').value=8;openModal('batchModal');}
+function editBatch(i){const b=db.batches[i];document.getElementById('batchModalTitle').textContent='Update Batch';document.getElementById('bEditIndex').value=i;document.getElementById('bPackage').value=b.package;document.getElementById('bDate').value=normaliseDate(b.date);document.getElementById('bFrom').value=b.from;document.getElementById('bTotal').value=b.total;document.getElementById('bSeats').value=b.seats;openModal('batchModal');}
+function saveBatch(e){e.preventDefault();const total=Math.max(1,+document.getElementById('bTotal').value||1);let seats=Math.max(0,+document.getElementById('bSeats').value||0);if(seats>total)seats=total;const item={id:Date.now(),package:document.getElementById('bPackage').value.trim(),date:document.getElementById('bDate').value,from:document.getElementById('bFrom').value.trim()||'Delhi',total,seats};const idx=+document.getElementById('bEditIndex').value;if(idx>=0){item.id=db.batches[idx].id;db.batches[idx]=item}else db.batches.unshift(item);saveDB();closeModal('batchModal');e.target.reset();renderBatches();showView('batches');alert('Batch saved successfully.');}
+function deleteBatch(i){if(confirm('Delete this batch?')){db.batches.splice(i,1);saveDB();renderBatches();}}
+function openPackageModal(){document.getElementById('pEditIndex').value='-1';document.getElementById('packageModal').querySelector('form').reset();openModal('packageModal');}
+function editPackage(i){const p=db.packages[i];document.getElementById('pEditIndex').value=i;document.getElementById('pName').value=p.name;document.getElementById('pType').value=p.type;document.getElementById('pDuration').value=p.duration;document.getElementById('pPrice').value=p.price;document.getElementById('pImage').value=p.image;document.getElementById('pHighlights').value=p.high;openModal('packageModal');}
+function savePackage(e){e.preventDefault();const item={name:pName.value.trim(),type:pType.value,duration:pDuration.value.trim()||'Custom',price:pPrice.value.trim()||'Ask',image:pImage.value.trim()||'assets/placeholder.jpg',high:pHighlights.value.trim()||'Custom itinerary',tag:'NEW'};if(!item.name){alert('Destination is required.');return}const idx=+pEditIndex.value;if(idx>=0)db.packages[idx]=item;else db.packages.unshift(item);saveDB();closeModal('packageModal');e.target.reset();renderPackages();renderDashboard();showView('packages');alert('Package saved successfully.');}
+function deletePackage(i){if(confirm('Delete '+db.packages[i].name+'?')){db.packages.splice(i,1);saveDB();renderPackages();renderDashboard();}}
+function renderCRM(){const q=(document.getElementById('crmSearch')?.value||'').toLowerCase(),st=document.getElementById('crmStatus')?.value||'',so=document.getElementById('crmSource')?.value||'';const list=db.leads.filter(l=>(l.name+' '+l.phone+' '+l.dest+' '+(l.email||'')).toLowerCase().includes(q)&&(!st||l.status===st)&&(!so||l.source===so));const counts={New:0,Contacted:0,Hot:0,'Quote Sent':0,Booked:0};db.leads.forEach(l=>{if(counts[l.status]!==undefined)counts[l.status]++});crmNew.textContent=counts.New;crmContacted.textContent=counts.Contacted;crmHot.textContent=counts.Hot;crmQuote.textContent=counts['Quote Sent'];crmBooked.textContent=counts.Booked;crmTable.innerHTML=list.length?list.map(l=>`<tr><td><div class="lead-name">${esc(l.name)}</div><div class="lead-sub">${esc(l.phone)}${l.email?' • '+esc(l.email):''}</div></td><td><b>${esc(l.dest)}</b><div class="lead-sub">${esc(displayDate(l.date)||'Date not set')}</div></td><td>${esc(l.trav)}</td><td>${esc(l.source)}</td><td><span class="priority ${l.priority==='Hot'?'hot':l.priority==='High'?'high':''}">${esc(l.priority)}</span></td><td><select class="status-select" onchange="changeLeadStatus(${l.id},this.value)">${['New','Contacted','Hot','Quote Sent','Booked','Lost'].map(s=>`<option ${s===l.status?'selected':''}>${s}</option>`).join('')}</select></td><td><span class="followup">${esc(displayDate(l.follow)||'Set date')}</span></td><td><div class="crm-actions"><button class="wa" onclick="whatsappLead(${l.id})">WhatsApp</button><button onclick="leadDetails(${l.id})">Details</button><button onclick="editLead(${l.id})">Edit</button><button onclick="deleteLead(${l.id})">Delete</button></div></td></tr>`).join(''):'<tr><td colspan="8">No leads match your filters.</td></tr>';renderDashboard();}
+function changeLeadStatus(id,status){const l=db.leads.find(x=>x.id===id);if(l){l.status=status;saveDB();renderCRM();}}
+function whatsappLead(id){const l=db.leads.find(x=>x.id===id);if(!l)return;const phone=(l.phone||'').replace(/\D/g,'');const msg=`Hi ${l.name}, this is On A Trip Holidays. Regarding your ${l.dest} trip enquiry for ${l.trav} travellers. Shall I share the latest package and batch details?`;window.open((phone?'https://wa.me/'+phone+'?text=':'https://wa.me/?text=')+encodeURIComponent(msg),'_blank')}
+function leadDetails(id){const l=db.leads.find(x=>x.id===id);if(!l)return;alert(`${l.name}\n${l.dest} • ${l.trav} travellers\nPhone: ${l.phone}\nSource: ${l.source}\nStatus: ${l.status}\nNext follow-up: ${l.follow||'Not set'}\nExpected value: ${l.value||'Not set'}\nNotes: ${l.notes||'No notes'}`)}
+function editLead(id){const l=db.leads.find(x=>x.id===id);if(!l)return;document.getElementById('lEditId').value=id;document.getElementById('lName').value=l.name;document.getElementById('lPhone').value=l.phone;document.getElementById('lEmail').value=l.email||'';document.getElementById('lDest').value=l.dest;document.getElementById('lTrav').value=l.trav;document.getElementById('lDate').value=normaliseDate(l.date);document.getElementById('lPriority').value=l.priority;document.getElementById('lFollow').value=normaliseDate(l.follow);document.getElementById('lValue').value=l.value||'';document.getElementById('lNotes').value=l.notes||'';document.getElementById('lSource').value=l.source;document.getElementById('leadModalTitle').textContent='Edit Lead';openModal('leadModal');}
+function saveLead(e){e.preventDefault();const item={id:Date.now(),name:lName.value.trim(),phone:lPhone.value.trim(),email:lEmail.value.trim(),dest:lDest.value.trim()||'Custom Trip',trav:Math.max(1,+lTrav.value||1),source:lSource.value,priority:lPriority.value,status:'New',follow:lFollow.value,date:lDate.value,value:lValue.value.trim(),notes:lNotes.value.trim()};if(!item.name){alert('Name is required.');return}const id=+lEditId.value;if(id){const old=db.leads.find(x=>x.id===id);item.id=id;item.status=old?.status||'New';db.leads=db.leads.map(x=>x.id===id?item:x)}else db.leads.unshift(item);saveDB();closeModal('leadModal');e.target.reset();document.getElementById('lEditId').value='';document.getElementById('leadModalTitle').textContent='Add Lead';renderCRM();showView('enquiries');alert('Lead saved successfully.');}
+function deleteLead(id){if(confirm('Delete this lead?')){db.leads=db.leads.filter(x=>x.id!==id);saveDB();renderCRM();}}
+function exportCRM(){const rows=[['Name','Phone','Email','Destination','Travellers','Source','Priority','Status','Travel Date','Value','Follow-up','Notes'],...db.leads.map(l=>[l.name,l.phone,l.email,l.dest,l.trav,l.source,l.priority,l.status,l.date,l.value,l.follow,l.notes])];const csv=rows.map(r=>r.map(x=>`"${String(x??'').replace(/"/g,'""')}"`).join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='on-a-trip-leads.csv';a.click();}
+function renderBlogs(){document.getElementById('blogList').innerHTML=db.blogs.map(b=>`<div style="padding:13px 0;border-bottom:1px solid var(--line)"><b>${esc(b[0])}</b><div style="color:var(--muted);font-size:13px">${esc(b[1])}</div><span class="badge" style="margin-top:7px">${esc(b[2])}</span></div>`).join('')}
+function addBlog(e){e.preventDefault();db.blogs.unshift([blogTitle.value.trim(),blogKeyword.value.trim()||'—','Draft']);saveDB();renderBlogs();closeModal('blogModal');e.target.reset();showView('blog');alert('Blog draft saved successfully.');}
 function openModal(id){document.getElementById(id).classList.add('show')}
 function closeModal(id){document.getElementById(id).classList.remove('show')}
-function addPackage(e){e.preventDefault();packages.unshift({name:pName.value,type:pType.value,duration:pDuration.value||"Custom",price:pPrice.value||"Ask",image:pImage.value||"assets/placeholder.jpg",high:pHighlights.value||"Custom itinerary",tag:"NEW"});renderPackages();closeModal('packageModal');e.target.reset();showView('packages')}
-function addBatch(e){e.preventDefault();batches.unshift([bPackage.value,bDate.value,bFrom.value,bTotal.value,+bSeats.value]);renderBatches();closeModal('batchModal');e.target.reset();showView('batches')}
-function addLead(e){e.preventDefault();leads.unshift({id:Date.now(),name:lName.value,phone:lPhone.value,dest:lDest.value,trav:lTrav.value,source:lSource.value,priority:lPriority.value,status:"New",follow:lFollow.value,date:lDate.value});renderCRM();closeModal('leadModal');e.target.reset();showView('enquiries')}
-function addBlog(e){e.preventDefault();blogs.unshift([blogTitle.value,blogKeyword.value||"—","Draft"]);renderBlogs();closeModal('blogModal');e.target.reset();showView('blog')}
-renderPackages();renderBatches();renderCRM();renderBlogs();
+// Wire forms after DOM load
+const batchForm=document.querySelector('#batchModal form');if(batchForm)batchForm.onsubmit=saveBatch;
+const packageForm=document.querySelector('#packageModal form');if(packageForm)packageForm.onsubmit=savePackage;
+const leadForm=document.querySelector('#leadModal form');if(leadForm)leadForm.onsubmit=saveLead;
+// Make top buttons use reset/open helpers
+const addBtns=document.querySelectorAll('button[onclick="openModal(\'packageModal\')"]');addBtns.forEach(b=>b.onclick=openPackageModal);
+const batchBtns=document.querySelectorAll('button[onclick="openModal(\'batchModal\')"]');batchBtns.forEach(b=>b.onclick=openBatchModal);
+// Add hidden edit controls dynamically if missing
+(function ensureLeadEditControls(){const f=document.querySelector('#leadModal form');if(!f)return;if(!document.getElementById('lEditId')){const h=document.createElement('input');h.type='hidden';h.id='lEditId';h.value='';f.prepend(h)}const h2=document.querySelector('#leadModal h2');if(h2&&!h2.id)h2.id='leadModalTitle';})();
+renderPackages();renderBatches();renderCRM();renderBlogs();renderDashboard();
 </script>
 </body>
 </html>
