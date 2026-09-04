@@ -1,24 +1,14 @@
-ON A TRIP HOLIDAYS — AI ITINERARY & QUOTATION BUILDER
+ON A TRIP HOLIDAYS — AI ITINERARY + QUOTATION BUILDER V2
 
-File:
+Two tabs only:
+1. AI Itinerary + Quotation — merged single workflow.
+2. Website Batches → AI Quotation — reads published date strings from the deployed homepage when available and uses a selected date as the quote starting point.
+
+Upload as:
 ai-itinerary-quotation-builder.html
 
-Features:
-- Mobile + desktop responsive UI
-- AI-style itinerary generation from travel inputs
-- Day-by-day itinerary
-- Customer and trip details
-- Hotel and vehicle selection
-- Travel style selection
-- Requirements
-- Automatic GST calculation
-- Advance and balance calculation
-- Professional quotation/itinerary preview
-- Print / Save as PDF
-
-Deployment:
-Upload ai-itinerary-quotation-builder.html to the website root and use:
+Direct URL:
 https://www.onatripholidays.com/ai-itinerary-quotation-builder.html
 
-Note:
-This version generates the itinerary locally in the browser. A real external AI API should be connected server-side for model-generated destination-specific content; API keys should never be placed directly in this HTML file.
+Important:
+The website-batch reader is best-effort HTML date extraction. For production accuracy, connect it to the same structured package/batch data source used by the website/Supabase, so package name, exact batch, seats and price are pulled from the authoritative database.

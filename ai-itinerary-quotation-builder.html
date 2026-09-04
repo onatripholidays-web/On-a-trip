@@ -18,13 +18,19 @@
 <body>
 <div class="app">
 <header class="top">
- <div class="brand"><div class="logo">✈</div><div><b>ON A TRIP HOLIDAYS</b><small>AI ITINERARY & QUOTATION BUILDER</small></div></div>
+ <div class="brand"><div class="logo">✈</div><div><b>ON A TRIP HOLIDAYS</b><small>AI ITINERARY + QUOTATION BUILDER</small></div></div>
  <div class="actions no-print"><button class="btn light" onclick="resetAll()">Reset</button><button class="btn dark" onclick="window.print()">Print / PDF</button></div>
 </header>
-<div class="tabs no-print"><button class="tab active" id="t1" onclick="mode('itinerary')">🗺️ AI Itinerary</button><button class="tab" id="t2" onclick="mode('quotation')">🤖 AI Quotation</button></div>
+<div class="tabs no-print">
+<button class="tab active" id="t1" onclick="mode('builder')">🗺️ AI Itinerary + Quotation</button>
+<button class="tab" id="t2" onclick="mode('website')">📅 Website Batches → AI Quote</button>
+</div>
 <div class="grid">
 <section class="card builder no-print">
- <h2 id="formTitle">AI Itinerary Builder</h2><div class="sub" id="formSub">Build a day-by-day travel plan, then turn it into a client-ready quotation.</div>
+ <h2 id="formTitle">AI Itinerary + Quotation Builder</h2><div class="sub" id="formSub">Create the complete itinerary and quotation together from one set of trip details.</div>
+<div id="websitePanel" class="ai hide"><b>📅 Website Batch Quotation</b><p>Select a live batch from your website. The builder will use the published batch date/package information as the starting point for the AI quotation.</p>
+<select id="batchSelect" style="width:100%;margin-top:8px;border:1px solid #dfe7f2;border-radius:10px;padding:10px;background:#fff"><option>Loading website batches…</option></select>
+<button class="btn primary" style="margin-top:8px;width:100%" onclick="loadBatch()">Use Selected Website Batch</button></div>
  <div class="ai"><b>✨ AI Travel Assistant</b><p>Enter the essentials below. The builder automatically creates a polished itinerary structure, suggested activities and a transparent quotation.</p></div>
  <div class="form">
   <div class="row"><div class="field"><label>Customer Name</label><input id="customer" placeholder="Customer name"></div><div class="field"><label>Mobile</label><input id="mobile" placeholder="10-digit mobile"></div></div>
@@ -42,23 +48,68 @@
 </div>
 </div>
 <script>
-let current='itinerary';
+let current='builder', websiteBatches=[];
 const $=id=>document.getElementById(id);
-function mode(m){current=m;$('t1').classList.toggle('active',m==='itinerary');$('t2').classList.toggle('active',m==='quotation');$('formTitle').textContent=m==='itinerary'?'AI Itinerary Builder':'AI Quotation Builder';$('formSub').textContent=m==='itinerary'?'Build a day-by-day travel plan, then turn it into a client-ready quotation.':'Create a professional travel quotation with itinerary, pricing, inclusions and payment details.';generate()}
+function mode(m){
+ current=m;
+ $('t1').classList.toggle('active',m==='builder');
+ $('t2').classList.toggle('active',m==='website');
+ $('formTitle').textContent=m==='builder'?'AI Itinerary + Quotation Builder':'Website Batches → AI Quotation';
+ $('formSub').textContent=m==='builder'?'Create the complete itinerary and quotation together from one set of trip details.':'Choose a published batch/date from your website and turn it into a client-ready AI quotation.';
+ $('websitePanel').classList.toggle('hide',m!=='website');
+ generate();
+ if(m==='website') loadWebsiteBatches();
+}
 function pick(el){document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));el.classList.add('on')}
 function money(n){return new Intl.NumberFormat('en-IN',{maximumFractionDigits:0}).format(Math.round(n))}
 function dateText(){const v=$('date').value;if(!v)return 'Travel date to be confirmed';return new Date(v+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})}
-function dayPlan(dest,day,style){let names=['Arrival & Local Exploration','Sightseeing & Experiences','Culture / Temple Visit','Nature & Leisure','Adventure & Highlights','Free Day & Shopping','Departure'];let n=names[(day-1)%names.length];if(style==='Pilgrimage'&&day===2)n='Temple / Darshan Day';if(style==='Adventure'&&day===2)n='Adventure & Scenic Drive';return n}
+function dayPlan(dest,day,style){
+ let names=['Arrival & Local Exploration','Sightseeing & Experiences','Culture / Temple Visit','Nature & Leisure','Adventure & Highlights','Free Day & Shopping','Departure'];
+ let n=names[(day-1)%names.length];
+ if(style==='Pilgrimage'&&day===2)n='Temple / Darshan Day';
+ if(style==='Adventure'&&day===2)n='Adventure & Scenic Drive';
+ return n;
+}
+async function loadWebsiteBatches(){
+ const sel=$('batchSelect');
+ try{
+   const r=await fetch('/index.html',{cache:'no-store'});
+   const text=await r.text();
+   // Best-effort extraction of date/package strings from the deployed homepage.
+   const patterns=[/\b\d{1,2}\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+20\d{2}\b/gi,
+                   /\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},?\s+20\d{2}\b/gi];
+   let dates=[...new Set(patterns.flatMap(p=>text.match(p)||[]))];
+   if(!dates.length) dates=['No published batch dates detected — enter manually'];
+   websiteBatches=dates.map((d,i)=>({date:d,title:'Website Batch '+(i+1)}));
+   sel.innerHTML=websiteBatches.map((b,i)=>`<option value="${i}">${b.date} — ${b.title}</option>`).join('');
+ }catch(e){
+   websiteBatches=[];
+   sel.innerHTML='<option>Could not read website batches automatically</option>';
+ }
+}
+function loadBatch(){
+ const b=websiteBatches[+$('batchSelect').value];
+ if(!b)return;
+ const parsed=new Date(b.date);
+ if(!isNaN(parsed)){
+   $('date').value=parsed.toISOString().slice(0,10);
+ }
+ $('requirements').value=($('requirements').value?$('requirements').value+'; ':'')+'Selected from published website batch: '+b.date;
+ generate();
+ window.scrollTo({top:0,behavior:'smooth'});
+}
 function generate(){
- const c=$('customer').value||'Valued Guest', mob=$('mobile').value||'—', dest=$('destination').value||'Your Destination', tr=+$('travellers').value||1, nights=+$('nights').value||1, price=+$('price').value||0, gst=+$('gst').value||0, paid=+$('paid').value||0, style=document.querySelector('.chip.on')?.textContent||'Family';
- const subtotal=tr*price, tax=subtotal*gst/100, total=subtotal+tax, balance=Math.max(0,total-paid), days=nights+1;
+ const c=$('customer').value||'Valued Guest', mob=$('mobile').value||'—', dest=$('destination').value||'Your Destination';
+ const tr=+$('travellers').value||1,nights=+$('nights').value||1,price=+$('price').value||0,gst=+$('gst').value||0,paid=+$('paid').value||0;
+ const style=document.querySelector('.chip.on')?.textContent||'Family';
+ const subtotal=tr*price,tax=subtotal*gst/100,total=subtotal+tax,balance=Math.max(0,total-paid),days=nights+1;
  let itinerary='';
  for(let d=1;d<=days;d++) itinerary+=`<div class="day"><b>Day ${d} — ${dayPlan(dest,d,style)}</b><p>${d===1?`Arrival at ${dest}, meet the driver and check in. Rest and begin a relaxed local experience.`:`Enjoy ${dest} with a comfortable private transfer, curated sightseeing and time for local experiences.`}${d===days?' Departure / drop-off as per travel schedule.':''}</p></div>`;
  $('preview').innerHTML=`<div class="doc">
- <div class="doc-head"><div class="doc-brand"><b>ON A TRIP HOLIDAYS</b><small>TRAVEL MORE • CREATE MEMORIES</small></div><div class="doc-title"><h1>${current==='itinerary'?'TRAVEL ITINERARY':'TRAVEL QUOTATION'}</h1><small>Prepared for ${c}</small></div></div>
+ <div class="doc-head"><div class="doc-brand"><b>ON A TRIP HOLIDAYS</b><small>TRAVEL MORE • CREATE MEMORIES</small></div><div class="doc-title"><h1>ITINERARY + QUOTATION</h1><small>Prepared for ${c}</small></div></div>
  <div class="client"><div class="box"><small>Customer</small><b>${c}</b><span style="font-size:10px;color:#71809a">${mob}</span></div><div class="box"><small>Journey</small><b>${dest}</b><span style="font-size:10px;color:#71809a">${dateText()} • ${tr} Traveller${tr>1?'s':''}</span></div></div>
  <div class="heroquote"><small>${style.toUpperCase()} • ${nights} NIGHTS / ${days} DAYS</small><b>${dest} — ${style} Journey</b></div>
- <div class="section"><h3>🗺️ DAY-BY-DAY ITINERARY</h3>${itinerary}</div>
+ <div class="section"><h3>🗺️ DAY-BY-DAY AI ITINERARY</h3>${itinerary}</div>
  <div class="section"><h3>🏨 STAY & TRAVEL</h3><p style="font-size:10px;line-height:1.6;color:#5f708b"><b>Hotel:</b> ${$('hotel').value}<br><b>Vehicle:</b> ${$('vehicle').value}<br><b>Requirements:</b> ${$('requirements').value||'As discussed with the guest.'}</p></div>
  <div class="section"><h3>💰 QUOTATION SUMMARY</h3><table class="price"><tr><td>Package price (${tr} × ₹${money(price)})</td><td>₹${money(subtotal)}</td></tr><tr><td>GST (${gst}%)</td><td>₹${money(tax)}</td></tr><tr class="total"><td>Grand Total</td><td>₹${money(total)}</td></tr><tr><td>Advance Paid</td><td>₹${money(paid)}</td></tr><tr class="total"><td>Balance Payable</td><td>₹${money(balance)}</td></tr></table></div>
  <div class="section"><h3>✅ INCLUSIONS</h3><p class="note">Accommodation as selected • Private vehicle as selected • Driver assistance • Sightseeing as per itinerary • Breakfast / meals as agreed • Applicable taxes. Final inclusions are subject to the confirmed package.</p></div>
@@ -66,7 +117,8 @@ function generate(){
  <p class="note" style="text-align:center;margin-top:25px">Thank you for choosing On A Trip Holidays • Travel More, Create Memories</p>
  </div>`;
 }
-function resetAll(){document.querySelectorAll('input,textarea').forEach(x=>{if(x.id!=='travellers'&&x.id!=='nights'&&x.id!=='price'&&x.id!=='gst'&&x.id!=='paid')x.value=''});$('travellers').value=2;$('nights').value=5;$('price').value=24999;$('gst').value=5;$('paid').value=0;generate()}
+function resetAll(){document.querySelectorAll('input,textarea').forEach(x=>{if(!['travellers','nights','price','gst','paid'].includes(x.id))x.value=''});$('travellers').value=2;$('nights').value=5;$('price').value=24999;$('gst').value=5;$('paid').value=0;generate()}
+document.addEventListener('input',e=>{if(e.target.matches('input,textarea,select'))generate()});
 generate();
 </script>
 </body>
