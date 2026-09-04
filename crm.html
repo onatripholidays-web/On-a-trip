@@ -93,16 +93,26 @@ const SUPABASE_URL="https://esezxiatffjihwikfzbz.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_VdPfeaWm6BsPk6ArHsI3iA_GxwPqd1d";
 const {createClient}=supabase; const db=createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 const stages=["New","Contacted","Qualified","Hot","Quote Sent","Follow-up","Booked","Lost"];
-const salespeople=["Unassigned","Rohini","Harshika","Godavari","Vanditha"];
+const salespeople=["Unassigned","Rohini","Harshika","Godavari","Sai Kumar"];
 let leads=[];
 let currentUser=null;
 let currentRole="admin";
 let currentSalesperson="";
-function getUserProfile(user){
-  const meta=user?.user_metadata||{};
-  const role=(meta.crm_role||meta.role||"admin").toLowerCase();
-  const salesperson=meta.salesperson||meta.crm_salesperson||"";
-  return {role:role==="salesperson"?"salesperson":"admin",salesperson};
+async function getUserProfile(user){
+  if(!user) return {role:"admin",salesperson:""};
+  const {data,error}=await db.from("crm_users").select("role,salesperson").eq("user_id",user.id).maybeSingle();
+  if(!error && data){
+    return {role:data.role==="salesperson"?"salesperson":"admin",salesperson:data.salesperson||""};
+  }
+  const email=(user.email||"").toLowerCase();
+  const emailMap={
+    "onatripholidays@gmail.com":{role:"admin",salesperson:""},
+    "rohinisalesoat@gmail.com":{role:"salesperson",salesperson:"Rohini"},
+    "oatsalesteam@gmail.com":{role:"salesperson",salesperson:"Harshika"},
+    "godavarisalesoat@gmail.com":{role:"salesperson",salesperson:"Godavari"},
+    "onatripholidayssaikumar@gmail.com":{role:"salesperson",salesperson:"Sai Kumar"}
+  };
+  return emailMap[email]||{role:"admin",salesperson:""};
 }
 function applyAccessUI(){
   const isAdmin=currentRole==="admin";
@@ -123,10 +133,10 @@ function fillSalespeople(){
     if(current)el.value=current;
   });
 }
-async function checkSession(){const {data:{session}}=await db.auth.getSession();if(session){currentUser=session.user;const p=getUserProfile(currentUser);currentRole=p.role;currentSalesperson=p.salesperson;showApp()}else showLogin()}
+async function checkSession(){const {data:{session}}=await db.auth.getSession();if(session){currentUser=session.user;const p=await getUserProfile(currentUser);currentRole=p.role;currentSalesperson=p.salesperson;showApp()}else showLogin()}
 function showLogin(){loginScreen.style.display="grid";app.style.display="none"}
 function showApp(){loginScreen.style.display="none";app.style.display="block";fillSalespeople();applyAccessUI();loadLeads()}
-async function login(){const email=loginEmail.value.trim(),password=loginPassword.value,error=loginError;error.style.display="none";if(!email||!password){error.textContent="Please enter email and password.";error.style.display="block";return}const {data,error:e}=await db.auth.signInWithPassword({email,password});if(e){error.textContent=e.message;error.style.display="block";return}currentUser=data.user;const p=getUserProfile(currentUser);currentRole=p.role;currentSalesperson=p.salesperson;if(currentRole==="salesperson"&&!currentSalesperson){error.textContent="This CRM account is not assigned to a salesperson. Ask Admin to set salesperson in the user's Auth metadata.";error.style.display="block";await db.auth.signOut();return}showApp()}
+async function login(){const email=loginEmail.value.trim(),password=loginPassword.value,error=loginError;error.style.display="none";if(!email||!password){error.textContent="Please enter email and password.";error.style.display="block";return}const {data,error:e}=await db.auth.signInWithPassword({email,password});if(e){error.textContent=e.message;error.style.display="block";return}currentUser=data.user;const p=await getUserProfile(currentUser);currentRole=p.role;currentSalesperson=p.salesperson;if(currentRole==="salesperson"&&!currentSalesperson){error.textContent="This CRM account is not assigned to a salesperson. Ask Admin to register this account in Supabase CRM users.";error.style.display="block";await db.auth.signOut();return}showApp()}
 async function logout(){await db.auth.signOut();leads=[];currentUser=null;currentRole="admin";currentSalesperson="";showLogin()}
 
 async function loadLeads(){
