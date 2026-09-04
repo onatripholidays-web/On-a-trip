@@ -20,80 +20,79 @@ function renderQuote(){$('out').innerHTML='<span class="status">STEP 3 — QUOTA
 function finalPDF(){let inc=quote.inclusions.map(x=>'<li>'+esc(x)+'</li>').join(''),exc=quote.exclusions.map(x=>'<li>'+esc(x)+'</li>').join('');$('printSheet').innerHTML='<div class="print-header"><img src="assets/on-a-trip-logo.png"><div><b>ON A TRIP HOLIDAYS</b><br>Let\'s explore the magical places<br>+91-8125248909<br>www.onatripholidays.com</div></div><div class="print-title">'+esc(quote.title)+'</div><div class="meta"><div><b>Guest</b>'+esc(quote.guest)+'</div><div><b>Contact</b>'+esc(v('contact'))+'</div><div><b>Destination</b>'+esc(quote.dest)+'</div><div><b>Travellers</b>'+quote.pax+'</div><div><b>Dates</b>'+esc(quote.dates)+'</div><div><b>Start City</b>'+esc(quote.start)+'</div></div>'+quote.days.map(d=>'<div class="print-day"><h3>DAY '+esc(d.day)+' — '+esc(d.title)+'</h3><p>'+esc(d.summary)+'</p><p><b>Hotel:</b> '+esc(d.hotel)+' &nbsp; <b>Meals:</b> '+esc(d.meals)+'</p></div>').join('')+'<div class="print-two"><div class="print-box"><h4>Accommodation</h4><p>'+esc(quote.hotels)+'</p></div><div class="print-box"><h4>Transport</h4><p>'+esc(quote.vehicle)+'</p></div></div><div class="print-box"><h4>Meals</h4><p>'+esc(quote.meals)+'</p></div><div class="print-box"><h4>Package Quote</h4><div class="print-price">'+esc(quote.price)+' per person · Total ₹ '+quote.total.toLocaleString('en-IN')+'</div></div><div class="print-two"><div class="print-box"><h4>Inclusions</h4><ul>'+inc+'</ul></div><div class="print-box"><h4>Exclusions</h4><ul>'+exc+'</ul></div></div><div class="print-box"><h4>Terms & Conditions</h4><p>'+esc(quote.terms)+'</p></div><div class="print-footer">On A Trip Holidays · Hyderabad · +91-8125248909 · www.onatripholidays.com</div>';window.print()}
 $('form').addEventListener('submit',e=>{e.preventDefault();generate()});
 </script>
-<style id="oat-real-editor-style">
-.oat-editing [contenteditable="true"]{outline:2px dashed #ee5a2a!important;outline-offset:3px;border-radius:4px;background:#fffaf7}
-.oat-edit-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;padding:10px;border:1px solid #dce4e9;border-radius:12px;background:#f8fafb}
-.oat-edit-toolbar button{border:1px solid #dce4e9;border-radius:9px;padding:9px 12px;background:#fff;font-weight:800;cursor:pointer}
-.oat-edit-toolbar .save{background:#ee5a2a;color:#fff;border-color:#ee5a2a}
+<style id="oat-quotation-v2">
+.oat-quote-panel{margin-top:16px;padding:18px;border:1px solid #dce4e9;border-radius:16px;background:#fff}
+.oat-quote-panel h3{margin:0 0 12px}
+.oat-quote-row{display:flex;justify-content:space-between;gap:12px;padding:7px 0}
+.oat-quote-total{border-top:1px solid #dce4e9;margin-top:8px;padding-top:10px;font-size:18px;font-weight:900}
+.oat-whatsapp-btn{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:12px 16px;border:0;border-radius:10px;background:#18a66a;color:#fff;font-weight:900;cursor:pointer}
 </style>
-<script id="oat-real-editor">
+<script id="oat-quotation-v2">
 (function(){
-  let editing=false, originals=new Map();
+  const GST=0.05;
 
-  function getRoot(){
-    return document.querySelector('#generatedItinerary,.generated-itinerary,.itinerary-preview,.itinerary-content,[data-itinerary-preview]') || document.body;
+  function money(n){
+    return '₹'+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:2});
   }
 
-  function fields(root){
-    return Array.from(root.querySelectorAll('h1,h2,h3,h4,p,li,td,[data-field]'))
-      .filter(el => !el.closest('.oat-edit-toolbar,.modal,script,style') && el.offsetParent !== null);
-  }
-
-  function enterEdit(){
-    if(editing) return;
-    editing=true;
-    const root=getRoot();
-    root.classList.add('oat-editing');
-
-    fields(root).forEach(el=>{
-      if(!el.dataset.oatOriginal) el.dataset.oatOriginal=el.innerHTML;
-      el.contentEditable='true';
-      el.spellcheck=true;
-      el.dataset.oatEditable='true';
-      originals.set(el,el.innerHTML);
-    });
-
-    let bar=document.querySelector('.oat-edit-toolbar');
-    if(!bar){
-      bar=document.createElement('div');
-      bar.className='oat-edit-toolbar';
-      bar.innerHTML='<b style="margin-right:auto">Editing itinerary</b><button class="save">💾 Save Changes</button><button class="cancel">↩ Cancel</button>';
-      root.parentNode.insertBefore(bar,root);
-      bar.querySelector('.save').onclick=saveEdit;
-      bar.querySelector('.cancel').onclick=cancelEdit;
+  function findNumber(labels){
+    const all=document.querySelectorAll('input,select,textarea');
+    for(const el of all){
+      const hay=((el.name||'')+' '+(el.id||'')+' '+(el.placeholder||'')).toLowerCase();
+      if(labels.some(x=>hay.includes(x))) return el;
     }
+    return null;
   }
 
-  function saveEdit(){
-    fields(getRoot()).forEach(el=>{
-      el.contentEditable='false';
-      delete el.dataset.oatEditable;
-      el.dataset.oatOriginal=el.innerHTML;
-    });
-    document.querySelector('.oat-edit-toolbar')?.remove();
-    getRoot().classList.remove('oat-editing');
-    editing=false;
+  function getCustomer(){
+    const name=findNumber(['customer name','client name','guest name','name']);
+    const phone=findNumber(['phone','mobile','whatsapp','contact']);
+    return {
+      name:name?.value?.trim()||'Customer',
+      phone:phone?.value?.trim()||''
+    };
   }
 
-  function cancelEdit(){
-    originals.forEach((html,el)=>{el.innerHTML=html;el.contentEditable='false';});
-    originals.clear();
-    document.querySelector('.oat-edit-toolbar')?.remove();
-    getRoot().classList.remove('oat-editing');
-    editing=false;
-  }
+  window.OATRenderStep2Quotation=function(container, price, pax){
+    if(!container) return;
+    const subtotal=Number(price||0)*Number(pax||0);
+    const gst=subtotal*GST;
+    const total=subtotal+gst;
+    const customer=getCustomer();
 
-  document.addEventListener('click',function(e){
-    const btn=e.target.closest('button,a');
-    if(!btn) return;
-    if(/edit itinerary/i.test((btn.textContent||'').trim())){
-      e.preventDefault();
-      e.stopPropagation();
-      enterEdit();
-    }
-  },true);
+    container.innerHTML=
+      '<div class="oat-quote-panel">'+
+      '<h3>Quick Quotation</h3>'+
+      '<div class="oat-quote-row"><span>Package</span><b>'+money(price)+' × '+pax+' = '+money(subtotal)+'</b></div>'+
+      '<div class="oat-quote-row"><span>GST @ 5%</span><b>'+money(gst)+'</b></div>'+
+      '<div class="oat-quote-row oat-quote-total"><span>Total Payable</span><b>'+money(total)+'</b></div>'+
+      '<button type="button" class="oat-whatsapp-btn" onclick="window.OATSendQuickQuoteWhatsApp()">'+
+      '🟢 Send Quick Quote on WhatsApp</button>'+
+      '</div>';
 
-  window.OATEnterItineraryEdit=enterEdit;
+    window.OATCurrentQuote={price:Number(price||0),pax:Number(pax||0),subtotal,gst,total,customer};
+  };
+
+  window.OATSendQuickQuoteWhatsApp=function(){
+    const q=window.OATCurrentQuote;
+    if(!q) return;
+    const text=
+      'On A Trip Holidays — Quick Quote\\n\\n'+
+      'Customer: '+q.customer.name+'\\n'+
+      (q.customer.phone?'Contact: '+q.customer.phone+'\\n':'')+
+      'Package Cost: '+money(q.price)+' × '+q.pax+' = '+money(q.subtotal)+'\\n'+
+      'GST @ 5%: '+money(q.gst)+'\\n'+
+      'Total Payable: '+money(q.total)+'\\n\\n'+
+      'Thank you for choosing On A Trip Holidays.';
+    const phone=q.customer.phone.replace(/\\D/g,'');
+    const url='https://wa.me/'+(phone||'')+'?text='+encodeURIComponent(text);
+    window.open(url,'_blank','noopener');
+  };
+
+  window.OATBuildCustomerContact=function(name,phone){
+    return '<div class="customer-name">'+(name||'Customer')+'</div>'+
+      '<div class="customer-contact">'+(phone||'')+'</div>';
+  };
 })();
 </script>
 
