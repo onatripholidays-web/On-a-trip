@@ -75,195 +75,48 @@ button:disabled{opacity:.6;cursor:wait}
   <div class="row"><button class="btn primary" onclick="generate()">✨ Generate AI Document</button><button class="btn light" onclick="window.print()">Preview / PDF</button></div>
  </div>
 </section>
-<section class="card preview" id="preview"></section>
+<section class="card preview" id="preview"><div id="out"></div></section>
 </div>
 </div>
+
 
 <script>
-const API_ENDPOINT = "/api/generate-itinerary";
-let latestItinerary = null;
-
-const $ = id => document.getElementById(id);
-const val = id => ($(id)?.value ?? "").trim();
-
-function esc(s){
-  return String(s ?? "").replace(/[&<>"']/g, m => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[m]));
+const API="/api/generate-itinerary";let itinerary=null,quotation=null,editing=false;
+const $=id=>document.getElementById(id),v=id=>(($(id)?.value)||"").trim();
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const days=()=>{let a=v("startDate"),b=v("endDate");if(!a||!b)return 1;return Math.max(1,Math.min(30,Math.ceil((new Date(b)-new Date(a))/86400000)+1))};
+const setMsg=(x,e=false)=>{let m=$("msg");if(m){m.textContent=x;m.style.color=e?"#a61b1b":""}};
+function p(){return{guest:v("guest")||"Guest",dest:v("dest"),days:days(),pax:+v("pax")||1,start:v("start")||"TBC",dates:v("startDate")&&v("endDate")?v("startDate")+" to "+v("endDate"):"TBC",language:v("language")||"English",type:v("type")||"Custom",hotel:v("hotel")||"3 Star",vehicle:v("vehicle")||"Private Car",meals:v("meals")||"Breakfast & Dinner",budget:"Price to be quoted",special:v("special")||"None",instruction:v("instruction")||"None"}}
+function out(x){$("out").innerHTML=x}
+async function generate(){
+ let q=p();if(!q.dest)return setMsg("Destination is required.",true);
+ if(!v("startDate")||!v("endDate"))return setMsg("Please select start and end dates.",true);
+ setMsg("✨ Creating itinerary with your existing AI engine…");
+ try{let r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(q)}),d=await r.json();
+ if(!r.ok)throw Error(d.error||"AI request failed");if(!d.title||!Array.isArray(d.days)||d.days.length!==q.days)throw Error("AI returned an incomplete itinerary.");
+ itinerary=d;renderI();setMsg("✅ Itinerary generated. Review it before creating the quotation.");
+ }catch(e){setMsg("❌ "+e.message,true)}
 }
-
-function collectPayload(){
-  return {
-    guest: val("customer") || val("guest") || "Guest",
-    dest: val("destination"),
-    days: Number(val("days")) || 1,
-    pax: Number(val("travellers")) || Number(val("pax")) || 1,
-    start: val("startCity") || val("start"),
-    dates: val("startDate") && val("endDate")
-      ? `${val("startDate")} to ${val("endDate")}`
-      : (val("startDate") || val("dates") || "TBC"),
-    language: val("language") || "English",
-    type: val("tripType") || val("type") || "Custom",
-    hotel: val("hotel") || "3 Star",
-    vehicle: val("vehicle") || "Private Car",
-    meals: val("meals") || "Breakfast & Dinner",
-    budget: val("price") ? `₹ ${val("price")} per person` : (val("budget") || "Price to be quoted"),
-    special: val("special") || "None",
-    instruction: val("instruction") || "None"
-  };
+function renderI(){
+ out(`<span class="status">STEP 1 — ITINERARY</span><div class="quote-title">${esc(itinerary.title)}</div><p>${esc(itinerary.summary)}</p>
+ ${itinerary.days.map((d,i)=>`<div class="day"><h3>Day ${esc(d.day)} — <span class="ed" data-i="${i}" data-k="title">${esc(d.title)}</span></h3><p><span class="ed" data-i="${i}" data-k="summary">${esc(d.summary)}</span></p><p><b>Hotel:</b> <span class="ed" data-i="${i}" data-k="hotel">${esc(d.hotel)}</span> · <b>Meals:</b> <span class="ed" data-i="${i}" data-k="meals">${esc(d.meals)}</span></p></div>`).join("")}
+ <div class="two"><div class="box"><b>Accommodation</b><p>${esc(itinerary.hotels)}</p></div><div class="box"><b>Vehicle</b><p>${esc(itinerary.vehicle)}</p></div></div>
+ <div class="box"><b>Meals</b><p>${esc(itinerary.meals)}</p></div><div class="box"><b>Notes</b><p>${esc(itinerary.notes)}</p></div>
+ <div class="actions"><button class="btn secondary" onclick="editI()">✏️ Edit Itinerary</button><button class="btn primary" onclick="approve()">✅ Approve & Create Quotation</button></div>`);
 }
-
-function setStatus(message, error=false){
-  const candidates = ["status","message","successMessage"];
-  for(const id of candidates){
-    const el=$(id);
-    if(el){
-      el.textContent=message;
-      el.style.display="block";
-      el.classList.toggle("error", error);
-      return;
-    }
-  }
+function editI(){editing=!editing;document.querySelectorAll(".ed").forEach(e=>e.contentEditable=editing);setMsg(editing?"✏️ Edit itinerary, then tap the same button to save.":"Itinerary edits saved.");if(!editing)document.querySelectorAll(".ed").forEach(e=>itinerary.days[+e.dataset.i][e.dataset.k]=e.innerText.trim())}
+function approve(){if(editing)editI();showQ()}
+function showQ(){
+ out(`<span class="status">STEP 2 — QUOTATION</span><div class="quote-title">Create Commercial Quotation</div><p>Itinerary approved. Add the commercial price now.</p>
+ <div class="two"><div class="box"><label>Price per person *</label><input id="qPrice" placeholder="₹ 30,500"></div><div class="box"><label>Quotation validity</label><input id="qValid" value="7 days"></div></div>
+ <div class="two"><div class="box"><label>Inclusions</label><textarea id="qInc">${esc((itinerary.inclusions||[]).join("\\n"))}</textarea></div><div class="box"><label>Exclusions</label><textarea id="qExc">${esc((itinerary.exclusions||[]).join("\\n"))}</textarea></div></div>
+ <div class="box"><label>Terms & Conditions</label><textarea id="qTerms">Package is subject to availability and confirmation. Final booking terms will be shared at confirmation.</textarea></div>
+ <div class="actions"><button class="btn secondary" onclick="renderI()">← Back</button><button class="btn primary" onclick="createQ()">💰 Create Quotation</button></div>`);
 }
-
-function findPreview(){
-  return $("preview") || $("previewContent") || $("itineraryPreview") ||
-    document.querySelector(".preview-content") ||
-    document.querySelector(".preview");
-}
-
-function renderItinerary(d){
-  latestItinerary=d;
-  const target=findPreview();
-  if(!target) return;
-
-  const days=Array.isArray(d.days)?d.days:[];
-  const html=`
-    <div class="oat-ai-result">
-      <div class="oat-result-head">
-        <div>
-          <div class="oat-kicker">CUSTOMER QUOTATION</div>
-          <h2>${esc(d.title)}</h2>
-          <p>${esc(d.summary)}</p>
-        </div>
-      </div>
-
-      <div class="oat-meta">
-        <span><b>Guest</b>${esc(payloadCache.guest)}</span>
-        <span><b>Destination</b>${esc(payloadCache.dest)}</span>
-        <span><b>Travellers</b>${esc(payloadCache.pax)}</span>
-        <span><b>Duration</b>${days.length} Days</span>
-      </div>
-
-      <h3>DAY WISE ITINERARY</h3>
-      ${days.map(x=>`
-        <div class="oat-day">
-          <div class="oat-day-no">DAY ${esc(x.day)}</div>
-          <div class="oat-day-body">
-            <h4>${esc(x.title)}</h4>
-            <p>${esc(x.summary)}</p>
-            <div class="oat-day-meta">
-              <span><b>Hotel:</b> ${esc(x.hotel)}</span>
-              <span><b>Meals:</b> ${esc(x.meals)}</span>
-            </div>
-          </div>
-        </div>
-      `).join("")}
-
-      <div class="oat-two">
-        <div><h3>ACCOMMODATION</h3><p>${esc(d.hotels)}</p></div>
-        <div><h3>TRANSPORT</h3><p>${esc(d.vehicle)}</p></div>
-      </div>
-      <div class="oat-two">
-        <div><h3>MEALS</h3><p>${esc(d.meals)}</p></div>
-        <div><h3>PACKAGE QUOTE</h3><p class="oat-price">${esc(d.price)}</p></div>
-      </div>
-
-      <div class="oat-two">
-        <div><h3>INCLUSIONS</h3><ul>${(d.inclusions||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
-        <div><h3>EXCLUSIONS</h3><ul>${(d.exclusions||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
-      </div>
-
-      <div><h3>IMPORTANT NOTES</h3><p>${esc(d.notes)}</p></div>
-
-      <div class="oat-footer">
-        <b>On A Trip Holidays</b><br>
-        +91-8125248909 · www.onatripholidays.com
-      </div>
-    </div>`;
-
-  target.innerHTML=html;
-}
-
-let payloadCache={};
-
-async function generateWithExistingEngine(){
-  payloadCache=collectPayload();
-  if(!payloadCache.dest){
-    setStatus("Destination is required.", true);
-    return;
-  }
-
-  setStatus("✨ Generating your itinerary with the existing On A Trip AI engine…");
-  const buttons=[...document.querySelectorAll("button")];
-  buttons.forEach(b=>{ if(/generate.*ai|generate with ai|generate ai document/i.test(b.textContent)) b.disabled=true; });
-
-  try{
-    const response=await fetch(API_ENDPOINT,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(payloadCache)
-    });
-
-    const raw=await response.text();
-    let data;
-    try{ data=JSON.parse(raw); }
-    catch{ throw new Error("AI server returned an invalid response."); }
-
-    if(!response.ok) throw new Error(data.error || `AI request failed (${response.status})`);
-
-    if(!data.title || !Array.isArray(data.days) || data.days.length !== payloadCache.days){
-      throw new Error("AI returned an incomplete itinerary.");
-    }
-
-    renderItinerary(data);
-    setStatus("✅ AI itinerary generated successfully. You can edit/print the quotation.");
-  }catch(err){
-    console.error(err);
-    setStatus("❌ "+err.message, true);
-  }finally{
-    buttons.forEach(b=>b.disabled=false);
-  }
-}
-
-document.addEventListener("DOMContentLoaded",()=>{
-  const selectors=[
-    "#generate","#generateAI","#generateAi","#generateDocument",
-    "[data-action='generate-ai']"
-  ];
-  let attached=false;
-  for(const s of selectors){
-    document.querySelectorAll(s).forEach(btn=>{
-      btn.addEventListener("click",generateWithExistingEngine);
-      attached=true;
-    });
-  }
-
-  if(!attached){
-    document.querySelectorAll("button").forEach(btn=>{
-      if(/generate.*ai|generate with ai|generate ai document/i.test(btn.textContent)){
-        btn.addEventListener("click",generateWithExistingEngine);
-      }
-    });
-  }
-
-  // Print/PDF buttons continue to use the browser's professional print output.
-  document.querySelectorAll("button").forEach(btn=>{
-    if(/generate pdf|preview.*pdf|print.*pdf|print \/ save pdf/i.test(btn.textContent)){
-      btn.addEventListener("click",()=>window.print());
-    }
-  });
-});
+function createQ(){let price=v("qPrice");if(!price)return setMsg("Please enter price per person.",true);let n=+(String(price).replace(/[^\d.]/g,""))||0;quotation={...p(),...itinerary,price,total:n*(+v("pax")||1),validity:v("qValid")||"7 days",inclusions:v("qInc").split("\\n").filter(Boolean),exclusions:v("qExc").split("\\n").filter(Boolean),terms:v("qTerms")};renderQ();setMsg("✅ Quotation created. Generate the final PDF.");}
+function renderQ(){out(`<span class="status">STEP 3 — QUOTATION READY</span><div class="quote-title">${esc(quotation.title)}</div><p>${esc(quotation.summary)}</p><div class="two"><div class="box"><b>Guest</b><p>${esc(quotation.guest)}</p></div><div class="box"><b>Destination</b><p>${esc(quotation.dest)} · ${quotation.days.length} Days</p></div></div>${quotation.days.map(d=>`<div class="day"><h3>Day ${esc(d.day)} — ${esc(d.title)}</h3><p>${esc(d.summary)}</p><p><b>Hotel:</b> ${esc(d.hotel)} · <b>Meals:</b> ${esc(d.meals)}</p></div>`).join("")}<div class="two"><div class="box"><b>Price / Person</b><div class="price">${esc(quotation.price)}</div></div><div class="box"><b>Total Package</b><div class="price">₹ ${quotation.total.toLocaleString("en-IN")}</div></div></div><div class="two"><div class="box"><b>Inclusions</b><ul>${quotation.inclusions.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div><div class="box"><b>Exclusions</b><ul>${quotation.exclusions.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div></div><div class="box"><b>Validity & Terms</b><p>${esc(quotation.validity)} — ${esc(quotation.terms)}</p></div><div class="actions"><button class="btn secondary" onclick="showQ()">✏️ Edit Quotation</button><button class="btn primary" onclick="pdf()">📄 Generate Final PDF</button></div>`)}
+function pdf(){if(!quotation)return;let w=window.open("","_blank");w.document.write(`<html><head><title>On A Trip Holidays Quotation</title><style>body{font-family:Arial;padding:35px;color:#172033}h1{color:#08233f}h2{margin-top:25px;border-bottom:2px solid #ed5b2a;padding-bottom:5px}.day{border:1px solid #ddd;padding:12px;margin:9px 0;border-radius:8px}.meta{background:#f5f7fa;padding:12px}.price{font-size:22px;font-weight:bold}</style></head><body><h1>ON A TRIP HOLIDAYS</h1><p>Let's explore the magical places</p><h2>${esc(quotation.title)}</h2><div class="meta">Guest: ${esc(quotation.guest)}<br>Destination: ${esc(quotation.dest)}<br>Travellers: ${quotation.pax}<br>Dates: ${esc(quotation.dates)}</div>${quotation.days.map(d=>`<div class="day"><b>DAY ${esc(d.day)} — ${esc(d.title)}</b><p>${esc(d.summary)}</p><small>Hotel: ${esc(d.hotel)} | Meals: ${esc(d.meals)}</small></div>`).join("")}<h2>Quotation</h2><p class="price">${esc(quotation.price)} per person</p><p>Total Package: ₹ ${quotation.total.toLocaleString("en-IN")}</p><h2>Inclusions</h2><ul>${quotation.inclusions.map(x=>`<li>${esc(x)}</li>`).join("")}</ul><h2>Exclusions</h2><ul>${quotation.exclusions.map(x=>`<li>${esc(x)}</li>`).join("")}</ul><h2>Terms</h2><p>${esc(quotation.terms)}</p><hr><p>On A Trip Holidays · +91-8125248909 · www.onatripholidays.com</p><script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close()}
+document.addEventListener("DOMContentLoaded",()=>{let f=$("f");if(f)f.addEventListener("submit",e=>{e.preventDefault();generate()})});
 </script>
 
 </body>
