@@ -1,12 +1,12 @@
-ON A TRIP HOLIDAYS — AI ITINERARY + QUOTATION BUILDER V3
+ON A TRIP HOLIDAYS — AI ITINERARY + QUOTATION BUILDER V4
 
 Changes:
-- Merged itinerary + quotation into one workflow.
-- Website Batches → AI Quotation remains as the second tab.
-- Removed Advance Paid and Payment Mode fields.
-- Quotation clearly states that payment is collected after quotation approval.
-- Keeps pricing and GST.
-- Print / Save as PDF remains available.
+- Removed Website Batches → AI Quotation tab completely.
+- Removed website batch/date extraction logic.
+- One clean workflow only: AI Itinerary + Quotation.
+- Payment/advance fields remain removed.
+- Price and GST remain.
+- Print / Save as PDF remains.
 
 Upload:
 ai-itinerary-quotation-builder.html

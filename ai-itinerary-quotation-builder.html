@@ -23,17 +23,10 @@
 </header>
 <div class="tabs no-print">
 <button class="tab active" id="t1" onclick="mode('builder')">🗺️ AI Itinerary + Quotation</button>
-<button class="tab" id="t2" onclick="mode('website')">📅 Website Batches → AI Quote</button>
 </div>
 <div class="grid">
 <section class="card builder no-print">
  <h2 id="formTitle">AI Itinerary + Quotation Builder</h2><div class="sub" id="formSub">Create the complete itinerary and quotation together from one set of trip details.</div>
-<div id="websitePanel" class="ai hide"><b>📅 Website Batch Quotation</b><p>Select a live batch from your website. The builder will use the published batch date/package information as the starting point for the AI quotation.</p>
-<select id="batchSelect" style="width:100%;margin-top:8px;border:1px solid #dfe7f2;border-radius:10px;padding:10px;background:#fff"><option>Loading website batches…</option></select>
-<button class="btn primary" style="margin-top:8px;width:100%" onclick="loadBatch()">Use Selected Website Batch</button></div>
- <div class="ai"><b>✨ AI Travel Assistant</b><p>Enter the essentials below. The builder automatically creates a polished itinerary structure, suggested activities and a transparent quotation.</p></div>
- <div class="form">
-  <div class="row"><div class="field"><label>Customer Name</label><input id="customer" placeholder="Customer name"></div><div class="field"><label>Mobile</label><input id="mobile" placeholder="10-digit mobile"></div></div>
   <div class="row"><div class="field"><label>Destination</label><input id="destination" placeholder="e.g. Kashmir"></div><div class="field"><label>Travellers</label><input id="travellers" type="number" min="1" value="2"></div></div>
   <div class="row"><div class="field"><label>Start Date</label><input id="date" type="date"></div><div class="field"><label>Nights</label><input id="nights" type="number" min="1" value="5"></div></div>
   <div class="row"><div class="field"><label>Hotel / Room</label><select id="hotel"><option>3★ Hotel — Standard Room</option><option>4★ Hotel — Premium Room</option><option>5★ Hotel — Luxury Room</option><option>Temple-nearby Accommodation</option></select></div><div class="field"><label>Vehicle</label><select id="vehicle"><option>Private Ertiga</option><option>Swift Dzire</option><option>Innova Crysta</option><option>Tempo Traveller</option><option>20 Seater Coach</option></select></div></div>
@@ -49,16 +42,7 @@
 <script>
 let current='builder', websiteBatches=[];
 const $=id=>document.getElementById(id);
-function mode(m){
- current=m;
- $('t1').classList.toggle('active',m==='builder');
- $('t2').classList.toggle('active',m==='website');
- $('formTitle').textContent=m==='builder'?'AI Itinerary + Quotation Builder':'Website Batches → AI Quotation';
- $('formSub').textContent=m==='builder'?'Create the complete itinerary and quotation together from one set of trip details.':'Choose a published batch/date from your website and turn it into a client-ready AI quotation.';
- $('websitePanel').classList.toggle('hide',m!=='website');
- generate();
- if(m==='website') loadWebsiteBatches();
-}
+function mode(m){current='builder';$('t1').classList.add('active');generate()}
 function pick(el){document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));el.classList.add('on')}
 function money(n){return new Intl.NumberFormat('en-IN',{maximumFractionDigits:0}).format(Math.round(n))}
 function dateText(){const v=$('date').value;if(!v)return 'Travel date to be confirmed';return new Date(v+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})}
@@ -68,34 +52,6 @@ function dayPlan(dest,day,style){
  if(style==='Pilgrimage'&&day===2)n='Temple / Darshan Day';
  if(style==='Adventure'&&day===2)n='Adventure & Scenic Drive';
  return n;
-}
-async function loadWebsiteBatches(){
- const sel=$('batchSelect');
- try{
-   const r=await fetch('/index.html',{cache:'no-store'});
-   const text=await r.text();
-   // Best-effort extraction of date/package strings from the deployed homepage.
-   const patterns=[/\b\d{1,2}\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+20\d{2}\b/gi,
-                   /\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},?\s+20\d{2}\b/gi];
-   let dates=[...new Set(patterns.flatMap(p=>text.match(p)||[]))];
-   if(!dates.length) dates=['No published batch dates detected — enter manually'];
-   websiteBatches=dates.map((d,i)=>({date:d,title:'Website Batch '+(i+1)}));
-   sel.innerHTML=websiteBatches.map((b,i)=>`<option value="${i}">${b.date} — ${b.title}</option>`).join('');
- }catch(e){
-   websiteBatches=[];
-   sel.innerHTML='<option>Could not read website batches automatically</option>';
- }
-}
-function loadBatch(){
- const b=websiteBatches[+$('batchSelect').value];
- if(!b)return;
- const parsed=new Date(b.date);
- if(!isNaN(parsed)){
-   $('date').value=parsed.toISOString().slice(0,10);
- }
- $('requirements').value=($('requirements').value?$('requirements').value+'; ':'')+'Selected from published website batch: '+b.date;
- generate();
- window.scrollTo({top:0,behavior:'smooth'});
 }
 function generate(){
  const c=$('customer').value||'Valued Guest', mob=$('mobile').value||'—', dest=$('destination').value||'Your Destination';
