@@ -142,10 +142,6 @@ button{cursor:pointer}
 </aside>
 
 <main class="main">
-<header class="topbar">
-  <div><h1 id="pageTitle">Dashboard</h1><p>On A Trip Holidays • Hyderabad & Vijayawada</p></div>
-  <div class="actions"><button class="btn secondary" onclick="openModal('leadModal')">＋ Quick Lead</button><button class="btn primary" onclick="openModal('packageModal')">＋ Add Package</button></div>
-</header>
 
 <section id="dashboard" class="view active">
   <div class="simple-welcome">
@@ -378,7 +374,7 @@ function normaliseDate(v){if(!v)return ''; if(/^\d{4}-\d{2}-\d{2}$/.test(v))retu
 function displayDate(v){if(!v)return 'TBC';const d=new Date(v+'T00:00:00');return isNaN(d)?v:d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});}
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
 function statusFor(b){const s=Number(b.seats)||0,t=Number(b.total)||0;return s<=0?'Sold Out':s<=Math.max(3,Math.ceil(t*.2))?'Filling Fast':'Available';}
-function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));const names={dashboard:'Dashboard',packages:'Packages',batches:'Batches & Seats',enquiries:'Enquiries',blog:'Blog / SEO',branches:'Branches',settings:'Website Settings'};document.getElementById('pageTitle').textContent=names[id];window.scrollTo({top:0,behavior:'smooth'});if(id==='dashboard')renderDashboard();}
+function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));const names={dashboard:'Dashboard',packages:'Packages',batches:'Batches & Seats',enquiries:'Enquiries',blog:'Blog / SEO',branches:'Branches',settings:'Website Settings'};const pageTitle=document.getElementById('pageTitle');if(pageTitle)pageTitle.textContent=names[id];window.scrollTo({top:0,behavior:'smooth'});if(id==='dashboard')renderDashboard();}
 document.querySelectorAll('.nav button').forEach(b=>{if(b.dataset.view)b.onclick=()=>showView(b.dataset.view)});
 function renderPackages(list=db.packages){document.getElementById('packageGrid').innerHTML=list.map((p)=>{const i=db.packages.indexOf(p);return `<article class="pkg"><img src="${esc(p.image)}" onerror="this.style.opacity='.15'" alt="${esc(p.name)}"><div class="pkg-body"><span class="badge ${p.tag==='HOT'?'hot':''}">${esc(p.tag)}</span><h3>${esc(p.name)}</h3><p>${esc(p.type)} • ${esc(p.duration)}</p><p>${esc(p.high)}</p><div class="pkg-foot"><b style="color:var(--orange)">${esc(p.price)}</b><div style="display:flex;gap:6px"><button class="btn secondary" onclick="editPackage(${i})">Edit</button><button class="btn secondary" onclick="deletePackage(${i})">Delete</button></div></div></div></article>`}).join('')||'<div class="card">No packages saved.</div>';}
 function filterPackages(){const q=document.getElementById('pkgSearch').value.toLowerCase(),t=document.getElementById('pkgType').value;renderPackages(db.packages.filter(p=>(p.name+' '+p.high).toLowerCase().includes(q)&&(!t||p.type===t)))}
