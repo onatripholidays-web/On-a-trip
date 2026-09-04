@@ -1,14 +1,15 @@
-ON A TRIP HOLIDAYS — AI ITINERARY + QUOTATION BUILDER V2
+ON A TRIP HOLIDAYS — AI ITINERARY + QUOTATION BUILDER V3
 
-Two tabs only:
-1. AI Itinerary + Quotation — merged single workflow.
-2. Website Batches → AI Quotation — reads published date strings from the deployed homepage when available and uses a selected date as the quote starting point.
+Changes:
+- Merged itinerary + quotation into one workflow.
+- Website Batches → AI Quotation remains as the second tab.
+- Removed Advance Paid and Payment Mode fields.
+- Quotation clearly states that payment is collected after quotation approval.
+- Keeps pricing and GST.
+- Print / Save as PDF remains available.
 
-Upload as:
+Upload:
 ai-itinerary-quotation-builder.html
 
-Direct URL:
+URL:
 https://www.onatripholidays.com/ai-itinerary-quotation-builder.html
-
-Important:
-The website-batch reader is best-effort HTML date extraction. For production accuracy, connect it to the same structured package/batch data source used by the website/Supabase, so package name, exact batch, seats and price are pulled from the authoritative database.
