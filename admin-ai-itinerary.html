@@ -4,13 +4,13 @@
 </style></head><body><script>if(sessionStorage.getItem('oat_admin_auth')!=='1')location.replace('admin.html');</script>
 <header class="top"><div class="brand"><img src="assets/on-a-trip-logo.png"><b>AI ITINERARY & QUOTATION</b></div><a href="admin-v4-crm-final.html">← Admin Dashboard</a></header>
 <div class="wrap"><div class="grid"><section class="builder card"><h1>✨ AI Itinerary Builder</h1><p class="muted">First create the itinerary. Then approve it, create the quotation, and finally generate the PDF.</p><div class="stepbar"><div id="s1" class="step active">1 ITINERARY</div><div id="s2" class="step">2 QUOTATION</div><div id="s3" class="step">3 PDF</div></div><form id="form" class="form">
-<div class="row"><div><label>Guest Name *</label><input id="guest" required></div><div><label>Travellers *</label><input id="pax" type="number" min="1" value="4" required></div></div><label>Destination *</label><input id="dest" placeholder="Kashmir / Char Dham / Ladakh" required><div class="row"><div><label>Start City</label><input id="start" value="Hyderabad"></div><div><label>Language</label><select id="language"><option>English</option><option>Telugu</option><option>English + Telugu</option></select></div></div><div class="row"><div><label>Start Date *</label><input id="startDate" type="date" required></div><div><label>End Date *</label><input id="endDate" type="date" required></div></div><div class="row"><div><label>Trip Type</label><select id="type"><option>Family</option><option>Pilgrimage</option><option>Adventure</option><option>Couples</option><option>Premium</option></select></div><div><label>Hotel Category</label><select id="hotel"><option>3 Star</option><option>4 Star</option><option>5 Star</option><option>Premium</option></select></div></div><div class="row"><div><label>Vehicle</label><select id="vehicle"><option>Private Car</option><option>Ertiga</option><option>Innova Crysta</option><option>Tempo Traveller 12 Seater</option><option>Tempo Traveller 17 Seater</option><option>Tempo Traveller 20 Seater</option></select></div><div><label>Meals</label><select id="meals"><option>Breakfast & Dinner</option><option>Breakfast Only</option><option>All Meals</option><option>Satvik Veg Meals</option></select></div></div><label>Special Requirements</label><textarea id="special" placeholder="Senior citizens, darshan, honeymoon, child-friendly, etc."></textarea><label>Additional Instructions</label><textarea id="instruction"></textarea><div class="actions"><button class="btn primary" type="submit">✨ Generate Itinerary with AI</button></div><div id="msg" class="muted">Uses your existing /api/generate-itinerary engine.</div></form></section>
+<div class="row"><div><label>Guest Name *</label><input id="guest" required></div><div><label>Mobile / WhatsApp Number *</label><input id="contact" type="tel" inputmode="tel" autocomplete="tel" placeholder="+91 98765 43210" required></div></div><div><label>Travellers *</label><input id="pax" type="number" min="1" value="4" required></div><label>Destination *</label><input id="dest" placeholder="Kashmir / Char Dham / Ladakh" required><div class="row"><div><label>Start City</label><input id="start" value="Hyderabad"></div><div><label>Language</label><select id="language"><option>English</option><option>Telugu</option><option>English + Telugu</option></select></div></div><div class="row"><div><label>Start Date *</label><input id="startDate" type="date" required></div><div><label>End Date *</label><input id="endDate" type="date" required></div></div><div class="row"><div><label>Trip Type</label><select id="type"><option>Family</option><option>Pilgrimage</option><option>Adventure</option><option>Couples</option><option>Premium</option></select></div><div><label>Hotel Category</label><select id="hotel"><option>3 Star</option><option>4 Star</option><option>5 Star</option><option>Premium</option></select></div></div><div class="row"><div><label>Vehicle</label><select id="vehicle"><option>Private Car</option><option>Ertiga</option><option>Innova Crysta</option><option>Tempo Traveller 12 Seater</option><option>Tempo Traveller 17 Seater</option><option>Tempo Traveller 20 Seater</option></select></div><div><label>Meals</label><select id="meals"><option>Breakfast & Dinner</option><option>Breakfast Only</option><option>All Meals</option><option>Satvik Veg Meals</option></select></div></div><label>Special Requirements</label><textarea id="special" placeholder="Senior citizens, darshan, honeymoon, child-friendly, etc."></textarea><label>Additional Instructions</label><textarea id="instruction"></textarea><div class="actions"><button class="btn primary" type="submit">✨ Generate Itinerary with AI</button></div><div id="msg" class="muted">Uses your existing /api/generate-itinerary engine.</div></form></section>
 <section class="card"><div class="screen"><div id="out"><div class="empty">Enter trip details and generate the AI itinerary.</div></div></div><div class="print-only" id="printSheet"></div></section></div></div>
 <script>
 const $=id=>document.getElementById(id),v=id=>(($(id)?.value)||'').trim(),esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));let itinerary=null,quote=null,edit=false;
 function setStep(n){[1,2,3].forEach(i=>$('s'+i).classList.toggle('active',i===n))}
 function dayCount(){let a=v('startDate'),b=v('endDate');return a&&b?Math.max(1,Math.min(30,Math.ceil((new Date(b)-new Date(a))/86400000)+1)):1}
-function payload(){return{guest:v('guest')||'Guest',dest:v('dest'),days:dayCount(),pax:+v('pax')||1,start:v('start')||'TBC',dates:v('startDate')+' to '+v('endDate'),language:v('language'),type:v('type'),hotel:v('hotel'),vehicle:v('vehicle'),meals:v('meals'),budget:'Price to be quoted',special:v('special')||'None',instruction:v('instruction')||'None'}}
+function payload(){return{guest:v('guest')||'Guest',contact:v('contact')||'',dest:v('dest'),days:dayCount(),pax:+v('pax')||1,start:v('start')||'TBC',dates:v('startDate')+' to '+v('endDate'),language:v('language'),type:v('type'),hotel:v('hotel'),vehicle:v('vehicle'),meals:v('meals'),budget:'Price to be quoted',special:v('special')||'None',instruction:v('instruction')||'None'}}
 function renderItinerary(){setStep(1);$('out').innerHTML='<span class="status">STEP 1 — AI ITINERARY</span><div class="quote-title">'+esc(itinerary.title)+'</div><p>'+esc(itinerary.summary)+'</p>'+itinerary.days.map((d,i)=>'<div class="day"><h3>Day '+esc(d.day)+' — <span class="ed" data-i="'+i+'" data-k="title">'+esc(d.title)+'</span></h3><p><span class="ed" data-i="'+i+'" data-k="summary">'+esc(d.summary)+'</span></p><p><b>Hotel:</b> <span class="ed" data-i="'+i+'" data-k="hotel">'+esc(d.hotel)+'</span> · <b>Meals:</b> <span class="ed" data-i="'+i+'" data-k="meals">'+esc(d.meals)+'</span></p></div>').join('')+'<div class="two"><div class="box"><b>Accommodation</b><p>'+esc(itinerary.hotels)+'</p></div><div class="box"><b>Vehicle</b><p>'+esc(itinerary.vehicle)+'</p></div></div><div class="box"><b>Meals</b><p>'+esc(itinerary.meals)+'</p></div><div class="box"><b>Notes</b><p>'+esc(itinerary.notes)+'</p></div><div class="actions screen-actions"><button class="btn secondary" onclick="toggleEdit()">✏️ '+(edit?'Save Edits':'Edit Itinerary')+'</button><button class="btn primary" onclick="createQuoteForm()">✅ Approve & Create Quotation</button></div>'}
 function toggleEdit(){edit=!edit;document.querySelectorAll('.ed').forEach(e=>e.contentEditable=edit);if(!edit)document.querySelectorAll('.ed').forEach(e=>itinerary.days[+e.dataset.i][e.dataset.k]=e.innerText.trim());renderItinerary()}
 async function generate(){let p=payload();if(!p.dest)return $('msg').textContent='Destination is required.';if(new Date(v('endDate'))<new Date(v('startDate')))return $('msg').textContent='End date must be after start date.';$('msg').textContent='✨ AI is generating the itinerary…';try{let r=await fetch('/api/generate-itinerary',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}),d=await r.json();if(!r.ok)throw Error(d.error||'AI request failed');if(!d.days||d.days.length!==p.days)throw Error('AI returned the wrong number of days.');itinerary=d;renderItinerary();$('msg').textContent='✅ Review the itinerary. Approve only when ready.'}catch(e){$('msg').textContent='❌ '+e.message}}
@@ -19,81 +19,4 @@ function createQuote(){let price=v('qPrice');if(!price)return $('msg').textConte
 function renderQuote(){$('out').innerHTML='<span class="status">STEP 3 — QUOTATION READY</span><div class="quote-title">'+esc(quote.title)+'</div><p>'+esc(quote.summary)+'</p><div class="two"><div class="box"><b>Guest</b><p>'+esc(quote.guest)+'</p></div><div class="box"><b>Destination</b><p>'+esc(quote.dest)+' · '+quote.days.length+' Days</p></div></div>'+quote.days.map(d=>'<div class="day"><h3>Day '+esc(d.day)+' — '+esc(d.title)+'</h3><p>'+esc(d.summary)+'</p><p><b>Hotel:</b> '+esc(d.hotel)+' · <b>Meals:</b> '+esc(d.meals)+'</p></div>').join('')+'<div class="two"><div class="box"><b>Price / Person</b><div class="price">'+esc(quote.price)+'</div></div><div class="box"><b>Total Package</b><div class="price">₹ '+quote.total.toLocaleString('en-IN')+'</div></div></div><div class="two"><div class="box"><b>Inclusions</b><ul>'+quote.inclusions.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div><div class="box"><b>Exclusions</b><ul>'+quote.exclusions.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div></div><div class="box"><b>Validity & Terms</b><p>'+esc(quote.validity)+' — '+esc(quote.terms)+'</p></div><div class="actions"><button class="btn secondary" onclick="createQuoteForm()">✏️ Edit Quotation</button><button class="btn primary" onclick="finalPDF()">📄 Generate Final PDF</button></div>'}
 function finalPDF(){let inc=quote.inclusions.map(x=>'<li>'+esc(x)+'</li>').join(''),exc=quote.exclusions.map(x=>'<li>'+esc(x)+'</li>').join('');$('printSheet').innerHTML='<div class="print-header"><img src="assets/on-a-trip-logo.png"><div><b>ON A TRIP HOLIDAYS</b><br>Let\'s explore the magical places<br>+91-8125248909<br>www.onatripholidays.com</div></div><div class="print-title">'+esc(quote.title)+'</div><div class="meta"><div><b>Guest</b>'+esc(quote.guest)+'</div><div><b>Contact</b>'+esc(v('contact'))+'</div><div><b>Destination</b>'+esc(quote.dest)+'</div><div><b>Travellers</b>'+quote.pax+'</div><div><b>Dates</b>'+esc(quote.dates)+'</div><div><b>Start City</b>'+esc(quote.start)+'</div></div>'+quote.days.map(d=>'<div class="print-day"><h3>DAY '+esc(d.day)+' — '+esc(d.title)+'</h3><p>'+esc(d.summary)+'</p><p><b>Hotel:</b> '+esc(d.hotel)+' &nbsp; <b>Meals:</b> '+esc(d.meals)+'</p></div>').join('')+'<div class="print-two"><div class="print-box"><h4>Accommodation</h4><p>'+esc(quote.hotels)+'</p></div><div class="print-box"><h4>Transport</h4><p>'+esc(quote.vehicle)+'</p></div></div><div class="print-box"><h4>Meals</h4><p>'+esc(quote.meals)+'</p></div><div class="print-box"><h4>Package Quote</h4><div class="print-price">'+esc(quote.price)+' per person · Total ₹ '+quote.total.toLocaleString('en-IN')+'</div></div><div class="print-two"><div class="print-box"><h4>Inclusions</h4><ul>'+inc+'</ul></div><div class="print-box"><h4>Exclusions</h4><ul>'+exc+'</ul></div></div><div class="print-box"><h4>Terms & Conditions</h4><p>'+esc(quote.terms)+'</p></div><div class="print-footer">On A Trip Holidays · Hyderabad · +91-8125248909 · www.onatripholidays.com</div>';window.print()}
 $('form').addEventListener('submit',e=>{e.preventDefault();generate()});
-</script>
-<style id="oat-quotation-v2">
-.oat-quote-panel{margin-top:16px;padding:18px;border:1px solid #dce4e9;border-radius:16px;background:#fff}
-.oat-quote-panel h3{margin:0 0 12px}
-.oat-quote-row{display:flex;justify-content:space-between;gap:12px;padding:7px 0}
-.oat-quote-total{border-top:1px solid #dce4e9;margin-top:8px;padding-top:10px;font-size:18px;font-weight:900}
-.oat-whatsapp-btn{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:12px 16px;border:0;border-radius:10px;background:#18a66a;color:#fff;font-weight:900;cursor:pointer}
-</style>
-<script id="oat-quotation-v2">
-(function(){
-  const GST=0.05;
-
-  function money(n){
-    return '₹'+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:2});
-  }
-
-  function findNumber(labels){
-    const all=document.querySelectorAll('input,select,textarea');
-    for(const el of all){
-      const hay=((el.name||'')+' '+(el.id||'')+' '+(el.placeholder||'')).toLowerCase();
-      if(labels.some(x=>hay.includes(x))) return el;
-    }
-    return null;
-  }
-
-  function getCustomer(){
-    const name=findNumber(['customer name','client name','guest name','name']);
-    const phone=findNumber(['phone','mobile','whatsapp','contact']);
-    return {
-      name:name?.value?.trim()||'Customer',
-      phone:phone?.value?.trim()||''
-    };
-  }
-
-  window.OATRenderStep2Quotation=function(container, price, pax){
-    if(!container) return;
-    const subtotal=Number(price||0)*Number(pax||0);
-    const gst=subtotal*GST;
-    const total=subtotal+gst;
-    const customer=getCustomer();
-
-    container.innerHTML=
-      '<div class="oat-quote-panel">'+
-      '<h3>Quick Quotation</h3>'+
-      '<div class="oat-quote-row"><span>Package</span><b>'+money(price)+' × '+pax+' = '+money(subtotal)+'</b></div>'+
-      '<div class="oat-quote-row"><span>GST @ 5%</span><b>'+money(gst)+'</b></div>'+
-      '<div class="oat-quote-row oat-quote-total"><span>Total Payable</span><b>'+money(total)+'</b></div>'+
-      '<button type="button" class="oat-whatsapp-btn" onclick="window.OATSendQuickQuoteWhatsApp()">'+
-      '🟢 Send Quick Quote on WhatsApp</button>'+
-      '</div>';
-
-    window.OATCurrentQuote={price:Number(price||0),pax:Number(pax||0),subtotal,gst,total,customer};
-  };
-
-  window.OATSendQuickQuoteWhatsApp=function(){
-    const q=window.OATCurrentQuote;
-    if(!q) return;
-    const text=
-      'On A Trip Holidays — Quick Quote\\n\\n'+
-      'Customer: '+q.customer.name+'\\n'+
-      (q.customer.phone?'Contact: '+q.customer.phone+'\\n':'')+
-      'Package Cost: '+money(q.price)+' × '+q.pax+' = '+money(q.subtotal)+'\\n'+
-      'GST @ 5%: '+money(q.gst)+'\\n'+
-      'Total Payable: '+money(q.total)+'\\n\\n'+
-      'Thank you for choosing On A Trip Holidays.';
-    const phone=q.customer.phone.replace(/\\D/g,'');
-    const url='https://wa.me/'+(phone||'')+'?text='+encodeURIComponent(text);
-    window.open(url,'_blank','noopener');
-  };
-
-  window.OATBuildCustomerContact=function(name,phone){
-    return '<div class="customer-name">'+(name||'Customer')+'</div>'+
-      '<div class="customer-contact">'+(phone||'')+'</div>';
-  };
-})();
-</script>
-
-</body></html>
+</script></body></html>
