@@ -91,6 +91,11 @@ button{cursor:pointer}
 @media(max-width:900px){.crm-pipeline{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:600px){.crm-pipeline{grid-template-columns:repeat(2,1fr)}.crm-toolbar>*{width:100%}.crm-table{min-width:800px}}
 
+
+.tools-card{margin:18px 0;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:18px}
+.tools-card h2{margin:0 0 6px;font-size:20px}.tools-card p{margin:0 0 14px;color:var(--muted);font-size:13px}
+.admin-tools{display:grid;grid-template-columns:1fr 1fr;gap:12px}.admin-tool{display:flex;align-items:center;gap:12px;padding:15px 16px;border:1px solid var(--line);border-radius:13px;text-decoration:none;color:var(--navy);background:#f8fafb;font-weight:900;transition:.15s}.admin-tool:hover{transform:translateY(-1px);border-color:#f0a080;background:#fff5f0}.admin-tool .tool-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:11px;background:#fff0ea;font-size:22px}.admin-tool small{display:block;color:var(--muted);font-weight:600;margin-top:3px}
+@media(max-width:600px){.admin-tools{grid-template-columns:1fr}}
 </style>
 <meta name="robots" content="noindex,nofollow,noarchive">
 </head>
@@ -100,6 +105,8 @@ button{cursor:pointer}
   <div class="brand"><div class="brand-mark">✈</div><div><b>ON A TRIP</b><small>HOLIDAYS • ADMIN</small></div></div>
   <div class="nav">
     <button class="active" data-view="dashboard">📊 <span>Dashboard</span></button>
+    <button type="button" onclick="location.href='admin-ai-itinerary.html'">✨ <span>AI Quotation Maker</span></button>
+    <button type="button" onclick="location.href='payment-invoicer.html'">🧾 <span>Payment Invoicer</span></button>
     <button data-view="packages">🧳 <span>Packages</span></button>
     <button data-view="batches">📅 <span>Batches & Seats</span></button>
     <button data-view="enquiries">📲 <span>Enquiries</span></button>
@@ -116,6 +123,21 @@ button{cursor:pointer}
 </header>
 
 <section id="dashboard" class="view active">
+  <div class="tools-card">
+    <h2>Admin Tools</h2>
+    <p>Quick access to quotation creation and payment billing.</p>
+    <div class="admin-tools">
+      <a class="admin-tool" href="admin-ai-itinerary.html">
+        <div class="tool-icon">✨</div>
+        <div><div>AI Quotation Maker</div><small>Create and send customer quotations & itineraries</small></div>
+      </a>
+      <a class="admin-tool" href="payment-invoicer.html">
+        <div class="tool-icon">🧾</div>
+        <div><div>Payment Invoicer</div><small>Create billing invoices after payment</small></div>
+      </a>
+    </div>
+  </div>
+
   <div class="stats">
     <div class="stat"><span>Total Packages</span><strong>36</strong><em>+5 this month</em></div>
     <div class="stat"><span>Upcoming Batches</span><strong>14</strong><em>8 filling fast</em></div>
