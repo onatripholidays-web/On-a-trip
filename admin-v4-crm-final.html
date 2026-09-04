@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>On A Trip Holidays — Admin</title>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f4f7f9}
+iframe{display:block;width:100%;height:100%;border:0}
+</style>
+</head>
+<body>
+<script>if(sessionStorage.getItem('oat_admin_auth')!=='1') location.replace('admin.html');</script>
+<iframe id="adminFrame" src="admin-v4-crm.html" title="On A Trip Holidays Admin"></iframe>
+<script>
+const frame=document.getElementById('adminFrame');
+function applyAdminMenuFix(){
+  try{
+    const d=frame.contentDocument;
+    if(!d)return;
+
+    [...d.querySelectorAll('.nav button')].forEach(b=>{
+      const text=(b.textContent||'').trim();
+      if(/Blog\s*\/\s*SEO/i.test(text)){b.remove();return;}
+      if(/Enquiries/i.test(text)){
+        const n=d.createElement('button');
+        n.type='button';
+        n.innerHTML='🔐 <span>CRM Login</span>';
+        n.onclick=()=>d.defaultView.location.href='crm.html';
+        b.replaceWith(n);
+      }
+    });
+
+    [...d.querySelectorAll('button,a')].forEach(el=>{
+      const text=(el.textContent||'').trim();
+      if(/Create SEO blog|Blog & SEO|Blog \/ SEO/i.test(text)){el.remove();return;}
+      if(/Check enquiries|CRM Enquiries|Open lead manager/i.test(text)){
+        el.textContent='🔐 CRM Login';
+        el.onclick=()=>d.defaultView.location.href='crm.html';
+        if(el.tagName==='A')el.href='crm.html';
+      }
+    });
+
+    [...d.querySelectorAll('button')].forEach(el=>{
+      if(/Quick Lead/i.test(el.textContent||'')){
+        el.textContent='🔐 CRM Login';
+        el.onclick=()=>d.defaultView.location.href='crm.html';
+      }
+    });
+
+    const old=d.defaultView.showView;
+    if(old&&!d.defaultView.__crmMenuPatched){
+      d.defaultView.showView=function(id){
+        if(id==='enquiries'||id==='blog'){
+          d.defaultView.location.href='crm.html';
+          return;
+        }
+        return old(id);
+      };
+      d.defaultView.__crmMenuPatched=true;
+    }
+  }catch(e){console.error('CRM menu patch failed',e)}
+}
+frame.addEventListener('load',()=>{
+  applyAdminMenuFix();
+  setTimeout(applyAdminMenuFix,150);
+});
+</script>
+</body>
+</html>
