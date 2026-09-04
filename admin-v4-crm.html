@@ -97,16 +97,18 @@ button{cursor:pointer}
 .admin-tools{display:grid;grid-template-columns:1fr 1fr;gap:12px}.admin-tool{display:flex;align-items:center;gap:12px;padding:15px 16px;border:1px solid var(--line);border-radius:13px;text-decoration:none;color:var(--navy);background:#f8fafb;font-weight:900;transition:.15s}.admin-tool:hover{transform:translateY(-1px);border-color:#f0a080;background:#fff5f0}.admin-tool .tool-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:11px;background:#fff0ea;font-size:22px}.admin-tool small{display:block;color:var(--muted);font-weight:600;margin-top:3px}
 @media(max-width:600px){.admin-tools{grid-template-columns:1fr}}
 
-/* V39.1 mobile quick navigation */
+/* V39.2 compact mobile admin quick navigation */
 .admin-bottom-nav{display:none}
 @media(max-width:700px){
-  body{padding-bottom:96px}
-  .admin-bottom-nav{position:fixed;left:18px;right:18px;bottom:14px;height:78px;background:rgba(255,255,255,.97);border:1px solid #dce4e9;border-radius:30px;box-shadow:0 10px 35px rgba(10,35,55,.16);display:grid;grid-template-columns:repeat(3,1fr);align-items:center;z-index:100}
-  .admin-bottom-nav a{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-decoration:none;color:#102335;font-weight:900;font-size:12px}
-  .admin-bottom-nav .bn-icon{font-size:25px;line-height:1}
+  body{padding-bottom:78px}
+  .admin-bottom-nav{position:fixed;left:12px;right:12px;bottom:10px;height:58px;padding:3px 4px;background:rgba(255,255,255,.98);border:1px solid #dce4e9;border-radius:22px;box-shadow:0 8px 28px rgba(10,35,55,.16);display:grid;grid-template-columns:repeat(4,1fr);align-items:stretch;z-index:50}
+  .admin-bottom-nav a{min-width:0;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;text-decoration:none;color:#102335;font-weight:900;font-size:10px;line-height:1.05;text-align:center}
+  .admin-bottom-nav .bn-icon{font-size:19px;line-height:1}
   .admin-bottom-nav a.active{color:#ee5a2a}
   .admin-bottom-nav a:active{transform:scale(.97)}
 }
+/* Modals must always sit above the compact navigation. */
+.modal{z-index:1000!important}
 </style>
 <meta name="robots" content="noindex,nofollow,noarchive">
 </head>
@@ -295,9 +297,10 @@ button{cursor:pointer}
 </section>
 </main>
 <nav class="admin-bottom-nav" aria-label="Admin quick navigation">
-  <a href="admin-v4-crm.html" class="active"><span class="bn-icon">⌂</span><span>Home</span></a>
-  <a href="payment-invoicer.html"><span class="bn-icon">🧾</span><span>Invoice Maker</span></a>
-  <a href="admin-ai-itinerary.html"><span class="bn-icon">✨</span><span>Quotation Maker</span></a>
+  <a href="javascript:void(0)" class="active" onclick="quickNavHome()"><span class="bn-icon">⌂</span><span>Home</span></a>
+  <a href="payment-invoicer.html"><span class="bn-icon">🧾</span><span>Invoice</span></a>
+  <a href="admin-ai-itinerary.html"><span class="bn-icon">✨</span><span>Quotation</span></a>
+  <a href="javascript:void(0)" onclick="quickNavBack()"><span class="bn-icon">‹</span><span>Back</span></a>
 </nav>
 </div>
 
@@ -358,7 +361,34 @@ function loadDB(){
  saveDB(db); return db;
 }
 let db=loadDB();
-function saveDB(next=db){db=next;localStorage.setItem(STORE_KEY,JSON.stringify(db));localStorage.setItem('oat_batches',JSON.stringify(db.batches.map(b=>[b.package,displayDate(b.date),b.from,b.total,b.seats])));localStorage.setItem('oat_leads',JSON.stringify(db.leads));}
+function saveDB(next=db){
+  db=next;
+  const payload=JSON.stringify(db);
+  try{
+    localStorage.setItem(STORE_KEY,payload);
+    localStorage.setItem('oat_batches',JSON.stringify(db.batches.map(b=>[b.package,displayDate(b.date),b.from,b.total,b.seats])));
+    localStorage.setItem('oat_leads',JSON.stringify(db.leads));
+    return true;
+  }catch(err){
+    console.error('On A Trip admin storage error:',err);
+    alert('Data could not be saved in this browser. Please allow website storage and try again.');
+    return false;
+  }
+}
+function readEl(id){return document.getElementById(id)}
+function valueOf(id){const el=readEl(id);return el?String(el.value||'').trim():''}
+function numberOf(id,fallback=0){const n=Number(valueOf(id));return Number.isFinite(n)?n:fallback}
+function quickNavHome(){
+  document.querySelectorAll('.admin-bottom-nav a').forEach(a=>a.classList.remove('active'));
+  const home=document.querySelector('.admin-bottom-nav a:first-child');if(home)home.classList.add('active');
+  showView('dashboard');
+}
+function quickNavBack(){
+  const active=document.querySelector('.view.active');
+  if(active && active.id!=='dashboard'){showView('dashboard');return}
+  if(history.length>1)history.back();else location.href='admin.html';
+}
+
 function normaliseDate(v){if(!v)return ''; if(/^\d{4}-\d{2}-\d{2}$/.test(v))return v; const m=String(v).match(/(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})/i); if(!m)return String(v); const months={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12}; return `${m[3]}-${String(months[m[2].slice(0,3).toLowerCase()]).padStart(2,'0')}-${String(m[1]).padStart(2,'0')}`;}
 function displayDate(v){if(!v)return 'TBC';const d=new Date(v+'T00:00:00');return isNaN(d)?v:d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});}
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
@@ -385,18 +415,65 @@ function renderDashboard(){
 }
 function openBatchModal(){document.getElementById('batchModalTitle').textContent='Add Batch';document.getElementById('bEditIndex').value='-1';document.getElementById('batchModal').querySelector('form').reset();document.getElementById('bTotal').value=16;document.getElementById('bSeats').value=8;openModal('batchModal');}
 function editBatch(i){const b=db.batches[i];document.getElementById('batchModalTitle').textContent='Update Batch';document.getElementById('bEditIndex').value=i;document.getElementById('bPackage').value=b.package;document.getElementById('bDate').value=normaliseDate(b.date);document.getElementById('bFrom').value=b.from;document.getElementById('bTotal').value=b.total;document.getElementById('bSeats').value=b.seats;openModal('batchModal');}
-function saveBatch(e){e.preventDefault();const total=Math.max(1,+document.getElementById('bTotal').value||1);let seats=Math.max(0,+document.getElementById('bSeats').value||0);if(seats>total)seats=total;const item={id:Date.now(),package:document.getElementById('bPackage').value.trim(),date:document.getElementById('bDate').value,from:document.getElementById('bFrom').value.trim()||'Delhi',total,seats};const idx=+document.getElementById('bEditIndex').value;if(idx>=0){item.id=db.batches[idx].id;db.batches[idx]=item}else db.batches.unshift(item);saveDB();closeModal('batchModal');e.target.reset();renderBatches();showView('batches');alert('Batch saved successfully.');}
+function saveBatch(e){
+  e.preventDefault();
+  try{
+    const pkg=valueOf('bPackage');
+    const date=valueOf('bDate');
+    if(!pkg || !date){alert('Package and date are required.');return false;}
+    const total=Math.max(1,Math.floor(numberOf('bTotal',1)));
+    let seats=Math.max(0,Math.floor(numberOf('bSeats',0)));
+    if(seats>total)seats=total;
+    const edit=Number(valueOf('bEditIndex'));
+    const item={id:Date.now(),package:pkg,date,from:valueOf('bFrom')||'Delhi',total,seats};
+    if(Number.isInteger(edit) && edit>=0 && edit<db.batches.length){item.id=db.batches[edit].id;db.batches[edit]=item;}
+    else db.batches.unshift(item);
+    if(!saveDB())return false;
+    renderBatches();
+    closeModal('batchModal');
+    e.target.reset();
+    readEl('bEditIndex').value='-1';
+    readEl('batchModalTitle').textContent='Add Batch';
+    showView('batches');
+    alert('Batch saved successfully.');
+  }catch(err){console.error(err);alert('Batch could not be saved. Please try again.');}
+  return false;
+}
 function deleteBatch(i){if(confirm('Delete this batch?')){db.batches.splice(i,1);saveDB();renderBatches();}}
 function openPackageModal(){document.getElementById('pEditIndex').value='-1';document.getElementById('packageModal').querySelector('form').reset();openModal('packageModal');}
 function editPackage(i){const p=db.packages[i];document.getElementById('pEditIndex').value=i;document.getElementById('pName').value=p.name;document.getElementById('pType').value=p.type;document.getElementById('pDuration').value=p.duration;document.getElementById('pPrice').value=p.price;document.getElementById('pImage').value=p.image;document.getElementById('pHighlights').value=p.high;openModal('packageModal');}
-function savePackage(e){e.preventDefault();const item={name:pName.value.trim(),type:pType.value,duration:pDuration.value.trim()||'Custom',price:pPrice.value.trim()||'Ask',image:pImage.value.trim()||'assets/placeholder.jpg',high:pHighlights.value.trim()||'Custom itinerary',tag:'NEW'};if(!item.name){alert('Destination is required.');return}const idx=+pEditIndex.value;if(idx>=0)db.packages[idx]=item;else db.packages.unshift(item);saveDB();closeModal('packageModal');e.target.reset();renderPackages();renderDashboard();showView('packages');alert('Package saved successfully.');}
+function savePackage(e){
+  e.preventDefault();
+  try{
+    const item={name:valueOf('pName'),type:valueOf('pType')||'India',duration:valueOf('pDuration')||'Custom',price:valueOf('pPrice')||'Ask',image:valueOf('pImage')||'assets/placeholder.jpg',high:valueOf('pHighlights')||'Custom itinerary',tag:'NEW'};
+    if(!item.name){alert('Destination is required.');return false;}
+    const idx=Number(valueOf('pEditIndex'));
+    if(Number.isInteger(idx) && idx>=0 && idx<db.packages.length){item.tag=db.packages[idx].tag||'NEW';db.packages[idx]=item;}
+    else db.packages.unshift(item);
+    if(!saveDB())return false;
+    renderPackages();renderDashboard();closeModal('packageModal');e.target.reset();readEl('pEditIndex').value='-1';showView('packages');alert('Package saved successfully.');
+  }catch(err){console.error(err);alert('Package could not be saved. Please try again.');}
+  return false;
+}
 function deletePackage(i){if(confirm('Delete '+db.packages[i].name+'?')){db.packages.splice(i,1);saveDB();renderPackages();renderDashboard();}}
 function renderCRM(){const q=(document.getElementById('crmSearch')?.value||'').toLowerCase(),st=document.getElementById('crmStatus')?.value||'',so=document.getElementById('crmSource')?.value||'';const list=db.leads.filter(l=>(l.name+' '+l.phone+' '+l.dest+' '+(l.email||'')).toLowerCase().includes(q)&&(!st||l.status===st)&&(!so||l.source===so));const counts={New:0,Contacted:0,Hot:0,'Quote Sent':0,Booked:0};db.leads.forEach(l=>{if(counts[l.status]!==undefined)counts[l.status]++});crmNew.textContent=counts.New;crmContacted.textContent=counts.Contacted;crmHot.textContent=counts.Hot;crmQuote.textContent=counts['Quote Sent'];crmBooked.textContent=counts.Booked;crmTable.innerHTML=list.length?list.map(l=>`<tr><td><div class="lead-name">${esc(l.name)}</div><div class="lead-sub">${esc(l.phone)}${l.email?' • '+esc(l.email):''}</div></td><td><b>${esc(l.dest)}</b><div class="lead-sub">${esc(displayDate(l.date)||'Date not set')}</div></td><td>${esc(l.trav)}</td><td>${esc(l.source)}</td><td><span class="priority ${l.priority==='Hot'?'hot':l.priority==='High'?'high':''}">${esc(l.priority)}</span></td><td><select class="status-select" onchange="changeLeadStatus(${l.id},this.value)">${['New','Contacted','Hot','Quote Sent','Booked','Lost'].map(s=>`<option ${s===l.status?'selected':''}>${s}</option>`).join('')}</select></td><td><span class="followup">${esc(displayDate(l.follow)||'Set date')}</span></td><td><div class="crm-actions"><button class="wa" onclick="whatsappLead(${l.id})">WhatsApp</button><button onclick="leadDetails(${l.id})">Details</button><button onclick="editLead(${l.id})">Edit</button><button onclick="deleteLead(${l.id})">Delete</button></div></td></tr>`).join(''):'<tr><td colspan="8">No leads match your filters.</td></tr>';renderDashboard();}
 function changeLeadStatus(id,status){const l=db.leads.find(x=>x.id===id);if(l){l.status=status;saveDB();renderCRM();}}
 function whatsappLead(id){const l=db.leads.find(x=>x.id===id);if(!l)return;const phone=(l.phone||'').replace(/\D/g,'');const msg=`Hi ${l.name}, this is On A Trip Holidays. Regarding your ${l.dest} trip enquiry for ${l.trav} travellers. Shall I share the latest package and batch details?`;window.open((phone?'https://wa.me/'+phone+'?text=':'https://wa.me/?text=')+encodeURIComponent(msg),'_blank')}
 function leadDetails(id){const l=db.leads.find(x=>x.id===id);if(!l)return;alert(`${l.name}\n${l.dest} • ${l.trav} travellers\nPhone: ${l.phone}\nSource: ${l.source}\nStatus: ${l.status}\nNext follow-up: ${l.follow||'Not set'}\nExpected value: ${l.value||'Not set'}\nNotes: ${l.notes||'No notes'}`)}
 function editLead(id){const l=db.leads.find(x=>x.id===id);if(!l)return;document.getElementById('lEditId').value=id;document.getElementById('lName').value=l.name;document.getElementById('lPhone').value=l.phone;document.getElementById('lEmail').value=l.email||'';document.getElementById('lDest').value=l.dest;document.getElementById('lTrav').value=l.trav;document.getElementById('lDate').value=normaliseDate(l.date);document.getElementById('lPriority').value=l.priority;document.getElementById('lFollow').value=normaliseDate(l.follow);document.getElementById('lValue').value=l.value||'';document.getElementById('lNotes').value=l.notes||'';document.getElementById('lSource').value=l.source;document.getElementById('leadModalTitle').textContent='Edit Lead';openModal('leadModal');}
-function saveLead(e){e.preventDefault();const item={id:Date.now(),name:lName.value.trim(),phone:lPhone.value.trim(),email:lEmail.value.trim(),dest:lDest.value.trim()||'Custom Trip',trav:Math.max(1,+lTrav.value||1),source:lSource.value,priority:lPriority.value,status:'New',follow:lFollow.value,date:lDate.value,value:lValue.value.trim(),notes:lNotes.value.trim()};if(!item.name){alert('Name is required.');return}const id=+lEditId.value;if(id){const old=db.leads.find(x=>x.id===id);item.id=id;item.status=old?.status||'New';db.leads=db.leads.map(x=>x.id===id?item:x)}else db.leads.unshift(item);saveDB();closeModal('leadModal');e.target.reset();document.getElementById('lEditId').value='';document.getElementById('leadModalTitle').textContent='Add Lead';renderCRM();showView('enquiries');alert('Lead saved successfully.');}
+function saveLead(e){
+  e.preventDefault();
+  try{
+    const item={id:Date.now(),name:valueOf('lName'),phone:valueOf('lPhone'),email:valueOf('lEmail'),dest:valueOf('lDest')||'Custom Trip',trav:Math.max(1,Math.floor(numberOf('lTrav',1))),source:valueOf('lSource')||'WhatsApp',priority:valueOf('lPriority')||'Normal',status:'New',follow:valueOf('lFollow'),date:valueOf('lDate'),value:valueOf('lValue'),notes:valueOf('lNotes')};
+    if(!item.name){alert('Name is required.');return false;}
+    const editId=Number(valueOf('lEditId'));
+    if(editId){const old=db.leads.find(x=>x.id===editId);item.id=editId;item.status=old?.status||'New';db.leads=db.leads.map(x=>x.id===editId?item:x);}
+    else db.leads.unshift(item);
+    if(!saveDB())return false;
+    renderCRM();renderDashboard();closeModal('leadModal');e.target.reset();readEl('lEditId').value='';readEl('leadModalTitle').textContent='Add Lead';showView('enquiries');alert('Lead saved successfully.');
+  }catch(err){console.error(err);alert('Lead could not be saved. Please try again.');}
+  return false;
+}
 function deleteLead(id){if(confirm('Delete this lead?')){db.leads=db.leads.filter(x=>x.id!==id);saveDB();renderCRM();}}
 function exportCRM(){const rows=[['Name','Phone','Email','Destination','Travellers','Source','Priority','Status','Travel Date','Value','Follow-up','Notes'],...db.leads.map(l=>[l.name,l.phone,l.email,l.dest,l.trav,l.source,l.priority,l.status,l.date,l.value,l.follow,l.notes])];const csv=rows.map(r=>r.map(x=>`"${String(x??'').replace(/"/g,'""')}"`).join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='on-a-trip-leads.csv';a.click();}
 function renderBlogs(){document.getElementById('blogList').innerHTML=db.blogs.map(b=>`<div style="padding:13px 0;border-bottom:1px solid var(--line)"><b>${esc(b[0])}</b><div style="color:var(--muted);font-size:13px">${esc(b[1])}</div><span class="badge" style="margin-top:7px">${esc(b[2])}</span></div>`).join('')}
