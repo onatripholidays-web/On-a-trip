@@ -1,13 +1,5 @@
-ON A TRIP HOLIDAYS — ADMIN DASHBOARD V5
+On A Trip Holidays Admin Dashboard V5
 
-This ZIP contains the redesigned responsive admin dashboard:
-admin-v4-crm-redesigned.html
-
-INSTALL:
-1. Replace the existing repository file named admin-v4-crm-redesigned.html with this file.
-2. Keep your existing admin.html and crm.html files.
-3. Keep the existing admin-v4-crm-final.html wrapper. It already points to admin-v4-crm-redesigned.html.
-4. Commit the replacement file to the main branch and redeploy/wait for Vercel.
-
-The page keeps the existing sessionStorage authentication gate and the CRM link to crm.html.
-The dashboard is intentionally frontend-ready; live counts should be connected to Supabase/CRM data next.
+Includes: modern responsive dashboard + functional AI-style quotation maker + invoice maker.
+Quotation and invoice can preview and open a print-ready document; choose Save as PDF in the browser print dialog.
+Upload admin-v4-crm-redesigned.html to the same repository path.
