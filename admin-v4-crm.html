@@ -354,25 +354,61 @@ const seedLeads=[
 ];
 const seedBlogs=[["Spiti Valley: Complete Travel Guide","Spiti Valley tour from Hyderabad","Published"],["Char Dham Yatra Guide","Char Dham Yatra from Hyderabad","Published"],["Best Time to Visit Ladakh","Ladakh tour packages","Draft"]];
 function loadDB(){
- try{const x=JSON.parse(localStorage.getItem(STORE_KEY));if(x&&Array.isArray(x.packages)&&Array.isArray(x.batches)&&Array.isArray(x.leads))return x}catch(e){}
- const oldB=JSON.parse(localStorage.getItem('oat_batches')||'null');
- const oldL=JSON.parse(localStorage.getItem('oat_leads')||'null');
- const db={packages:seedPackages,batches:(Array.isArray(oldB)&&oldB.length?oldB.map((b,i)=>Array.isArray(b)?{id:Date.now()+i,package:b[0],date:normaliseDate(b[1]),from:b[2],total:+b[3]||16,seats:+b[4]||0}:b):seedBatches),leads:(Array.isArray(oldL)&&oldL.length?oldL:seedLeads),blogs:seedBlogs};
- saveDB(db); return db;
+  try{
+    const x=JSON.parse(localStorage.getItem(STORE_KEY)||'null');
+    if(x&&Array.isArray(x.packages)&&Array.isArray(x.batches)&&Array.isArray(x.leads))return x;
+  }catch(e){console.warn('Primary admin storage unavailable',e)}
+  try{
+    const fp=JSON.parse(localStorage.getItem('oat_packages_v39')||'null');
+    const fb=JSON.parse(localStorage.getItem('oat_batches_v39')||'null');
+    const fl=JSON.parse(localStorage.getItem('oat_leads_v39')||'null');
+    if(Array.isArray(fp)&&Array.isArray(fb)&&Array.isArray(fl)) return {packages:fp,batches:fb,leads:fl,blogs:JSON.parse(localStorage.getItem('oat_blogs_v39')||'null')||seedBlogs};
+  }catch(e){console.warn('Fallback admin storage unavailable',e)}
+  let oldB=null,oldL=null;
+  try{oldB=JSON.parse(localStorage.getItem('oat_batches')||'null')}catch(e){}
+  try{oldL=JSON.parse(localStorage.getItem('oat_leads')||'null')}catch(e){}
+  const db0={
+    packages:seedPackages.map(p=>({...p})),
+    batches:(Array.isArray(oldB)&&oldB.length?oldB.map((b,i)=>Array.isArray(b)?{id:Date.now()+i,package:b[0],date:normaliseDate(b[1]),from:b[2],total:+b[3]||16,seats:+b[4]||0}:b):seedBatches.map(b=>({...b}))),
+    leads:(Array.isArray(oldL)&&oldL.length?oldL.map(l=>({...l})):seedLeads.map(l=>({...l}))),
+    blogs:seedBlogs.map(b=>[...b])
+  };
+  return db0;
 }
 let db=loadDB();
+try{ if(!localStorage.getItem(STORE_KEY)) saveDB(db); }catch(e){}
 function saveDB(next=db){
-  db=next;
-  const payload=JSON.stringify(db);
+  const candidate={
+    packages:Array.isArray(next?.packages)?next.packages:[],
+    batches:Array.isArray(next?.batches)?next.batches:[],
+    leads:Array.isArray(next?.leads)?next.leads:[],
+    blogs:Array.isArray(next?.blogs)?next.blogs:[]
+  };
+  const payload=JSON.stringify(candidate);
   try{
+    // Write the complete database first, then the legacy mirrors used by older pages.
     localStorage.setItem(STORE_KEY,payload);
-    localStorage.setItem('oat_batches',JSON.stringify(db.batches.map(b=>[b.package,displayDate(b.date),b.from,b.total,b.seats])));
-    localStorage.setItem('oat_leads',JSON.stringify(db.leads));
+    const verify=localStorage.getItem(STORE_KEY);
+    if(verify!==payload) throw new Error('Storage verification failed');
+    localStorage.setItem('oat_batches',JSON.stringify(candidate.batches.map(b=>[b.package,b.date,b.from,b.total,b.seats])));
+    localStorage.setItem('oat_leads',JSON.stringify(candidate.leads));
+    db=candidate;
     return true;
   }catch(err){
     console.error('On A Trip admin storage error:',err);
-    alert('Data could not be saved in this browser. Please allow website storage and try again.');
-    return false;
+    // Try a compact per-collection fallback if the combined object cannot be written.
+    try{
+      localStorage.setItem('oat_packages_v39',JSON.stringify(candidate.packages));
+      localStorage.setItem('oat_batches_v39',JSON.stringify(candidate.batches));
+      localStorage.setItem('oat_leads_v39',JSON.stringify(candidate.leads));
+      localStorage.setItem('oat_blogs_v39',JSON.stringify(candidate.blogs));
+      db=candidate;
+      return true;
+    }catch(err2){
+      console.error('Fallback storage error:',err2);
+      alert('Data could not be saved. Please check browser site-storage permissions and try again.');
+      return false;
+    }
   }
 }
 function readEl(id){return document.getElementById(id)}
@@ -426,9 +462,10 @@ function saveBatch(e){
     if(seats>total)seats=total;
     const edit=Number(valueOf('bEditIndex'));
     const item={id:Date.now(),package:pkg,date,from:valueOf('bFrom')||'Delhi',total,seats};
-    if(Number.isInteger(edit) && edit>=0 && edit<db.batches.length){item.id=db.batches[edit].id;db.batches[edit]=item;}
-    else db.batches.unshift(item);
-    if(!saveDB())return false;
+    const nextBatches=db.batches.slice();
+    if(Number.isInteger(edit) && edit>=0 && edit<nextBatches.length){item.id=nextBatches[edit].id;nextBatches[edit]=item;}
+    else nextBatches.unshift(item);
+    if(!saveDB({...db,batches:nextBatches}))return false;
     renderBatches();
     closeModal('batchModal');
     e.target.reset();
@@ -448,9 +485,10 @@ function savePackage(e){
     const item={name:valueOf('pName'),type:valueOf('pType')||'India',duration:valueOf('pDuration')||'Custom',price:valueOf('pPrice')||'Ask',image:valueOf('pImage')||'assets/placeholder.jpg',high:valueOf('pHighlights')||'Custom itinerary',tag:'NEW'};
     if(!item.name){alert('Destination is required.');return false;}
     const idx=Number(valueOf('pEditIndex'));
-    if(Number.isInteger(idx) && idx>=0 && idx<db.packages.length){item.tag=db.packages[idx].tag||'NEW';db.packages[idx]=item;}
-    else db.packages.unshift(item);
-    if(!saveDB())return false;
+    const nextPackages=db.packages.slice();
+    if(Number.isInteger(idx) && idx>=0 && idx<nextPackages.length){item.tag=nextPackages[idx].tag||'NEW';nextPackages[idx]=item;}
+    else nextPackages.unshift(item);
+    if(!saveDB({...db,packages:nextPackages}))return false;
     renderPackages();renderDashboard();closeModal('packageModal');e.target.reset();readEl('pEditIndex').value='-1';showView('packages');alert('Package saved successfully.');
   }catch(err){console.error(err);alert('Package could not be saved. Please try again.');}
   return false;
@@ -467,9 +505,10 @@ function saveLead(e){
     const item={id:Date.now(),name:valueOf('lName'),phone:valueOf('lPhone'),email:valueOf('lEmail'),dest:valueOf('lDest')||'Custom Trip',trav:Math.max(1,Math.floor(numberOf('lTrav',1))),source:valueOf('lSource')||'WhatsApp',priority:valueOf('lPriority')||'Normal',status:'New',follow:valueOf('lFollow'),date:valueOf('lDate'),value:valueOf('lValue'),notes:valueOf('lNotes')};
     if(!item.name){alert('Name is required.');return false;}
     const editId=Number(valueOf('lEditId'));
-    if(editId){const old=db.leads.find(x=>x.id===editId);item.id=editId;item.status=old?.status||'New';db.leads=db.leads.map(x=>x.id===editId?item:x);}
-    else db.leads.unshift(item);
-    if(!saveDB())return false;
+    let nextLeads;
+    if(editId){const old=db.leads.find(x=>x.id===editId);item.id=editId;item.status=old?.status||'New';nextLeads=db.leads.map(x=>x.id===editId?item:x);}
+    else nextLeads=[item,...db.leads];
+    if(!saveDB({...db,leads:nextLeads}))return false;
     renderCRM();renderDashboard();closeModal('leadModal');e.target.reset();readEl('lEditId').value='';readEl('leadModalTitle').textContent='Add Lead';showView('enquiries');alert('Lead saved successfully.');
   }catch(err){console.error(err);alert('Lead could not be saved. Please try again.');}
   return false;
