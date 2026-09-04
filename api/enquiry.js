@@ -40,7 +40,6 @@ export default async function handler(req, res) {
         headers: {
           "Content-Type": "application/json",
           "apikey": supabaseKey,
-          "Authorization": `Bearer ${supabaseKey}`,
           "Prefer": "return=representation"
         },
         body: JSON.stringify({
