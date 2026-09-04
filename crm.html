@@ -23,7 +23,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 .toolbar input,.toolbar select{padding:11px;border:1px solid var(--line);border-radius:9px;background:#fff}.toolbar input{min-width:260px}
 .btn{border:0;border-radius:9px;padding:11px 14px;font-weight:900}.primary{background:var(--o);color:#fff}.secondary{background:#fff;border:1px solid var(--line);color:var(--n)}
 .board{display:grid;grid-template-columns:repeat(8,1fr);gap:10px;overflow-x:auto}.column{min-width:185px;background:#eaf0f3;border-radius:12px;padding:9px}.column h3{font-size:12px;margin:3px 4px 9px;text-transform:uppercase}.count{float:right;background:#fff;border-radius:12px;padding:2px 7px}
-.lead{background:#fff;border:1px solid var(--line);border-radius:11px;padding:12px;margin-bottom:9px;box-shadow:0 3px 12px #00000008}.lead b{font-size:14px}.lead .muted{font-size:11px;color:var(--muted);margin-top:3px}.lead .trip{color:var(--o);font-weight:800;font-size:12px;margin-top:8px}.lead .actions{display:flex;gap:5px;margin-top:9px}.lead .actions button{border:1px solid var(--line);background:#fff;border-radius:7px;padding:6px 7px;font-size:11px;font-weight:800}.lead .actions .wa{background:#eaf8f0;color:#087548;border-color:#ccebdc}.lead .actions .call{background:#eef6ff;color:#1266d4;border-color:#cfe3ff}.lead .actions button{cursor:pointer}.lead .actions button:first-child,.lead .actions .call{min-width:42px}
+.lead{background:#fff;border:1px solid var(--line);border-radius:11px;padding:12px;margin-bottom:9px;box-shadow:0 3px 12px #00000008}.lead b{font-size:14px}.lead .muted{font-size:11px;color:var(--muted);margin-top:3px}.lead .trip{color:var(--o);font-weight:800;font-size:12px;margin-top:8px}.lead .actions{display:flex;gap:5px;margin-top:9px}.lead .actions button{border:1px solid var(--line);background:#fff;border-radius:7px;padding:6px 7px;font-size:11px;font-weight:800}.lead .actions .wa{background:#eaf8f0;color:#087548;border-color:#ccebdc}.lead .actions .call{background:#eef6ff;color:#1266d4;border-color:#cfe3ff}.lead .actions button{cursor:pointer}.lead .actions button:first-child,.lead .actions .call{min-width:42px}.icon-svg{width:17px;height:17px;vertical-align:-3px;display:inline-block}.wa-logo{width:17px;height:17px;vertical-align:-3px}.top .role-link{display:inline-flex;align-items:center;gap:5px}
 .badge{display:inline-block;padding:4px 7px;border-radius:7px;background:#eef2f5;font-size:10px;font-weight:800;margin-top:6px}
 .table-card{background:#fff;border:1px solid var(--line);border-radius:14px;margin-top:18px;padding:15px;overflow:auto}.table{width:100%;border-collapse:collapse;min-width:1120px}.table th,.table td{padding:11px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}.table th{font-size:11px;color:var(--muted);text-transform:uppercase}.table select{padding:7px;border:1px solid var(--line);border-radius:7px}
 .modal{position:fixed;inset:0;background:#0008;display:none;place-items:center;padding:18px;z-index:30}.modal.show{display:grid}.box{background:#fff;width:min(680px,100%);max-height:92vh;overflow:auto;border-radius:17px;padding:20px}.head{display:flex;justify-content:space-between;align-items:center}.close{border:0;background:#eef2f5;border-radius:50%;width:35px;height:35px}
@@ -43,7 +43,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 
 <div id="app">
 <header class="top"><div><b>ON A TRIP HOLIDAYS — CRM</b><small> • Sales & Lead Management</small></div>
-<div class="top-actions"><a href="admin.html">← Admin</a><button class="logout" onclick="logout()">Logout</button></div></header>
+<div class="top-actions"><a id="roleLink" class="role-link" href="admin.html">← Admin</a><button class="logout" onclick="logout()">Logout</button></div></header>
 <main class="shell">
 <section class="stats">
 <div class="stat"><small>Total Leads</small><strong id="sTotal">0</strong><em>All enquiries</em></div>
@@ -93,30 +93,27 @@ const SUPABASE_URL="https://esezxiatffjihwikfzbz.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_VdPfeaWm6BsPk6ArHsI3iA_GxwPqd1d";
 const {createClient}=supabase; const db=createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 const stages=["New","Contacted","Qualified","Hot","Quote Sent","Follow-up","Booked","Lost"];
-const salespeople=["Unassigned","Rohini","Harshika","Godavari","Sai Kumar"];
+const salespeople=["Unassigned","Rohini","Harshika","Godavari","Vanditha"];
 let leads=[];
 let currentUser=null;
 let currentRole="admin";
 let currentSalesperson="";
-async function getUserProfile(user){
-  if(!user) return {role:"admin",salesperson:""};
-  const {data,error}=await db.from("crm_users").select("role,salesperson").eq("user_id",user.id).maybeSingle();
-  if(!error && data){
-    return {role:data.role==="salesperson"?"salesperson":"admin",salesperson:data.salesperson||""};
-  }
-  const email=(user.email||"").toLowerCase();
-  const emailMap={
-    "onatripholidays@gmail.com":{role:"admin",salesperson:""},
-    "rohinisalesoat@gmail.com":{role:"salesperson",salesperson:"Rohini"},
-    "oatsalesteam@gmail.com":{role:"salesperson",salesperson:"Harshika"},
-    "godavarisalesoat@gmail.com":{role:"salesperson",salesperson:"Godavari"},
-    "onatripholidayssaikumar@gmail.com":{role:"salesperson",salesperson:"Sai Kumar"}
-  };
-  return emailMap[email]||{role:"admin",salesperson:""};
+function getUserProfile(user){
+  const meta=user?.user_metadata||{};
+  const role=(meta.crm_role||meta.role||"admin").toLowerCase();
+  const salesperson=meta.salesperson||meta.crm_salesperson||"";
+  return {role:role==="salesperson"?"salesperson":"admin",salesperson};
 }
 function applyAccessUI(){
   const isAdmin=currentRole==="admin";
+  const roleLink=document.getElementById('roleLink');
   document.querySelector('.top small').textContent=isAdmin?' • Admin • Sales & Lead Management':(' • '+(currentSalesperson||'Salesperson')+' • My Leads');
+  if(roleLink){
+    roleLink.textContent=isAdmin?'← Admin':('👤 '+(currentSalesperson||'Salesperson'));
+    roleLink.href=isAdmin?'admin.html':'#';
+    roleLink.style.pointerEvents=isAdmin?'':'none';
+    roleLink.style.opacity=isAdmin?'1':'.95';
+  }
   document.getElementById('filterBranch').style.display=isAdmin?'':'none';
   document.getElementById('filterSalesperson').style.display=isAdmin?'':'none';
   const newLeadBtn=document.querySelector('button[onclick="openModal(\'leadModal\')"]'); if(newLeadBtn)newLeadBtn.style.display=isAdmin?'':'none';
@@ -133,10 +130,10 @@ function fillSalespeople(){
     if(current)el.value=current;
   });
 }
-async function checkSession(){const {data:{session}}=await db.auth.getSession();if(session){currentUser=session.user;const p=await getUserProfile(currentUser);currentRole=p.role;currentSalesperson=p.salesperson;showApp()}else showLogin()}
+async function checkSession(){const {data:{session}}=await db.auth.getSession();if(session){currentUser=session.user;const p=getUserProfile(currentUser);currentRole=p.role;currentSalesperson=p.salesperson;showApp()}else showLogin()}
 function showLogin(){loginScreen.style.display="grid";app.style.display="none"}
 function showApp(){loginScreen.style.display="none";app.style.display="block";fillSalespeople();applyAccessUI();loadLeads()}
-async function login(){const email=loginEmail.value.trim(),password=loginPassword.value,error=loginError;error.style.display="none";if(!email||!password){error.textContent="Please enter email and password.";error.style.display="block";return}const {data,error:e}=await db.auth.signInWithPassword({email,password});if(e){error.textContent=e.message;error.style.display="block";return}currentUser=data.user;const p=await getUserProfile(currentUser);currentRole=p.role;currentSalesperson=p.salesperson;if(currentRole==="salesperson"&&!currentSalesperson){error.textContent="This CRM account is not assigned to a salesperson. Ask Admin to register this account in Supabase CRM users.";error.style.display="block";await db.auth.signOut();return}showApp()}
+async function login(){const email=loginEmail.value.trim(),password=loginPassword.value,error=loginError;error.style.display="none";if(!email||!password){error.textContent="Please enter email and password.";error.style.display="block";return}const {data,error:e}=await db.auth.signInWithPassword({email,password});if(e){error.textContent=e.message;error.style.display="block";return}currentUser=data.user;const p=getUserProfile(currentUser);currentRole=p.role;currentSalesperson=p.salesperson;if(currentRole==="salesperson"&&!currentSalesperson){error.textContent="This CRM account is not assigned to a salesperson. Ask Admin to set salesperson in the user's Auth metadata.";error.style.display="block";await db.auth.signOut();return}showApp()}
 async function logout(){await db.auth.signOut();leads=[];currentUser=null;currentRole="admin";currentSalesperson="";showLogin()}
 
 async function loadLeads(){
@@ -157,8 +154,11 @@ function render(){
  board.innerHTML=stages.map(s=>`<div class="column"><h3>${s}<span class="count">${counts[s]||0}</span></h3>${list.filter(l=>l.status===s).map(card).join("")}</div>`).join("");
  table.innerHTML=list.map(row).join("")||'<tr><td colspan="10">No matching enquiries.</td></tr>';
 }
-function card(l){return `<div class="lead"><b>${esc(l.name)}</b><div class="muted">${esc(l.phone)} • ${esc(l.branch||"Branch not assigned")}</div><div class="trip">${esc(l.dest||"Destination not specified")}</div><div class="muted">${l.trav||0} travellers • ${esc(l.value||"Value not set")}</div><span class="badge">👤 ${esc(l.salesperson)}</span><div class="actions"><button class="wa" title="WhatsApp" aria-label="WhatsApp" onclick="wa(${l.id})">☘ WA</button><button class="call" title="Call customer" aria-label="Call customer" onclick="callCustomer('${esc(l.phone)}')">☎ Call</button><button onclick="details(${l.id})">View</button></div></div>`}
-function row(l){const assignment=currentRole==="admin"?`<select onchange="assign(${l.id},this.value)">${salespeople.map(s=>`<option ${s===l.salesperson?"selected":""}>${esc(s)}</option>`).join("")}</select>`:`<span>${esc(l.salesperson)}</span>`;return `<tr><td><b>${esc(l.name)}</b><div style="color:var(--muted);font-size:11px">${esc(l.phone)}</div></td><td>${esc(l.dest||"—")}</td><td>${esc(l.branch||"—")}</td><td>${assignment}</td><td>${esc(l.date||"—")}</td><td>${l.trav||"—"}</td><td><b>${esc(l.value||"—")}</b></td><td><select onchange="stage(${l.id},this.value)">${stages.map(s=>`<option value="${esc(s)}" ${s===l.status?"selected":""}>${s}</option>`).join("")}</select></td><td style="color:var(--o);font-weight:800">${esc(l.follow||"—")}</td><td><button class="btn secondary" title="WhatsApp" onclick="wa(${l.id})">☘ WA</button> <button class="btn secondary" title="Call customer" onclick="callCustomer('${esc(l.phone)}')">☎</button> <button class="btn secondary" onclick="details(${l.id})">View</button></td></tr>`}
+const WA_ICON='<img class="wa-logo" src="https://cdn.simpleicons.org/whatsapp/25D366" alt="WhatsApp">';
+const CALL_ICON='<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92z"/></svg>';
+
+function card(l){return `<div class="lead"><b>${esc(l.name)}</b><div class="muted">${esc(l.phone)} • ${esc(l.branch||"Branch not assigned")}</div><div class="trip">${esc(l.dest||"Destination not specified")}</div><div class="muted">${l.trav||0} travellers • ${esc(l.value||"Value not set")}</div><span class="badge">👤 ${esc(l.salesperson)}</span><div class="actions"><button class="wa" title="WhatsApp" aria-label="WhatsApp" onclick="wa(${l.id})">${WA_ICON} WA</button><button class="call" title="Call customer" aria-label="Call customer" onclick="callCustomer('${esc(l.phone)}')">${CALL_ICON} Call</button><button onclick="details(${l.id})">View</button></div></div>`}
+function row(l){const assignment=currentRole==="admin"?`<select onchange="assign(${l.id},this.value)">${salespeople.map(s=>`<option ${s===l.salesperson?"selected":""}>${esc(s)}</option>`).join("")}</select>`:`<span>${esc(l.salesperson)}</span>`;return `<tr><td><b>${esc(l.name)}</b><div style="color:var(--muted);font-size:11px">${esc(l.phone)}</div></td><td>${esc(l.dest||"—")}</td><td>${esc(l.branch||"—")}</td><td>${assignment}</td><td>${esc(l.date||"—")}</td><td>${l.trav||"—"}</td><td><b>${esc(l.value||"—")}</b></td><td><select onchange="stage(${l.id},this.value)">${stages.map(s=>`<option value="${esc(s)}" ${s===l.status?"selected":""}>${s}</option>`).join("")}</select></td><td style="color:var(--o);font-weight:800">${esc(l.follow||"—")}</td><td><button class="btn secondary" title="WhatsApp" aria-label="WhatsApp" onclick="wa(${l.id})">${WA_ICON} WA</button> <button class="btn secondary" title="Call customer" aria-label="Call customer" onclick="callCustomer('${esc(l.phone)}')">${CALL_ICON}</button> <button class="btn secondary" onclick="details(${l.id})">View</button></td></tr>`}
 
 async function stage(id,status){const l=leads.find(x=>x.id===id);if(currentRole!=="admin"&&l?.salesperson!==currentSalesperson){alert("You can only update your assigned leads.");return}if(!l)return;const old=l.status;l.status=status;const {error}=await db.from("enquiries").update({status}).eq("id",id);if(error){l.status=old;alert("Could not update status: "+error.message)}render()}
 async function assign(id,salesperson){if(currentRole!=="admin"){alert("Only Admin can reassign leads.");return}const l=leads.find(x=>x.id===id);if(!l)return;const old=l.salesperson;l.salesperson=salesperson;const {error}=await db.from("enquiries").update({salesperson}).eq("id",id);if(error){l.salesperson=old;alert("Could not update salesperson: "+error.message)}render()}
@@ -175,7 +175,7 @@ function details(id){const l=leads.find(x=>x.id===id);if(!l)return;detailTitle.t
 <div class="detail"><small>Follow-up</small><b>${esc(l.follow||"—")}</b></div></div>
 <div style="margin-top:18px"><b>Notes</b><p>${esc(l.notes||"No notes added.")}</p></div>
 <div style="margin-top:18px"><b>Customer Message</b><p>${esc(l.message||"No message.")}</p></div>
-<div style="display:flex;gap:8px;margin-top:18px"><button class="btn primary" onclick="wa(${l.id})">WhatsApp</button><button class="btn secondary" onclick="callCustomer('${esc(l.phone)}')">Call Customer</button></div>`;
+<div style="display:flex;gap:8px;margin-top:18px"><button class="btn primary" onclick="wa(${l.id})">${WA_ICON} WhatsApp</button><button class="btn secondary" onclick="callCustomer('${esc(l.phone)}')">${CALL_ICON} Call Customer</button></div>`;
 openModal("detailsModal")}
 
 async function addLead(e){e.preventDefault();const lead={name:name.value.trim(),phone:phone.value.trim(),destination:dest.value.trim(),travel_date:date.value||null,travellers:Number(trav.value||0),branch:branch.value,salesperson:salesperson.value||"Unassigned",source:source.value,priority:priority.value,status:"New",value:value.value.trim(),follow_up:follow.value||null,notes:notes.value.trim()};
