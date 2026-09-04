@@ -96,6 +96,17 @@ button{cursor:pointer}
 .tools-card h2{margin:0 0 6px;font-size:20px}.tools-card p{margin:0 0 14px;color:var(--muted);font-size:13px}
 .admin-tools{display:grid;grid-template-columns:1fr 1fr;gap:12px}.admin-tool{display:flex;align-items:center;gap:12px;padding:15px 16px;border:1px solid var(--line);border-radius:13px;text-decoration:none;color:var(--navy);background:#f8fafb;font-weight:900;transition:.15s}.admin-tool:hover{transform:translateY(-1px);border-color:#f0a080;background:#fff5f0}.admin-tool .tool-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:11px;background:#fff0ea;font-size:22px}.admin-tool small{display:block;color:var(--muted);font-weight:600;margin-top:3px}
 @media(max-width:600px){.admin-tools{grid-template-columns:1fr}}
+
+/* V39.1 mobile quick navigation */
+.admin-bottom-nav{display:none}
+@media(max-width:700px){
+  body{padding-bottom:96px}
+  .admin-bottom-nav{position:fixed;left:18px;right:18px;bottom:14px;height:78px;background:rgba(255,255,255,.97);border:1px solid #dce4e9;border-radius:30px;box-shadow:0 10px 35px rgba(10,35,55,.16);display:grid;grid-template-columns:repeat(3,1fr);align-items:center;z-index:100}
+  .admin-bottom-nav a{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-decoration:none;color:#102335;font-weight:900;font-size:12px}
+  .admin-bottom-nav .bn-icon{font-size:25px;line-height:1}
+  .admin-bottom-nav a.active{color:#ee5a2a}
+  .admin-bottom-nav a:active{transform:scale(.97)}
+}
 </style>
 <meta name="robots" content="noindex,nofollow,noarchive">
 </head>
@@ -283,6 +294,11 @@ button{cursor:pointer}
  </div></div>
 </section>
 </main>
+<nav class="admin-bottom-nav" aria-label="Admin quick navigation">
+  <a href="admin-v4-crm.html" class="active"><span class="bn-icon">⌂</span><span>Home</span></a>
+  <a href="payment-invoicer.html"><span class="bn-icon">🧾</span><span>Invoice Maker</span></a>
+  <a href="admin-ai-itinerary.html"><span class="bn-icon">✨</span><span>Quotation Maker</span></a>
+</nav>
 </div>
 
 <div class="modal" id="packageModal"><div class="modal-box"><div class="modal-head"><h2>Add / Edit Package</h2><button class="close" onclick="closeModal('packageModal')">×</button></div><form class="form" onsubmit="savePackage(event)"><input id="pEditIndex" type="hidden" value="-1"><div class="form-row"><div><label>Destination</label><input id="pName" required placeholder="Thailand"></div><div><label>Category</label><select id="pType"><option>International</option><option>India</option><option>North East</option><option>Pilgrimage</option><option>Couples</option><option>Weekend</option></select></div></div><div class="form-row"><div><label>Duration</label><input id="pDuration" placeholder="6D/5N"></div><div><label>Starting price</label><input id="pPrice" placeholder="₹39,999"></div></div><label>Image path</label><input id="pImage" placeholder="assets/thailand.jpg"><label>Highlights</label><textarea id="pHighlights" placeholder="Bangkok • Pattaya • Phuket"></textarea><button class="btn primary">Save Package</button></form></div></div>
