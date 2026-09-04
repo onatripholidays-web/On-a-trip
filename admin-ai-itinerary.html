@@ -31,9 +31,8 @@ textarea{min-height:72px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px
 .editbar{display:none;background:#fff8e8;border:1px solid #f1d28b;border-radius:10px;padding:10px;margin:10px 0}.editing .editbar{display:block}
 .empty{padding:30px 10px;text-align:center;color:var(--muted)}
 .print-sheet{display:none}
+.cover-page{break-after:page;min-height:250mm;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20mm}.cover-page img{width:250px;max-width:70%;margin-bottom:28px}.cover-brand{font-size:34px;font-weight:950;letter-spacing:.04em;color:var(--navy)}.cover-tag{font-size:18px;font-weight:700;color:var(--orange);margin-top:8px}.cover-rule{width:180px;height:4px;background:var(--orange);margin:24px auto}.booking-stamp{margin-top:24px;border:1px solid var(--line);border-radius:12px;padding:14px 24px;background:#fafcfd}
 
-
-.quote-workflow{margin-top:16px;border:1px solid var(--line);border-radius:16px;padding:16px;background:#fbfcfd}.workflow-head{display:flex;justify-content:space-between;gap:12px;align-items:center}.workflow-status{font-size:11px;font-weight:900;padding:7px 10px;border-radius:999px;background:#fff3df;color:#9b5c00}.workflow-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.payment-panel,.negotiate-panel{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}.payment-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.payment-actions{margin-top:10px}.invoice-preview{margin-top:12px;padding:14px;border:1px dashed #d4a13b;border-radius:12px;background:#fffaf0}@media(max-width:600px){.payment-grid{grid-template-columns:1fr}}
 @media(max-width:950px){.grid{grid-template-columns:1fr}}
 @media(max-width:600px){.row,.two{grid-template-columns:1fr}.wrap{padding:12px}.quote-title{font-size:22px}.top{padding:12px 14px}.brand img{width:92px}}
 
@@ -44,7 +43,7 @@ textarea{min-height:72px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px
   .wrap{max-width:none;padding:0}.grid{display:block}.card{border:0;box-shadow:none;padding:0}
   .quote{display:none!important}.print-sheet{display:block}
   .print-header{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid var(--orange);padding-bottom:8px;margin-bottom:12px}
-  .print-header img{width:175px;height:auto;background:#fff;object-fit:contain}
+  .print-header img{width:155px;height:auto;background:#ffd75a}
   .print-company{text-align:right;font-size:10px;line-height:1.4}.print-company b{font-size:15px}
   .print-title{font-size:23px;font-weight:950;margin:5px 0}.print-sub{font-size:11px;color:#52636f}
   .guest-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;border:1px solid #ddd;padding:9px;margin:10px 0}
@@ -55,7 +54,7 @@ textarea{min-height:72px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px
   .print-box h4{margin:0 0 4px;font-size:11px}.print-box p,.print-box li{font-size:9.5px;line-height:1.35}
   .print-price{font-size:18px;font-weight:950}.payment{break-inside:avoid;margin-top:10px;border:2px solid #e6a33a;border-radius:8px;padding:10px}
   .payment h3{text-align:center;margin:0 0 8px;font-size:15px}.pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;font-size:9.5px}
-  .pay-grid b{color:#b12820}.qr-wrap{text-align:center;margin-top:7px}.qr-wrap img{width:125px;height:125px;object-fit:contain}
+  .pay-grid b{color:#b12820}.qr-wrap{text-align:center;margin-top:7px}.qr-wrap img{width:115px;height:115px}
   .how{font-size:9.5px;line-height:1.35;margin-top:7px}.print-footer{text-align:center;border-top:2px solid var(--orange);padding-top:6px;margin-top:10px;font-size:9px}
 }
 </style>
@@ -64,27 +63,28 @@ textarea{min-height:72px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px
 <script>if(sessionStorage.getItem('oat_admin_auth')!=='1') location.replace('admin.html');</script>
 
 <header class="top">
-  <div class="brand"><img src="assets/logo.png" alt="On A Trip Holidays logo"><b>AI QUOTATION MAKER</b></div>
-  <a href="admin-dashboard.html">← Admin</a>
+  <div class="brand"><img src="assets/on-a-trip-logo.png" alt="On A Trip Holidays logo"><b>AI QUOTATION MAKER</b></div>
+  <a href="admin-v4-crm.html">← Admin</a>
 </header>
 
 <div class="wrap">
 <div class="grid">
 <section class="builder card">
-  <h1>AI Quotation Maker</h1>
-  <p class="muted">Create, edit, negotiate and convert travel quotations into payment invoices.</p>
+  <h1>✨ AI Quotation Maker</h1>
+  <p class="muted">Create, edit and prepare a professional branded customer quotation.</p>
   <form id="f" class="form">
-    <div class="row"><div><label>Guest name</label><input id="guest" placeholder="Guest full name" autocomplete="name"></div><div><label>Guest contact number *</label><input id="contact" type="tel" placeholder="10-digit mobile number" autocomplete="tel" required></div></div>
-    <div class="row"><div><label>Email ID (optional)</label><input id="email" type="email" placeholder="guest@example.com" autocomplete="email"></div><div></div></div>
-    <div class="row"><div><label>Destination</label><input id="dest" placeholder="Kedarnath"></div><div><label>Days</label><input id="days" type="number" min="1" max="30" value="5"></div></div>
-    <div class="row"><div><label>Travellers</label><input id="pax" type="number" min="1" value="4"></div><div><label>Start city</label><input id="start" value="Hyderabad"></div></div>
-    <div class="row"><div><label>Start date</label><input id="startDate" type="date"></div><div><label>End date</label><input id="endDate" type="date"></div></div>
-    <div class="row"><div><label>Duration</label><input id="duration" readonly placeholder="Select start & end dates"></div><div><label>Language</label><select id="language"><option>English</option><option>Telugu</option><option>English + Telugu</option></select></div></div>
+    <div class="row"><div><label>Salesperson name *</label><input id="salesperson" placeholder="Enter salesperson name" required></div><div><label>Guest name</label><input id="guest" placeholder="Guest full name" autocomplete="name"></div></div>
+    <div class="row"><div><label>Guest contact number *</label><input id="contact" placeholder="10-digit mobile number" inputmode="tel" required></div><div><label>Email (optional)</label><input id="email" type="email" placeholder="guest@email.com"></div></div>
+    <div class="row"><div><label>Destination</label><input id="dest" placeholder="Kedarnath" required></div><div><label>Travellers</label><input id="pax" type="number" min="1" value="4"></div></div>
+    <div class="row"><div><label>Trip start date *</label><input id="startDate" type="date" required></div><div><label>Trip end date *</label><input id="endDate" type="date" required></div></div>
+    <input id="days" type="hidden" value="5">
+    <div class="row"><div><label>Start city</label><input id="start" value="Hyderabad"></div><div><label>Language</label><select id="language"><option>English</option><option>Telugu</option><option>English + Telugu</option></select></div></div>
     <div class="row"><div><label>Trip type</label><select id="type"><option>Family</option><option>Pilgrimage</option><option>Adventure</option><option>Couples</option><option>Premium</option></select></div><div><label>Hotel</label><select id="hotel"><option>3 Star</option><option>4 Star</option><option>5 Star</option><option>Premium</option></select></div></div>
-    <div class="row"><div><label>Vehicle</label><select id="vehicle"><option>Sedan Car — up to 4 members</option><option>Ertiga — up to 6 members</option><option>Innova Crysta — up to 7 members</option><option>Tempo Traveller — 12 Seater</option><option>Tempo Traveller — 17 Seater</option><option>Tempo Traveller — 20 Seater</option></select></div><div><label>Meals</label><select id="meals"><option>Breakfast & Dinner</option><option>Breakfast Only</option><option>All Meals</option><option>Satvik Veg Meals</option></select></div></div>
+    <div class="row"><div><label>Vehicle</label><select id="vehicle"><option>Sedan / Private Car — up to 4</option><option>Ertiga — up to 6</option><option>Innova Crysta — up to 7</option><option>Tempo Traveller — 12 Seater</option><option>Tempo Traveller — 17 Seater</option><option>Tempo Traveller — 20 Seater</option></select></div><div><label>Meals</label><select id="meals"><option>Breakfast & Dinner</option><option>Breakfast Only</option><option>All Meals</option><option>Satvik Veg Meals</option></select></div></div>
     <label>Budget / quote</label><input id="budget" placeholder="e.g. ₹59,999 total or ₹30,500 per person">
     <label>Special requirements</label><textarea id="special" placeholder="Senior citizens, darshan, child-friendly, honeymoon, activities..."></textarea>
     <label>Additional instruction</label><textarea id="instruction" placeholder="Anything the sales person wants AI to consider..."></textarea>
+    <div class="row"><div><label>Guest response</label><select id="guestResponse"><option>Pay to confirm</option><option>Negotiate</option><option>Considering</option></select></div><div><label>Payment status</label><select id="paymentStatus"><option>Quote only</option><option>Advance pending</option><option>Advance received</option><option>Paid in full</option></select></div></div>
     <div class="actions">
       <button class="btn primary" type="submit">✨ Generate with AI</button>
       <button class="btn secondary" type="button" onclick="printQuote()">🖨 Create PDF</button>
@@ -104,24 +104,18 @@ textarea{min-height:72px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px
     <button class="btn secondary" type="button" onclick="saveDraft()">💾 Save Draft</button>
   </div>
   <div id="out"><div class="empty">Fill the form and click Generate with AI.</div></div>
-  <div class="quote-workflow" id="quoteWorkflow" style="display:none">
-    <div class="workflow-head"><div><b>Quotation Response</b><div class="muted">Every quotation must have a sales decision.</div></div><span class="workflow-status" id="workflowStatus">AWAITING RESPONSE</span></div>
-    <div class="workflow-actions">
-      <button class="btn primary" type="button" onclick="setQuoteResponse('prepay')">💳 Customer agrees — Pay Advance</button>
-      <button class="btn secondary" type="button" onclick="setQuoteResponse('negotiate')">🤝 Customer wants to Negotiate</button>
-    </div>
-    <div class="payment-panel" id="paymentPanel" style="display:none">
-      <div class="payment-grid"><div><label>Payment status</label><select id="paymentStatus"><option value="pending">Pending</option><option value="partial">Partially Paid</option><option value="paid">Paid</option></select></div><div><label>Amount paid</label><input id="amountPaid" placeholder="₹ 0"></div></div>
-      <div class="payment-actions"><button class="btn primary" type="button" onclick="markPaidAndInvoice()">🧾 Mark Paid & Create Payment Invoice</button></div>
-      <div id="invoiceMsg" class="note"></div>
-    </div>
-    <div class="negotiate-panel" id="negotiatePanel" style="display:none"><label>Negotiation note</label><textarea id="negotiationNote" placeholder="Enter customer's requested price or change..."></textarea><button class="btn secondary" type="button" onclick="saveNegotiation()">Save Negotiation Request</button></div>
-  </div>
 </section>
 
 <section class="print-sheet" id="printSheet">
+  <div class="cover-page">
+    <img src="assets/on-a-trip-logo.png" alt="On A Trip Holidays logo">
+    <div class="cover-brand">ON A TRIP HOLIDAYS</div>
+    <div class="cover-tag">LET'S EXPLORE THE MAGICAL PLACES</div>
+    <div class="cover-rule"></div>
+    <div class="booking-stamp" id="pCoverMeta"></div>
+  </div>
   <div class="print-header">
-    <img src="assets/logo.png" alt="On A Trip Holidays">
+    <img src="assets/on-a-trip-logo.png" alt="On A Trip Holidays">
     <div class="print-company"><b>ON A TRIP HOLIDAYS</b><br>Travel with us. Explore the magical places.<br>www.onatripholidays.com</div>
   </div>
   <div class="print-title" id="pTitle">Travel Quotation & Itinerary</div>
@@ -165,45 +159,22 @@ const $=id=>document.getElementById(id);
 let last=null,lastQuote=null,editing=false;
 
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
-function formatDate(v){if(!v)return '';const d=new Date(v+'T00:00:00');return d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});}
-function updateDates(){
- const a=$('startDate').value,b=$('endDate').value;
- if(a&&b){
-  const s=new Date(a+'T00:00:00'),e=new Date(b+'T00:00:00'),diff=Math.round((e-s)/86400000);
-  if(diff>=0){$('days').value=diff+1;$('duration').value=`${diff} Night${diff===1?'':'s'} / ${diff+1} Day${diff===0?'':'s'}`;return true;}
-  $('duration').value='End date must be on or after start date'; return false;
- }
- if(a){
-  const n=Math.max(1,Math.min(30,Number($('days').value)||1));
-  const s=new Date(a+'T00:00:00'); s.setDate(s.getDate()+n-1);
-  const end=s.toISOString().slice(0,10);
-  $('endDate').value=end;
-  $('duration').value=`${n-1} Night${n-1===1?'':'s'} / ${n} Day${n===1?'':'s'}`;
-  return true;
- }
- $('duration').value='Select start & end dates'; return true;
+function readForm(){
+ const sd=$('startDate').value, ed=$('endDate').value;
+ const fmt=d=>d?new Date(d+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}):'';
+ const now=new Date();
+ return{salesperson:$('salesperson').value.trim(),guest:$('guest').value.trim()||'Guest',contact:$('contact').value.trim(),email:$('email').value.trim(),dest:$('dest').value.trim(),
+ days:Math.max(1,Math.min(30,Number($('days').value)||1)),pax:Math.max(1,Number($('pax').value)||1),start:$('start').value.trim()||'Hyderabad',
+ startDate:sd,endDate:ed,dates:sd&&ed?`${fmt(sd)} – ${fmt(ed)}`:'',language:$('language').value,type:$('type').value,hotel:$('hotel').value,vehicle:$('vehicle').value,meals:$('meals').value,
+ budget:$('budget').value.trim(),special:$('special').value.trim(),instruction:$('instruction').value.trim(),guestResponse:$('guestResponse').value,paymentStatus:$('paymentStatus').value,
+ bookingTimestamp:now.toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true})};
 }
-function validateDates(){
- const a=$('startDate').value,b=$('endDate').value;
- if(a&&b && new Date(b+'T00:00:00') < new Date(a+'T00:00:00')){
-  $('endDate').setCustomValidity('End date must be on or after start date.');
-  return false;
- }
- $('endDate').setCustomValidity(''); return true;
-}
-function readForm(){updateDates();return{
- guest:$('guest').value.trim()||'Guest',contact:$('contact').value.trim(),email:$('email').value.trim(),dest:$('dest').value.trim(),
- days:Math.max(1,Math.min(30,Number($('days').value)||1)),pax:Math.max(1,Number($('pax').value)||1),
- start:$('start').value.trim()||'Hyderabad',startDate:$('startDate').value,endDate:$('endDate').value,dates:$('startDate').value&&$('endDate').value?`${formatDate($('startDate').value)} – ${formatDate($('endDate').value)}`:'',language:$('language').value,
- type:$('type').value,hotel:$('hotel').value,vehicle:$('vehicle').value,meals:$('meals').value,
- budget:$('budget').value.trim(),special:$('special').value.trim(),instruction:$('instruction').value.trim()
-};}
 
 function render(x,r){
  lastQuote=JSON.parse(JSON.stringify(x));
  $('status').className='status';$('status').textContent='● AI QUOTE DRAFT';
  $('qt').textContent=x.title||`${r.dest} — ${r.days} Days`;
- $('qm').textContent=x.summary||`Prepared for ${r.guest} • ${r.pax} travellers • ${r.start} • ${r.dates||'Dates to be confirmed'}`;
+ $('qm').textContent=x.summary||`Prepared for ${r.guest} • ${r.pax} travellers • ${r.start} • ${r.dates||'Dates to be confirmed'} • Salesperson: ${r.salesperson}`;
  const days=(x.days||[]).map((d,i)=>`<article class="day">
    <h3 class="editable" data-path="days.${i}.title" contenteditable="false">Day ${esc(d.day)}: ${esc(d.title)}</h3>
    <p class="editable" data-path="days.${i}.summary" contenteditable="false">${esc(d.summary||d.details||'')}</p>
@@ -223,18 +194,19 @@ function render(x,r){
    <div class="box"><b>Quote</b><div class="price editable" data-path="price" contenteditable="false">${esc(x.price||r.budget||'Price to be quoted')}</div></div>
    <div class="box"><b>Important notes</b><p class="note editable" data-path="notes" contenteditable="false">${esc(x.notes||'Final confirmation is subject to availability and supplier confirmation.')}</p></div>`;
  $('screenActions').style.display='flex';
- $('quoteWorkflow').style.display='block'; $('paymentPanel').style.display='none'; $('negotiatePanel').style.display='none'; $('workflowStatus').textContent='AWAITING RESPONSE'; $('workflowStatus').style.background='#fff3df'; $('workflowStatus').style.color='#9b5c00';
  syncPrint();
 }
 
 function showError(message){$('status').className='status error';$('status').textContent='● AI ERROR';$('err').style.display='block';$('err').textContent=message;$('msg').textContent='AI did not return a usable itinerary. Check the message and try again.';}
 
-$('startDate').addEventListener('change',()=>{updateDates();validateDates()});$('endDate').addEventListener('change',()=>{validateDates();updateDates()});$('days').addEventListener('change',()=>{updateDates();validateDates()});
-$('pax').addEventListener('change',()=>{const n=Number($('pax').value)||1;const opts=[['Sedan Car — up to 4 members',4],['Ertiga — up to 6 members',6],['Innova Crysta — up to 7 members',7],['Tempo Traveller — 12 Seater',12],['Tempo Traveller — 17 Seater',17],['Tempo Traveller — 20 Seater',20]];const current=$('vehicle').value;const match=opts.find(([_,cap])=>n<=cap);if(match && (current.startsWith('Sedan')||current.startsWith('Ertiga')||current.startsWith('Innova')||current.startsWith('Tempo'))) $('vehicle').value=match[0];});
 $('f').addEventListener('submit',async e=>{
- e.preventDefault();$('err').style.display='none';if(!validateDates()){showError('End date must be on or after the start date. Please correct the travel dates.');return}const r=readForm();if(r.startDate&&r.endDate&&new Date(r.endDate+'T00:00:00')<new Date(r.startDate+'T00:00:00')){showError('End date must be on or after the start date.');return}
- if(!r.dest){showError('Please enter a destination before generating the itinerary.');return}
+ e.preventDefault();$('err').style.display='none';const r=readForm();
+ if(!r.salesperson){showError('Please enter the salesperson name.');return}
  if(!r.contact){showError('Please enter the guest contact number.');return}
+ if(!r.dest){showError('Please enter a destination before generating the itinerary.');return}
+ if(!r.startDate||!r.endDate){showError('Please select both trip start and trip end dates.');return}
+ if(new Date(r.endDate)<new Date(r.startDate)){showError('Trip end date cannot be before the start date.');return}
+ r.days=Math.max(1,Math.round((new Date(r.endDate)-new Date(r.startDate))/86400000)+1);$('days').value=r.days;
  last=r;$('msg').textContent='AI is preparing the itinerary…';
  document.body.classList.add('loading');
  try{
@@ -267,52 +239,23 @@ function captureEdits(){
 function syncPrint(){
  if(!last||!lastQuote)return;
  const x=lastQuote,r=last;
+ $('pCoverMeta').innerHTML=`<b>Prepared for:</b> ${esc(r.guest)}<br><b>Salesperson:</b> ${esc(r.salesperson)}<br><b>Booking date & time:</b> ${esc(r.bookingTimestamp)}<br><b>Trip:</b> ${esc(r.dest)} • ${esc(r.dates||'Dates to be confirmed')}`;
  $('pTitle').textContent=x.title||`${r.dest} — ${r.days} Days`;
  $('pSummary').textContent=x.summary||'Customer-ready travel quotation and itinerary';
  $('pGuest').innerHTML=[
-  ['Guest',r.guest],['Contact',r.contact],['Email',r.email||'Not provided'],['Destination',r.dest],['Duration',r.startDate&&r.endDate?`${Math.round((new Date(r.endDate+'T00:00:00')-new Date(r.startDate+'T00:00:00'))/86400000)} Nights / ${Math.round((new Date(r.endDate+'T00:00:00')-new Date(r.startDate+'T00:00:00'))/86400000)+1} Days`:(r.days>1?`${r.days-1} Nights / ${r.days} Days`:`${r.days} Day`)],['Travellers',r.pax],
-  ['Start City',r.start],['Start Date',r.startDate?formatDate(r.startDate):'To be confirmed'],['End Date',r.endDate?formatDate(r.endDate):'To be confirmed'],['Trip Type',r.type],['Language',r.language]
+  ['Guest',r.guest],['Contact',r.contact],['Email',r.email||'Not provided'],['Salesperson',r.salesperson],['Destination',r.dest],['Duration',`${r.days} Days`],['Travellers',r.pax],['Start City',r.start],['Travel Dates',r.dates||'To be confirmed'],['Trip Type',r.type],['Language',r.language],['Booking Date & Time',r.bookingTimestamp]
  ].map(a=>`<div><b>${esc(a[0])}</b>${esc(a[1])}</div>`).join('');
  $('pDays').innerHTML=(x.days||[]).map(d=>`<div class="print-day"><h3>Day ${esc(d.day)}: ${esc(d.title)}</h3><p>${esc(d.summary||'')}</p><p><b>Hotel:</b> ${esc(d.hotel||'')}</p><p><b>Meals:</b> ${esc(d.meals||'')}</p></div>`).join('');
  $('pHotels').textContent=x.hotels||r.hotel;$('pVehicle').textContent=x.vehicle||r.vehicle;$('pMeals').textContent=x.meals||r.meals;
  $('pInc').innerHTML=(x.inclusions||[]).map(i=>`<li>${esc(i)}</li>`).join('');$('pExc').innerHTML=(x.exclusions||[]).map(i=>`<li>${esc(i)}</li>`).join('');
- $('pPrice').textContent=x.price||r.budget||'Price to be quoted';$('pNotes').textContent=x.notes||'Final confirmation is subject to availability and supplier confirmation.';
+ $('pPrice').textContent=x.price||r.budget||'Price to be quoted';$('pNotes').textContent=(x.notes||'Final confirmation is subject to availability and supplier confirmation.')+` Guest response: ${r.guestResponse}. Payment status: ${r.paymentStatus}.`;
 }
-function printQuote(){captureEdits();syncPrint();ensurePrintImages().then(()=>window.print())}
+function printQuote(){captureEdits();syncPrint();window.print()}
 function whatsapp(){
  captureEdits();syncPrint();if(!last||!lastQuote){alert('Generate a quote first.');return}
- const text=['ON A TRIP HOLIDAYS — CUSTOMER QUOTE','',`Guest: ${last.guest}`,`Contact: ${last.contact}`,...(last.email?[`Email: ${last.email}`]:[]),`Destination: ${last.dest}`,`Duration: ${last.days} Days`,`Travellers: ${last.pax}`,`Dates: ${last.dates||'TBC'}`,`Quote: ${lastQuote.price||last.budget||'TBC'}`,'','Detailed branded itinerary PDF can be shared by the travel team.'].join('\n');
+ const text=['ON A TRIP HOLIDAYS — CUSTOMER QUOTE','',`Guest: ${last.guest}`,`Destination: ${last.dest}`,`Duration: ${last.days} Days`,`Travellers: ${last.pax}`,`Dates: ${last.dates||'TBC'}`,`Guest Contact: ${last.contact}`,`Salesperson: ${last.salesperson}`,`Guest Response: ${last.guestResponse}`,`Quote: ${lastQuote.price||last.budget||'TBC'}`,'','Detailed branded itinerary PDF can be shared by the travel team.'].join('\n');
  window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
 }
-function setQuoteResponse(type){
- if(!last||!lastQuote){alert('Generate a quotation first.');return}
- $('quoteWorkflow').style.display='block';$('paymentPanel').style.display=type==='prepay'?'block':'none';$('negotiatePanel').style.display=type==='negotiate'?'block':'none';
- $('workflowStatus').textContent=type==='prepay'?'READY FOR PAYMENT':'NEGOTIATION REQUESTED';
- $('workflowStatus').style.background=type==='prepay'?'#e8f7ef':'#fff3df';$('workflowStatus').style.color=type==='prepay'?'#08744a':'#9b5c00';
- last.paymentResponse=type;
-}
-function saveNegotiation(){
- const note=$('negotiationNote').value.trim();if(!note){alert('Add the customer negotiation request.');return}last.negotiationNote=note;$('workflowStatus').textContent='NEGOTIATION SAVED';$('msg').textContent='Negotiation request saved with this quotation.';saveDraft();
-}
-function markPaidAndInvoice(){
- const status=$('paymentStatus').value, amount=$('amountPaid').value.trim();
- if(status!=='paid'){alert('Set Payment status to Paid before creating the payment invoice.');return}
- if(!amount){alert('Enter the amount paid.');return}
- captureEdits();
- last.paymentStatus='paid';last.amountPaid=amount;last.paymentDate=new Date().toISOString().slice(0,10);
- const totalText=String(lastQuote.price||last.budget||amount);
- const totalNum=Number(totalText.replace(/[^0-9.]/g,''))||Number(amount.replace(/[^0-9.]/g,''))||0;
- const paidNum=Number(amount.replace(/[^0-9.]/g,''))||0;
- const invoice={bookingId:String(Date.now()),bookingDate:new Date().toISOString().slice(0,10),tripStart:last.startDate||'',tripEnd:last.endDate||'',places:last.dest||'',bookingType:last.type||'Group',guestName:last.guest||'',guestContact:last.contact||'',guestEmail:last.email||'',aadhaar:'',address:'',tariff:lastQuote.price||last.budget||'',pax:last.pax||1,inclusions:Array.isArray(lastQuote.inclusions)?lastQuote.inclusions.join(', '):String(lastQuote.inclusions||''),totalFare:totalNum,advance:paidNum,balance:Math.max(0,totalNum-paidNum),paymentStatus:paidNum>=totalNum?'PAID IN FULL':'PARTIALLY PAID',paymentMode:'UPI / Bank Transfer',paymentDate:last.paymentDate,paymentNotes:'Payment received against the above travel quotation.'};
- localStorage.setItem('oat_payment_invoice_draft',JSON.stringify(invoice));
- $('workflowStatus').textContent='PAID';$('workflowStatus').style.background='#e8f7ef';$('workflowStatus').style.color='#08744a';
- $('invoiceMsg').innerHTML='<div class="invoice-preview"><b>Payment Invoice Ready</b><br>Guest: '+esc(last.guest)+'<br>Amount Paid: '+esc(amount)+'<br>Date: '+esc(formatDate(last.paymentDate))+'<br><button class="btn secondary" type="button" style="margin-top:10px" onclick="printPaymentInvoice()">🧾 Open Payment Invoicer</button></div>';
-}
-function printPaymentInvoice(){
- if(!last||last.paymentStatus!=='paid'){alert('Mark the quotation as Paid first.');return}
- location.href='payment-invoicer.html';
-}
-
 function saveDraft(){
  captureEdits();if(!last||!lastQuote){alert('Generate a quote first.');return}
  const a=JSON.parse(localStorage.getItem('oat_itinerary_drafts')||'[]');a.unshift({...last,quote:lastQuote,saved:new Date().toISOString()});
