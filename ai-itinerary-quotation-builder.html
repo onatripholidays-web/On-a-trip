@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f8fc">
+<title>On A Trip Holidays — AI Itinerary & Quotation Builder</title>
+<style>
+:root{--navy:#102a62;--blue:#1974e6;--sky:#eaf3ff;--green:#13905f;--orange:#f15b2a;--text:#172b4d;--muted:#71809a;--line:#e2e8f1;--bg:#f5f8fc;--white:#fff;--shadow:0 10px 30px rgba(26,52,91,.09)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}.app{max-width:1180px;margin:auto;padding:20px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:18px}.brand{display:flex;align-items:center;gap:11px}.logo{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,#0d62d8,#3b9cff);color:white;display:grid;place-items:center;font-size:22px;font-weight:900}.brand b{display:block;font-size:16px;color:var(--navy)}.brand small{display:block;font-size:9px;letter-spacing:2px;color:var(--muted);font-weight:800}.actions{display:flex;gap:8px}.btn{border:0;border-radius:11px;padding:11px 15px;font-weight:800;cursor:pointer}.primary{background:var(--blue);color:white}.dark{background:var(--navy);color:white}.light{background:#fff;border:1px solid var(--line);color:var(--navy)}
+.tabs{display:flex;gap:8px;margin-bottom:15px}.tab{border:1px solid var(--line);background:#fff;color:var(--muted);padding:10px 16px;border-radius:11px;font-weight:800;cursor:pointer}.tab.active{background:var(--navy);color:#fff}
+.grid{display:grid;grid-template-columns:390px 1fr;gap:16px}.card{background:#fff;border:1px solid var(--line);border-radius:17px;padding:17px;box-shadow:var(--shadow)}.card h2{margin:0 0 4px;font-size:18px}.sub{color:var(--muted);font-size:11px;margin-bottom:15px}.form{display:grid;gap:11px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.field label{display:block;font-size:10px;font-weight:800;color:#50617c;margin-bottom:5px}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 11px;outline:none;background:#fff;color:var(--text);font:inherit}.field textarea{min-height:75px;resize:vertical}.full{grid-column:1/-1}.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{border:1px solid #dbe5f2;background:#f6f9fd;padding:6px 9px;border-radius:999px;font-size:10px;font-weight:700;cursor:pointer}.chip.on{background:var(--sky);border-color:#bcd8ff;color:#1266d9}.ai{background:linear-gradient(135deg,#f0eaff,#edf5ff);border:1px solid #d9e3fa;border-radius:13px;padding:12px;margin-bottom:13px}.ai b{font-size:12px}.ai p{margin:5px 0 0;color:#65738a;font-size:10px;line-height:1.5}.preview{min-height:650px}.doc{background:#fff;max-width:760px;margin:auto;border:1px solid #e1e7ef;box-shadow:0 8px 24px rgba(0,0,0,.05);padding:34px}.doc-head{display:flex;justify-content:space-between;border-bottom:2px solid var(--navy);padding-bottom:18px}.doc-brand b{font-size:20px;color:var(--navy)}.doc-brand small{display:block;letter-spacing:2px;font-size:8px;font-weight:800;color:var(--muted);margin-top:3px}.doc-title{text-align:right}.doc-title h1{margin:0;color:var(--navy);font-size:25px}.doc-title small{color:var(--muted)}.client{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}.box{background:#f7f9fc;border-radius:10px;padding:12px}.box small{display:block;color:var(--muted);font-size:9px;font-weight:800;text-transform:uppercase}.box b{display:block;margin-top:4px;font-size:12px}.heroquote{background:var(--navy);color:#fff;border-radius:12px;padding:15px;margin-bottom:15px}.heroquote small{opacity:.75}.heroquote b{display:block;font-size:20px;margin-top:3px}.section{margin-top:18px}.section h3{font-size:13px;border-bottom:1px solid var(--line);padding-bottom:7px}.day{border:1px solid var(--line);border-radius:10px;padding:11px;margin:8px 0}.day b{font-size:11px}.day p{margin:4px 0 0;color:#5f708b;font-size:10px;line-height:1.5}.price{width:100%;border-collapse:collapse;margin-top:8px}.price td{padding:7px 0;border-bottom:1px solid var(--line);font-size:10px}.price td:last-child{text-align:right;font-weight:800}.total td{font-size:14px;color:var(--navy);font-weight:900;border-bottom:0}.note{font-size:9px;color:var(--muted);line-height:1.5;margin-top:16px}.hide{display:none}
+@media(max-width:800px){.app{padding:12px}.top{align-items:flex-start}.actions .btn{padding:9px;font-size:10px}.grid{grid-template-columns:1fr}.preview{min-height:0}.doc{padding:20px}.doc-head{gap:10px}.doc-title h1{font-size:20px}.row,.client{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.actions{flex-wrap:wrap;justify-content:flex-end}.tabs{overflow:auto}.grid{gap:10px}.card{padding:13px}.row{grid-template-columns:1fr}.doc{padding:15px}.client{grid-template-columns:1fr}.doc-brand b{font-size:16px}}
+@media print{body{background:#fff}.top,.tabs,.builder,.no-print{display:none!important}.app{padding:0;max-width:none}.grid{display:block}.preview{box-shadow:none;border:0;padding:0}.card{box-shadow:none;border:0;padding:0}.doc{border:0;box-shadow:none;max-width:none;padding:20px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+ <div class="brand"><div class="logo">✈</div><div><b>ON A TRIP HOLIDAYS</b><small>AI ITINERARY & QUOTATION BUILDER</small></div></div>
+ <div class="actions no-print"><button class="btn light" onclick="resetAll()">Reset</button><button class="btn dark" onclick="window.print()">Print / PDF</button></div>
+</header>
+<div class="tabs no-print"><button class="tab active" id="t1" onclick="mode('itinerary')">🗺️ AI Itinerary</button><button class="tab" id="t2" onclick="mode('quotation')">🤖 AI Quotation</button></div>
+<div class="grid">
+<section class="card builder no-print">
+ <h2 id="formTitle">AI Itinerary Builder</h2><div class="sub" id="formSub">Build a day-by-day travel plan, then turn it into a client-ready quotation.</div>
+ <div class="ai"><b>✨ AI Travel Assistant</b><p>Enter the essentials below. The builder automatically creates a polished itinerary structure, suggested activities and a transparent quotation.</p></div>
+ <div class="form">
+  <div class="row"><div class="field"><label>Customer Name</label><input id="customer" placeholder="Customer name"></div><div class="field"><label>Mobile</label><input id="mobile" placeholder="10-digit mobile"></div></div>
+  <div class="row"><div class="field"><label>Destination</label><input id="destination" placeholder="e.g. Kashmir"></div><div class="field"><label>Travellers</label><input id="travellers" type="number" min="1" value="2"></div></div>
+  <div class="row"><div class="field"><label>Start Date</label><input id="date" type="date"></div><div class="field"><label>Nights</label><input id="nights" type="number" min="1" value="5"></div></div>
+  <div class="row"><div class="field"><label>Hotel / Room</label><select id="hotel"><option>3★ Hotel — Standard Room</option><option>4★ Hotel — Premium Room</option><option>5★ Hotel — Luxury Room</option><option>Temple-nearby Accommodation</option></select></div><div class="field"><label>Vehicle</label><select id="vehicle"><option>Private Ertiga</option><option>Swift Dzire</option><option>Innova Crysta</option><option>Tempo Traveller</option><option>20 Seater Coach</option></select></div></div>
+  <div class="field"><label>Travel Style</label><div class="chips"><span class="chip on" onclick="pick(this)">Pilgrimage</span><span class="chip" onclick="pick(this)">Family</span><span class="chip" onclick="pick(this)">Adventure</span><span class="chip" onclick="pick(this)">Luxury</span><span class="chip" onclick="pick(this)">Budget</span></div></div>
+  <div class="field"><label>Special Requirements</label><textarea id="requirements" placeholder="Veg meals, elderly travellers, room preference, darshan, pickup, etc."></textarea></div>
+  <div class="row"><div class="field"><label>Price / Traveller (₹)</label><input id="price" type="number" value="24999"></div><div class="field"><label>GST %</label><input id="gst" type="number" value="5"></div></div>
+  <div class="row"><div class="field"><label>Advance Paid (₹)</label><input id="paid" type="number" value="0"></div><div class="field"><label>Payment Mode</label><select id="payment"><option>UPI</option><option>Bank Transfer</option><option>Cash</option><option>Card</option></select></div></div>
+  <div class="row"><button class="btn primary" onclick="generate()">✨ Generate AI Document</button><button class="btn light" onclick="window.print()">Preview / PDF</button></div>
+ </div>
+</section>
+<section class="card preview" id="preview"></section>
+</div>
+</div>
+<script>
+let current='itinerary';
+const $=id=>document.getElementById(id);
+function mode(m){current=m;$('t1').classList.toggle('active',m==='itinerary');$('t2').classList.toggle('active',m==='quotation');$('formTitle').textContent=m==='itinerary'?'AI Itinerary Builder':'AI Quotation Builder';$('formSub').textContent=m==='itinerary'?'Build a day-by-day travel plan, then turn it into a client-ready quotation.':'Create a professional travel quotation with itinerary, pricing, inclusions and payment details.';generate()}
+function pick(el){document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));el.classList.add('on')}
+function money(n){return new Intl.NumberFormat('en-IN',{maximumFractionDigits:0}).format(Math.round(n))}
+function dateText(){const v=$('date').value;if(!v)return 'Travel date to be confirmed';return new Date(v+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})}
+function dayPlan(dest,day,style){let names=['Arrival & Local Exploration','Sightseeing & Experiences','Culture / Temple Visit','Nature & Leisure','Adventure & Highlights','Free Day & Shopping','Departure'];let n=names[(day-1)%names.length];if(style==='Pilgrimage'&&day===2)n='Temple / Darshan Day';if(style==='Adventure'&&day===2)n='Adventure & Scenic Drive';return n}
+function generate(){
+ const c=$('customer').value||'Valued Guest', mob=$('mobile').value||'—', dest=$('destination').value||'Your Destination', tr=+$('travellers').value||1, nights=+$('nights').value||1, price=+$('price').value||0, gst=+$('gst').value||0, paid=+$('paid').value||0, style=document.querySelector('.chip.on')?.textContent||'Family';
+ const subtotal=tr*price, tax=subtotal*gst/100, total=subtotal+tax, balance=Math.max(0,total-paid), days=nights+1;
+ let itinerary='';
+ for(let d=1;d<=days;d++) itinerary+=`<div class="day"><b>Day ${d} — ${dayPlan(dest,d,style)}</b><p>${d===1?`Arrival at ${dest}, meet the driver and check in. Rest and begin a relaxed local experience.`:`Enjoy ${dest} with a comfortable private transfer, curated sightseeing and time for local experiences.`}${d===days?' Departure / drop-off as per travel schedule.':''}</p></div>`;
+ $('preview').innerHTML=`<div class="doc">
+ <div class="doc-head"><div class="doc-brand"><b>ON A TRIP HOLIDAYS</b><small>TRAVEL MORE • CREATE MEMORIES</small></div><div class="doc-title"><h1>${current==='itinerary'?'TRAVEL ITINERARY':'TRAVEL QUOTATION'}</h1><small>Prepared for ${c}</small></div></div>
+ <div class="client"><div class="box"><small>Customer</small><b>${c}</b><span style="font-size:10px;color:#71809a">${mob}</span></div><div class="box"><small>Journey</small><b>${dest}</b><span style="font-size:10px;color:#71809a">${dateText()} • ${tr} Traveller${tr>1?'s':''}</span></div></div>
+ <div class="heroquote"><small>${style.toUpperCase()} • ${nights} NIGHTS / ${days} DAYS</small><b>${dest} — ${style} Journey</b></div>
+ <div class="section"><h3>🗺️ DAY-BY-DAY ITINERARY</h3>${itinerary}</div>
+ <div class="section"><h3>🏨 STAY & TRAVEL</h3><p style="font-size:10px;line-height:1.6;color:#5f708b"><b>Hotel:</b> ${$('hotel').value}<br><b>Vehicle:</b> ${$('vehicle').value}<br><b>Requirements:</b> ${$('requirements').value||'As discussed with the guest.'}</p></div>
+ <div class="section"><h3>💰 QUOTATION SUMMARY</h3><table class="price"><tr><td>Package price (${tr} × ₹${money(price)})</td><td>₹${money(subtotal)}</td></tr><tr><td>GST (${gst}%)</td><td>₹${money(tax)}</td></tr><tr class="total"><td>Grand Total</td><td>₹${money(total)}</td></tr><tr><td>Advance Paid</td><td>₹${money(paid)}</td></tr><tr class="total"><td>Balance Payable</td><td>₹${money(balance)}</td></tr></table></div>
+ <div class="section"><h3>✅ INCLUSIONS</h3><p class="note">Accommodation as selected • Private vehicle as selected • Driver assistance • Sightseeing as per itinerary • Breakfast / meals as agreed • Applicable taxes. Final inclusions are subject to the confirmed package.</p></div>
+ <div class="section"><h3>📌 TERMS</h3><p class="note">This is a travel quotation and not a confirmed booking until payment and written confirmation are received. Rates may change based on availability. Cancellation and amendment charges apply as per the confirmed booking terms.</p></div>
+ <p class="note" style="text-align:center;margin-top:25px">Thank you for choosing On A Trip Holidays • Travel More, Create Memories</p>
+ </div>`;
+}
+function resetAll(){document.querySelectorAll('input,textarea').forEach(x=>{if(x.id!=='travellers'&&x.id!=='nights'&&x.id!=='price'&&x.id!=='gst'&&x.id!=='paid')x.value=''});$('travellers').value=2;$('nights').value=5;$('price').value=24999;$('gst').value=5;$('paid').value=0;generate()}
+generate();
+</script>
+</body>
+</html>
