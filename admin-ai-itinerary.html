@@ -20,47 +20,81 @@ function renderQuote(){$('out').innerHTML='<span class="status">STEP 3 — QUOTA
 function finalPDF(){let inc=quote.inclusions.map(x=>'<li>'+esc(x)+'</li>').join(''),exc=quote.exclusions.map(x=>'<li>'+esc(x)+'</li>').join('');$('printSheet').innerHTML='<div class="print-header"><img src="assets/on-a-trip-logo.png"><div><b>ON A TRIP HOLIDAYS</b><br>Let\'s explore the magical places<br>+91-8125248909<br>www.onatripholidays.com</div></div><div class="print-title">'+esc(quote.title)+'</div><div class="meta"><div><b>Guest</b>'+esc(quote.guest)+'</div><div><b>Contact</b>'+esc(v('contact'))+'</div><div><b>Destination</b>'+esc(quote.dest)+'</div><div><b>Travellers</b>'+quote.pax+'</div><div><b>Dates</b>'+esc(quote.dates)+'</div><div><b>Start City</b>'+esc(quote.start)+'</div></div>'+quote.days.map(d=>'<div class="print-day"><h3>DAY '+esc(d.day)+' — '+esc(d.title)+'</h3><p>'+esc(d.summary)+'</p><p><b>Hotel:</b> '+esc(d.hotel)+' &nbsp; <b>Meals:</b> '+esc(d.meals)+'</p></div>').join('')+'<div class="print-two"><div class="print-box"><h4>Accommodation</h4><p>'+esc(quote.hotels)+'</p></div><div class="print-box"><h4>Transport</h4><p>'+esc(quote.vehicle)+'</p></div></div><div class="print-box"><h4>Meals</h4><p>'+esc(quote.meals)+'</p></div><div class="print-box"><h4>Package Quote</h4><div class="print-price">'+esc(quote.price)+' per person · Total ₹ '+quote.total.toLocaleString('en-IN')+'</div></div><div class="print-two"><div class="print-box"><h4>Inclusions</h4><ul>'+inc+'</ul></div><div class="print-box"><h4>Exclusions</h4><ul>'+exc+'</ul></div></div><div class="print-box"><h4>Terms & Conditions</h4><p>'+esc(quote.terms)+'</p></div><div class="print-footer">On A Trip Holidays · Hyderabad · +91-8125248909 · www.onatripholidays.com</div>';window.print()}
 $('form').addEventListener('submit',e=>{e.preventDefault();generate()});
 </script>
-<script id="oat-step2-gst">
+<style id="oat-real-editor-style">
+.oat-editing [contenteditable="true"]{outline:2px dashed #ee5a2a!important;outline-offset:3px;border-radius:4px;background:#fffaf7}
+.oat-edit-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;padding:10px;border:1px solid #dce4e9;border-radius:12px;background:#f8fafb}
+.oat-edit-toolbar button{border:1px solid #dce4e9;border-radius:9px;padding:9px 12px;background:#fff;font-weight:800;cursor:pointer}
+.oat-edit-toolbar .save{background:#ee5a2a;color:#fff;border-color:#ee5a2a}
+</style>
+<script id="oat-real-editor">
 (function(){
-  window.OAT_GST_RATE = 0.05;
+  let editing=false, originals=new Map();
 
-  window.oatCalculateQuotation = function(price, pax){
-    price = Number(price) || 0;
-    pax = Number(pax) || 0;
-    const subtotal = price * pax;
-    const gst = subtotal * window.OAT_GST_RATE;
-    return {
-      price: price,
-      pax: pax,
-      subtotal: subtotal,
-      gstRate: 5,
-      gst: gst,
-      total: subtotal + gst,
-      calculation: '₹' + price.toLocaleString('en-IN') + ' × ' + pax +
-                   ' = ₹' + subtotal.toLocaleString('en-IN')
-    };
-  };
+  function getRoot(){
+    return document.querySelector('#generatedItinerary,.generated-itinerary,.itinerary-preview,.itinerary-content,[data-itinerary-preview]') || document.body;
+  }
 
-  window.oatRenderQuotationTotals = function(container, price, pax){
-    if(!container) return;
-    const q = window.oatCalculateQuotation(price, pax);
-    container.innerHTML =
-      '<div class="oat-quotation-total">' +
-        '<div><b>Package Cost</b></div>' +
-        '<div class="oat-calculation">₹' + q.price.toLocaleString('en-IN') +
-          ' × ' + q.pax + ' = <b>₹' + q.subtotal.toLocaleString('en-IN') + '</b></div>' +
-        '<div>GST @ 5% <span>₹' + q.gst.toLocaleString('en-IN', {maximumFractionDigits:2}) + '</span></div>' +
-        '<div class="oat-grand-total"><b>Grand Total</b><b>₹' +
-          q.total.toLocaleString('en-IN', {maximumFractionDigits:2}) + '</b></div>' +
-      '</div>';
-  };
+  function fields(root){
+    return Array.from(root.querySelectorAll('h1,h2,h3,h4,p,li,td,[data-field]'))
+      .filter(el => !el.closest('.oat-edit-toolbar,.modal,script,style') && el.offsetParent !== null);
+  }
+
+  function enterEdit(){
+    if(editing) return;
+    editing=true;
+    const root=getRoot();
+    root.classList.add('oat-editing');
+
+    fields(root).forEach(el=>{
+      if(!el.dataset.oatOriginal) el.dataset.oatOriginal=el.innerHTML;
+      el.contentEditable='true';
+      el.spellcheck=true;
+      el.dataset.oatEditable='true';
+      originals.set(el,el.innerHTML);
+    });
+
+    let bar=document.querySelector('.oat-edit-toolbar');
+    if(!bar){
+      bar=document.createElement('div');
+      bar.className='oat-edit-toolbar';
+      bar.innerHTML='<b style="margin-right:auto">Editing itinerary</b><button class="save">💾 Save Changes</button><button class="cancel">↩ Cancel</button>';
+      root.parentNode.insertBefore(bar,root);
+      bar.querySelector('.save').onclick=saveEdit;
+      bar.querySelector('.cancel').onclick=cancelEdit;
+    }
+  }
+
+  function saveEdit(){
+    fields(getRoot()).forEach(el=>{
+      el.contentEditable='false';
+      delete el.dataset.oatEditable;
+      el.dataset.oatOriginal=el.innerHTML;
+    });
+    document.querySelector('.oat-edit-toolbar')?.remove();
+    getRoot().classList.remove('oat-editing');
+    editing=false;
+  }
+
+  function cancelEdit(){
+    originals.forEach((html,el)=>{el.innerHTML=html;el.contentEditable='false';});
+    originals.clear();
+    document.querySelector('.oat-edit-toolbar')?.remove();
+    getRoot().classList.remove('oat-editing');
+    editing=false;
+  }
+
+  document.addEventListener('click',function(e){
+    const btn=e.target.closest('button,a');
+    if(!btn) return;
+    if(/edit itinerary/i.test((btn.textContent||'').trim())){
+      e.preventDefault();
+      e.stopPropagation();
+      enterEdit();
+    }
+  },true);
+
+  window.OATEnterItineraryEdit=enterEdit;
 })();
 </script>
-<style id="oat-step2-gst-style">
-.oat-quotation-total{display:grid;gap:8px;margin-top:12px;padding:14px;border:1px solid #dce4e9;border-radius:12px;background:#fff;font-size:14px}
-.oat-quotation-total>div{display:flex;justify-content:space-between;gap:12px}
-.oat-calculation{font-size:16px}
-.oat-grand-total{margin-top:4px;padding-top:10px;border-top:1px solid #dce4e9;font-size:17px}
-</style>
 
 </body></html>
