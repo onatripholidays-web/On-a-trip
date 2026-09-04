@@ -19,4 +19,38 @@ function createQuote(){let price=v('qPrice');if(!price)return $('msg').textConte
 function renderQuote(){$('out').innerHTML='<span class="status">STEP 3 — QUOTATION READY</span><div class="quote-title">'+esc(quote.title)+'</div><p>'+esc(quote.summary)+'</p><div class="two"><div class="box"><b>Guest</b><p>'+esc(quote.guest)+'</p></div><div class="box"><b>Destination</b><p>'+esc(quote.dest)+' · '+quote.days.length+' Days</p></div></div>'+quote.days.map(d=>'<div class="day"><h3>Day '+esc(d.day)+' — '+esc(d.title)+'</h3><p>'+esc(d.summary)+'</p><p><b>Hotel:</b> '+esc(d.hotel)+' · <b>Meals:</b> '+esc(d.meals)+'</p></div>').join('')+'<div class="two"><div class="box"><b>Price / Person</b><div class="price">'+esc(quote.price)+'</div></div><div class="box"><b>Total Package</b><div class="price">₹ '+quote.total.toLocaleString('en-IN')+'</div></div></div><div class="two"><div class="box"><b>Inclusions</b><ul>'+quote.inclusions.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div><div class="box"><b>Exclusions</b><ul>'+quote.exclusions.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div></div><div class="box"><b>Validity & Terms</b><p>'+esc(quote.validity)+' — '+esc(quote.terms)+'</p></div><div class="actions"><button class="btn secondary" onclick="createQuoteForm()">✏️ Edit Quotation</button><button class="btn primary" onclick="finalPDF()">📄 Generate Final PDF</button></div>'}
 function finalPDF(){let inc=quote.inclusions.map(x=>'<li>'+esc(x)+'</li>').join(''),exc=quote.exclusions.map(x=>'<li>'+esc(x)+'</li>').join('');$('printSheet').innerHTML='<div class="print-header"><img src="assets/on-a-trip-logo.png"><div><b>ON A TRIP HOLIDAYS</b><br>Let\'s explore the magical places<br>+91-8125248909<br>www.onatripholidays.com</div></div><div class="print-title">'+esc(quote.title)+'</div><div class="meta"><div><b>Guest</b>'+esc(quote.guest)+'</div><div><b>Contact</b>'+esc(v('contact'))+'</div><div><b>Destination</b>'+esc(quote.dest)+'</div><div><b>Travellers</b>'+quote.pax+'</div><div><b>Dates</b>'+esc(quote.dates)+'</div><div><b>Start City</b>'+esc(quote.start)+'</div></div>'+quote.days.map(d=>'<div class="print-day"><h3>DAY '+esc(d.day)+' — '+esc(d.title)+'</h3><p>'+esc(d.summary)+'</p><p><b>Hotel:</b> '+esc(d.hotel)+' &nbsp; <b>Meals:</b> '+esc(d.meals)+'</p></div>').join('')+'<div class="print-two"><div class="print-box"><h4>Accommodation</h4><p>'+esc(quote.hotels)+'</p></div><div class="print-box"><h4>Transport</h4><p>'+esc(quote.vehicle)+'</p></div></div><div class="print-box"><h4>Meals</h4><p>'+esc(quote.meals)+'</p></div><div class="print-box"><h4>Package Quote</h4><div class="print-price">'+esc(quote.price)+' per person · Total ₹ '+quote.total.toLocaleString('en-IN')+'</div></div><div class="print-two"><div class="print-box"><h4>Inclusions</h4><ul>'+inc+'</ul></div><div class="print-box"><h4>Exclusions</h4><ul>'+exc+'</ul></div></div><div class="print-box"><h4>Terms & Conditions</h4><p>'+esc(quote.terms)+'</p></div><div class="print-footer">On A Trip Holidays · Hyderabad · +91-8125248909 · www.onatripholidays.com</div>';window.print()}
 $('form').addEventListener('submit',e=>{e.preventDefault();generate()});
-</script></body></html>
+</script>
+<script id="oat-full-itinerary-editor">
+(function(){
+  function makeEditable(){
+    const root = document.querySelector('[id*="generated"], .generated-itinerary, .itinerary-preview, .itinerary-content');
+    const scope = root || document.body;
+    const selectors = [
+      'h1','h2','h3',
+      '[data-field="title"]','[data-field="summary"]',
+      '[data-field="accommodation"]','[data-field="vehicle"]',
+      '[data-field="meals"]','[data-field="notes"]'
+    ];
+    selectors.forEach(sel=>{
+      scope.querySelectorAll(sel).forEach(el=>{
+        if(!el.closest('.modal') && !el.dataset.oatEditable){
+          el.contentEditable='true';
+          el.dataset.oatEditable='1';
+          el.title='Click to edit';
+          el.style.outline='1px dashed rgba(238,90,42,.35)';
+          el.style.outlineOffset='2px';
+        }
+      });
+    });
+  }
+  document.addEventListener('click', function(e){
+    const b=e.target.closest('button,a');
+    if(b && /edit itinerary/i.test(b.textContent||'')){
+      setTimeout(makeEditable,50);
+    }
+  });
+  setTimeout(makeEditable,300);
+})();
+</script>
+
+</body></html>
