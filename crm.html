@@ -35,7 +35,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 </head>
 <body>
 <section class="login" id="loginScreen"><div class="login-box">
-<h1>On A Trip Holidays</h1><p>CRM • Sales & Lead Management</p>
+<h1>On A Trip Holidays</h1><p>CRM • Admin & Salesperson Access</p>
 <label>Email</label><input id="loginEmail" type="email" placeholder="CRM email" autocomplete="username">
 <label>Password</label><input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password">
 <button class="login-btn" onclick="login()">Login to CRM</button><div class="error" id="loginError"></div>
@@ -76,7 +76,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <div class="row"><div><label>Customer name</label><input id="name" required></div><div><label>Phone / WhatsApp</label><input id="phone" required></div></div>
 <div class="row"><div><label>Destination / Package</label><input id="dest" placeholder="Thailand" required></div><div><label>Travellers</label><input id="trav" type="number" min="1" value="2"></div></div>
 <div class="row"><div><label>Travel date</label><input id="date" type="date"></div><div><label>Expected value</label><input id="value" placeholder="₹50,000"></div></div>
-<div class="row"><div><label>Branch</label><select id="branch"><option>Hyderabad</option><option>Vijayawada</option></select></div>
+<div class="row admin-only"><div><label>Branch</label><select id="branch"><option>Hyderabad</option><option>Vijayawada</option></select></div>
 <div><label>Salesperson</label><select id="salesperson"></select></div></div>
 <div class="row"><div><label>Source</label><select id="source"><option>Website</option><option>Meta Ads</option><option>Instagram</option><option>Facebook</option><option>WhatsApp</option><option>Google</option><option>Walk-in</option></select></div>
 <div><label>Priority</label><select id="priority"><option>Normal</option><option>High</option><option>Hot</option></select></div></div>
@@ -95,6 +95,25 @@ const {createClient}=supabase; const db=createClient(SUPABASE_URL,SUPABASE_PUBLI
 const stages=["New","Contacted","Qualified","Hot","Quote Sent","Follow-up","Booked","Lost"];
 const salespeople=["Unassigned","Rohini","Harshika","Godavari","Vanditha"];
 let leads=[];
+let currentUser=null;
+let currentRole="admin";
+let currentSalesperson="";
+function getUserProfile(user){
+  const meta=user?.user_metadata||{};
+  const role=(meta.crm_role||meta.role||"admin").toLowerCase();
+  const salesperson=meta.salesperson||meta.crm_salesperson||"";
+  return {role:role==="salesperson"?"salesperson":"admin",salesperson};
+}
+function applyAccessUI(){
+  const isAdmin=currentRole==="admin";
+  document.querySelector('.top small').textContent=isAdmin?' • Admin • Sales & Lead Management':(' • '+(currentSalesperson||'Salesperson')+' • My Leads');
+  document.getElementById('filterBranch').style.display=isAdmin?'':'none';
+  document.getElementById('filterSalesperson').style.display=isAdmin?'':'none';
+  const newLeadBtn=document.querySelector('button[onclick="openModal(\'leadModal\')"]'); if(newLeadBtn)newLeadBtn.style.display=isAdmin?'':'none';
+  const exportBtn=document.querySelector('button[onclick="exportCSV()"]'); if(exportBtn)exportBtn.style.display=isAdmin?'':'none';
+  document.querySelectorAll('.admin-only').forEach(x=>x.style.display=isAdmin?'':'none');
+}
+function visibleLeads(){return currentRole==="salesperson"?leads.filter(l=>l.salesperson===currentSalesperson):leads;}
 
 function fillSalespeople(){
   ["salesperson","filterSalesperson"].forEach(id=>{
@@ -104,11 +123,11 @@ function fillSalespeople(){
     if(current)el.value=current;
   });
 }
-async function checkSession(){const {data:{session}}=await db.auth.getSession();session?showApp():showLogin()}
+async function checkSession(){const {data:{session}}=await db.auth.getSession();if(session){currentUser=session.user;const p=getUserProfile(currentUser);currentRole=p.role;currentSalesperson=p.salesperson;showApp()}else showLogin()}
 function showLogin(){loginScreen.style.display="grid";app.style.display="none"}
-function showApp(){loginScreen.style.display="none";app.style.display="block";fillSalespeople();loadLeads()}
-async function login(){const email=loginEmail.value.trim(),password=loginPassword.value,error=loginError;error.style.display="none";if(!email||!password){error.textContent="Please enter email and password.";error.style.display="block";return}const {error:e}=await db.auth.signInWithPassword({email,password});if(e){error.textContent=e.message;error.style.display="block";return}showApp()}
-async function logout(){await db.auth.signOut();leads=[];showLogin()}
+function showApp(){loginScreen.style.display="none";app.style.display="block";fillSalespeople();applyAccessUI();loadLeads()}
+async function login(){const email=loginEmail.value.trim(),password=loginPassword.value,error=loginError;error.style.display="none";if(!email||!password){error.textContent="Please enter email and password.";error.style.display="block";return}const {data,error:e}=await db.auth.signInWithPassword({email,password});if(e){error.textContent=e.message;error.style.display="block";return}currentUser=data.user;const p=getUserProfile(currentUser);currentRole=p.role;currentSalesperson=p.salesperson;if(currentRole==="salesperson"&&!currentSalesperson){error.textContent="This CRM account is not assigned to a salesperson. Ask Admin to set salesperson in the user's Auth metadata.";error.style.display="block";await db.auth.signOut();return}showApp()}
+async function logout(){await db.auth.signOut();leads=[];currentUser=null;currentRole="admin";currentSalesperson="";showLogin()}
 
 async function loadLeads(){
  board.innerHTML='<div class="loading">Loading enquiries...</div>';
@@ -120,18 +139,19 @@ function normalizeLead(x){return {id:x.id,name:x.name||"Unknown",phone:x.phone||
 
 function render(){
  const q=search.value.toLowerCase(),st=filterStatus.value,br=filterBranch.value,sp=filterSalesperson.value,so=filterSource.value;
- const list=leads.filter(l=>(l.name+" "+l.phone+" "+l.dest+" "+l.salesperson).toLowerCase().includes(q)&&(!st||l.status===st)&&(!br||l.branch===br)&&(!sp||l.salesperson===sp)&&(!so||l.source===so));
- const counts={};stages.forEach(s=>counts[s]=0);leads.forEach(l=>counts[l.status]=(counts[l.status]||0)+1);
- sTotal.textContent=leads.length;sNew.textContent=counts.New||0;sHot.textContent=counts.Hot||0;sQuote.textContent=counts["Quote Sent"]||0;sBooked.textContent=counts.Booked||0;
- const today=new Date().toISOString().slice(0,10);sFollow.textContent=leads.filter(l=>l.follow&&l.follow<=today&&l.status!=="Booked"&&l.status!=="Lost").length;
+ const base=visibleLeads();
+ const list=base.filter(l=>(l.name+" "+l.phone+" "+l.dest+" "+l.salesperson).toLowerCase().includes(q)&&(!st||l.status===st)&&(!br||l.branch===br)&&(!sp||l.salesperson===sp)&&(!so||l.source===so));
+ const counts={};stages.forEach(s=>counts[s]=0);base.forEach(l=>counts[l.status]=(counts[l.status]||0)+1);
+ sTotal.textContent=base.length;sNew.textContent=counts.New||0;sHot.textContent=counts.Hot||0;sQuote.textContent=counts["Quote Sent"]||0;sBooked.textContent=counts.Booked||0;
+ const today=new Date().toISOString().slice(0,10);sFollow.textContent=base.filter(l=>l.follow&&l.follow<=today&&l.status!=="Booked"&&l.status!=="Lost").length;
  board.innerHTML=stages.map(s=>`<div class="column"><h3>${s}<span class="count">${counts[s]||0}</span></h3>${list.filter(l=>l.status===s).map(card).join("")}</div>`).join("");
  table.innerHTML=list.map(row).join("")||'<tr><td colspan="10">No matching enquiries.</td></tr>';
 }
 function card(l){return `<div class="lead"><b>${esc(l.name)}</b><div class="muted">${esc(l.phone)} • ${esc(l.branch||"Branch not assigned")}</div><div class="trip">${esc(l.dest||"Destination not specified")}</div><div class="muted">${l.trav||0} travellers • ${esc(l.value||"Value not set")}</div><span class="badge">👤 ${esc(l.salesperson)}</span><div class="actions"><button class="wa" title="WhatsApp" aria-label="WhatsApp" onclick="wa(${l.id})">☘ WA</button><button class="call" title="Call customer" aria-label="Call customer" onclick="callCustomer('${esc(l.phone)}')">☎ Call</button><button onclick="details(${l.id})">View</button></div></div>`}
-function row(l){return `<tr><td><b>${esc(l.name)}</b><div style="color:var(--muted);font-size:11px">${esc(l.phone)}</div></td><td>${esc(l.dest||"—")}</td><td>${esc(l.branch||"—")}</td><td><select onchange="assign(${l.id},this.value)">${salespeople.map(s=>`<option ${s===l.salesperson?"selected":""}>${esc(s)}</option>`).join("")}</select></td><td>${esc(l.date||"—")}</td><td>${l.trav||"—"}</td><td><b>${esc(l.value||"—")}</b></td><td><select onchange="stage(${l.id},this.value)">${stages.map(s=>`<option value="${esc(s)}" ${s===l.status?"selected":""}>${s}</option>`).join("")}</select></td><td style="color:var(--o);font-weight:800">${esc(l.follow||"—")}</td><td><button class="btn secondary" title="WhatsApp" onclick="wa(${l.id})">☘ WA</button> <button class="btn secondary" title="Call customer" onclick="callCustomer('${esc(l.phone)}')">☎</button> <button class="btn secondary" onclick="details(${l.id})">View</button></td></tr>`}
+function row(l){const assignment=currentRole==="admin"?`<select onchange="assign(${l.id},this.value)">${salespeople.map(s=>`<option ${s===l.salesperson?"selected":""}>${esc(s)}</option>`).join("")}</select>`:`<span>${esc(l.salesperson)}</span>`;return `<tr><td><b>${esc(l.name)}</b><div style="color:var(--muted);font-size:11px">${esc(l.phone)}</div></td><td>${esc(l.dest||"—")}</td><td>${esc(l.branch||"—")}</td><td>${assignment}</td><td>${esc(l.date||"—")}</td><td>${l.trav||"—"}</td><td><b>${esc(l.value||"—")}</b></td><td><select onchange="stage(${l.id},this.value)">${stages.map(s=>`<option value="${esc(s)}" ${s===l.status?"selected":""}>${s}</option>`).join("")}</select></td><td style="color:var(--o);font-weight:800">${esc(l.follow||"—")}</td><td><button class="btn secondary" title="WhatsApp" onclick="wa(${l.id})">☘ WA</button> <button class="btn secondary" title="Call customer" onclick="callCustomer('${esc(l.phone)}')">☎</button> <button class="btn secondary" onclick="details(${l.id})">View</button></td></tr>`}
 
-async function stage(id,status){const l=leads.find(x=>x.id===id);if(!l)return;const old=l.status;l.status=status;const {error}=await db.from("enquiries").update({status}).eq("id",id);if(error){l.status=old;alert("Could not update status: "+error.message)}render()}
-async function assign(id,salesperson){const l=leads.find(x=>x.id===id);if(!l)return;const old=l.salesperson;l.salesperson=salesperson;const {error}=await db.from("enquiries").update({salesperson}).eq("id",id);if(error){l.salesperson=old;alert("Could not update salesperson: "+error.message)}render()}
+async function stage(id,status){const l=leads.find(x=>x.id===id);if(currentRole!=="admin"&&l?.salesperson!==currentSalesperson){alert("You can only update your assigned leads.");return}if(!l)return;const old=l.status;l.status=status;const {error}=await db.from("enquiries").update({status}).eq("id",id);if(error){l.status=old;alert("Could not update status: "+error.message)}render()}
+async function assign(id,salesperson){if(currentRole!=="admin"){alert("Only Admin can reassign leads.");return}const l=leads.find(x=>x.id===id);if(!l)return;const old=l.salesperson;l.salesperson=salesperson;const {error}=await db.from("enquiries").update({salesperson}).eq("id",id);if(error){l.salesperson=old;alert("Could not update salesperson: "+error.message)}render()}
 
 function wa(id){const l=leads.find(x=>x.id===id);if(!l)return;let phone=(l.phone||"").replace(/\D/g,"");if(phone.length===10)phone="91"+phone;const msg=`Hi ${l.name}, this is On A Trip Holidays. Regarding your ${l.dest||"travel"} enquiry for ${l.trav||""} travellers. I can share the latest package, batch and offer details.`;window.open("https://wa.me/"+phone+"?text="+encodeURIComponent(msg),"_blank")}
 function callCustomer(phone){const p=(phone||"").replace(/\s/g,"");if(p)window.location.href="tel:"+p}
@@ -151,7 +171,7 @@ openModal("detailsModal")}
 async function addLead(e){e.preventDefault();const lead={name:name.value.trim(),phone:phone.value.trim(),destination:dest.value.trim(),travel_date:date.value||null,travellers:Number(trav.value||0),branch:branch.value,salesperson:salesperson.value||"Unassigned",source:source.value,priority:priority.value,status:"New",value:value.value.trim(),follow_up:follow.value||null,notes:notes.value.trim()};
 const {data,error}=await db.from("enquiries").insert(lead).select().single();if(error){alert("Could not create lead: "+error.message);return}leads.unshift(normalizeLead(data));closeModal("leadModal");e.target.reset();fillSalespeople();render()}
 
-function exportCSV(){const headers=["Name","Phone","Destination","Travel Date","Travellers","Branch","Salesperson","Source","Priority","Status","Value","Follow-up","Notes"];const rows=leads.map(l=>[l.name,l.phone,l.dest,l.date,l.trav,l.branch,l.salesperson,l.source,l.priority,l.status,l.value,l.follow,l.notes]);const csv=[headers,...rows].map(r=>r.map(csvCell).join(",")).join("\n");const blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="on-a-trip-crm-leads.csv";a.click();URL.revokeObjectURL(url)}
+function exportCSV(){if(currentRole!=="admin"){alert("Only Admin can export all leads.");return}const headers=["Name","Phone","Destination","Travel Date","Travellers","Branch","Salesperson","Source","Priority","Status","Value","Follow-up","Notes"];const rows=leads.map(l=>[l.name,l.phone,l.dest,l.date,l.trav,l.branch,l.salesperson,l.source,l.priority,l.status,l.value,l.follow,l.notes]);const csv=[headers,...rows].map(r=>r.map(csvCell).join(",")).join("\n");const blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="on-a-trip-crm-leads.csv";a.click();URL.revokeObjectURL(url)}
 function csvCell(v){return `"${String(v??"").replace(/"/g,'""')}"`}
 function openModal(id){document.getElementById(id).classList.add("show")}function closeModal(id){document.getElementById(id).classList.remove("show")}
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
