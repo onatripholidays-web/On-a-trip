@@ -20,37 +20,47 @@ function renderQuote(){$('out').innerHTML='<span class="status">STEP 3 — QUOTA
 function finalPDF(){let inc=quote.inclusions.map(x=>'<li>'+esc(x)+'</li>').join(''),exc=quote.exclusions.map(x=>'<li>'+esc(x)+'</li>').join('');$('printSheet').innerHTML='<div class="print-header"><img src="assets/on-a-trip-logo.png"><div><b>ON A TRIP HOLIDAYS</b><br>Let\'s explore the magical places<br>+91-8125248909<br>www.onatripholidays.com</div></div><div class="print-title">'+esc(quote.title)+'</div><div class="meta"><div><b>Guest</b>'+esc(quote.guest)+'</div><div><b>Contact</b>'+esc(v('contact'))+'</div><div><b>Destination</b>'+esc(quote.dest)+'</div><div><b>Travellers</b>'+quote.pax+'</div><div><b>Dates</b>'+esc(quote.dates)+'</div><div><b>Start City</b>'+esc(quote.start)+'</div></div>'+quote.days.map(d=>'<div class="print-day"><h3>DAY '+esc(d.day)+' — '+esc(d.title)+'</h3><p>'+esc(d.summary)+'</p><p><b>Hotel:</b> '+esc(d.hotel)+' &nbsp; <b>Meals:</b> '+esc(d.meals)+'</p></div>').join('')+'<div class="print-two"><div class="print-box"><h4>Accommodation</h4><p>'+esc(quote.hotels)+'</p></div><div class="print-box"><h4>Transport</h4><p>'+esc(quote.vehicle)+'</p></div></div><div class="print-box"><h4>Meals</h4><p>'+esc(quote.meals)+'</p></div><div class="print-box"><h4>Package Quote</h4><div class="print-price">'+esc(quote.price)+' per person · Total ₹ '+quote.total.toLocaleString('en-IN')+'</div></div><div class="print-two"><div class="print-box"><h4>Inclusions</h4><ul>'+inc+'</ul></div><div class="print-box"><h4>Exclusions</h4><ul>'+exc+'</ul></div></div><div class="print-box"><h4>Terms & Conditions</h4><p>'+esc(quote.terms)+'</p></div><div class="print-footer">On A Trip Holidays · Hyderabad · +91-8125248909 · www.onatripholidays.com</div>';window.print()}
 $('form').addEventListener('submit',e=>{e.preventDefault();generate()});
 </script>
-<script id="oat-full-itinerary-editor">
+<script id="oat-step2-gst">
 (function(){
-  function makeEditable(){
-    const root = document.querySelector('[id*="generated"], .generated-itinerary, .itinerary-preview, .itinerary-content');
-    const scope = root || document.body;
-    const selectors = [
-      'h1','h2','h3',
-      '[data-field="title"]','[data-field="summary"]',
-      '[data-field="accommodation"]','[data-field="vehicle"]',
-      '[data-field="meals"]','[data-field="notes"]'
-    ];
-    selectors.forEach(sel=>{
-      scope.querySelectorAll(sel).forEach(el=>{
-        if(!el.closest('.modal') && !el.dataset.oatEditable){
-          el.contentEditable='true';
-          el.dataset.oatEditable='1';
-          el.title='Click to edit';
-          el.style.outline='1px dashed rgba(238,90,42,.35)';
-          el.style.outlineOffset='2px';
-        }
-      });
-    });
-  }
-  document.addEventListener('click', function(e){
-    const b=e.target.closest('button,a');
-    if(b && /edit itinerary/i.test(b.textContent||'')){
-      setTimeout(makeEditable,50);
-    }
-  });
-  setTimeout(makeEditable,300);
+  window.OAT_GST_RATE = 0.05;
+
+  window.oatCalculateQuotation = function(price, pax){
+    price = Number(price) || 0;
+    pax = Number(pax) || 0;
+    const subtotal = price * pax;
+    const gst = subtotal * window.OAT_GST_RATE;
+    return {
+      price: price,
+      pax: pax,
+      subtotal: subtotal,
+      gstRate: 5,
+      gst: gst,
+      total: subtotal + gst,
+      calculation: '₹' + price.toLocaleString('en-IN') + ' × ' + pax +
+                   ' = ₹' + subtotal.toLocaleString('en-IN')
+    };
+  };
+
+  window.oatRenderQuotationTotals = function(container, price, pax){
+    if(!container) return;
+    const q = window.oatCalculateQuotation(price, pax);
+    container.innerHTML =
+      '<div class="oat-quotation-total">' +
+        '<div><b>Package Cost</b></div>' +
+        '<div class="oat-calculation">₹' + q.price.toLocaleString('en-IN') +
+          ' × ' + q.pax + ' = <b>₹' + q.subtotal.toLocaleString('en-IN') + '</b></div>' +
+        '<div>GST @ 5% <span>₹' + q.gst.toLocaleString('en-IN', {maximumFractionDigits:2}) + '</span></div>' +
+        '<div class="oat-grand-total"><b>Grand Total</b><b>₹' +
+          q.total.toLocaleString('en-IN', {maximumFractionDigits:2}) + '</b></div>' +
+      '</div>';
+  };
 })();
 </script>
+<style id="oat-step2-gst-style">
+.oat-quotation-total{display:grid;gap:8px;margin-top:12px;padding:14px;border:1px solid #dce4e9;border-radius:12px;background:#fff;font-size:14px}
+.oat-quotation-total>div{display:flex;justify-content:space-between;gap:12px}
+.oat-calculation{font-size:16px}
+.oat-grand-total{margin-top:4px;padding-top:10px;border-top:1px solid #dce4e9;font-size:17px}
+</style>
 
 </body></html>
