@@ -5,1297 +5,157 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>On A Trip Holidays | CRM</title>
 <meta name="robots" content="noindex,nofollow,noarchive">
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
-:root{
---n:#08233f;--n2:#103d66;--o:#ee5a2a;--g:#18a66a;
---r:#d64545;--bg:#f3f6f8;--line:#dce4e9;--muted:#6b7b87
-}
-*{box-sizing:border-box}
-body{
-margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-background:var(--bg);color:#102335
-}
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-
-.login{
-min-height:100vh;display:grid;place-items:center;padding:20px;
-background:linear-gradient(135deg,#08233f,#103d66)
-}
-.login-box{
-background:#fff;width:min(420px,100%);padding:32px;border-radius:20px;
-box-shadow:0 20px 60px #0005
-}
-.login-box h1{margin:0 0 5px;color:var(--n)}
-.login-box p{color:var(--muted);margin:0 0 22px}
-.login-box label{display:block;font-size:13px;font-weight:800;margin:12px 0 6px}
-.login-box input{
-width:100%;padding:13px;border:1px solid var(--line);border-radius:10px
-}
-.login-btn{
-width:100%;margin-top:18px;padding:13px;border:0;border-radius:10px;
-background:var(--o);color:#fff;font-weight:900
-}
-.error{color:var(--r);font-size:13px;margin-top:12px;display:none}
-
-#app{display:none}
-
-.top{
-background:var(--n);color:#fff;padding:14px 5%;display:flex;
-align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10
-}
-.top b{font-size:18px}
-.top small{color:#bdcad4}
-.top-actions{display:flex;gap:8px}
-.top button,.top a{
-color:#fff;text-decoration:none;background:var(--o);padding:9px 13px;
-border-radius:9px;font-weight:800;border:0
-}
-.top .logout{background:#ffffff20}
-
-.shell{max-width:1280px;margin:auto;padding:22px 18px}
-
-.stats{
-display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:16px
-}
-.stat{
-background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px
-}
-.stat small{color:var(--muted);font-weight:800}
-.stat strong{display:block;font-size:25px;margin:5px 0}
-.stat em{font-style:normal;color:var(--g);font-size:11px;font-weight:800}
-
-.toolbar{
-background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px;
-display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px
-}
-.toolbar input,.toolbar select{
-padding:11px;border:1px solid var(--line);border-radius:9px;background:#fff
-}
-.toolbar input{min-width:260px}
-
-.btn{
-border:0;border-radius:9px;padding:11px 14px;font-weight:900
-}
-.primary{background:var(--o);color:#fff}
-.secondary{background:#fff;border:1px solid var(--line);color:var(--n)}
-
-.board{
-display:grid;grid-template-columns:repeat(8,1fr);gap:10px;
-overflow-x:auto
-}
-.column{
-min-width:185px;background:#eaf0f3;border-radius:12px;padding:9px
-}
-.column h3{
-font-size:12px;margin:3px 4px 9px;text-transform:uppercase
-}
-.count{
-float:right;background:#fff;border-radius:12px;padding:2px 7px
-}
-
-.lead{
-background:#fff;border:1px solid var(--line);border-radius:11px;
-padding:12px;margin-bottom:9px;box-shadow:0 3px 12px #00000008
-}
-.lead b{font-size:14px}
-.lead .muted{font-size:11px;color:var(--muted);margin-top:3px}
-.lead .trip{color:var(--o);font-weight:800;font-size:12px;margin-top:8px}
-.lead .actions{display:flex;gap:5px;margin-top:9px}
-.lead .actions button{
-border:1px solid var(--line);background:#fff;border-radius:7px;
-padding:6px 7px;font-size:11px;font-weight:800
-}
-.lead .actions .wa{
-background:#eaf8f0;color:#087548;border-color:#ccebdc
-}
-
-.table-card{
-background:#fff;border:1px solid var(--line);border-radius:14px;
-margin-top:18px;padding:15px;overflow:auto
-}
-.table{
-width:100%;border-collapse:collapse;min-width:1000px
-}
-.table th,.table td{
-padding:11px;border-bottom:1px solid var(--line);
-text-align:left;font-size:13px
-}
-.table th{
-font-size:11px;color:var(--muted);text-transform:uppercase
-}
-.table select{
-padding:7px;border:1px solid var(--line);border-radius:7px
-}
-
-.modal{
-position:fixed;inset:0;background:#0008;display:none;
-place-items:center;padding:18px;z-index:30
-}
-.modal.show{display:grid}
-.box{
-background:#fff;width:min(650px,100%);max-height:92vh;
-overflow:auto;border-radius:17px;padding:20px
-}
-.head{
-display:flex;justify-content:space-between;align-items:center
-}
-.close{
-border:0;background:#eef2f5;border-radius:50%;
-width:35px;height:35px
-}
-.form{display:grid;gap:9px}
-.form label{font-size:12px;font-weight:900}
-.form input,.form select,.form textarea{
-padding:11px;border:1px solid var(--line);border-radius:9px
-}
-.form textarea{min-height:90px}
-.row{
-display:grid;grid-template-columns:1fr 1fr;gap:9px
-}
-
-.detail-grid{
-display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px
-}
-.detail{
-background:#f7f9fa;padding:12px;border-radius:10px
-}
-.detail small{
-display:block;color:var(--muted);font-weight:800;font-size:10px;
-text-transform:uppercase
-}
-.detail b{display:block;margin-top:4px}
-
-.loading{
-padding:40px;text-align:center;color:var(--muted)
-}
-
-@media(max-width:1000px){
-.stats{grid-template-columns:repeat(3,1fr)}
-}
-@media(max-width:600px){
-.shell{padding:14px 10px}
-.stats{grid-template-columns:repeat(2,1fr)}
-.stat{padding:12px}
-.stat strong{font-size:22px}
-.toolbar input{width:100%;min-width:0}
-.board{grid-template-columns:repeat(8,185px)}
-.row,.detail-grid{grid-template-columns:1fr}
-.top{padding:12px}
-.top small{display:none}
-}
+:root{--n:#08233f;--n2:#103d66;--o:#ee5a2a;--g:#18a66a;--r:#d64545;--bg:#f3f6f8;--line:#dce4e9;--muted:#6b7b87}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#102335}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,#08233f,#103d66)}
+.login-box{background:#fff;width:min(420px,100%);padding:32px;border-radius:20px;box-shadow:0 20px 60px #0005}
+.login-box h1{margin:0 0 5px;color:var(--n)}.login-box p{color:var(--muted);margin:0 0 22px}
+.login-box label{display:block;font-size:13px;font-weight:800;margin:12px 0 6px}.login-box input{width:100%;padding:13px;border:1px solid var(--line);border-radius:10px}
+.login-btn{width:100%;margin-top:18px;padding:13px;border:0;border-radius:10px;background:var(--o);color:#fff;font-weight:900}.error{color:var(--r);font-size:13px;margin-top:12px;display:none}
+#app{display:none}.top{background:var(--n);color:#fff;padding:14px 5%;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.top b{font-size:18px}.top small{color:#bdcad4}.top-actions{display:flex;gap:8px}.top button,.top a{color:#fff;text-decoration:none;background:var(--o);padding:9px 13px;border-radius:9px;font-weight:800;border:0}.top .logout{background:#ffffff20}
+.shell{max-width:1280px;margin:auto;padding:22px 18px}.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:16px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px}.stat small{color:var(--muted);font-weight:800}.stat strong{display:block;font-size:25px;margin:5px 0}.stat em{font-style:normal;color:var(--g);font-size:11px;font-weight:800}
+.toolbar{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px;display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}
+.toolbar input,.toolbar select{padding:11px;border:1px solid var(--line);border-radius:9px;background:#fff}.toolbar input{min-width:260px}
+.btn{border:0;border-radius:9px;padding:11px 14px;font-weight:900}.primary{background:var(--o);color:#fff}.secondary{background:#fff;border:1px solid var(--line);color:var(--n)}
+.board{display:grid;grid-template-columns:repeat(8,1fr);gap:10px;overflow-x:auto}.column{min-width:185px;background:#eaf0f3;border-radius:12px;padding:9px}.column h3{font-size:12px;margin:3px 4px 9px;text-transform:uppercase}.count{float:right;background:#fff;border-radius:12px;padding:2px 7px}
+.lead{background:#fff;border:1px solid var(--line);border-radius:11px;padding:12px;margin-bottom:9px;box-shadow:0 3px 12px #00000008}.lead b{font-size:14px}.lead .muted{font-size:11px;color:var(--muted);margin-top:3px}.lead .trip{color:var(--o);font-weight:800;font-size:12px;margin-top:8px}.lead .actions{display:flex;gap:5px;margin-top:9px}.lead .actions button{border:1px solid var(--line);background:#fff;border-radius:7px;padding:6px 7px;font-size:11px;font-weight:800}.lead .actions .wa{background:#eaf8f0;color:#087548;border-color:#ccebdc}
+.badge{display:inline-block;padding:4px 7px;border-radius:7px;background:#eef2f5;font-size:10px;font-weight:800;margin-top:6px}
+.table-card{background:#fff;border:1px solid var(--line);border-radius:14px;margin-top:18px;padding:15px;overflow:auto}.table{width:100%;border-collapse:collapse;min-width:1120px}.table th,.table td{padding:11px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}.table th{font-size:11px;color:var(--muted);text-transform:uppercase}.table select{padding:7px;border:1px solid var(--line);border-radius:7px}
+.modal{position:fixed;inset:0;background:#0008;display:none;place-items:center;padding:18px;z-index:30}.modal.show{display:grid}.box{background:#fff;width:min(680px,100%);max-height:92vh;overflow:auto;border-radius:17px;padding:20px}.head{display:flex;justify-content:space-between;align-items:center}.close{border:0;background:#eef2f5;border-radius:50%;width:35px;height:35px}
+.form{display:grid;gap:9px}.form label{font-size:12px;font-weight:900}.form input,.form select,.form textarea{padding:11px;border:1px solid var(--line);border-radius:9px}.form textarea{min-height:90px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px}.detail{background:#f7f9fa;padding:12px;border-radius:10px}.detail small{display:block;color:var(--muted);font-weight:800;font-size:10px;text-transform:uppercase}.detail b{display:block;margin-top:4px}
+.loading{padding:40px;text-align:center;color:var(--muted)}
+@media(max-width:1000px){.stats{grid-template-columns:repeat(3,1fr)}}@media(max-width:600px){.shell{padding:14px 10px}.stats{grid-template-columns:repeat(2,1fr)}.stat{padding:12px}.stat strong{font-size:22px}.toolbar input{width:100%;min-width:0}.board{grid-template-columns:repeat(8,185px)}.row,.detail-grid{grid-template-columns:1fr}.top{padding:12px}.top small{display:none}}
 </style>
 </head>
-
 <body>
+<section class="login" id="loginScreen"><div class="login-box">
+<h1>On A Trip Holidays</h1><p>CRM • Sales & Lead Management</p>
+<label>Email</label><input id="loginEmail" type="email" placeholder="CRM email" autocomplete="username">
+<label>Password</label><input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password">
+<button class="login-btn" onclick="login()">Login to CRM</button><div class="error" id="loginError"></div>
+</div></section>
 
-<!-- LOGIN -->
-<section class="login" id="loginScreen">
-<div class="login-box">
-<h1>On A Trip Holidays</h1>
-<p>CRM • Sales & Lead Management</p>
-
-<label>Email</label>
-<input id="loginEmail" type="email"
-placeholder="CRM email" autocomplete="username">
-
-<label>Password</label>
-<input id="loginPassword" type="password"
-placeholder="Password" autocomplete="current-password">
-
-<button class="login-btn" onclick="login()">Login to CRM</button>
-
-<div class="error" id="loginError"></div>
-</div>
-</section>
-
-
-<!-- CRM APP -->
 <div id="app">
-
-<header class="top">
-<div>
-<b>ON A TRIP HOLIDAYS — CRM</b>
-<small> • Sales & Lead Management</small>
-</div>
-
-<div class="top-actions">
-<a href="admin.html">← Admin</a>
-<button class="logout" onclick="logout()">Logout</button>
-</div>
-</header>
-
-
+<header class="top"><div><b>ON A TRIP HOLIDAYS — CRM</b><small> • Sales & Lead Management</small></div>
+<div class="top-actions"><a href="admin.html">← Admin</a><button class="logout" onclick="logout()">Logout</button></div></header>
 <main class="shell">
-
 <section class="stats">
-
-<div class="stat">
-<small>Total Leads</small>
-<strong id="sTotal">0</strong>
-<em>All enquiries</em>
-</div>
-
-<div class="stat">
-<small>New</small>
-<strong id="sNew">0</strong>
-<em>Needs first contact</em>
-</div>
-
-<div class="stat">
-<small>Hot</small>
-<strong id="sHot">0</strong>
-<em>Priority follow-up</em>
-</div>
-
-<div class="stat">
-<small>Quotes Sent</small>
-<strong id="sQuote">0</strong>
-<em>Awaiting decision</em>
-</div>
-
-<div class="stat">
-<small>Booked</small>
-<strong id="sBooked">0</strong>
-<em>Converted leads</em>
-</div>
-
-<div class="stat">
-<small>Follow-ups</small>
-<strong id="sFollow">0</strong>
-<em>Upcoming</em>
-</div>
-
+<div class="stat"><small>Total Leads</small><strong id="sTotal">0</strong><em>All enquiries</em></div>
+<div class="stat"><small>New</small><strong id="sNew">0</strong><em>Needs first contact</em></div>
+<div class="stat"><small>Hot</small><strong id="sHot">0</strong><em>Priority follow-up</em></div>
+<div class="stat"><small>Quotes Sent</small><strong id="sQuote">0</strong><em>Awaiting decision</em></div>
+<div class="stat"><small>Booked</small><strong id="sBooked">0</strong><em>Converted leads</em></div>
+<div class="stat"><small>Follow-ups</small><strong id="sFollow">0</strong><em>Upcoming</em></div>
 </section>
-
 
 <div class="toolbar">
-
-<input id="search"
-oninput="render()"
-placeholder="🔎 Search name, phone, destination...">
-
-<select id="filterStatus" onchange="render()">
-<option value="">All stages</option>
-<option>New</option>
-<option>Contacted</option>
-<option>Qualified</option>
-<option>Hot</option>
-<option>Quote Sent</option>
-<option>Follow-up</option>
-<option>Booked</option>
-<option>Lost</option>
-</select>
-
-<select id="filterBranch" onchange="render()">
-<option value="">All branches</option>
-<option>Hyderabad</option>
-<option>Vijayawada</option>
-</select>
-
-<select id="filterSource" onchange="render()">
-<option value="">All sources</option>
-<option>Meta Ads</option>
-<option>Instagram</option>
-<option>Facebook</option>
-<option>WhatsApp</option>
-<option>Website</option>
-<option>Google</option>
-<option>Walk-in</option>
-</select>
-
-<button class="btn primary" onclick="openModal('leadModal')">
-＋ New Lead
-</button>
-
-<button class="btn secondary" onclick="exportCSV()">
-Export CSV
-</button>
-
+<input id="search" oninput="render()" placeholder="🔎 Search name, phone, destination...">
+<select id="filterStatus" onchange="render()"><option value="">All stages</option><option>New</option><option>Contacted</option><option>Qualified</option><option>Hot</option><option>Quote Sent</option><option>Follow-up</option><option>Booked</option><option>Lost</option></select>
+<select id="filterBranch" onchange="render()"><option value="">All branches</option><option>Hyderabad</option><option>Vijayawada</option></select>
+<select id="filterSalesperson" onchange="render()"><option value="">All salespeople</option></select>
+<select id="filterSource" onchange="render()"><option value="">All sources</option><option>Meta Ads</option><option>Instagram</option><option>Facebook</option><option>WhatsApp</option><option>Website</option><option>Google</option><option>Walk-in</option></select>
+<button class="btn primary" onclick="openModal('leadModal')">＋ New Lead</button>
+<button class="btn secondary" onclick="exportCSV()">Export CSV</button>
 </div>
 
+<div class="board" id="board"><div class="loading">Loading enquiries...</div></div>
 
-<div class="board" id="board">
-<div class="loading">Loading enquiries...</div>
-</div>
-
-
-<div class="table-card">
-
-<h2 style="margin:2px 0 13px;font-size:19px">
-All Real Enquiries
-</h2>
-
-<table class="table">
-
-<thead>
-<tr>
-<th>Customer</th>
-<th>Trip</th>
-<th>Branch</th>
-<th>Travel Date</th>
-<th>Travellers</th>
-<th>Value</th>
-<th>Stage</th>
-<th>Follow-up</th>
-<th>Actions</th>
-</tr>
-</thead>
-
-<tbody id="table"></tbody>
-
-</table>
-
-</div>
-
+<div class="table-card"><h2 style="margin:2px 0 13px;font-size:19px">All Real Enquiries</h2>
+<table class="table"><thead><tr><th>Customer</th><th>Trip</th><th>Branch</th><th>Salesperson</th><th>Travel Date</th><th>Travellers</th><th>Value</th><th>Stage</th><th>Follow-up</th><th>Actions</th></tr></thead>
+<tbody id="table"></tbody></table></div>
 </main>
 
-
-<!-- NEW LEAD -->
-<div class="modal" id="leadModal">
-
-<div class="box">
-
-<div class="head">
-<h2>New Lead</h2>
-<button class="close" onclick="closeModal('leadModal')">×</button>
-</div>
-
+<div class="modal" id="leadModal"><div class="box"><div class="head"><h2>New Lead</h2><button class="close" onclick="closeModal('leadModal')">×</button></div>
 <form class="form" onsubmit="addLead(event)">
+<div class="row"><div><label>Customer name</label><input id="name" required></div><div><label>Phone / WhatsApp</label><input id="phone" required></div></div>
+<div class="row"><div><label>Destination / Package</label><input id="dest" placeholder="Thailand" required></div><div><label>Travellers</label><input id="trav" type="number" min="1" value="2"></div></div>
+<div class="row"><div><label>Travel date</label><input id="date" type="date"></div><div><label>Expected value</label><input id="value" placeholder="₹50,000"></div></div>
+<div class="row"><div><label>Branch</label><select id="branch"><option>Hyderabad</option><option>Vijayawada</option></select></div>
+<div><label>Salesperson</label><select id="salesperson"></select></div></div>
+<div class="row"><div><label>Source</label><select id="source"><option>Website</option><option>Meta Ads</option><option>Instagram</option><option>Facebook</option><option>WhatsApp</option><option>Google</option><option>Walk-in</option></select></div>
+<div><label>Priority</label><select id="priority"><option>Normal</option><option>High</option><option>Hot</option></select></div></div>
+<div class="row"><div><label>Next follow-up</label><input id="follow" type="date"></div><div></div></div>
+<label>Notes</label><textarea id="notes" placeholder="Requirements, budget, hotel preference..."></textarea>
+<button class="btn primary">Create Lead</button>
+</form></div></div>
 
-<div class="row">
-
-<div>
-<label>Customer name</label>
-<input id="name" required>
+<div class="modal" id="detailsModal"><div class="box"><div class="head"><h2 id="detailTitle">Lead</h2><button class="close" onclick="closeModal('detailsModal')">×</button></div><div id="details"></div></div></div>
 </div>
-
-<div>
-<label>Phone / WhatsApp</label>
-<input id="phone" required>
-</div>
-
-</div>
-
-
-<div class="row">
-
-<div>
-<label>Destination / Package</label>
-<input id="dest" placeholder="Thailand" required>
-</div>
-
-<div>
-<label>Travellers</label>
-<input id="trav" type="number" min="1" value="2">
-</div>
-
-</div>
-
-
-<div class="row">
-
-<div>
-<label>Travel date</label>
-<input id="date" type="date">
-</div>
-
-<div>
-<label>Expected value</label>
-<input id="value" placeholder="₹50,000">
-</div>
-
-</div>
-
-
-<div class="row">
-
-<div>
-<label>Branch</label>
-
-<select id="branch">
-<option>Hyderabad</option>
-<option>Vijayawada</option>
-</select>
-
-</div>
-
-<div>
-<label>Source</label>
-
-<select id="source">
-<option>Website</option>
-<option>Meta Ads</option>
-<option>Instagram</option>
-<option>Facebook</option>
-<option>WhatsApp</option>
-<option>Google</option>
-<option>Walk-in</option>
-</select>
-
-</div>
-
-</div>
-
-
-<div class="row">
-
-<div>
-<label>Priority</label>
-
-<select id="priority">
-<option>Normal</option>
-<option>High</option>
-<option>Hot</option>
-</select>
-
-</div>
-
-<div>
-<label>Next follow-up</label>
-<input id="follow" type="date">
-</div>
-
-</div>
-
-
-<label>Notes</label>
-
-<textarea id="notes"
-placeholder="Requirements, budget, hotel preference..."></textarea>
-
-<button class="btn primary">
-Create Lead
-</button>
-
-</form>
-
-</div>
-</div>
-
-
-<!-- DETAILS -->
-<div class="modal" id="detailsModal">
-
-<div class="box">
-
-<div class="head">
-
-<h2 id="detailTitle">Lead</h2>
-
-<button class="close"
-onclick="closeModal('detailsModal')">×</button>
-
-</div>
-
-<div id="details"></div>
-
-</div>
-
-</div>
-
 
 <script>
-
-/* ==========================================
-   SUPABASE CONFIG
-========================================== */
-
-const SUPABASE_URL =
-"https://esezxiatffjihwikfzbz.supabase.co";
-
-/*
-PASTE YOUR SUPABASE PUBLISHABLE KEY BELOW.
-DO NOT USE sb_secret_...
-*/
-
-const SUPABASE_PUBLISHABLE_KEY =
-"sb_publishable_VdPfeaWm6BsPk6ArHsI3iA_GxwPqd1d";
-
-const {createClient} = supabase;
-
-const db = createClient(
-SUPABASE_URL,
-SUPABASE_PUBLISHABLE_KEY
-);
-
-
-/* ==========================================
-   CRM DATA
-========================================== */
-
-const stages=[
-"New",
-"Contacted",
-"Qualified",
-"Hot",
-"Quote Sent",
-"Follow-up",
-"Booked",
-"Lost"
-];
-
+const SUPABASE_URL="https://esezxiatffjihwikfzbz.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_VdPfeaWm6BsPk6ArHsI3iA_GxwPqd1d";
+const {createClient}=supabase; const db=createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+const stages=["New","Contacted","Qualified","Hot","Quote Sent","Follow-up","Booked","Lost"];
+const salespeople=["Unassigned","Rohini","Harshika","Godavari","Vanditha"];
 let leads=[];
 
-
-/* ==========================================
-   LOGIN
-========================================== */
-
-async function checkSession(){
-
-const {
-data:{session}
-}=await db.auth.getSession();
-
-if(session){
-showApp();
-}else{
-showLogin();
+function fillSalespeople(){
+  ["salesperson","filterSalesperson"].forEach(id=>{
+    const el=document.getElementById(id); if(!el)return;
+    const current=el.value;
+    el.innerHTML=(id==="filterSalesperson"?'<option value="">All salespeople</option>':"")+salespeople.map(x=>`<option>${esc(x)}</option>`).join("");
+    if(current)el.value=current;
+  });
 }
-
-}
-
-
-function showLogin(){
-
-document.getElementById("loginScreen").style.display="grid";
-document.getElementById("app").style.display="none";
-
-}
-
-
-function showApp(){
-
-document.getElementById("loginScreen").style.display="none";
-document.getElementById("app").style.display="block";
-
-loadLeads();
-
-}
-
-
-async function login(){
-
-const email=document.getElementById("loginEmail").value.trim();
-const password=document.getElementById("loginPassword").value;
-
-const error=document.getElementById("loginError");
-
-error.style.display="none";
-
-if(!email || !password){
-
-error.textContent="Please enter email and password.";
-error.style.display="block";
-return;
-
-}
-
-const {
-error:loginError
-}=await db.auth.signInWithPassword({
-email,
-password
-});
-
-if(loginError){
-
-error.textContent=loginError.message;
-error.style.display="block";
-return;
-
-}
-
-showApp();
-
-}
-
-
-async function logout(){
-
-await db.auth.signOut();
-
-leads=[];
-
-showLogin();
-
-}
-
-
-/* ==========================================
-   LOAD REAL ENQUIRIES
-========================================== */
+async function checkSession(){const {data:{session}}=await db.auth.getSession();session?showApp():showLogin()}
+function showLogin(){loginScreen.style.display="grid";app.style.display="none"}
+function showApp(){loginScreen.style.display="none";app.style.display="block";fillSalespeople();loadLeads()}
+async function login(){const email=loginEmail.value.trim(),password=loginPassword.value,error=loginError;error.style.display="none";if(!email||!password){error.textContent="Please enter email and password.";error.style.display="block";return}const {error:e}=await db.auth.signInWithPassword({email,password});if(e){error.textContent=e.message;error.style.display="block";return}showApp()}
+async function logout(){await db.auth.signOut();leads=[];showLogin()}
 
 async function loadLeads(){
-
-document.getElementById("board").innerHTML=
-'<div class="loading">Loading enquiries...</div>';
-
-const {
-data,
-error
-}=await db
-.from("enquiries")
-.select("*")
-.order("created_at",{ascending:false});
-
-if(error){
-
-console.error(error);
-
-document.getElementById("board").innerHTML=
-'<div class="loading">Unable to load enquiries.</div>';
-
-alert("Could not load enquiries: "+error.message);
-
-return;
-
+ board.innerHTML='<div class="loading">Loading enquiries...</div>';
+ const {data,error}=await db.from("enquiries").select("*").order("created_at",{ascending:false});
+ if(error){console.error(error);board.innerHTML='<div class="loading">Unable to load enquiries.</div>';alert("Could not load enquiries: "+error.message);return}
+ leads=(data||[]).map(normalizeLead);render();
 }
-
-leads=(data||[]).map(normalizeLead);
-
-render();
-
-}
-
-
-function normalizeLead(x){
-
-return {
-
-id:x.id,
-
-name:x.name||"Unknown",
-
-phone:x.phone||"",
-
-dest:x.destination||"",
-
-trav:Number(x.travellers||0),
-
-branch:x.branch||"",
-
-source:x.source||"Website",
-
-priority:x.priority||"Normal",
-
-status:x.status||"New",
-
-date:x.travel_date||"",
-
-value:x.value||"",
-
-follow:x.follow_up||"",
-
-notes:x.notes||"",
-
-message:x.message||"",
-
-type:x.enquiry_type||"",
-
-created:x.created_at||""
-
-};
-
-}
-
-
-/* ==========================================
-   RENDER
-========================================== */
+function normalizeLead(x){return {id:x.id,name:x.name||"Unknown",phone:x.phone||"",dest:x.destination||"",trav:Number(x.travellers||0),branch:x.branch||"",salesperson:x.salesperson||"Unassigned",source:x.source||"Website",priority:x.priority||"Normal",status:x.status||"New",date:x.travel_date||"",value:x.value||"",follow:x.follow_up||"",notes:x.notes||"",message:x.message||"",type:x.enquiry_type||"",created:x.created_at||""}}
 
 function render(){
-
-const q=document
-.getElementById("search")
-.value
-.toLowerCase();
-
-const st=document
-.getElementById("filterStatus")
-.value;
-
-const br=document
-.getElementById("filterBranch")
-.value;
-
-const so=document
-.getElementById("filterSource")
-.value;
-
-
-const list=leads.filter(l=>
-
-(l.name+" "+l.phone+" "+l.dest)
-.toLowerCase()
-.includes(q)
-
-&&(!st||l.status===st)
-
-&&(!br||l.branch===br)
-
-&&(!so||l.source===so)
-
-);
-
-
-const counts={};
-
-stages.forEach(s=>counts[s]=0);
-
-leads.forEach(l=>{
-
-counts[l.status]=(counts[l.status]||0)+1;
-
-});
-
-
-document.getElementById("sTotal").textContent=leads.length;
-document.getElementById("sNew").textContent=counts.New||0;
-document.getElementById("sHot").textContent=counts.Hot||0;
-document.getElementById("sQuote").textContent=counts["Quote Sent"]||0;
-document.getElementById("sBooked").textContent=counts.Booked||0;
-
-
-const today=new Date().toISOString().slice(0,10);
-
-const followups=leads.filter(l=>
-l.follow && l.follow<=today && l.status!=="Booked" && l.status!=="Lost"
-).length;
-
-document.getElementById("sFollow").textContent=followups;
-
-
-document.getElementById("board").innerHTML=
-
-stages.map(s=>`
-
-<div class="column">
-
-<h3>
-${s}
-<span class="count">${counts[s]||0}</span>
-</h3>
-
-${list
-.filter(l=>l.status===s)
-.map(card)
-.join("")}
-
-</div>
-
-`).join("");
-
-
-document.getElementById("table").innerHTML=
-
-list.map(row).join("")
-
-||
-
-'<tr><td colspan="9">No matching enquiries.</td></tr>';
-
+ const q=search.value.toLowerCase(),st=filterStatus.value,br=filterBranch.value,sp=filterSalesperson.value,so=filterSource.value;
+ const list=leads.filter(l=>(l.name+" "+l.phone+" "+l.dest+" "+l.salesperson).toLowerCase().includes(q)&&(!st||l.status===st)&&(!br||l.branch===br)&&(!sp||l.salesperson===sp)&&(!so||l.source===so));
+ const counts={};stages.forEach(s=>counts[s]=0);leads.forEach(l=>counts[l.status]=(counts[l.status]||0)+1);
+ sTotal.textContent=leads.length;sNew.textContent=counts.New||0;sHot.textContent=counts.Hot||0;sQuote.textContent=counts["Quote Sent"]||0;sBooked.textContent=counts.Booked||0;
+ const today=new Date().toISOString().slice(0,10);sFollow.textContent=leads.filter(l=>l.follow&&l.follow<=today&&l.status!=="Booked"&&l.status!=="Lost").length;
+ board.innerHTML=stages.map(s=>`<div class="column"><h3>${s}<span class="count">${counts[s]||0}</span></h3>${list.filter(l=>l.status===s).map(card).join("")}</div>`).join("");
+ table.innerHTML=list.map(row).join("")||'<tr><td colspan="10">No matching enquiries.</td></tr>';
 }
-
-
-/* ==========================================
-   CARD
-========================================== */
-
-function card(l){
-
-return `
-
-<div class="lead">
-
-<b>${esc(l.name)}</b>
-
-<div class="muted">
-${esc(l.phone)} • ${esc(l.branch||"Branch not assigned")}
-</div>
-
-<div class="trip">
-${esc(l.dest||"Destination not specified")}
-</div>
-
-<div class="muted">
-${l.trav||0} travellers • ${esc(l.value||"Value not set")}
-</div>
-
-<div class="actions">
-
-<button class="wa"
-onclick="wa(${l.id})">
-WhatsApp
-</button>
-
-<button onclick="callCustomer('${esc(l.phone)}')">
-Call
-</button>
-
-<button onclick="details(${l.id})">
-Details
-</button>
-
-</div>
-
-</div>
-
-`;
-
-}
-
-
-/* ==========================================
-   TABLE
-========================================== */
-
-function row(l){
-
-return `
-
-<tr>
-
-<td>
-
-<b>${esc(l.name)}</b>
-
-<div style="color:var(--muted);font-size:11px">
-${esc(l.phone)}
-</div>
-
-</td>
-
-<td>${esc(l.dest||"—")}</td>
-
-<td>${esc(l.branch||"—")}</td>
-
-<td>${esc(l.date||"—")}</td>
-
-<td>${l.trav||"—"}</td>
-
-<td><b>${esc(l.value||"—")}</b></td>
-
-<td>
-
-<select
-onchange="stage(${l.id},this.value)">
-
-${stages.map(s=>`
-
-<option
-value="${esc(s)}"
-${s===l.status?"selected":""}>
-
-${s}
-
-</option>
-
-`).join("")}
-
-</select>
-
-</td>
-
-<td style="color:var(--o);font-weight:800">
-
-${esc(l.follow||"—")}
-
-</td>
-
-<td>
-
-<button
-class="btn secondary"
-onclick="wa(${l.id})">
-
-WA
-
-</button>
-
-<button
-class="btn secondary"
-onclick="details(${l.id})">
-
-View
-
-</button>
-
-</td>
-
-</tr>
-
-`;
-
-}
-
-
-/* ==========================================
-   UPDATE STATUS
-========================================== */
-
-async function stage(id,status){
-
-const lead=leads.find(x=>x.id===id);
-
-if(!lead)return;
-
-const old=lead.status;
-
-lead.status=status;
-
-const {
-error
-}=await db
-.from("enquiries")
-.update({status})
-.eq("id",id);
-
-if(error){
-
-lead.status=old;
-
-alert("Could not update status: "+error.message);
-
-}
-
-render();
-
-}
-
-
-/* ==========================================
-   WHATSAPP
-========================================== */
-
-function wa(id){
-
-const l=leads.find(x=>x.id===id);
-
-if(!l)return;
-
-let phone=(l.phone||"")
-.replace(/\D/g,"");
-
-if(phone.length===10)
-phone="91"+phone;
-
-const msg=
-`Hi ${l.name}, this is On A Trip Holidays. Regarding your ${l.dest||"travel"} enquiry for ${l.trav||""} travellers. I can share the latest package, batch and offer details.`;
-
-window.open(
-"https://wa.me/"+phone+"?text="+encodeURIComponent(msg),
-"_blank"
-);
-
-}
-
-
-function callCustomer(phone){
-
-const p=(phone||"").replace(/\s/g,"");
-
-if(p)
-window.location.href="tel:"+p;
-
-}
-
-
-/* ==========================================
-   DETAILS
-========================================== */
-
-function details(id){
-
-const l=leads.find(x=>x.id===id);
-
-if(!l)return;
-
-document.getElementById("detailTitle").textContent=l.name;
-
-document.getElementById("details").innerHTML=`
-
-<div class="detail-grid">
-
-<div class="detail">
-<small>Phone</small>
-<b>${esc(l.phone)}</b>
-</div>
-
-<div class="detail">
-<small>Destination</small>
-<b>${esc(l.dest||"—")}</b>
-</div>
-
-<div class="detail">
-<small>Travel Date</small>
-<b>${esc(l.date||"—")}</b>
-</div>
-
-<div class="detail">
-<small>Travellers</small>
-<b>${l.trav||"—"}</b>
-</div>
-
-<div class="detail">
-<small>Status</small>
-<b>${esc(l.status)}</b>
-</div>
-
-<div class="detail">
-<small>Priority</small>
-<b>${esc(l.priority)}</b>
-</div>
-
-<div class="detail">
-<small>Branch</small>
-<b>${esc(l.branch||"—")}</b>
-</div>
-
-<div class="detail">
-<small>Source</small>
-<b>${esc(l.source||"—")}</b>
-</div>
-
-<div class="detail">
-<small>Expected Value</small>
-<b>${esc(l.value||"—")}</b>
-</div>
-
-<div class="detail">
-<small>Follow-up</small>
-<b>${esc(l.follow||"—")}</b>
-</div>
-
-</div>
-
-<div style="margin-top:18px">
-
-<b>Notes</b>
-
-<p>
-${esc(l.notes||"No notes added.")}
-</p>
-
-</div>
-
-<div style="margin-top:18px">
-
-<b>Customer Message</b>
-
-<p>
-${esc(l.message||"No message.")}
-</p>
-
-</div>
-
-<div style="display:flex;gap:8px;margin-top:18px">
-
-<button class="btn primary"
-onclick="wa(${l.id})">
-
-WhatsApp
-
-</button>
-
-<button class="btn secondary"
-onclick="callCustomer('${esc(l.phone)}')">
-
-Call Customer
-
-</button>
-
-</div>
-
-`;
-
-openModal("detailsModal");
-
-}
-
-
-/* ==========================================
-   NEW LEAD
-========================================== */
-
-async function addLead(e){
-
-e.preventDefault();
-
-const lead={
-
-name:document.getElementById("name").value.trim(),
-
-phone:document.getElementById("phone").value.trim(),
-
-destination:document.getElementById("dest").value.trim(),
-
-travel_date:document.getElementById("date").value||null,
-
-travellers:Number(document.getElementById("trav").value||0),
-
-branch:document.getElementById("branch").value,
-
-source:document.getElementById("source").value,
-
-priority:document.getElementById("priority").value,
-
-status:"New",
-
-value:document.getElementById("value").value.trim(),
-
-follow_up:document.getElementById("follow").value||null,
-
-notes:document.getElementById("notes").value.trim()
-
-};
-
-
-const {
-data,
-error
-}=await db
-.from("enquiries")
-.insert(lead)
-.select()
-.single();
-
-
-if(error){
-
-alert("Could not create lead: "+error.message);
-
-return;
-
-}
-
-
-leads.unshift(normalizeLead(data));
-
-closeModal("leadModal");
-
-e.target.reset();
-
-render();
-
-}
-
-
-/* ==========================================
-   CSV EXPORT
-========================================== */
-
-function exportCSV(){
-
-const headers=[
-"Name",
-"Phone",
-"Destination",
-"Travel Date",
-"Travellers",
-"Branch",
-"Source",
-"Priority",
-"Status",
-"Value",
-"Follow-up",
-"Notes"
-];
-
-const rows=leads.map(l=>[
-l.name,
-l.phone,
-l.dest,
-l.date,
-l.trav,
-l.branch,
-l.source,
-l.priority,
-l.status,
-l.value,
-l.follow,
-l.notes
-]);
-
-const csv=[headers,...rows]
-.map(r=>r.map(csvCell).join(","))
-.join("\n");
-
-const blob=new Blob([csv],{
-type:"text/csv;charset=utf-8"
-});
-
-const url=URL.createObjectURL(blob);
-
-const a=document.createElement("a");
-
-a.href=url;
-a.download="on-a-trip-crm-leads.csv";
-
-a.click();
-
-URL.revokeObjectURL(url);
-
-}
-
-
-function csvCell(v){
-
-return `"${String(v??"")
-.replace(/"/g,'""')}"`;
-
-}
-
-
-/* ==========================================
-   MODALS
-========================================== */
-
-function openModal(id){
-
-document.getElementById(id).classList.add("show");
-
-}
-
-
-function closeModal(id){
-
-document.getElementById(id).classList.remove("show");
-
-}
-
-
-/* ==========================================
-   SECURITY / HTML ESCAPE
-========================================== */
-
-function esc(s){
-
-return String(s??"")
-.replace(/[&<>"']/g,m=>({
-
-"&":"&amp;",
-"<":"&lt;",
-">":"&gt;",
-'"':"&quot;",
-"'":"&#39;"
-
-}[m]));
-
-}
-
-
-/* ==========================================
-   START
-========================================== */
-
+function card(l){return `<div class="lead"><b>${esc(l.name)}</b><div class="muted">${esc(l.phone)} • ${esc(l.branch||"Branch not assigned")}</div><div class="trip">${esc(l.dest||"Destination not specified")}</div><div class="muted">${l.trav||0} travellers • ${esc(l.value||"Value not set")}</div><span class="badge">👤 ${esc(l.salesperson)}</span><div class="actions"><button class="wa" onclick="wa(${l.id})">WhatsApp</button><button onclick="callCustomer('${esc(l.phone)}')">Call</button><button onclick="details(${l.id})">Details</button></div></div>`}
+function row(l){return `<tr><td><b>${esc(l.name)}</b><div style="color:var(--muted);font-size:11px">${esc(l.phone)}</div></td><td>${esc(l.dest||"—")}</td><td>${esc(l.branch||"—")}</td><td><select onchange="assign(${l.id},this.value)">${salespeople.map(s=>`<option ${s===l.salesperson?"selected":""}>${esc(s)}</option>`).join("")}</select></td><td>${esc(l.date||"—")}</td><td>${l.trav||"—"}</td><td><b>${esc(l.value||"—")}</b></td><td><select onchange="stage(${l.id},this.value)">${stages.map(s=>`<option value="${esc(s)}" ${s===l.status?"selected":""}>${s}</option>`).join("")}</select></td><td style="color:var(--o);font-weight:800">${esc(l.follow||"—")}</td><td><button class="btn secondary" onclick="wa(${l.id})">WA</button> <button class="btn secondary" onclick="details(${l.id})">View</button></td></tr>`}
+
+async function stage(id,status){const l=leads.find(x=>x.id===id);if(!l)return;const old=l.status;l.status=status;const {error}=await db.from("enquiries").update({status}).eq("id",id);if(error){l.status=old;alert("Could not update status: "+error.message)}render()}
+async function assign(id,salesperson){const l=leads.find(x=>x.id===id);if(!l)return;const old=l.salesperson;l.salesperson=salesperson;const {error}=await db.from("enquiries").update({salesperson}).eq("id",id);if(error){l.salesperson=old;alert("Could not update salesperson: "+error.message)}render()}
+
+function wa(id){const l=leads.find(x=>x.id===id);if(!l)return;let phone=(l.phone||"").replace(/\D/g,"");if(phone.length===10)phone="91"+phone;const msg=`Hi ${l.name}, this is On A Trip Holidays. Regarding your ${l.dest||"travel"} enquiry for ${l.trav||""} travellers. I can share the latest package, batch and offer details.`;window.open("https://wa.me/"+phone+"?text="+encodeURIComponent(msg),"_blank")}
+function callCustomer(phone){const p=(phone||"").replace(/\s/g,"");if(p)window.location.href="tel:"+p}
+
+function details(id){const l=leads.find(x=>x.id===id);if(!l)return;detailTitle.textContent=l.name;details.innerHTML=`<div class="detail-grid">
+<div class="detail"><small>Phone</small><b>${esc(l.phone)}</b></div><div class="detail"><small>Destination</small><b>${esc(l.dest||"—")}</b></div>
+<div class="detail"><small>Travel Date</small><b>${esc(l.date||"—")}</b></div><div class="detail"><small>Travellers</small><b>${l.trav||"—"}</b></div>
+<div class="detail"><small>Status</small><b>${esc(l.status)}</b></div><div class="detail"><small>Priority</small><b>${esc(l.priority)}</b></div>
+<div class="detail"><small>Branch</small><b>${esc(l.branch||"—")}</b></div><div class="detail"><small>Salesperson</small><b>${esc(l.salesperson)}</b></div>
+<div class="detail"><small>Source</small><b>${esc(l.source||"—")}</b></div><div class="detail"><small>Expected Value</small><b>${esc(l.value||"—")}</b></div>
+<div class="detail"><small>Follow-up</small><b>${esc(l.follow||"—")}</b></div></div>
+<div style="margin-top:18px"><b>Notes</b><p>${esc(l.notes||"No notes added.")}</p></div>
+<div style="margin-top:18px"><b>Customer Message</b><p>${esc(l.message||"No message.")}</p></div>
+<div style="display:flex;gap:8px;margin-top:18px"><button class="btn primary" onclick="wa(${l.id})">WhatsApp</button><button class="btn secondary" onclick="callCustomer('${esc(l.phone)}')">Call Customer</button></div>`;
+openModal("detailsModal")}
+
+async function addLead(e){e.preventDefault();const lead={name:name.value.trim(),phone:phone.value.trim(),destination:dest.value.trim(),travel_date:date.value||null,travellers:Number(trav.value||0),branch:branch.value,salesperson:salesperson.value||"Unassigned",source:source.value,priority:priority.value,status:"New",value:value.value.trim(),follow_up:follow.value||null,notes:notes.value.trim()};
+const {data,error}=await db.from("enquiries").insert(lead).select().single();if(error){alert("Could not create lead: "+error.message);return}leads.unshift(normalizeLead(data));closeModal("leadModal");e.target.reset();fillSalespeople();render()}
+
+function exportCSV(){const headers=["Name","Phone","Destination","Travel Date","Travellers","Branch","Salesperson","Source","Priority","Status","Value","Follow-up","Notes"];const rows=leads.map(l=>[l.name,l.phone,l.dest,l.date,l.trav,l.branch,l.salesperson,l.source,l.priority,l.status,l.value,l.follow,l.notes]);const csv=[headers,...rows].map(r=>r.map(csvCell).join(",")).join("\n");const blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="on-a-trip-crm-leads.csv";a.click();URL.revokeObjectURL(url)}
+function csvCell(v){return `"${String(v??"").replace(/"/g,'""')}"`}
+function openModal(id){document.getElementById(id).classList.add("show")}function closeModal(id){document.getElementById(id).classList.remove("show")}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
 checkSession();
-
 </script>
-
 </body>
 </html>
