@@ -103,6 +103,18 @@ font-size:11px;color:var(--muted);text-transform:uppercase
 padding:7px;border:1px solid var(--line);border-radius:7px
 }
 
+/* Lead row action buttons */
+.lead-actions{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.lead-action{width:30px;height:30px;border:0;border-radius:7px;background:transparent;display:inline-grid;place-items:center;font-size:17px;line-height:1;position:relative}
+.lead-action:hover{background:#f3f6fb}
+.lead-action.green{color:#18a66a}.lead-action.blue{color:#10a5e8}.lead-action.slate{color:#71839a}.lead-action.purple{color:#9a43ff}.lead-action.red{color:#ff3e4d}
+.lead-action[data-tip]::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#334155;color:#fff;padding:7px 9px;border-radius:7px;font-size:11px;font-weight:800;white-space:nowrap;opacity:0;pointer-events:none;transition:.12s;z-index:60}
+.lead-action[data-tip]::before{content:"";position:absolute;bottom:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#334155;opacity:0;transition:.12s;z-index:60}
+.lead-action[data-tip]:hover::after,.lead-action[data-tip]:hover::before{opacity:1}
+.quote-preview{background:#fff;border:1px solid #dce4ec;border-radius:12px;padding:22px;line-height:1.55}
+.quote-preview h3{margin:0;color:var(--n);font-size:20px}.quote-preview .quote-meta{color:var(--muted);font-size:12px;margin-top:4px}
+.quote-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+
 /* ==========================================
    DASHBOARDS LANDING
 ========================================== */
@@ -290,20 +302,10 @@ placeholder="Password" autocomplete="current-password">
 <div><h1>Dashboards</h1><p>Overview of your metrics and analytics</p></div>
 </div>
 
-<div class="dashboard-breadcrumb">▥ &nbsp; Dashboard <span class="count">2</span></div>
+<div class="dashboard-breadcrumb" id="dashboardBreadcrumb">▥ &nbsp; Dashboard <span class="count">1</span></div>
 
-<div class="dashboard-cards">
-<div class="dashboard-card" onclick="openDashboard('admin')">
-<div class="dashboard-card-icon">▥</div>
-<div class="dashboard-card-content"><h3>Admin Dashboard</h3><p>Company-wide CRM overview and management</p></div>
-<div class="dashboard-card-arrow">›</div>
-</div>
-
-<div class="dashboard-card" onclick="openDashboard('mine')">
-<div class="dashboard-card-icon">⌂</div>
-<div class="dashboard-card-content"><h3>My Dashboard</h3><p>Your personal sales, leads and follow-ups</p></div>
-<div class="dashboard-card-arrow">›</div>
-</div>
+<div class="dashboard-cards" id="dashboardCards">
+<!-- Cards are rendered according to the logged-in CRM role. Admins see only Admin Dashboard; sales users see only My Dashboard. -->
 </div>
 </div>
 </section>
@@ -342,6 +344,9 @@ placeholder="Password" autocomplete="current-password">
         </div>
         <div class="lead-option-card" onclick="openLeadOption('metaFailed')">
           <div class="lead-option-icon">△</div><div class="lead-option-copy"><b>Meta Ads Failed Leads</b><span>Meta Ads leads marked failed or invalid</span></div><div class="lead-option-arrow">›</div>
+        </div>
+        <div class="lead-option-card" id="leadsBinCard" onclick="openLeadOption('bin')" style="display:none">
+          <div class="lead-option-icon">⌫</div><div class="lead-option-copy"><b>Leads Bin</b><span>Deleted leads retained for Admin review only</span></div><div class="lead-option-arrow">›</div>
         </div>
         <div class="lead-option-card" onclick="openLeadOption('customFields')">
           <div class="lead-option-icon">☷</div><div class="lead-option-copy"><b>Lead Custom Fields</b><span>Create fields used on lead records and imports</span></div><div class="lead-option-arrow">›</div>
@@ -656,6 +661,30 @@ Create Lead
 </div>
 
 
+<!-- QUOTATION GENERATOR -->
+<div class="modal" id="quotationModal">
+<div class="box" style="max-width:760px">
+  <div class="head"><h2>Quotation Generator</h2><button class="close" onclick="closeModal('quotationModal')">×</button></div>
+  <div id="quotationBody" style="margin-top:14px"></div>
+</div>
+</div>
+
+<!-- TRANSFER LEAD -->
+<div class="modal" id="transferModal">
+<div class="box" style="max-width:520px">
+  <div class="head"><h2>Transfer Lead</h2><button class="close" onclick="closeModal('transferModal')">×</button></div>
+  <div style="padding-top:14px">
+    <p id="transferLeadName" style="margin:0 0 12px;color:var(--muted)"></p>
+    <label style="display:block;font-size:12px;font-weight:900;margin-bottom:6px">Transfer to salesperson</label>
+    <select id="transferSalesperson" style="width:100%;padding:11px;border:1px solid var(--line);border-radius:9px"></select>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+      <button class="btn secondary" onclick="closeModal('transferModal')">Cancel</button>
+      <button class="btn primary" onclick="confirmTransfer()">Transfer Lead</button>
+    </div>
+  </div>
+</div>
+</div>
+
 <!-- DETAILS -->
 <div class="modal" id="detailsModal">
 
@@ -728,7 +757,9 @@ async function loadCRMProfile(){
     const {data,error}=await db.from("crm_users").select("role,salesperson,email").eq("user_id",user.id).maybeSingle();
     if(error){console.warn("CRM profile lookup failed:",error.message);crmProfile={role:"salesperson",salesperson:""};return;}
     crmProfile=data||{role:"salesperson",salesperson:""};
+    window.crmProfile=crmProfile;
   }catch(e){console.warn(e);}
+  window.crmProfile=crmProfile;
 }
 
 
@@ -759,52 +790,81 @@ document.getElementById("app").style.display="none";
 }
 
 
-function showApp(){
+async function showApp(){
 
-document.getElementById("loginScreen").style.display="none";
-document.getElementById("app").style.display="block";
+  document.getElementById("loginScreen").style.display="none";
+  document.getElementById("app").style.display="block";
 
-// Always open CRM on the dashboard landing page after login.
-document.getElementById("dashboardLanding").style.display="flex";
-document.getElementById("leadsHub").style.display="none";
-document.getElementById("crmTopbar").style.display="none";
-document.getElementById("crmWorkspace").style.display="none";
+  // Load the authenticated CRM role before rendering the dashboard.
+  // This prevents an admin from briefly seeing the user's dashboard.
+  await loadCRMProfile();
+  renderDashboardLanding();
 
-loadCRMProfile().then(loadLeads);
+  document.getElementById("leadsHub").style.display="none";
+  document.getElementById("crmTopbar").style.display="none";
+  document.getElementById("crmWorkspace").style.display="none";
 
+  loadLeads();
 }
 
+function renderDashboardLanding(){
+  const landing=document.getElementById("dashboardLanding");
+  const cards=document.getElementById("dashboardCards");
+  const breadcrumb=document.getElementById("dashboardBreadcrumb");
+  if(!landing || !cards) return;
 
+  const isAdmin=(crmProfile.role||"").toLowerCase()==="admin";
 
-function openDashboard(type){
- const landing=document.getElementById("dashboardLanding");
- const workspace=document.getElementById("crmWorkspace");
- const top=document.getElementById("crmTopbar");
- if(type==="admin"){
-   landing.style.display="none"; workspace.style.display="block"; top.style.display="flex";
- }else{
-   landing.style.display="none"; workspace.style.display="block"; top.style.display="flex";
-   const shell=workspace.querySelector(".shell") || workspace;
-   shell.scrollIntoView({behavior:"smooth",block:"start"});
-   alert("My Dashboard will be built in the next step.");
- }
+  // Strict role-based dashboard visibility:
+  // ADMIN -> Admin Dashboard only
+  // SALESPERSON/USER -> My Dashboard only
+  if(isAdmin){
+    cards.innerHTML=`
+      <div class="dashboard-card" onclick="openDashboard('admin')">
+        <div class="dashboard-card-icon">▥</div>
+        <div class="dashboard-card-content"><h3>Admin Dashboard</h3><p>Company-wide CRM overview and management</p></div>
+        <div class="dashboard-card-arrow">›</div>
+      </div>`;
+  }else{
+    cards.innerHTML=`
+      <div class="dashboard-card" onclick="openDashboard('mine')">
+        <div class="dashboard-card-icon">⌂</div>
+        <div class="dashboard-card-content"><h3>My Dashboard</h3><p>Your personal sales, leads and follow-ups</p></div>
+        <div class="dashboard-card-arrow">›</div>
+      </div>`;
+  }
+
+  if(breadcrumb){
+    breadcrumb.innerHTML=`▥ &nbsp; Dashboard <span class="count">1</span>`;
+  }
+  const binCard=document.getElementById("leadsBinCard");
+  if(binCard) binCard.style.display=isAdmin?"flex":"none";
+  landing.style.display="flex";
 }
 
 function openDashboard(type){
- const landing=document.getElementById("dashboardLanding");
- const leadsHub=document.getElementById("leadsHub");
- const workspace=document.getElementById("crmWorkspace");
- const top=document.getElementById("crmTopbar");
- landing.style.display="none";
- leadsHub.style.display="none";
- if(type==="admin"){
-   workspace.style.display="block"; top.style.display="flex";
- }else{
-   workspace.style.display="block"; top.style.display="flex";
-   const shell=workspace.querySelector(".shell") || workspace;
-   shell.scrollIntoView({behavior:"smooth",block:"start"});
-   alert("My Dashboard will be built in the next step.");
- }
+  const landing=document.getElementById("dashboardLanding");
+  const leadsHub=document.getElementById("leadsHub");
+  const workspace=document.getElementById("crmWorkspace");
+  const top=document.getElementById("crmTopbar");
+  const isAdmin=(crmProfile.role||"").toLowerCase()==="admin";
+
+  // Never allow a non-admin dashboard to be opened by an admin, and vice versa.
+  if(isAdmin && type!=="admin") return;
+  if(!isAdmin && type!=="mine") return;
+
+  landing.style.display="none";
+  leadsHub.style.display="none";
+
+  if(type==="admin"){
+    workspace.style.display="block";
+    top.style.display="flex";
+  }else{
+    workspace.style.display="block";
+    top.style.display="flex";
+    const shell=workspace.querySelector(".shell") || workspace;
+    shell.scrollIntoView({behavior:"smooth",block:"start"});
+  }
 }
 
 function openLeadsHub(){
@@ -840,7 +900,7 @@ function openLeadOption(type){
  if(!content||!view||!title||!subtitle||!body)return;
  content.style.display="none"; view.classList.add("show");
 
- if(type==="mine"||type==="all"||type==="unassigned"||type==="metaFailed"){
+ if(type==="mine"||type==="all"||type==="unassigned"||type==="metaFailed"||type==="bin"){
    let rows=[...leads], label="", rule="";
    if(type==="mine"){
      const me=(window.crmProfile?.salesperson||"").toLowerCase();
@@ -852,6 +912,10 @@ function openLeadOption(type){
    }else if(type==="metaFailed"){
      rows=rows.filter(l=>/meta\s*ads/i.test(String(l.source||"")) && /fail|invalid|error/i.test(String(l.status||"")));
      label="Meta Ads Failed Leads"; rule="Shows Meta Ads leads whose stage/status contains Failed, Invalid, or Error.";
+   }else if(type==="bin"){
+     if(!isAdminUser()){ alert("Leads Bin is available to Admin only."); closeLeadOption(); return; }
+     rows=rows.filter(l=>l.deleted);
+     label="Leads Bin"; rule="Deleted leads are retained for Admin review. Users have no restore/revoke action.";
    }else{
      label="All Leads"; rule="Admins can see all CRM leads. Salesperson access is restricted by Supabase row-level security.";
    }
@@ -877,7 +941,7 @@ function openLeadOption(type){
 
 function renderLeadOptionTable(rows){
  if(!rows.length)return '<div class="loading" style="padding:30px">No leads match this rule.</div>';
- return `<div style="overflow:auto"><table class="table" style="min-width:900px"><thead><tr><th>Customer</th><th>Phone</th><th>Trip</th><th>Owner</th><th>Stage</th><th>Source</th><th>Travel Date</th><th>Actions</th></tr></thead><tbody>${rows.map(l=>`<tr><td><b>${esc(l.name||"—")}</b></td><td>${esc(l.phone||"—")}</td><td>${esc(l.destination||"—")}</td><td>${esc(l.salesperson||"Unassigned")}</td><td>${esc(l.status||"New")}</td><td>${esc(l.source||"—")}</td><td>${esc(l.travel_date||"—")}</td><td><button class="btn secondary" onclick="wa('${l.id}')">WhatsApp</button> <button class="btn secondary" onclick="callCustomer('${esc(l.phone||"")}')">Call</button> <button class="btn secondary" onclick="details('${l.id}')">Details</button></td></tr>`).join("")}</tbody></table></div>`;
+ return `<div style="overflow:auto"><table class="table" style="min-width:1100px"><thead><tr><th>Customer</th><th>Phone</th><th>Trip</th><th>Owner</th><th>Stage</th><th>Source</th><th>Travel Date</th><th>Actions</th></tr></thead><tbody>${rows.map(l=>`<tr><td><b>${esc(l.name||"—")}</b></td><td>${esc(l.phone||"—")}</td><td>${esc(l.dest||"—")}</td><td>${esc(l.salesperson||"Unassigned")}</td><td>${esc(l.status||"New")}</td><td>${esc(l.source||"—")}</td><td>${esc(l.date||"—")}</td><td><div class="lead-actions"><button class="lead-action green" data-tip="WhatsApp" onclick="wa(${l.id})">◔</button><button class="lead-action blue" data-tip="Call" onclick="callCustomer('${esc(l.phone||"")}')">⌕</button><button class="lead-action slate" data-tip="Details" onclick="details(${l.id})">◉</button>${!l.deleted?`<button class="lead-action green" data-tip="Generate Quotation" onclick="openQuotation(${l.id})">◩</button><button class="lead-action purple" data-tip="Transfer" onclick="openTransfer(${l.id})">⇄</button>${isAdminUser()?`<button class="lead-action red" data-tip="Unassign" onclick="unassignLead(${l.id})">♙</button>`:''}<button class="lead-action red" data-tip="Delete" onclick="deleteLead(${l.id})">▢</button>`:''}</div></td></tr>`).join("")}</tbody></table></div>`;
 }
 
 function customFieldsConfig(){
@@ -1090,6 +1154,7 @@ const so=document
 
 const list=leads.filter(l=>
 
+!l.deleted &&
 (l.name+" "+l.phone+" "+l.dest)
 .toLowerCase()
 .includes(q)
@@ -1107,14 +1172,14 @@ const counts={};
 
 stages.forEach(s=>counts[s]=0);
 
-leads.forEach(l=>{
+leads.filter(l=>!l.deleted).forEach(l=>{
 
 counts[l.status]=(counts[l.status]||0)+1;
 
 });
 
 
-document.getElementById("sTotal").textContent=leads.length;
+document.getElementById("sTotal").textContent=leads.filter(l=>!l.deleted).length;
 document.getElementById("sNew").textContent=counts.New||0;
 document.getElementById("sHot").textContent=counts.Hot||0;
 document.getElementById("sQuote").textContent=counts["Quote Sent"]||0;
@@ -1200,31 +1265,17 @@ ${esc(l.follow||"—")}
 </td>
 
 <td>
-
-<button
-class="btn secondary"
-onclick="wa(${l.id})">
-
-WhatsApp
-
-</button>
-
-<button
-class="btn secondary"
-onclick="callCustomer('${esc(l.phone)}')">
-
-Call
-
-</button>
-
-<button
-class="btn secondary"
-onclick="details(${l.id})">
-
-Details
-
-</button>
-
+<div class="lead-actions">
+<button class="lead-action green" data-tip="Open WhatsApp" onclick="wa(${l.id})" aria-label="WhatsApp">↗</button>
+<button class="lead-action green" data-tip="WhatsApp" onclick="wa(${l.id})" aria-label="WhatsApp">◔</button>
+<button class="lead-action blue" data-tip="Call" onclick="callCustomer('${esc(l.phone)}')" aria-label="Call">⌕</button>
+<button class="lead-action slate" data-tip="Details" onclick="details(${l.id})" aria-label="Details">◉</button>
+<button class="lead-action green" data-tip="Generate Quotation" onclick="openQuotation(${l.id})" aria-label="Generate Quotation">◩</button>
+<button class="lead-action slate" data-tip="Edit" onclick="details(${l.id})" aria-label="Edit">✎</button>
+<button class="lead-action purple" data-tip="Transfer" onclick="openTransfer(${l.id})" aria-label="Transfer">⇄</button>
+${isAdminUser()?`<button class="lead-action red" data-tip="Unassign" onclick="unassignLead(${l.id})" aria-label="Unassign">♙</button>`:''}
+<button class="lead-action red" data-tip="Delete" onclick="deleteLead(${l.id})" aria-label="Delete">▢</button>
+</div>
 </td>
 
 </tr>
@@ -1233,6 +1284,80 @@ Details
 
 }
 
+
+/* ==========================================
+   LEAD ACTIONS
+========================================== */
+function isAdminUser(){ return String(crmProfile?.role||"").toLowerCase()==="admin"; }
+
+async function unassignLead(id){
+  if(!isAdminUser()){ alert("Only Admin can unassign a lead."); return; }
+  const lead=leads.find(x=>x.id===id); if(!lead)return;
+  if(!confirm(`Unassign ${lead.name||"this lead"}?`))return;
+  const {error}=await db.from("enquiries").update({salesperson:null}).eq("id",id);
+  if(error){alert("Could not unassign lead: "+error.message);return;}
+  lead.salesperson=""; render();
+}
+
+async function deleteLead(id){
+  const lead=leads.find(x=>x.id===id); if(!lead)return;
+  if(!confirm(`Delete ${lead.name||"this lead"}? It will move to the Admin Leads Bin and cannot be restored by users.`))return;
+  const {error}=await db.from("enquiries").update({status:"Deleted"}).eq("id",id);
+  if(error){alert("Could not delete lead: "+error.message);return;}
+  lead.status="Deleted"; lead.deleted=true; render();
+}
+
+async function openTransfer(id){
+  const lead=leads.find(x=>x.id===id); if(!lead)return;
+  document.getElementById("transferLeadName").textContent=`Lead: ${lead.name||"Unknown"} • Current owner: ${lead.salesperson||"Unassigned"}`;
+  const select=document.getElementById("transferSalesperson");
+  select.innerHTML='<option value="">Loading salespeople…</option>';
+  document.getElementById("transferModal").dataset.leadId=String(id);
+  openModal("transferModal");
+  const {data,error}=await db.from("crm_users").select("salesperson,email,role").order("salesperson",{ascending:true});
+  if(error){select.innerHTML='<option value="">Could not load users</option>'; alert("Could not load salespeople: "+error.message); return;}
+  const users=(data||[]).filter(u=>u.salesperson && String(u.role||"").toLowerCase()!=="admin");
+  select.innerHTML='<option value="">Select salesperson</option>'+users.map(u=>`<option value="${esc(u.salesperson)}">${esc(u.salesperson)}${u.email?" • "+esc(u.email):""}</option>`).join("");
+}
+
+async function confirmTransfer(){
+  const modal=document.getElementById("transferModal");
+  const id=Number(modal.dataset.leadId||0); const owner=document.getElementById("transferSalesperson").value;
+  const lead=leads.find(x=>x.id===id); if(!lead||!owner){alert("Please select a salesperson.");return;}
+  const {error}=await db.from("enquiries").update({salesperson:owner}).eq("id",id);
+  if(error){alert("Could not transfer lead: "+error.message);return;}
+  lead.salesperson=owner; closeModal("transferModal"); render();
+}
+
+function openQuotation(id){
+  const l=leads.find(x=>x.id===id); if(!l)return;
+  const today=new Date().toLocaleDateString("en-IN");
+  document.getElementById("quotationBody").innerHTML=`
+  <div class="quote-preview" id="quotePrintable">
+    <div style="font-weight:900;color:var(--o);font-size:13px">ON A TRIP HOLIDAYS</div>
+    <h3>Travel Quotation</h3>
+    <div class="quote-meta">Quotation Date: ${esc(today)}</div>
+    <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+    <div class="detail-grid">
+      <div class="detail"><small>Customer</small><b>${esc(l.name)}</b></div>
+      <div class="detail"><small>Phone</small><b>${esc(l.phone||"—")}</b></div>
+      <div class="detail"><small>Destination</small><b>${esc(l.dest||"—")}</b></div>
+      <div class="detail"><small>Travel Date</small><b>${esc(l.date||"—")}</b></div>
+      <div class="detail"><small>Travellers</small><b>${l.trav||"—"}</b></div>
+      <div class="detail"><small>Package Value</small><b>${esc(l.value||"To be quoted")}</b></div>
+    </div>
+    <div style="margin-top:18px"><b>Notes / Requirements</b><p>${esc(l.notes||"Custom package quotation to be prepared based on the customer's requirements.")}</p></div>
+  </div>
+  <div class="quote-actions"><button class="btn secondary" onclick="closeModal('quotationModal')">Close</button><button class="btn primary" onclick="printQuotation()">Print / Save PDF</button></div>`;
+  openModal("quotationModal");
+}
+
+function printQuotation(){
+  const content=document.getElementById("quotePrintable"); if(!content)return;
+  const w=window.open("","_blank","width=900,height=700");
+  w.document.write(`<html><head><title>On A Trip Holidays - Quotation</title><style>body{font-family:Arial,sans-serif;padding:40px;color:#102335}.quote{max-width:760px;margin:auto}h3{font-size:24px;margin:8px 0}.meta{color:#6b7b87;font-size:12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}.cell{border:1px solid #dce4e9;border-radius:8px;padding:12px}.cell small{display:block;color:#6b7b87;font-size:11px}.cell b{display:block;margin-top:4px}</style></head><body><div class="quote">${content.outerHTML.replace(/class="quote-preview"/,'class="quote"').replace(/class="detail-grid"/,'class="grid"').replace(/class="detail"/g,'class="cell"')}</div></body></html>`);
+  w.document.close(); w.focus(); w.print();
+}
 
 /* ==========================================
    UPDATE STATUS
