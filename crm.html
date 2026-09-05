@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>On A Trip Holidays | CRM</title>
 <meta name="robots" content="noindex,nofollow,noarchive">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -16,7 +19,7 @@
 }
 *{box-sizing:border-box}
 body{
-margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+margin:0;font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
 background:var(--bg);color:#102335
 }
 button,input,select,textarea{font:inherit}
@@ -52,7 +55,11 @@ grid-template-columns:1fr minmax(280px,520px) 1fr;align-items:center;gap:18px;
 position:sticky;top:0;z-index:80;border-bottom:1px solid #e4eaf1;
 box-shadow:0 2px 10px #102a6208
 }
-.top-brand{display:flex;align-items:center;gap:8px;min-width:0}
+.top-brand{display:flex;align-items:center;gap:14px;min-width:0}
+.top-brand-logo{width:82px;height:38px;object-fit:contain;object-position:center;display:block;flex:0 0 auto}
+.top-brand-copy{display:flex;flex-direction:column;justify-content:center;min-width:0}
+.top-brand-copy b{font-size:15px;color:#26364d;line-height:1.2}
+.top-brand-copy small{color:#71809a;font-size:11px;line-height:1.3;margin-top:2px}
 .top-brand-mark{width:34px;height:34px;border-radius:9px;background:#655cf6;color:#fff;display:grid;place-items:center;font-weight:900}
 .top-brand b{font-size:15px;color:#26364d}
 .top-brand small{color:#71809a;font-size:11px}
@@ -96,7 +103,7 @@ box-shadow:0 2px 10px #102a6208
 .notification-item-copy b{display:block;font-size:12px;color:#26364d}
 .notification-item-copy span{display:block;margin-top:3px;font-size:11px;color:#71809a;line-height:1.4}
 .notification-empty{padding:30px 18px;text-align:center;color:#8190a5;font-size:12px}
-@media(max-width:900px){.top{grid-template-columns:1fr minmax(220px,420px) 1fr;padding:9px 12px}.top-brand b,.top-brand small,.admin-link,.logout{display:none!important}.crm-user-name{font-size:12px}.top-actions{gap:5px}}
+@media(max-width:900px){.top{grid-template-columns:1fr minmax(220px,420px) 1fr;padding:9px 12px}.top-brand-copy,.admin-link,.logout{display:none!important}.crm-user-name{font-size:12px}.top-actions{gap:5px}}
 @media(max-width:600px){.top{grid-template-columns:1fr auto}.global-search-trigger{grid-column:1/-1;grid-row:1;max-width:none}.top-brand{display:none}.top-actions{grid-column:2;grid-row:1;justify-content:flex-end}.global-search-overlay{padding-top:72px}.notification-panel{top:108px;right:10px}}
 
 .shell{max-width:1280px;margin:auto;padding:22px 18px}
@@ -193,10 +200,10 @@ min-height:calc(100vh - 58px);display:flex;background:#f3f7fb
 .dashboard-sidebar{
 width:250px;background:#fff;border-right:1px solid #dfe7ef;padding:16px 12px;flex:0 0 250px
 }
-.dashboard-brand{display:flex;align-items:center;gap:10px;padding:4px 10px 18px;border-bottom:1px solid #edf1f5;margin-bottom:14px}
-.dashboard-brand-mark{width:38px;height:38px;border-radius:10px;background:#08233f;color:#fff;display:grid;place-items:center;font-weight:900}
-.dashboard-brand-name{font-size:23px;font-weight:900;color:#08233f;letter-spacing:-.8px}
-.dashboard-brand-name span{color:#ee5a2a}
+.dashboard-brand{display:flex;align-items:center;gap:12px;padding:4px 10px 18px;border-bottom:1px solid #edf1f5;margin-bottom:14px}
+.dashboard-brand-mark{width:82px;height:40px;object-fit:contain;object-position:center;display:block;flex:0 0 auto}
+.dashboard-brand-name{font-size:14px;font-weight:700;color:#26364d;letter-spacing:-.1px}
+.dashboard-brand-name span{color:#71809a}
 .dashboard-menu-title{font-size:12px;font-weight:900;color:#ee5a2a;padding:8px 10px;margin-bottom:3px}
 .dashboard-menu-item{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:10px;color:#41536b;font-size:14px;font-weight:700}
 .dashboard-menu-item.active{background:#eceaff;color:#655cf6}
@@ -227,10 +234,10 @@ width:250px;background:#fff;border-right:1px solid #dfe7ef;padding:16px 12px;fle
 ========================================== */
 .leads-shell{min-height:calc(100vh - 58px);display:flex;background:#f3f7fb}
 .leads-sidebar{width:252px;background:#fff;border-right:1px solid #dfe7ef;padding:14px 10px;flex:0 0 252px;display:flex;flex-direction:column}
-.leads-brand{display:flex;align-items:center;gap:10px;padding:3px 10px 16px;border-bottom:1px solid #edf1f5;margin-bottom:10px}
-.leads-brand-mark{width:38px;height:38px;border-radius:10px;background:#08233f;color:#fff;display:grid;place-items:center;font-weight:900}
-.leads-brand-name{font-size:23px;font-weight:900;color:#08233f;letter-spacing:-.8px}
-.leads-brand-name span{color:#ee5a2a}
+.leads-brand{display:flex;align-items:center;gap:12px;padding:3px 10px 16px;border-bottom:1px solid #edf1f5;margin-bottom:10px}
+.leads-brand-mark{width:82px;height:40px;object-fit:contain;object-position:center;display:block;flex:0 0 auto}
+.leads-brand-name{font-size:14px;font-weight:700;color:#26364d;letter-spacing:-.1px}
+.leads-brand-name span{color:#71809a}
 .leads-menu-title{font-size:12px;font-weight:900;color:#655cf6;padding:9px 12px 5px}
 .leads-menu-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:10px;color:#41536b;font-size:14px;font-weight:700;cursor:pointer}
 .leads-menu-item:hover{background:#f4f5ff}
@@ -355,8 +362,8 @@ placeholder="Password" autocomplete="current-password">
 
 <header class="top" id="crmTopbar">
   <div class="top-brand">
-    <div class="top-brand-mark">O</div>
-    <div><b>CRM</b><small> • Sales & Lead Management</small></div>
+    <img class="top-brand-logo" src="assets/crm-logo-master-v4.png" alt="On A Trip Holidays">
+    <div class="top-brand-copy"><b>CRM</b><small>Sales &amp; Lead Management</small></div>
   </div>
 
   <button class="global-search-trigger" type="button" onclick="openGlobalSearch()" aria-label="Search CRM">
@@ -396,8 +403,8 @@ placeholder="Password" autocomplete="current-password">
 <section class="dashboard-shell" id="dashboardLanding">
 <aside class="dashboard-sidebar">
 <div class="dashboard-brand">
-<div class="dashboard-brand-mark">O</div>
-<div class="dashboard-brand-name">on a <span>trip</span></div>
+<img class="dashboard-brand-mark" src="assets/crm-logo-master-v4.png" alt="On A Trip Holidays">
+<div class="dashboard-brand-name">CRM <span>Sales &amp; Lead Management</span></div>
 </div>
 <div class="dashboard-menu-title">▣ &nbsp; CRM</div>
 <div class="dashboard-menu-item active">▥ <span>Dashboard</span></div>
@@ -423,8 +430,8 @@ placeholder="Password" autocomplete="current-password">
 <section class="leads-shell" id="leadsHub" style="display:none">
 <aside class="leads-sidebar">
   <div class="leads-brand">
-    <div class="leads-brand-mark">O</div>
-    <div class="leads-brand-name">on a <span>trip</span></div>
+    <img class="leads-brand-mark" src="assets/crm-logo-master-v4.png" alt="On A Trip Holidays">
+    <div class="leads-brand-name">CRM <span>Sales &amp; Lead Management</span></div>
   </div>
   <div class="leads-menu-title">▣ &nbsp; CRM</div>
   <div class="leads-menu-item" onclick="returnToDashboards()">▥ <span>Dashboard</span></div>
@@ -1652,7 +1659,7 @@ function openQuotation(id){
 function printQuotation(){
   const content=document.getElementById("quotePrintable"); if(!content)return;
   const w=window.open("","_blank","width=900,height=700");
-  w.document.write(`<html><head><title>On A Trip Holidays - Quotation</title><style>body{font-family:Arial,sans-serif;padding:40px;color:#102335}.quote{max-width:760px;margin:auto}h3{font-size:24px;margin:8px 0}.meta{color:#6b7b87;font-size:12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}.cell{border:1px solid #dce4e9;border-radius:8px;padding:12px}.cell small{display:block;color:#6b7b87;font-size:11px}.cell b{display:block;margin-top:4px}</style></head><body><div class="quote">${content.outerHTML.replace(/class="quote-preview"/,'class="quote"').replace(/class="detail-grid"/,'class="grid"').replace(/class="detail"/g,'class="cell"')}</div></body></html>`);
+  w.document.write(`<html><head><title>On A Trip Holidays - Quotation</title><style>body{font-family:"Inter",Arial,sans-serif;padding:40px;color:#102335}.quote{max-width:760px;margin:auto}h3{font-size:24px;margin:8px 0}.meta{color:#6b7b87;font-size:12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}.cell{border:1px solid #dce4e9;border-radius:8px;padding:12px}.cell small{display:block;color:#6b7b87;font-size:11px}.cell b{display:block;margin-top:4px}</style></head><body><div class="quote">${content.outerHTML.replace(/class="quote-preview"/,'class="quote"').replace(/class="detail-grid"/,'class="grid"').replace(/class="detail"/g,'class="cell"')}</div></body></html>`);
   w.document.close(); w.focus(); w.print();
 }
 
