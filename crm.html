@@ -84,36 +84,6 @@ border:0;border-radius:9px;padding:11px 14px;font-weight:900
 .primary{background:var(--o);color:#fff}
 .secondary{background:#fff;border:1px solid var(--line);color:var(--n)}
 
-.board{
-display:grid;grid-template-columns:repeat(8,1fr);gap:10px;
-overflow-x:auto
-}
-.column{
-min-width:185px;background:#eaf0f3;border-radius:12px;padding:9px
-}
-.column h3{
-font-size:12px;margin:3px 4px 9px;text-transform:uppercase
-}
-.count{
-float:right;background:#fff;border-radius:12px;padding:2px 7px
-}
-
-.lead{
-background:#fff;border:1px solid var(--line);border-radius:11px;
-padding:12px;margin-bottom:9px;box-shadow:0 3px 12px #00000008
-}
-.lead b{font-size:14px}
-.lead .muted{font-size:11px;color:var(--muted);margin-top:3px}
-.lead .trip{color:var(--o);font-weight:800;font-size:12px;margin-top:8px}
-.lead .actions{display:flex;gap:5px;margin-top:9px}
-.lead .actions button{
-border:1px solid var(--line);background:#fff;border-radius:7px;
-padding:6px 7px;font-size:11px;font-weight:800
-}
-.lead .actions .wa{
-background:#eaf8f0;color:#087548;border-color:#ccebdc
-}
-
 .table-card{
 background:#fff;border:1px solid var(--line);border-radius:14px;
 margin-top:18px;padding:15px;overflow:auto
@@ -183,7 +153,6 @@ padding:40px;text-align:center;color:var(--muted)
 .stat{padding:12px}
 .stat strong{font-size:22px}
 .toolbar input{width:100%;min-width:0}
-.board{grid-template-columns:repeat(8,185px)}
 .row,.detail-grid{grid-template-columns:1fr}
 .top{padding:12px}
 .top small{display:none}
@@ -320,11 +289,6 @@ Export CSV
 ⇧ Import Leads
 </button>
 
-</div>
-
-
-<div class="board" id="board">
-<div class="loading">Loading enquiries...</div>
 </div>
 
 
@@ -658,8 +622,6 @@ showLogin();
 
 async function loadLeads(){
 
-document.getElementById("board").innerHTML=
-'<div class="loading">Loading enquiries...</div>';
 
 const {
 data,
@@ -673,8 +635,6 @@ if(error){
 
 console.error(error);
 
-document.getElementById("board").innerHTML=
-'<div class="loading">Unable to load enquiries.</div>';
 
 alert("Could not load enquiries: "+error.message);
 
@@ -796,27 +756,6 @@ l.follow && l.follow<=today && l.status!=="Booked" && l.status!=="Lost"
 document.getElementById("sFollow").textContent=followups;
 
 
-document.getElementById("board").innerHTML=
-
-stages.map(s=>`
-
-<div class="column">
-
-<h3>
-${s}
-<span class="count">${counts[s]||0}</span>
-</h3>
-
-${list
-.filter(l=>l.status===s)
-.map(card)
-.join("")}
-
-</div>
-
-`).join("");
-
-
 document.getElementById("table").innerHTML=
 
 list.map(row).join("")
@@ -827,53 +766,6 @@ list.map(row).join("")
 
 }
 
-
-/* ==========================================
-   CARD
-========================================== */
-
-function card(l){
-
-return `
-
-<div class="lead">
-
-<b>${esc(l.name)}</b>
-
-<div class="muted">
-${esc(l.phone)} • ${esc(l.branch||"Branch not assigned")}
-</div>
-
-<div class="trip">
-${esc(l.dest||"Destination not specified")}
-</div>
-
-<div class="muted">
-${l.trav||0} travellers • ${esc(l.value||"Value not set")}
-</div>
-
-<div class="actions">
-
-<button class="wa"
-onclick="wa(${l.id})">
-WhatsApp
-</button>
-
-<button onclick="callCustomer('${esc(l.phone)}')">
-Call
-</button>
-
-<button onclick="details(${l.id})">
-Details
-</button>
-
-</div>
-
-</div>
-
-`;
-
-}
 
 
 /* ==========================================
@@ -939,7 +831,15 @@ ${esc(l.follow||"—")}
 class="btn secondary"
 onclick="wa(${l.id})">
 
-WA
+WhatsApp
+
+</button>
+
+<button
+class="btn secondary"
+onclick="callCustomer('${esc(l.phone)}')">
+
+Call
 
 </button>
 
@@ -947,7 +847,7 @@ WA
 class="btn secondary"
 onclick="details(${l.id})">
 
-View
+Details
 
 </button>
 
@@ -1278,129 +1178,6 @@ return `"${String(v??"")
 
 
 /* ==========================================
-   IMPORT LEADS FROM CSV / EXCEL
-========================================== */
-
-let pendingImportRows=[];
-
-const importAliases={
- name:["name","customer name","customer_name","full name","fullname","customer"],
- phone:["phone","mobile","mobile number","phone number","whatsapp","whatsapp number","contact","contact number"],
- destination:["destination","trip","travel destination","package","tour"],
- travel_date:["travel date","travel_date","date","journey date","departure date"],
- travellers:["travellers","travelers","traveller","traveler","pax","no of travellers","number of travellers"],
- branch:["branch"],
- source:["source","lead source","lead_source","channel"],
- priority:["priority"],
- status:["status","stage","lead status"],
- value:["value","amount","budget","deal value","package value"],
- follow_up:["follow-up","follow up","follow_up","followup","next follow-up","next follow up"],
- notes:["notes","note","remarks","comments"]
-};
-
-function cleanHeader(v){
- return String(v??"").trim().toLowerCase().replace(/[\s_-]+/g," ");
-}
-
-function findImportValue(row,key){
- const aliases=importAliases[key]||[];
- const keys=Object.keys(row);
- const found=keys.find(k=>aliases.includes(cleanHeader(k)));
- return found===undefined?"":row[found];
-}
-
-function normalizeImportDate(v){
- if(v===null||v===undefined||v==="") return null;
- if(v instanceof Date && !isNaN(v)) return v.toISOString().slice(0,10);
- if(typeof v==="number" && window.XLSX){
-   const d=XLSX.SSF.parse_date_code(v);
-   if(d && d.y) return `${d.y}-${String(d.m).padStart(2,"0")}-${String(d.d).padStart(2,"0")}`;
- }
- const s=String(v).trim();
- if(/^\d{4}-\d{1,2}-\d{1,2}$/.test(s)) return s;
- const m=s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})$/);
- if(m){ let y=Number(m[3]); if(y<100)y+=2000; return `${y}-${String(m[2]).padStart(2,"0")}-${String(m[1]).padStart(2,"0")}`; }
- return null;
-}
-
-function normalizeImportRow(row,index){
- const name=String(findImportValue(row,"name")||"").trim();
- const phone=String(findImportValue(row,"phone")||"").trim();
- return {
-   _row:index+2,
-   name,
-   phone,
-   destination:String(findImportValue(row,"destination")||"").trim(),
-   travel_date:normalizeImportDate(findImportValue(row,"travel_date")),
-   travellers:Number(findImportValue(row,"travellers")||0)||0,
-   branch:String(findImportValue(row,"branch")||"").trim(),
-   source:String(findImportValue(row,"source")||"Sheet Import").trim()||"Sheet Import",
-   priority:String(findImportValue(row,"priority")||"Normal").trim()||"Normal",
-   status:String(findImportValue(row,"status")||"New").trim()||"New",
-   value:String(findImportValue(row,"value")||"").trim(),
-   follow_up:normalizeImportDate(findImportValue(row,"follow_up")),
-   notes:String(findImportValue(row,"notes")||"").trim()
- };
-}
-
-async function previewImport(e){
- const file=e.target.files?.[0];
- const preview=document.getElementById("importPreview");
- const result=document.getElementById("importResult");
- if(!file) return;
- result.innerHTML="";
- preview.style.display="block";
- preview.innerHTML='<div class="loading">Reading sheet...</div>';
- try{
-   const buf=await file.arrayBuffer();
-   const wb=XLSX.read(buf,{type:"array",cellDates:true});
-   const ws=wb.Sheets[wb.SheetNames[0]];
-   const raw=XLSX.utils.sheet_to_json(ws,{defval:"",raw:true});
-   pendingImportRows=raw.map(normalizeImportRow).filter(r=>r.name||r.phone||r.destination);
-   if(!pendingImportRows.length){ preview.innerHTML='<div class="loading">No lead rows found.</div>'; return; }
-   const invalid=pendingImportRows.filter(r=>!r.name||!r.phone).length;
-   const sample=pendingImportRows.slice(0,5);
-   preview.innerHTML=`<div style="border:1px solid var(--border);border-radius:10px;padding:12px;background:var(--card)">\n     <b>${pendingImportRows.length} lead(s) ready to import</b>${invalid?`<span style="color:#b45309"> • ${invalid} row(s) missing name or phone will be skipped</span>`:""}\n     <div style="overflow:auto;margin-top:10px"><table class="table"><thead><tr><th>Name</th><th>Phone</th><th>Destination</th><th>Travel Date</th><th>Source</th></tr></thead><tbody>${sample.map(r=>`<tr><td>${esc(r.name)}</td><td>${esc(r.phone)}</td><td>${esc(r.destination)}</td><td>${esc(r.travel_date||"")}</td><td>${esc(r.source)}</td></tr>`).join("")}</tbody></table></div>\n     <button class="btn primary" style="margin-top:12px" onclick="importPendingLeads()">Import ${pendingImportRows.length} Leads</button>\n   </div>`;
- }catch(err){ console.error(err); preview.innerHTML='<div class="loading">Could not read this file. Please use CSV or Excel format.</div>'; }
-}
-
-function normalizePhone(v){ return String(v??"").replace(/\D/g,"").replace(/^91(?=\d{10}$)/,""); }
-
-async function importPendingLeads(){
- if(!pendingImportRows.length) return;
- const result=document.getElementById("importResult");
- result.innerHTML='<div class="loading">Importing leads...</div>';
- const existingPhones=new Set(leads.map(l=>normalizePhone(l.phone)).filter(Boolean));
- const batchPhones=new Set();
- const rows=[];
- let skipped=0;
- for(const r of pendingImportRows){
-   const phone=normalizePhone(r.phone);
-   if(!r.name||!phone||existingPhones.has(phone)||batchPhones.has(phone)){ skipped++; continue; }
-   batchPhones.add(phone);
-   rows.push({name:r.name,phone:r.phone,destination:r.destination,travel_date:r.travel_date,travellers:r.travellers,branch:r.branch,source:r.source,priority:r.priority,status:r.status,value:r.value,follow_up:r.follow_up,notes:r.notes});
- }
- if(!rows.length){ result.innerHTML=`<div style="padding:12px;border-radius:10px;background:#fff7ed">No new valid leads to import. ${skipped} row(s) skipped.</div>`; return; }
- let imported=0;
- const errors=[];
- for(let i=0;i<rows.length;i+=100){
-   const chunk=rows.slice(i,i+100);
-   const {data,error}=await db.from("enquiries").insert(chunk).select();
-   if(error){ errors.push(error.message); break; }
-   imported += data?.length || chunk.length;
- }
- if(imported){ await loadLeads(); }
- result.innerHTML=`<div style="padding:12px;border-radius:10px;background:${errors.length?"#fff7ed":"#f0fdf4"}"><b>${imported} lead(s) imported successfully.</b> ${skipped} row(s) skipped.${errors.length?`<br><span style="color:#b91c1c">Error: ${esc(errors[0])}</span>`:""}</div>`;
- if(imported && !errors.length){ pendingImportRows=[]; document.getElementById("importFile").value=""; setTimeout(()=>closeModal("importModal"),1200); }
-}
-
-function downloadImportTemplate(){
- const headers=[["Name","Phone","Destination","Travel Date","Travellers","Branch","Source","Priority","Status","Value","Follow-up","Notes"]];
- const ws=XLSX.utils.aoa_to_sheet(headers); const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,"Leads"); XLSX.writeFile(wb,"on-a-trip-leads-import-template.xlsx");
-}
-
-
-/* ==========================================
    MODALS
 ========================================== */
 
@@ -1421,6 +1198,20 @@ document.getElementById(id).classList.remove("show");
 /* ==========================================
    SECURITY / HTML ESCAPE
 ========================================== */
+
+/* ==========================================
+   IMPORT LEADS FROM CSV / EXCEL
+========================================== */
+let pendingImportRows=[];
+const importAliases={name:["name","customer name","customer_name","full name","fullname","customer"],phone:["phone","mobile","mobile number","phone number","whatsapp","whatsapp number","contact","contact number"],destination:["destination","trip","travel destination","package","tour"],travel_date:["travel date","travel_date","date","journey date","departure date"],travellers:["travellers","travelers","traveller","traveler","pax","no of travellers","number of travellers"],branch:["branch"],source:["source","lead source","lead_source","channel"],priority:["priority"],status:["status","stage","lead status"],value:["value","amount","budget","deal value","package value"],follow_up:["follow-up","follow up","follow_up","followup","next follow-up","next follow up"],notes:["notes","note","remarks","comments"]};
+function cleanHeader(v){return String(v??"").trim().toLowerCase().replace(/[\s_-]+/g," ")}
+function findImportValue(row,key){const aliases=importAliases[key]||[];const found=Object.keys(row).find(k=>aliases.includes(cleanHeader(k)));return found===undefined?"":row[found]}
+function normalizeImportDate(v){if(v===null||v===undefined||v==="")return null;if(v instanceof Date&&!isNaN(v))return v.toISOString().slice(0,10);if(typeof v==="number"&&window.XLSX){const d=XLSX.SSF.parse_date_code(v);if(d&&d.y)return `${d.y}-${String(d.m).padStart(2,"0")}-${String(d.d).padStart(2,"0")}`}const s=String(v).trim();if(/^\d{4}-\d{1,2}-\d{1,2}$/.test(s))return s;const m=s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})$/);if(m){let y=Number(m[3]);if(y<100)y+=2000;return `${y}-${String(m[2]).padStart(2,"0")}-${String(m[1]).padStart(2,"0")}`}return null}
+function normalizeImportRow(row,index){return{_row:index+2,name:String(findImportValue(row,"name")||"").trim(),phone:String(findImportValue(row,"phone")||"").trim(),destination:String(findImportValue(row,"destination")||"").trim(),travel_date:normalizeImportDate(findImportValue(row,"travel_date")),travellers:Number(findImportValue(row,"travellers")||0)||0,branch:String(findImportValue(row,"branch")||"").trim(),source:String(findImportValue(row,"source")||"Sheet Import").trim()||"Sheet Import",priority:String(findImportValue(row,"priority")||"Normal").trim()||"Normal",status:String(findImportValue(row,"status")||"New").trim()||"New",value:String(findImportValue(row,"value")||"").trim(),follow_up:normalizeImportDate(findImportValue(row,"follow_up")),notes:String(findImportValue(row,"notes")||"").trim()}}
+async function previewImport(e){const file=e.target.files?.[0],preview=document.getElementById("importPreview"),result=document.getElementById("importResult");if(!file)return;result.innerHTML="";preview.style.display="block";preview.innerHTML='<div class="loading">Reading sheet...</div>';try{const buf=await file.arrayBuffer(),wb=XLSX.read(buf,{type:"array",cellDates:true}),ws=wb.Sheets[wb.SheetNames[0]],raw=XLSX.utils.sheet_to_json(ws,{defval:"",raw:true});pendingImportRows=raw.map(normalizeImportRow).filter(r=>r.name||r.phone||r.destination);if(!pendingImportRows.length){preview.innerHTML='<div class="loading">No lead rows found.</div>';return}const invalid=pendingImportRows.filter(r=>!r.name||!r.phone).length;preview.innerHTML=`<div style="border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--white)"><b>${pendingImportRows.length} lead(s) ready to import</b>${invalid?`<span style="color:#b45309"> • ${invalid} row(s) missing name or phone will be skipped</span>`:""}<div style="overflow:auto;margin-top:10px"><table class="table"><thead><tr><th>Name</th><th>Phone</th><th>Destination</th><th>Travel Date</th><th>Source</th></tr></thead><tbody>${pendingImportRows.slice(0,5).map(r=>`<tr><td>${esc(r.name)}</td><td>${esc(r.phone)}</td><td>${esc(r.destination)}</td><td>${esc(r.travel_date||"")}</td><td>${esc(r.source)}</td></tr>`).join("")}</tbody></table></div><button class="btn primary" style="margin-top:12px" onclick="importPendingLeads()">Import ${pendingImportRows.length} Leads</button></div>`}catch(err){console.error(err);preview.innerHTML='<div class="loading">Could not read this file. Please use CSV or Excel format.</div>'}}
+function normalizePhone(v){return String(v??"").replace(/\D/g,"").replace(/^91(?=\d{10}$)/,"")}
+async function importPendingLeads(){if(!pendingImportRows.length)return;const result=document.getElementById("importResult");result.innerHTML='<div class="loading">Importing leads...</div>';const existingPhones=new Set(leads.map(l=>normalizePhone(l.phone)).filter(Boolean)),batchPhones=new Set(),rows=[];let skipped=0;for(const r of pendingImportRows){const phone=normalizePhone(r.phone);if(!r.name||!phone||existingPhones.has(phone)||batchPhones.has(phone)){skipped++;continue}batchPhones.add(phone);rows.push({name:r.name,phone:r.phone,destination:r.destination,travel_date:r.travel_date,travellers:r.travellers,branch:r.branch,source:r.source,priority:r.priority,status:r.status,value:r.value,follow_up:r.follow_up,notes:r.notes})}if(!rows.length){result.innerHTML=`<div style="padding:12px;border-radius:10px;background:#fff7ed">No new valid leads to import. ${skipped} row(s) skipped.</div>`;return}let imported=0;const errors=[];for(let i=0;i<rows.length;i+=100){const chunk=rows.slice(i,i+100),{data,error}=await db.from("enquiries").insert(chunk).select();if(error){errors.push(error.message);break}imported+=data?.length||chunk.length}if(imported){await loadLeads()}result.innerHTML=`<div style="padding:12px;border-radius:10px;background:${errors.length?"#fff7ed":"#f0fdf4"}"><b>${imported} lead(s) imported successfully.</b> ${skipped} row(s) skipped.${errors.length?`<br><span style="color:#b91c1c">Error: ${esc(errors[0])}</span>`:""}</div>`;if(imported&&!errors.length){pendingImportRows=[];document.getElementById("importFile").value="";setTimeout(()=>closeModal("importModal"),1200)}}
+function downloadImportTemplate(){const ws=XLSX.utils.aoa_to_sheet([["Name","Phone","Destination","Travel Date","Travellers","Branch","Source","Priority","Status","Value","Follow-up","Notes"]]),wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Leads");XLSX.writeFile(wb,"on-a-trip-leads-import-template.xlsx")}
 
 function esc(s){
 
