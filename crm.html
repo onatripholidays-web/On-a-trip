@@ -103,9 +103,25 @@ font-size:11px;color:var(--muted);text-transform:uppercase
 padding:7px;border:1px solid var(--line);border-radius:7px
 }
 
+/* Accessible action icons */
+function leadIcon(name){
+  const common='width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
+  const icons={
+    whatsapp:`<svg ${common}><path d="M20 11.5a8 8 0 0 1-11.8 7L4 20l1.5-4.1A8 8 0 1 1 20 11.5Z"/><path d="M8.5 8.5c.3 1.6 1.5 3.4 3 4.5 1.1.8 2.4 1.4 3.3 1.1l1-.8"/></svg>`,
+    call:`<svg ${common}><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.7 19.7 0 0 1-8.6-3.1 19.3 19.3 0 0 1-6-6A19.7 19.7 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.7 2.6a2 2 0 0 1-.5 2.1L8 9.7a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.8.4 1.7.6 2.6.7A2 2 0 0 1 22 16.9Z"/></svg>`,
+    details:`<svg ${common}><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></svg>`,
+    quote:`<svg ${common}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></svg>`,
+    edit:`<svg ${common}><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>`,
+    transfer:`<svg ${common}><path d="M7 7h13l-3-3M20 7l-3 3M17 17H4l3 3M4 17l3-3"/></svg>`,
+    unassign:`<svg ${common}><circle cx="12" cy="7" r="4"/><path d="M5.5 21a6.5 6.5 0 0 1 13 0M18 5l4 4M22 5l-4 4"/></svg>`,
+    delete:`<svg ${common}><path d="M3 6h18M9 6V4h6v2M19 6l-1 15H6L5 6M10 11v6M14 11v6"/></svg>`,
+    open:`<svg ${common}><path d="M14 3h7v7M21 3l-9 9"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>`
+  }; return icons[name]||'';
+}
+
 /* Lead row action buttons */
 .lead-actions{display:flex;align-items:center;gap:8px;white-space:nowrap}
-.lead-action{width:30px;height:30px;border:0;border-radius:7px;background:transparent;display:inline-grid;place-items:center;font-size:17px;line-height:1;position:relative}
+.lead-action{width:32px;height:32px;border:0;border-radius:7px;background:transparent;display:inline-grid;place-items:center;font-size:17px;line-height:1;position:relative}
 .lead-action:hover{background:#f3f6fb}
 .lead-action.green{color:#18a66a}.lead-action.blue{color:#10a5e8}.lead-action.slate{color:#71839a}.lead-action.purple{color:#9a43ff}.lead-action.red{color:#ff3e4d}
 .lead-action[data-tip]::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#334155;color:#fff;padding:7px 9px;border-radius:7px;font-size:11px;font-weight:800;white-space:nowrap;opacity:0;pointer-events:none;transition:.12s;z-index:60}
@@ -941,7 +957,7 @@ function openLeadOption(type){
 
 function renderLeadOptionTable(rows){
  if(!rows.length)return '<div class="loading" style="padding:30px">No leads match this rule.</div>';
- return `<div style="overflow:auto"><table class="table" style="min-width:1100px"><thead><tr><th>Customer</th><th>Phone</th><th>Trip</th><th>Owner</th><th>Stage</th><th>Source</th><th>Travel Date</th><th>Actions</th></tr></thead><tbody>${rows.map(l=>`<tr><td><b>${esc(l.name||"—")}</b></td><td>${esc(l.phone||"—")}</td><td>${esc(l.dest||"—")}</td><td>${esc(l.salesperson||"Unassigned")}</td><td>${esc(l.status||"New")}</td><td>${esc(l.source||"—")}</td><td>${esc(l.date||"—")}</td><td><div class="lead-actions"><button class="lead-action green" data-tip="WhatsApp" onclick="wa(${l.id})">◔</button><button class="lead-action blue" data-tip="Call" onclick="callCustomer('${esc(l.phone||"")}')">⌕</button><button class="lead-action slate" data-tip="Details" onclick="details(${l.id})">◉</button>${!l.deleted?`<button class="lead-action green" data-tip="Generate Quotation" onclick="openQuotation(${l.id})">◩</button><button class="lead-action purple" data-tip="Transfer" onclick="openTransfer(${l.id})">⇄</button>${isAdminUser()?`<button class="lead-action red" data-tip="Unassign" onclick="unassignLead(${l.id})">♙</button>`:''}<button class="lead-action red" data-tip="Delete" onclick="deleteLead(${l.id})">▢</button>`:''}</div></td></tr>`).join("")}</tbody></table></div>`;
+ return `<div style="overflow:auto"><table class="table" style="min-width:1100px"><thead><tr><th>Customer</th><th>Phone</th><th>Trip</th><th>Owner</th><th>Stage</th><th>Source</th><th>Travel Date</th><th>Actions</th></tr></thead><tbody>${rows.map(l=>`<tr><td><b>${esc(l.name||"—")}</b></td><td>${esc(l.phone||"—")}</td><td>${esc(l.dest||"—")}</td><td>${esc(l.salesperson||"Unassigned")}</td><td>${esc(l.status||"New")}</td><td>${esc(l.source||"—")}</td><td>${esc(l.date||"—")}</td><td><div class="lead-actions"><button class="lead-action green" data-tip="WhatsApp" onclick="wa(${l.id})" aria-label="WhatsApp">${leadIcon("whatsapp")}</button><button class="lead-action blue" data-tip="Call" onclick="callCustomer('${esc(l.phone||"")}')" aria-label="Call">${leadIcon("call")}</button><button class="lead-action slate" data-tip="View Details" onclick="details(${l.id})" aria-label="View Details">${leadIcon("details")}</button>${!l.deleted?`<button class="lead-action green" data-tip="Generate Quotation" onclick="openQuotation(${l.id})" aria-label="Generate Quotation">${leadIcon("quote")}</button><button class="lead-action purple" data-tip="Transfer" onclick="openTransfer(${l.id})" aria-label="Transfer">${leadIcon("transfer")}</button>${isAdminUser()?`<button class="lead-action red" data-tip="Unassign" onclick="unassignLead(${l.id})" aria-label="Unassign">${leadIcon("unassign")}</button>`:''}<button class="lead-action red" data-tip="Delete" onclick="deleteLead(${l.id})" aria-label="Delete">${leadIcon("delete")}</button>`:''}</div></td></tr>`).join("")}</tbody></table></div>`;
 }
 
 function customFieldsConfig(){
@@ -1266,15 +1282,14 @@ ${esc(l.follow||"—")}
 
 <td>
 <div class="lead-actions">
-<button class="lead-action green" data-tip="Open WhatsApp" onclick="wa(${l.id})" aria-label="WhatsApp">↗</button>
-<button class="lead-action green" data-tip="WhatsApp" onclick="wa(${l.id})" aria-label="WhatsApp">◔</button>
-<button class="lead-action blue" data-tip="Call" onclick="callCustomer('${esc(l.phone)}')" aria-label="Call">⌕</button>
-<button class="lead-action slate" data-tip="Details" onclick="details(${l.id})" aria-label="Details">◉</button>
-<button class="lead-action green" data-tip="Generate Quotation" onclick="openQuotation(${l.id})" aria-label="Generate Quotation">◩</button>
-<button class="lead-action slate" data-tip="Edit" onclick="details(${l.id})" aria-label="Edit">✎</button>
-<button class="lead-action purple" data-tip="Transfer" onclick="openTransfer(${l.id})" aria-label="Transfer">⇄</button>
-${isAdminUser()?`<button class="lead-action red" data-tip="Unassign" onclick="unassignLead(${l.id})" aria-label="Unassign">♙</button>`:''}
-<button class="lead-action red" data-tip="Delete" onclick="deleteLead(${l.id})" aria-label="Delete">▢</button>
+<button class="lead-action green" data-tip="WhatsApp" onclick="wa(${l.id})" aria-label="WhatsApp">${leadIcon("whatsapp")}</button>
+<button class="lead-action blue" data-tip="Call" onclick="callCustomer('${esc(l.phone)}')" aria-label="Call">${leadIcon("call")}</button>
+<button class="lead-action slate" data-tip="View Details" onclick="details(${l.id})" aria-label="View Details">${leadIcon("details")}</button>
+<button class="lead-action green" data-tip="Generate Quotation" onclick="openQuotation(${l.id})" aria-label="Generate Quotation">${leadIcon("quote")}</button>
+<button class="lead-action slate" data-tip="Edit" onclick="details(${l.id})" aria-label="Edit">${leadIcon("edit")}</button>
+<button class="lead-action purple" data-tip="Transfer" onclick="openTransfer(${l.id})" aria-label="Transfer">${leadIcon("transfer")}</button>
+${isAdminUser()?`<button class="lead-action red" data-tip="Unassign" onclick="unassignLead(${l.id})" aria-label="Unassign">${leadIcon("unassign")}</button>`:''}
+<button class="lead-action red" data-tip="Delete" onclick="deleteLead(${l.id})" aria-label="Delete">${leadIcon("delete")}</button>
 </div>
 </td>
 
@@ -1331,25 +1346,16 @@ async function confirmTransfer(){
 
 function openQuotation(id){
   const l=leads.find(x=>x.id===id); if(!l)return;
-  const today=new Date().toLocaleDateString("en-IN");
-  document.getElementById("quotationBody").innerHTML=`
-  <div class="quote-preview" id="quotePrintable">
-    <div style="font-weight:900;color:var(--o);font-size:13px">ON A TRIP HOLIDAYS</div>
-    <h3>Travel Quotation</h3>
-    <div class="quote-meta">Quotation Date: ${esc(today)}</div>
-    <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-    <div class="detail-grid">
-      <div class="detail"><small>Customer</small><b>${esc(l.name)}</b></div>
-      <div class="detail"><small>Phone</small><b>${esc(l.phone||"—")}</b></div>
-      <div class="detail"><small>Destination</small><b>${esc(l.dest||"—")}</b></div>
-      <div class="detail"><small>Travel Date</small><b>${esc(l.date||"—")}</b></div>
-      <div class="detail"><small>Travellers</small><b>${l.trav||"—"}</b></div>
-      <div class="detail"><small>Package Value</small><b>${esc(l.value||"To be quoted")}</b></div>
-    </div>
-    <div style="margin-top:18px"><b>Notes / Requirements</b><p>${esc(l.notes||"Custom package quotation to be prepared based on the customer's requirements.")}</p></div>
-  </div>
-  <div class="quote-actions"><button class="btn secondary" onclick="closeModal('quotationModal')">Close</button><button class="btn primary" onclick="printQuotation()">Print / Save PDF</button></div>`;
-  openModal("quotationModal");
+  const params=new URLSearchParams({
+    leadId:String(l.id||""),
+    name:String(l.name||""),
+    phone:String(l.phone||""),
+    destination:String(l.dest||""),
+    travelDate:String(l.date||""),
+    travellers:String(l.trav||"")
+  });
+  try{ localStorage.setItem("onatrip_selected_lead", JSON.stringify(l)); }catch(e){}
+  window.location.href="https://www.onatripholidays.com/admin-ai-itinerary.html?"+params.toString();
 }
 
 function printQuotation(){
