@@ -113,7 +113,7 @@ background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px
 
 /* CRM lead filters — Master V2 */
 .crm-leads-filter-bar{display:block!important;padding:18px!important;border-radius:14px!important}
-.crm-filter-grid{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr)) auto auto auto;gap:12px;align-items:center}
+.crm-filter-grid{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:12px;align-items:center}
 .crm-filter-grid select,.crm-filter-select{width:100%;height:40px;padding:0 12px;border:1px solid #cbd8e6;border-radius:8px;background:#fff;color:#667993;font-size:13px;outline:none}
 .crm-filter-grid select:focus,.crm-filter-select:focus{border-color:#8e9cf4;box-shadow:0 0 0 3px #655cf610}
 .crm-filter-select{display:flex;align-items:center;justify-content:space-between;text-align:left;cursor:pointer}
@@ -127,7 +127,7 @@ background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px
 .source-category-options{max-height:230px;overflow:auto;padding:2px 4px 7px}
 .source-category-option{display:block;width:100%;border:0;background:#fff;text-align:left;padding:10px 10px;border-radius:6px;color:#52657d;font-size:13px;cursor:pointer}
 .source-category-option:hover,.source-category-option.active{background:#f0f3f7;color:#26364d}
-.crm-filter-divider{height:1px;background:#e1e7ee;margin:16px 0 17px}
+.crm-filter-actions{display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap;margin-top:12px}.crm-filter-divider{height:1px;background:#e1e7ee;margin:16px 0 17px}
 .crm-lead-search-row{display:flex;align-items:center;gap:10px}
 .crm-lead-search-wrap{width:min(320px,100%);height:40px;display:flex;align-items:center;gap:8px;border:1px solid #cbd8e6;border-radius:8px;background:#fff;padding:0 11px}
 .crm-lead-search-wrap:focus-within{border-color:#8e9cf4;box-shadow:0 0 0 3px #655cf610}
@@ -353,6 +353,45 @@ placeholder="Password" autocomplete="current-password">
 <!-- CRM APP -->
 <div id="app">
 
+<header class="top" id="crmTopbar">
+  <div class="top-brand">
+    <div class="top-brand-mark">O</div>
+    <div><b>CRM</b><small> • Sales & Lead Management</small></div>
+  </div>
+
+  <button class="global-search-trigger" type="button" onclick="openGlobalSearch()" aria-label="Search CRM">
+    <span class="global-search-icon">⌕</span><span>Search CRM...</span><span style="margin-left:auto;font-size:10px;color:#9aa7b8">Ctrl + K</span>
+  </button>
+
+  <div class="top-actions">
+    <div class="crm-user-name" id="crmUserName">User</div>
+    <button class="top-icon-btn" id="notificationButton" type="button" onclick="toggleNotifications(event)" aria-label="Notifications" title="Notifications">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>
+      <span class="notification-badge" id="notificationBadge">0</span>
+    </button>
+    <a class="admin-link" href="admin.html">← Admin</a>
+    <button class="logout" onclick="logout()">Logout</button>
+  </div>
+</header>
+
+<div class="global-search-overlay" id="globalSearchOverlay" onclick="if(event.target===this)closeGlobalSearch()">
+  <div class="global-search-box" role="dialog" aria-modal="true" aria-label="Search CRM">
+    <div class="global-search-head">
+      <span class="global-search-icon">⌕</span>
+      <input class="global-search-input" id="globalSearchInput" autocomplete="off" placeholder="Search leads, customers, phone, destination, CRM sections..." oninput="runGlobalSearch()" onkeydown="if(event.key==='Escape')closeGlobalSearch()">
+      <button class="global-search-close" type="button" onclick="closeGlobalSearch()">×</button>
+    </div>
+    <div class="global-search-results" id="globalSearchResults"></div>
+  </div>
+</div>
+
+<div class="notification-panel" id="notificationPanel">
+  <div class="notification-head"><b>Notifications</b><span id="notificationSummary">0 items</span></div>
+  <div class="notification-list" id="notificationList"></div>
+</div>
+
+
+
 <!-- DASHBOARD LANDING -->
 <section class="dashboard-shell" id="dashboardLanding">
 <aside class="dashboard-sidebar">
@@ -449,44 +488,6 @@ placeholder="Password" autocomplete="current-password">
 </div>
 </section>
 
-<header class="top" id="crmTopbar">
-  <div class="top-brand">
-    <div class="top-brand-mark">O</div>
-    <div><b>CRM</b><small> • Sales & Lead Management</small></div>
-  </div>
-
-  <button class="global-search-trigger" type="button" onclick="openGlobalSearch()" aria-label="Search CRM">
-    <span class="global-search-icon">⌕</span><span>Search CRM...</span><span style="margin-left:auto;font-size:10px;color:#9aa7b8">Ctrl + K</span>
-  </button>
-
-  <div class="top-actions">
-    <div class="crm-user-name" id="crmUserName">User</div>
-    <button class="top-icon-btn" id="notificationButton" type="button" onclick="toggleNotifications(event)" aria-label="Notifications" title="Notifications">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>
-      <span class="notification-badge" id="notificationBadge">0</span>
-    </button>
-    <a class="admin-link" href="admin.html">← Admin</a>
-    <button class="logout" onclick="logout()">Logout</button>
-  </div>
-</header>
-
-<div class="global-search-overlay" id="globalSearchOverlay" onclick="if(event.target===this)closeGlobalSearch()">
-  <div class="global-search-box" role="dialog" aria-modal="true" aria-label="Search CRM">
-    <div class="global-search-head">
-      <span class="global-search-icon">⌕</span>
-      <input class="global-search-input" id="globalSearchInput" autocomplete="off" placeholder="Search leads, customers, phone, destination, CRM sections..." oninput="runGlobalSearch()" onkeydown="if(event.key==='Escape')closeGlobalSearch()">
-      <button class="global-search-close" type="button" onclick="closeGlobalSearch()">×</button>
-    </div>
-    <div class="global-search-results" id="globalSearchResults"></div>
-  </div>
-</div>
-
-<div class="notification-panel" id="notificationPanel">
-  <div class="notification-head"><b>Notifications</b><span id="notificationSummary">0 items</span></div>
-  <div class="notification-list" id="notificationList"></div>
-</div>
-
-
 <main class="shell" id="crmWorkspace">
 
 <section class="stats">
@@ -561,6 +562,9 @@ placeholder="Password" autocomplete="current-password">
       <option value="">Branch</option><option>Hyderabad</option><option>Vijayawada</option>
     </select>
 
+  </div>
+
+  <div class="crm-filter-actions">
     <button class="btn primary" onclick="openModal('leadModal')">＋ New Lead</button>
     <button class="btn secondary" onclick="exportCSV()">Export CSV</button>
     <button class="btn primary" onclick="openModal('importModal')">⇧ Import Leads</button>
@@ -887,8 +891,11 @@ function getCurrentUserFirstName(){
   const salesperson=String(window.crmProfile?.salesperson||"").trim();
   if(salesperson)return salesperson.split(/\s+/)[0];
   const email=String(window.crmAuthUser?.email||"").trim();
-  if(email)return email.split("@")[0].split(/[._-]/)[0];
-  return "User";
+  if(email){
+    const local=email.split("@")[0].split(/[._-]+/).filter(Boolean);
+    if(local.length===1 && local[0].toLowerCase()!=="onatripholidays") return local[0].replace(/^./,c=>c.toUpperCase());
+  }
+  return (String(window.crmProfile?.role||"").toLowerCase()==="admin") ? "Admin" : "User";
 }
 
 async function renderCRMUserName(){
