@@ -43,6 +43,7 @@ background:var(--o);color:#fff;font-weight:900
 .error{color:var(--r);font-size:13px;margin-top:12px;display:none}
 
 #app{display:none}
+#crmTopbar,#crmWorkspace{display:none}
 
 .top{
 background:var(--n);color:#fff;padding:14px 5%;display:flex;
@@ -101,6 +102,91 @@ font-size:11px;color:var(--muted);text-transform:uppercase
 .table select{
 padding:7px;border:1px solid var(--line);border-radius:7px
 }
+
+/* ==========================================
+   DASHBOARDS LANDING
+========================================== */
+.dashboard-shell{
+min-height:calc(100vh - 58px);display:flex;background:#f3f7fb
+}
+.dashboard-sidebar{
+width:250px;background:#fff;border-right:1px solid #dfe7ef;padding:16px 12px;flex:0 0 250px
+}
+.dashboard-brand{display:flex;align-items:center;gap:10px;padding:4px 10px 18px;border-bottom:1px solid #edf1f5;margin-bottom:14px}
+.dashboard-brand-mark{width:38px;height:38px;border-radius:10px;background:#08233f;color:#fff;display:grid;place-items:center;font-weight:900}
+.dashboard-brand-name{font-size:23px;font-weight:900;color:#08233f;letter-spacing:-.8px}
+.dashboard-brand-name span{color:#ee5a2a}
+.dashboard-menu-title{font-size:12px;font-weight:900;color:#ee5a2a;padding:8px 10px;margin-bottom:3px}
+.dashboard-menu-item{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:10px;color:#41536b;font-size:14px;font-weight:700}
+.dashboard-menu-item.active{background:#eceaff;color:#655cf6}
+.dashboard-main{flex:1;min-width:0;padding:34px 38px}
+.dashboard-heading{display:flex;align-items:flex-start;gap:14px;margin-bottom:28px}
+.dashboard-heading-icon{width:44px;height:44px;border-radius:12px;background:#edf0ff;color:#655cf6;display:grid;place-items:center;font-size:24px}
+.dashboard-heading h1{margin:0;color:#26364d;font-size:26px;letter-spacing:-.5px}
+.dashboard-heading p{margin:5px 0 0;color:#71809a;font-size:14px}
+.dashboard-breadcrumb{display:flex;align-items:center;gap:9px;margin:0 0 24px 4px;color:#2f4260;font-size:13px;font-weight:800}
+.dashboard-breadcrumb .count{background:transparent;color:#655cf6;padding:0;float:none}
+.dashboard-cards{display:grid;grid-template-columns:repeat(2,minmax(280px,1fr));gap:12px;max-width:900px}
+.dashboard-card{background:#fff;border:1px solid #dce4ec;border-radius:12px;min-height:92px;padding:16px 14px;display:flex;align-items:center;gap:13px;box-shadow:0 2px 6px #102a620f;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease}
+.dashboard-card:hover{transform:translateY(-1px);box-shadow:0 6px 18px #102a6214;border-color:#cbd6e3}
+.dashboard-card-icon{width:34px;height:34px;border-radius:9px;background:#edf0ff;color:#655cf6;display:grid;place-items:center;font-size:18px;flex:0 0 34px}
+.dashboard-card-content{flex:1}
+.dashboard-card h3{margin:0;color:#26364d;font-size:14px}
+.dashboard-card p{margin:5px 0 0;color:#71809a;font-size:12px}
+.dashboard-card-arrow{font-size:20px;color:#a8b3c2}
+.dashboard-view{display:none}
+.dashboard-view.active{display:block}
+@media(max-width:800px){
+.dashboard-shell{display:block}.dashboard-sidebar{width:100%;border-right:0;border-bottom:1px solid #dfe7ef}.dashboard-menu-item{display:none}.dashboard-main{padding:24px 16px}.dashboard-cards{grid-template-columns:1fr}
+}
+
+
+/* ==========================================
+   LEADS HUB
+========================================== */
+.leads-shell{min-height:calc(100vh - 58px);display:flex;background:#f3f7fb}
+.leads-sidebar{width:252px;background:#fff;border-right:1px solid #dfe7ef;padding:14px 10px;flex:0 0 252px;display:flex;flex-direction:column}
+.leads-brand{display:flex;align-items:center;gap:10px;padding:3px 10px 16px;border-bottom:1px solid #edf1f5;margin-bottom:10px}
+.leads-brand-mark{width:38px;height:38px;border-radius:10px;background:#08233f;color:#fff;display:grid;place-items:center;font-weight:900}
+.leads-brand-name{font-size:23px;font-weight:900;color:#08233f;letter-spacing:-.8px}
+.leads-brand-name span{color:#ee5a2a}
+.leads-menu-title{font-size:12px;font-weight:900;color:#655cf6;padding:9px 12px 5px}
+.leads-menu-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:10px;color:#41536b;font-size:14px;font-weight:700;cursor:pointer}
+.leads-menu-item:hover{background:#f4f5ff}
+.leads-menu-item.active{background:#e8e7ff;color:#655cf6}
+.leads-main{flex:1;min-width:0;padding:34px 38px;overflow:auto}
+.leads-heading{display:flex;align-items:flex-start;gap:14px;margin-bottom:28px}
+.leads-heading-icon{width:44px;height:44px;border-radius:12px;background:#edf0ff;color:#655cf6;display:grid;place-items:center;font-size:24px}
+.leads-heading h1{margin:0;color:#26364d;font-size:27px;letter-spacing:-.5px}
+.leads-heading p{margin:5px 0 0;color:#71809a;font-size:14px}
+.leads-section{margin:0 0 30px}
+.leads-section-title{display:flex;align-items:center;gap:10px;margin:0 0 14px 6px;color:#2f4260;font-size:13px;font-weight:900}
+.leads-section-title .section-count{color:#655cf6;font-size:11px}
+.leads-section-title .collapse{margin-left:auto;color:#71809a;font-size:17px}
+.leads-grid{display:grid;grid-template-columns:repeat(3,minmax(240px,1fr));gap:12px}
+.lead-option-card{background:#fff;border:1px solid #d6dee7;border-radius:10px;min-height:60px;padding:13px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 5px #102a620d;cursor:pointer;transition:.15s}
+.lead-option-card:hover{transform:translateY(-1px);box-shadow:0 6px 16px #102a6212;border-color:#c6d0dc}
+.lead-option-icon{width:34px;height:34px;border-radius:9px;background:#edf0ff;color:#655cf6;display:grid;place-items:center;font-size:16px;flex:0 0 34px}
+.lead-option-copy{flex:1;min-width:0}
+.lead-option-copy b{display:block;color:#26364d;font-size:12px}
+.lead-option-copy span{display:block;margin-top:3px;color:#8190a5;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lead-option-arrow{color:#a7b3c1;font-size:19px}
+.lead-list-panel{display:none;background:#fff;border:1px solid #dce4ec;border-radius:12px;box-shadow:0 2px 7px #102a620d;padding:16px}
+.lead-list-panel.show{display:block}
+.lead-list-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.lead-list-head h2{margin:0;font-size:18px;color:#26364d}
+.lead-list-head p{margin:4px 0 0;color:#71809a;font-size:12px}
+.lead-list-actions{display:flex;gap:8px;flex-wrap:wrap}
+.lead-rule-box{background:#f7f9fc;border:1px solid #e0e6ee;border-radius:10px;padding:12px;margin-top:10px}
+.lead-rule-box b{font-size:12px;color:#26364d}
+.lead-rule-box p{font-size:11px;color:#71809a;line-height:1.5;margin:5px 0 0}
+.lead-config-grid{display:grid;grid-template-columns:repeat(2,minmax(260px,1fr));gap:12px}
+.lead-config-card{background:#fff;border:1px solid #d6dee7;border-radius:10px;padding:14px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 5px #102a620d;cursor:pointer}
+.lead-config-card:hover{border-color:#c6d0dc;box-shadow:0 6px 16px #102a6212}
+.lead-config-card .lead-option-icon{background:#edf0ff}
+.leads-back{display:inline-flex;align-items:center;gap:6px;border:0;background:#f0f3f7;color:#42546c;padding:8px 11px;border-radius:8px;font-weight:800;font-size:12px}
+@media(max-width:1050px){.leads-grid{grid-template-columns:repeat(2,minmax(220px,1fr))}}
+@media(max-width:800px){.leads-shell{display:block}.leads-sidebar{width:100%;border-right:0;border-bottom:1px solid #dfe7ef}.leads-main{padding:24px 16px}.leads-grid,.lead-config-grid{grid-template-columns:1fr}}
 
 .modal{
 position:fixed;inset:0;background:#0008;display:none;
@@ -186,7 +272,110 @@ placeholder="Password" autocomplete="current-password">
 <!-- CRM APP -->
 <div id="app">
 
-<header class="top">
+<!-- DASHBOARD LANDING -->
+<section class="dashboard-shell" id="dashboardLanding">
+<aside class="dashboard-sidebar">
+<div class="dashboard-brand">
+<div class="dashboard-brand-mark">O</div>
+<div class="dashboard-brand-name">on a <span>trip</span></div>
+</div>
+<div class="dashboard-menu-title">▣ &nbsp; CRM</div>
+<div class="dashboard-menu-item active">▥ <span>Dashboard</span></div>
+<div class="dashboard-menu-item" onclick="openLeadsHub()">⌁ <span>Leads</span></div>
+</aside>
+
+<div class="dashboard-main">
+<div class="dashboard-heading">
+<div class="dashboard-heading-icon">▥</div>
+<div><h1>Dashboards</h1><p>Overview of your metrics and analytics</p></div>
+</div>
+
+<div class="dashboard-breadcrumb">▥ &nbsp; Dashboard <span class="count">2</span></div>
+
+<div class="dashboard-cards">
+<div class="dashboard-card" onclick="openDashboard('admin')">
+<div class="dashboard-card-icon">▥</div>
+<div class="dashboard-card-content"><h3>Admin Dashboard</h3><p>Company-wide CRM overview and management</p></div>
+<div class="dashboard-card-arrow">›</div>
+</div>
+
+<div class="dashboard-card" onclick="openDashboard('mine')">
+<div class="dashboard-card-icon">⌂</div>
+<div class="dashboard-card-content"><h3>My Dashboard</h3><p>Your personal sales, leads and follow-ups</p></div>
+<div class="dashboard-card-arrow">›</div>
+</div>
+</div>
+</div>
+</section>
+
+
+<!-- LEADS HUB -->
+<section class="leads-shell" id="leadsHub" style="display:none">
+<aside class="leads-sidebar">
+  <div class="leads-brand">
+    <div class="leads-brand-mark">O</div>
+    <div class="leads-brand-name">on a <span>trip</span></div>
+  </div>
+  <div class="leads-menu-title">▣ &nbsp; CRM</div>
+  <div class="leads-menu-item" onclick="returnToDashboards()">▥ <span>Dashboard</span></div>
+  <div class="leads-menu-item active">⌁ <span>Leads</span></div>
+</aside>
+
+<div class="leads-main">
+  <div class="leads-heading">
+    <div class="leads-heading-icon">⌁</div>
+    <div><h1>Leads</h1><p>Lead management, assignment, and visibility rules</p></div>
+  </div>
+
+  <div id="leadHubContent">
+    <section class="leads-section">
+      <div class="leads-section-title">⌁ <span>Leads</span> <span class="section-count">6</span><span class="collapse">⌃</span></div>
+      <div class="leads-grid">
+        <div class="lead-option-card" onclick="openLeadOption('mine')">
+          <div class="lead-option-icon">♙</div><div class="lead-option-copy"><b>My Leads</b><span>Leads assigned to the logged-in salesperson</span></div><div class="lead-option-arrow">›</div>
+        </div>
+        <div class="lead-option-card" onclick="openLeadOption('all')">
+          <div class="lead-option-icon">♧</div><div class="lead-option-copy"><b>All Leads</b><span>View every lead allowed by CRM access rules</span></div><div class="lead-option-arrow">›</div>
+        </div>
+        <div class="lead-option-card" onclick="openLeadOption('unassigned')">
+          <div class="lead-option-icon">♙</div><div class="lead-option-copy"><b>Unassigned Leads</b><span>Leads waiting for an owner</span></div><div class="lead-option-arrow">›</div>
+        </div>
+        <div class="lead-option-card" onclick="openLeadOption('metaFailed')">
+          <div class="lead-option-icon">△</div><div class="lead-option-copy"><b>Meta Ads Failed Leads</b><span>Meta Ads leads marked failed or invalid</span></div><div class="lead-option-arrow">›</div>
+        </div>
+        <div class="lead-option-card" onclick="openLeadOption('customFields')">
+          <div class="lead-option-icon">☷</div><div class="lead-option-copy"><b>Lead Custom Fields</b><span>Create fields used on lead records and imports</span></div><div class="lead-option-arrow">›</div>
+        </div>
+        <div class="lead-option-card" onclick="openLeadOption('tags')">
+          <div class="lead-option-icon">◇</div><div class="lead-option-copy"><b>Lead Tag</b><span>Create and apply tags for segmentation</span></div><div class="lead-option-arrow">›</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="leads-section">
+      <div class="leads-section-title">☷ <span>Configuration</span> <span class="section-count">2</span><span class="collapse">⌃</span></div>
+      <div class="lead-config-grid">
+        <div class="lead-config-card" onclick="openLeadOption('assignmentRules')">
+          <div class="lead-option-icon">♧</div><div class="lead-option-copy"><b>Lead Assignment Rules</b><span>Automatically decide who receives new leads</span></div><div class="lead-option-arrow">›</div>
+        </div>
+        <div class="lead-config-card" onclick="openLeadOption('visibilityRules')">
+          <div class="lead-option-icon">◉</div><div class="lead-option-copy"><b>Lead Visibility Rules</b><span>Control which users can see and edit leads</span></div><div class="lead-option-arrow">›</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="leadOptionView" class="lead-list-panel">
+    <div class="lead-list-head">
+      <div><h2 id="leadOptionTitle">Leads</h2><p id="leadOptionSubtitle"></p></div>
+      <div class="lead-list-actions"><button class="leads-back" onclick="closeLeadOption()">← Back to Leads</button></div>
+    </div>
+    <div id="leadOptionBody"></div>
+  </div>
+</div>
+</section>
+
+<header class="top" id="crmTopbar">
 <div>
 <b>ON A TRIP HOLIDAYS — CRM</b>
 <small> • Sales & Lead Management</small>
@@ -199,7 +388,7 @@ placeholder="Password" autocomplete="current-password">
 </header>
 
 
-<main class="shell">
+<main class="shell" id="crmWorkspace">
 
 <section class="stats">
 
@@ -530,6 +719,18 @@ const stages=[
 
 let leads=[];
 
+let crmProfile={role:"salesperson",salesperson:""};
+
+async function loadCRMProfile(){
+  try{
+    const {data:{user}}=await db.auth.getUser();
+    if(!user){crmProfile={role:"salesperson",salesperson:""};return;}
+    const {data,error}=await db.from("crm_users").select("role,salesperson,email").eq("user_id",user.id).maybeSingle();
+    if(error){console.warn("CRM profile lookup failed:",error.message);crmProfile={role:"salesperson",salesperson:""};return;}
+    crmProfile=data||{role:"salesperson",salesperson:""};
+  }catch(e){console.warn(e);}
+}
+
 
 /* ==========================================
    LOGIN
@@ -563,10 +764,183 @@ function showApp(){
 document.getElementById("loginScreen").style.display="none";
 document.getElementById("app").style.display="block";
 
-loadLeads();
+// Always open CRM on the dashboard landing page after login.
+document.getElementById("dashboardLanding").style.display="flex";
+document.getElementById("leadsHub").style.display="none";
+document.getElementById("crmTopbar").style.display="none";
+document.getElementById("crmWorkspace").style.display="none";
+
+loadCRMProfile().then(loadLeads);
 
 }
 
+
+
+function openDashboard(type){
+ const landing=document.getElementById("dashboardLanding");
+ const workspace=document.getElementById("crmWorkspace");
+ const top=document.getElementById("crmTopbar");
+ if(type==="admin"){
+   landing.style.display="none"; workspace.style.display="block"; top.style.display="flex";
+ }else{
+   landing.style.display="none"; workspace.style.display="block"; top.style.display="flex";
+   const shell=workspace.querySelector(".shell") || workspace;
+   shell.scrollIntoView({behavior:"smooth",block:"start"});
+   alert("My Dashboard will be built in the next step.");
+ }
+}
+
+function openDashboard(type){
+ const landing=document.getElementById("dashboardLanding");
+ const leadsHub=document.getElementById("leadsHub");
+ const workspace=document.getElementById("crmWorkspace");
+ const top=document.getElementById("crmTopbar");
+ landing.style.display="none";
+ leadsHub.style.display="none";
+ if(type==="admin"){
+   workspace.style.display="block"; top.style.display="flex";
+ }else{
+   workspace.style.display="block"; top.style.display="flex";
+   const shell=workspace.querySelector(".shell") || workspace;
+   shell.scrollIntoView({behavior:"smooth",block:"start"});
+   alert("My Dashboard will be built in the next step.");
+ }
+}
+
+function openLeadsHub(){
+ document.getElementById("dashboardLanding").style.display="none";
+ document.getElementById("crmWorkspace").style.display="none";
+ document.getElementById("crmTopbar").style.display="none";
+ document.getElementById("leadsHub").style.display="flex";
+ closeLeadOption();
+}
+
+function returnToDashboards(){
+ document.getElementById("leadsHub").style.display="none";
+ document.getElementById("crmWorkspace").style.display="none";
+ document.getElementById("crmTopbar").style.display="none";
+ document.getElementById("dashboardLanding").style.display="flex";
+}
+
+function closeLeadOption(){
+ const view=document.getElementById("leadOptionView");
+ const content=document.getElementById("leadHubContent");
+ if(view){view.classList.remove("show");}
+ if(content){content.style.display="block";}
+}
+
+function leadCount(rows){return (rows||[]).length}
+
+function openLeadOption(type){
+ const content=document.getElementById("leadHubContent");
+ const view=document.getElementById("leadOptionView");
+ const title=document.getElementById("leadOptionTitle");
+ const subtitle=document.getElementById("leadOptionSubtitle");
+ const body=document.getElementById("leadOptionBody");
+ if(!content||!view||!title||!subtitle||!body)return;
+ content.style.display="none"; view.classList.add("show");
+
+ if(type==="mine"||type==="all"||type==="unassigned"||type==="metaFailed"){
+   let rows=[...leads], label="", rule="";
+   if(type==="mine"){
+     const me=(window.crmProfile?.salesperson||"").toLowerCase();
+     rows=me?rows.filter(l=>String(l.salesperson||"").toLowerCase()===me):[];
+     label="My Leads"; rule=me?`Only leads assigned to ${window.crmProfile.salesperson} are shown.`:"Your CRM user profile is not mapped to a salesperson yet.";
+   }else if(type==="unassigned"){
+     rows=rows.filter(l=>!String(l.salesperson||"").trim());
+     label="Unassigned Leads"; rule="Only leads without a salesperson owner are shown.";
+   }else if(type==="metaFailed"){
+     rows=rows.filter(l=>/meta\s*ads/i.test(String(l.source||"")) && /fail|invalid|error/i.test(String(l.status||"")));
+     label="Meta Ads Failed Leads"; rule="Shows Meta Ads leads whose stage/status contains Failed, Invalid, or Error.";
+   }else{
+     label="All Leads"; rule="Admins can see all CRM leads. Salesperson access is restricted by Supabase row-level security.";
+   }
+   title.textContent=label+" ("+leadCount(rows)+")";
+   subtitle.textContent=rule;
+   body.innerHTML=renderLeadOptionTable(rows);
+   return;
+ }
+
+ title.textContent=type==="customFields"?"Lead Custom Fields":
+                  type==="tags"?"Lead Tag":
+                  type==="assignmentRules"?"Lead Assignment Rules":"Lead Visibility Rules";
+ subtitle.textContent=type==="customFields"?"Manage fields used in lead records and sheet imports.":
+                      type==="tags"?"Manage reusable tags for lead segmentation.":
+                      type==="assignmentRules"?"Define how new leads are assigned to salespeople.":
+                      "Define which CRM users can view and edit lead records.";
+
+ if(type==="customFields") body.innerHTML=customFieldsConfig();
+ if(type==="tags") body.innerHTML=tagsConfig();
+ if(type==="assignmentRules") body.innerHTML=assignmentRulesConfig();
+ if(type==="visibilityRules") body.innerHTML=visibilityRulesConfig();
+}
+
+function renderLeadOptionTable(rows){
+ if(!rows.length)return '<div class="loading" style="padding:30px">No leads match this rule.</div>';
+ return `<div style="overflow:auto"><table class="table" style="min-width:900px"><thead><tr><th>Customer</th><th>Phone</th><th>Trip</th><th>Owner</th><th>Stage</th><th>Source</th><th>Travel Date</th><th>Actions</th></tr></thead><tbody>${rows.map(l=>`<tr><td><b>${esc(l.name||"—")}</b></td><td>${esc(l.phone||"—")}</td><td>${esc(l.destination||"—")}</td><td>${esc(l.salesperson||"Unassigned")}</td><td>${esc(l.status||"New")}</td><td>${esc(l.source||"—")}</td><td>${esc(l.travel_date||"—")}</td><td><button class="btn secondary" onclick="wa('${l.id}')">WhatsApp</button> <button class="btn secondary" onclick="callCustomer('${esc(l.phone||"")}')">Call</button> <button class="btn secondary" onclick="details('${l.id}')">Details</button></td></tr>`).join("")}</tbody></table></div>`;
+}
+
+function customFieldsConfig(){
+ const fields=JSON.parse(localStorage.getItem("oat_lead_custom_fields")||"[]");
+ return `<div class="lead-rule-box"><b>Rules</b><p>Custom fields are optional. Field names must be unique. They appear on future lead forms/import mappings; deleting a field does not delete existing lead data automatically.</p></div>
+ <div style="margin-top:12px"><button class="btn primary" onclick="addCustomField()">＋ Add Custom Field</button></div>
+ <div style="margin-top:12px">${fields.length?fields.map((f,i)=>`<div class="lead-rule-box" style="display:flex;align-items:center;justify-content:space-between"><div><b>${esc(f.name)}</b><p>Type: ${esc(f.type)} ${f.required?" • Required":""}</p></div><button class="btn secondary" onclick="deleteCustomField(${i})">Delete</button></div>`).join(""):'<div class="loading" style="padding:24px">No custom fields created yet.</div>'}</div>`;
+}
+
+function addCustomField(){
+ const name=prompt("Custom field name:");
+ if(!name||!name.trim())return;
+ const type=prompt("Field type: Text, Number, Date, Dropdown","Text")||"Text";
+ const fields=JSON.parse(localStorage.getItem("oat_lead_custom_fields")||"[]");
+ if(fields.some(f=>f.name.toLowerCase()===name.trim().toLowerCase())){alert("That field already exists.");return;}
+ fields.push({name:name.trim(),type:type.trim()||"Text",required:false});
+ localStorage.setItem("oat_lead_custom_fields",JSON.stringify(fields));
+ openLeadOption("customFields");
+}
+function deleteCustomField(i){
+ const fields=JSON.parse(localStorage.getItem("oat_lead_custom_fields")||"[]");
+ fields.splice(i,1); localStorage.setItem("oat_lead_custom_fields",JSON.stringify(fields)); openLeadOption("customFields");
+}
+
+function tagsConfig(){
+ const tags=JSON.parse(localStorage.getItem("oat_lead_tags")||'["VIP","Hot","Family","Pilgrimage","International"]');
+ return `<div class="lead-rule-box"><b>Rules</b><p>Tags are reusable labels. A tag name must be unique. Tags are intended for filtering, reporting and segmentation.</p></div>
+ <div style="margin-top:12px"><button class="btn primary" onclick="addLeadTag()">＋ Add Tag</button></div>
+ <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">${tags.map((t,i)=>`<span style="display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #dce4ec;border-radius:999px;background:#f7f9fc;font-size:12px;font-weight:800">${esc(t)} <button onclick="deleteLeadTag(${i})" style="border:0;background:transparent;color:#8795a7;cursor:pointer">×</button></span>`).join("")}</div>`;
+}
+function addLeadTag(){
+ const name=prompt("Tag name:");
+ if(!name||!name.trim())return;
+ const tags=JSON.parse(localStorage.getItem("oat_lead_tags")||'["VIP","Hot","Family","Pilgrimage","International"]');
+ if(tags.some(t=>t.toLowerCase()===name.trim().toLowerCase())){alert("That tag already exists.");return;}
+ tags.push(name.trim()); localStorage.setItem("oat_lead_tags",JSON.stringify(tags)); openLeadOption("tags");
+}
+function deleteLeadTag(i){
+ const tags=JSON.parse(localStorage.getItem("oat_lead_tags")||'["VIP","Hot","Family","Pilgrimage","International"]');
+ tags.splice(i,1); localStorage.setItem("oat_lead_tags",JSON.stringify(tags)); openLeadOption("tags");
+}
+
+function assignmentRulesConfig(){
+ const rule=JSON.parse(localStorage.getItem("oat_assignment_rule")||'{"mode":"manual","value":""}');
+ return `<div class="lead-rule-box"><b>Rule 1 — Admin control</b><p>Only Admin can reassign a lead owner. Salespersons cannot move a lead to another salesperson.</p></div>
+ <div class="lead-rule-box"><b>Rule 2 — New lead assignment</b><p>Choose Manual, Round Robin, or Destination/Branch based routing for future automation.</p></div>
+ <div class="form" style="margin-top:14px"><label>Assignment mode</label><select id="assignmentMode"><option value="manual">Manual — Admin chooses owner</option><option value="roundrobin">Round Robin — rotate across sales team</option><option value="branch">Branch — assign by branch</option><option value="destination">Destination — assign by destination</option></select>
+ <button class="btn primary" onclick="saveAssignmentRule()">Save Assignment Rule</button></div>
+ <div class="lead-rule-box"><b>Current setting</b><p>${esc(rule.mode||"manual")}</p></div>`;
+}
+function saveAssignmentRule(){
+ const mode=document.getElementById("assignmentMode")?.value||"manual";
+ localStorage.setItem("oat_assignment_rule",JSON.stringify({mode}));
+ alert("Assignment rule saved for this CRM browser.");
+ openLeadOption("assignmentRules");
+}
+
+function visibilityRulesConfig(){
+ return `<div class="lead-rule-box"><b>Admin</b><p>Can view, create, update, assign and manage all CRM leads and configuration.</p></div>
+ <div class="lead-rule-box"><b>Salesperson</b><p>Can view and update only leads assigned to their salesperson name. They cannot reassign ownership.</p></div>
+ <div class="lead-rule-box"><b>Unassigned leads</b><p>Visible to Admin. A salesperson does not gain access until the lead is assigned to that salesperson.</p></div>
+ <div class="lead-rule-box"><b>Security enforcement</b><p>These rules are enforced server-side by Supabase RLS policies in the CRM access-control SQL, not only by hiding buttons in the interface.</p></div>`;
+}
 
 async function login(){
 
