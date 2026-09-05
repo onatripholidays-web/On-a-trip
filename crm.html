@@ -811,8 +811,7 @@ async function showApp(){
   document.getElementById("loginScreen").style.display="none";
   document.getElementById("app").style.display="block";
 
-  // Load the authenticated CRM role before rendering the dashboard.
-  // This prevents an admin from briefly seeing the user's dashboard.
+  // Load role first, then load leads before the user can open a lead list.
   await loadCRMProfile();
   renderDashboardLanding();
 
@@ -820,7 +819,7 @@ async function showApp(){
   document.getElementById("crmTopbar").style.display="none";
   document.getElementById("crmWorkspace").style.display="none";
 
-  loadLeads();
+  await loadLeads();
 }
 
 function renderDashboardLanding(){
@@ -884,6 +883,8 @@ function openDashboard(type){
 }
 
 function openLeadsHub(){
+ // Always refresh from Supabase when entering Leads so Admin sees the current master lead set.
+ loadLeads();
  document.getElementById("dashboardLanding").style.display="none";
  document.getElementById("crmWorkspace").style.display="none";
  document.getElementById("crmTopbar").style.display="none";
@@ -930,7 +931,7 @@ function openLeadOption(type){
      label="Meta Ads Failed Leads"; rule="Shows Meta Ads leads whose stage/status contains Failed, Invalid, or Error.";
    }else if(type==="bin"){
      if(!isAdminUser()){ alert("Leads Bin is available to Admin only."); closeLeadOption(); return; }
-     rows=rows.filter(l=>l.deleted);
+     rows=rows.filter(l=>l.deleted || String(l.status||"").toLowerCase()==="deleted");
      label="Leads Bin"; rule="Deleted leads are retained for Admin review. Users have no restore/revoke action.";
    }else{
      label="All Leads"; rule="Admins can see all CRM leads. Salesperson access is restricted by Supabase row-level security.";
@@ -957,7 +958,7 @@ function openLeadOption(type){
 
 function renderLeadOptionTable(rows){
  if(!rows.length)return '<div class="loading" style="padding:30px">No leads match this rule.</div>';
- return `<div style="overflow:auto"><table class="table" style="min-width:1100px"><thead><tr><th>Customer</th><th>Phone</th><th>Trip</th><th>Owner</th><th>Stage</th><th>Source</th><th>Travel Date</th><th>Actions</th></tr></thead><tbody>${rows.map(l=>`<tr><td><b>${esc(l.name||"—")}</b></td><td>${esc(l.phone||"—")}</td><td>${esc(l.dest||"—")}</td><td>${esc(l.salesperson||"Unassigned")}</td><td>${esc(l.status||"New")}</td><td>${esc(l.source||"—")}</td><td>${esc(l.date||"—")}</td><td><div class="lead-actions"><button class="lead-action green" data-tip="WhatsApp" onclick="wa(${l.id})" aria-label="WhatsApp">${leadIcon("whatsapp")}</button><button class="lead-action blue" data-tip="Call" onclick="callCustomer('${esc(l.phone||"")}')" aria-label="Call">${leadIcon("call")}</button><button class="lead-action slate" data-tip="View Details" onclick="details(${l.id})" aria-label="View Details">${leadIcon("details")}</button>${!l.deleted?`<button class="lead-action green" data-tip="Generate Quotation" onclick="openQuotation(${l.id})" aria-label="Generate Quotation">${leadIcon("quote")}</button><button class="lead-action purple" data-tip="Transfer" onclick="openTransfer(${l.id})" aria-label="Transfer">${leadIcon("transfer")}</button>${isAdminUser()?`<button class="lead-action red" data-tip="Unassign" onclick="unassignLead(${l.id})" aria-label="Unassign">${leadIcon("unassign")}</button>`:''}<button class="lead-action red" data-tip="Delete" onclick="deleteLead(${l.id})" aria-label="Delete">${leadIcon("delete")}</button>`:''}</div></td></tr>`).join("")}</tbody></table></div>`;
+ return `<div style="overflow:auto"><table class="table" style="min-width:1100px"><thead><tr><th>Customer</th><th>Phone</th><th>Trip</th><th>Owner</th><th>Stage</th><th>Source</th><th>Travel Date</th><th>Actions</th></tr></thead><tbody>${rows.map(l=>`<tr><td><b>${esc(l.name||"—")}</b></td><td>${esc(l.phone||"—")}</td><td>${esc(l.dest||"—")}</td><td>${esc(l.salesperson||"Unassigned")}</td><td>${esc(l.status||"New")}</td><td>${esc(l.source||"—")}</td><td>${esc(l.date||"—")}</td><td><div class="lead-actions"><button class="lead-action green" data-tip="WhatsApp" onclick="wa(${l.id})" aria-label="WhatsApp">${leadIcon("whatsapp")}</button><button class="lead-action blue" data-tip="Call" onclick="callCustomer('${esc(l.phone||"")}')" aria-label="Call">${leadIcon("call")}</button><button class="lead-action slate" data-tip="View Details" onclick="details(${l.id})" aria-label="View Details">${leadIcon("details")}</button>${!(l.deleted || String(l.status||"").toLowerCase()==="deleted")?`<button class="lead-action green" data-tip="Generate Quotation" onclick="openQuotation(${l.id})" aria-label="Generate Quotation">${leadIcon("quote")}</button><button class="lead-action purple" data-tip="Transfer" onclick="openTransfer(${l.id})" aria-label="Transfer">${leadIcon("transfer")}</button>${isAdminUser()?`<button class="lead-action red" data-tip="Unassign" onclick="unassignLead(${l.id})" aria-label="Unassign">${leadIcon("unassign")}</button>`:''}<button class="lead-action red" data-tip="Delete" onclick="deleteLead(${l.id})" aria-label="Delete">${leadIcon("delete")}</button>`:''}</div></td></tr>`).join("")}</tbody></table></div>`;
 }
 
 function customFieldsConfig(){
@@ -1076,7 +1077,6 @@ showLogin();
 
 async function loadLeads(){
 
-
 const {
 data,
 error
@@ -1098,7 +1098,17 @@ return;
 
 leads=(data||[]).map(normalizeLead);
 
+// Keep an already-open Leads view in sync after loading.
 render();
+const openView=document.getElementById("leadOptionView");
+if(openView && openView.classList.contains("show")){
+  const title=document.getElementById("leadOptionTitle")?.textContent||"";
+  if(title.startsWith("All Leads")) openLeadOption("all");
+  else if(title.startsWith("My Leads")) openLeadOption("mine");
+  else if(title.startsWith("Unassigned Leads")) openLeadOption("unassigned");
+  else if(title.startsWith("Meta Ads Failed Leads")) openLeadOption("metaFailed");
+  else if(title.startsWith("Leads Bin")) openLeadOption("bin");
+}
 
 }
 
@@ -1124,7 +1134,8 @@ source:x.source||"Website",
 priority:x.priority||"Normal",
 
 status:x.status||"New",
-
+salesperson:x.salesperson||x.assigned_to||x.owner||"",
+deleted:(x.deleted===true || String(x.status||"").toLowerCase()==="deleted"),
 date:x.travel_date||"",
 
 value:x.value||"",
@@ -1170,7 +1181,7 @@ const so=document
 
 const list=leads.filter(l=>
 
-!l.deleted &&
+!l.deleted && String(l.status||"").toLowerCase()!=="deleted" &&
 (l.name+" "+l.phone+" "+l.dest)
 .toLowerCase()
 .includes(q)
@@ -1188,14 +1199,14 @@ const counts={};
 
 stages.forEach(s=>counts[s]=0);
 
-leads.filter(l=>!l.deleted).forEach(l=>{
+leads.filter(l=>!l.deleted && String(l.status||"").toLowerCase()!=="deleted").forEach(l=>{
 
 counts[l.status]=(counts[l.status]||0)+1;
 
 });
 
 
-document.getElementById("sTotal").textContent=leads.filter(l=>!l.deleted).length;
+document.getElementById("sTotal").textContent=leads.filter(l=>!l.deleted && String(l.status||"").toLowerCase()!=="deleted").length;
 document.getElementById("sNew").textContent=counts.New||0;
 document.getElementById("sHot").textContent=counts.Hot||0;
 document.getElementById("sQuote").textContent=counts["Quote Sent"]||0;
@@ -1320,6 +1331,8 @@ async function deleteLead(id){
   const {error}=await db.from("enquiries").update({status:"Deleted"}).eq("id",id);
   if(error){alert("Could not delete lead: "+error.message);return;}
   lead.status="Deleted"; lead.deleted=true; render();
+  const openView=document.getElementById("leadOptionView");
+  if(openView && openView.classList.contains("show")) openLeadOption("all");
 }
 
 async function openTransfer(id){
