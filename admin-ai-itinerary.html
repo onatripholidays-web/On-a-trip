@@ -8,6 +8,33 @@
 <section class="card"><div class="screen"><div id="out"><div class="empty">Enter trip details and generate the AI itinerary.</div></div></div><div class="print-only" id="printSheet"></div></section></div></div>
 <script>
 const $=id=>document.getElementById(id),v=id=>(($(id)?.value)||'').trim(),esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));let itinerary=null,quote=null,edit=false;
+function fillFromCRMLead(){
+  const p=new URLSearchParams(window.location.search);
+  let lead={};
+  try{lead=JSON.parse(localStorage.getItem('onatrip_selected_lead')||'{}')||{};}catch(e){}
+  const data={
+    name:p.get('name')||lead.name||'',
+    phone:p.get('phone')||lead.phone||'',
+    destination:p.get('destination')||lead.dest||'',
+    travelDate:p.get('travelDate')||lead.date||'',
+    travellers:p.get('travellers')||lead.trav||''
+  };
+  if(data.name) $('guest').value=data.name;
+  if(data.phone) $('contact').value=data.phone;
+  if(data.destination) $('dest').value=data.destination;
+  if(data.travellers && Number(data.travellers)>0) $('pax').value=Number(data.travellers);
+  if(data.travelDate){
+    const raw=String(data.travelDate).trim();
+    const dates=raw.match(/\d{4}-\d{2}-\d{2}/g)||[];
+    if(dates[0]) $('startDate').value=dates[0];
+    if(dates[1]) $('endDate').value=dates[1];
+    else if(dates[0]) $('endDate').value=dates[0];
+  }
+  if(data.name||data.phone||data.destination||data.travelDate||data.travellers){
+    $('msg').textContent='✅ Customer details loaded from the selected CRM lead. Review the details and generate the itinerary.';
+  }
+}
+
 function setStep(n){[1,2,3].forEach(i=>$('s'+i).classList.toggle('active',i===n))}
 function dayCount(){let a=v('startDate'),b=v('endDate');return a&&b?Math.max(1,Math.min(30,Math.ceil((new Date(b)-new Date(a))/86400000)+1)):1}
 function payload(){return{guest:v('guest')||'Guest',contact:v('contact')||'',dest:v('dest'),days:dayCount(),pax:+v('pax')||1,start:v('start')||'TBC',dates:v('startDate')+' to '+v('endDate'),language:v('language'),type:v('type'),hotel:v('hotel'),vehicle:v('vehicle'),meals:v('meals'),budget:'Price to be quoted',special:v('special')||'None',instruction:v('instruction')||'None'}}
@@ -18,5 +45,6 @@ function createQuoteForm(){if(edit){edit=false;document.querySelectorAll('.ed').
 function createQuote(){let price=v('qPrice');if(!price)return $('msg').textContent='Please enter price per person.';let n=+(price.replace(/[^\d.]/g,''))||0;quote={...payload(),...itinerary,price,total:n*(+v('pax')||1),validity:v('qValid')||'7 days',inclusions:v('qInc').split('\n').map(x=>x.trim()).filter(Boolean),exclusions:v('qExc').split('\n').map(x=>x.trim()).filter(Boolean),terms:v('qTerms')};setStep(3);renderQuote()}
 function renderQuote(){$('out').innerHTML='<span class="status">STEP 3 — QUOTATION READY</span><div class="quote-title">'+esc(quote.title)+'</div><p>'+esc(quote.summary)+'</p><div class="two"><div class="box"><b>Guest</b><p>'+esc(quote.guest)+'</p></div><div class="box"><b>Destination</b><p>'+esc(quote.dest)+' · '+quote.days.length+' Days</p></div></div>'+quote.days.map(d=>'<div class="day"><h3>Day '+esc(d.day)+' — '+esc(d.title)+'</h3><p>'+esc(d.summary)+'</p><p><b>Hotel:</b> '+esc(d.hotel)+' · <b>Meals:</b> '+esc(d.meals)+'</p></div>').join('')+'<div class="two"><div class="box"><b>Price / Person</b><div class="price">'+esc(quote.price)+'</div></div><div class="box"><b>Total Package</b><div class="price">₹ '+quote.total.toLocaleString('en-IN')+'</div></div></div><div class="two"><div class="box"><b>Inclusions</b><ul>'+quote.inclusions.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div><div class="box"><b>Exclusions</b><ul>'+quote.exclusions.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div></div><div class="box"><b>Validity & Terms</b><p>'+esc(quote.validity)+' — '+esc(quote.terms)+'</p></div><div class="actions"><button class="btn secondary" onclick="createQuoteForm()">✏️ Edit Quotation</button><button class="btn primary" onclick="finalPDF()">📄 Generate Final PDF</button></div>'}
 function finalPDF(){let inc=quote.inclusions.map(x=>'<li>'+esc(x)+'</li>').join(''),exc=quote.exclusions.map(x=>'<li>'+esc(x)+'</li>').join('');$('printSheet').innerHTML='<div class="print-header"><img src="assets/on-a-trip-logo.png"><div><b>ON A TRIP HOLIDAYS</b><br>Let\'s explore the magical places<br>+91-8125248909<br>www.onatripholidays.com</div></div><div class="print-title">'+esc(quote.title)+'</div><div class="meta"><div><b>Guest</b>'+esc(quote.guest)+'</div><div><b>Contact</b>'+esc(v('contact'))+'</div><div><b>Destination</b>'+esc(quote.dest)+'</div><div><b>Travellers</b>'+quote.pax+'</div><div><b>Dates</b>'+esc(quote.dates)+'</div><div><b>Start City</b>'+esc(quote.start)+'</div></div>'+quote.days.map(d=>'<div class="print-day"><h3>DAY '+esc(d.day)+' — '+esc(d.title)+'</h3><p>'+esc(d.summary)+'</p><p><b>Hotel:</b> '+esc(d.hotel)+' &nbsp; <b>Meals:</b> '+esc(d.meals)+'</p></div>').join('')+'<div class="print-two"><div class="print-box"><h4>Accommodation</h4><p>'+esc(quote.hotels)+'</p></div><div class="print-box"><h4>Transport</h4><p>'+esc(quote.vehicle)+'</p></div></div><div class="print-box"><h4>Meals</h4><p>'+esc(quote.meals)+'</p></div><div class="print-box"><h4>Package Quote</h4><div class="print-price">'+esc(quote.price)+' per person · Total ₹ '+quote.total.toLocaleString('en-IN')+'</div></div><div class="print-two"><div class="print-box"><h4>Inclusions</h4><ul>'+inc+'</ul></div><div class="print-box"><h4>Exclusions</h4><ul>'+exc+'</ul></div></div><div class="print-box"><h4>Terms & Conditions</h4><p>'+esc(quote.terms)+'</p></div><div class="print-footer">On A Trip Holidays · Hyderabad · +91-8125248909 · www.onatripholidays.com</div>';window.print()}
+fillFromCRMLead();
 $('form').addEventListener('submit',e=>{e.preventDefault();generate()});
 </script></body></html>
