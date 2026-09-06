@@ -1,0 +1,9 @@
+{
+  "name": "On A Trip Invoice Maker",
+  "short_name": "Invoices",
+  "start_url": "./",
+  "display": "standalone",
+  "theme_color": "#0f172a",
+  "background_color": "#ffffff",
+  "description": "On A Trip Invoice Maker"
+}
