@@ -30,3 +30,8 @@ Never expose the secret with a `NEXT_PUBLIC_` prefix.
 ## Production
 `npm run build`
 `npm start`
+
+
+## Build Fix
+This build-ready version normalizes SVG attribute names for React/TypeScript (for example `viewbox` to `viewBox`) across the TS/TSX source files.
+No CRM, AI itinerary maker, invoice maker, or admin panel is included.
