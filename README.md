@@ -1,17 +1,26 @@
-# Team OAT — On A Trip Business App
+# On A Trip Holidays — Team OAT
 
-Single app shell combining the original CRM, AI Itinerary & Quotation Maker, Invoice Maker and Admin Panel.
+Clean Next.js + TypeScript baseline for the On A Trip Holidays business application.
+
+## Start
+
+```bash
+npm install
+npm run typecheck
+npm run verify
+npm run build
+npm run dev
+```
+
+Open `http://localhost:3000`.
 
 ## Modules
-- CRM — original `crm/index.html`, including its existing Supabase integration
-- AI Itinerary — `ai-itinerary/index.html`
-- Invoice Maker — `invoice-maker/index.html`
-- Admin — `admin-panel/index.html`
 
-## Shared backend
-Keep the existing Supabase project/configuration. Do not create a second Supabase project unless intentionally migrating.
+- CRM: `/crm`
+- AI Itinerary: `/ai-itinerary`
+- Invoice Maker: `/invoice-maker`
+- Admin Panel: `/admin-panel`
 
-## Deployment
-Deploy this whole `Team-OAT` folder as one static web app. The root `index.html` is the app entry point. Preserve the `api/` directory under `ai-itinerary` when deploying to a platform that supports the existing AI API routes.
+## Development rule
 
-Recommended domain: `team.onatripholidays.com` (or another domain you choose).
+Build new Team OAT/CRM functionality in `.tsx`/`.ts` modules. Keep secrets in environment variables only.
