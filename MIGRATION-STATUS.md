@@ -34,13 +34,3 @@ A successful `typecheck`, `verify`, and `build` is the release gate before CRM f
 
 ## Architecture note
 The legacy business modules are retained behind a compatibility layer where necessary so functionality can be preserved while the CRM is progressively converted into native typed React components. The compatibility layer is not a substitute for the eventual full component rewrite.
-
-## Final baseline correction
-- CRM route is explicitly client-side because the legacy CRM payload initializes browser-only Supabase/XLSX/UI globals.
-- This avoids server-side export/render attempts against the legacy browser runtime.
-
-
-## FINAL READY build correction
-- Browser-only Team OAT modules (CRM, AI Itinerary, Invoice Maker, Admin Panel) are marked as client pages.
-- This keeps their legacy browser initialization out of the server export path.
-- Run `npm run typecheck`, `npm run verify`, and `npm run build` from this project root after installation.
