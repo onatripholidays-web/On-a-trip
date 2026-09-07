@@ -1,9 +1,0 @@
-{
-  "name": "On A Trip CRM",
-  "short_name": "CRM",
-  "start_url": "./",
-  "display": "standalone",
-  "theme_color": "#0f172a",
-  "background_color": "#ffffff",
-  "description": "On A Trip CRM"
-}

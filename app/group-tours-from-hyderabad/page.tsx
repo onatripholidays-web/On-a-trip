@@ -1,0 +1,24 @@
+import type { Metadata } from "next";
+import SitePage from "@/components/SitePage";
+
+export const metadata: Metadata = {
+  title: "Group Tours from Hyderabad | Telugu Group Travel Packages",
+  description: "Explore group tour packages from Hyderabad for Kashmir, Ladakh, Manali, Char Dham, Kerala, Sikkim, Nepal and international holidays with Telugu travel support.",
+  alternates: { canonical: "/group-tours-from-hyderabad" },
+  robots: { index: true, follow: true, "max-image-preview": "large" },
+  openGraph: {
+    title: "Group Tours from Hyderabad | Telugu Group Travel Packages",
+    description: "Explore group tour packages from Hyderabad for Kashmir, Ladakh, Manali, Char Dham, Kerala, Sikkim, Nepal and international holidays with Telugu travel support.",
+    url: "/group-tours-from-hyderabad",
+    siteName: "On A Trip Holidays",
+    type: "website",
+  },
+};
+
+export default function Page() {
+  return (
+    <SitePage>
+      <nav className="nav"><a className="brand" href="/"><img alt="On A Trip Holidays" src="assets/logo.png" /></a><div className="navlinks"><a href="/packages">Packages</a><a href="/pilgrimage">Pilgrimage</a><a href="/itineraries">Itineraries</a><a href="/blogs">Blogs</a><a href="blogs.html#new-destination-guides">Guides</a><a href="/about">About</a><a href="/contact">Contact</a></div><a className="wa" href="https://wa.me/919182894146?text=Hi%20On%20A%20Trip%20Holidays%2C%20I%20want%20a%20travel%20quote">WhatsApp Us</a></nav><main className="seo-page"><div className="seo-hero"><div className="eyebrow">HYDERABAD TRAVEL</div><h1>Group Tour Packages from Hyderabad</h1><p>Discover organised group travel from Hyderabad with planned routes, accommodation, transport and destination support. Choose pilgrimage, adventure, family or international group holidays.</p><div className="seo-cta"><a href="/packages">Explore Packages</a><a href="/contact">Get a Custom Quote</a></div></div><section className="seo-content-grid"><article><h3>Kashmir Group Tours</h3><p>Srinagar, Gulmarg, Pahalgam and Sonamarg itineraries for travellers who prefer a planned Himalayan group experience.</p><a href="/hyderabad-to-kashmir-tour-packages">Kashmir from Hyderabad →</a></article><article><h3>Ladakh Group Tours</h3><p>Leh, Nubra and Pangong routes with acclimatisation guidance and practical high-altitude planning.</p><a href="/hyderabad-to-ladakh-tour-packages">Ladakh from Hyderabad →</a></article><article><h3>Himachal Group Tours</h3><p>Shimla, Manali, Kasol and surrounding destinations for families and friends.</p><a href="/hyderabad-to-manali-tour-packages">Manali from Hyderabad →</a></article><article><h3>Pilgrimage Group Tours</h3><p>Char Dham, Kedarnath, Do Dham and other yatra routes for families and devotional groups.</p><a href="/pilgrimage-tour-packages-from-hyderabad">Pilgrimage tours →</a></article><article><h3>Kerala & South India Groups</h3><p>Munnar, Thekkady, Alleppey and multi-city South India journeys.</p></article><article><h3>International Group Holidays</h3><p>Thailand, Bali, Dubai, Vietnam and Nepal travel options for groups and families.</p><a href="/packages">International packages →</a></article></section><section className="seo-guide"><div className="eyebrow">FREQUENTLY ASKED QUESTIONS</div><h2>Planning questions answered</h2><details><summary>Are group tours suitable for families?</summary><p>Yes. Choose a route and pace that fits your family. Package pages explain accommodation, transport and sightseeing details.</p></details><details><summary>Can I join a group tour alone?</summary><p>Yes, subject to availability. Contact the travel team for current batch details and room options.</p></details><details><summary>Are meals and hotels included?</summary><p>Inclusions vary by package. Check the specific package page and final booking confirmation for the exact meal and hotel plan.</p></details></section><section className="seo-cta-block"><h2>Ready to plan your trip from Hyderabad?</h2><p>Tell us your destination, travel dates, number of travellers and preferred budget. Our team can help with group and customised options.</p><a href="/contact">Plan My Trip →</a></section><section><div><b>Looking for a Hyderabad pilgrimage group?</b> <a href="/char-dham-yatra-packages-from-hyderabad">Explore Char Dham Yatra from Hyderabad →</a></div></section></main><footer className="oat-company-footer"><h3 className="oat-company-name">ON A TRIP HOLIDAYS</h3><p className="oat-company-tag">Telugu-first travel support from Hyderabad for pilgrimage, domestic, adventure and international holidays.</p><div className="oat-footer-links"><a href="/packages">All Packages</a><a href="/itineraries">Itineraries</a><a href="/blogs">Travel Blog</a><a href="blogs.html#new-destination-guides">Guides</a><a href="/contact">Contact</a></div><div className="oat-copy">© 2026 On A Trip Holidays. All rights reserved.</div></footer>
+    </SitePage>
+  );
+}
