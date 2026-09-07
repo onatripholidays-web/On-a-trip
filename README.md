@@ -1,26 +1,32 @@
-# On A Trip Holidays — Team OAT
+# On A Trip Holidays — Secure TypeScript Website
 
-Clean Next.js + TypeScript baseline for the On A Trip Holidays business application.
+Migrated from the cleaned public site to Next.js + TypeScript.
 
-## Start
+- No `.html` source pages
+- 114 public routes converted to `.tsx`
+- CRM removed
+- AI Itinerary Maker removed
+- Invoice Maker removed
+- Admin panel removed
+- Darjeeling/North-East page removed
+- Server-side Supabase enquiry API
+- Zod validation
+- Origin checking
+- Honeypot anti-bot field
+- Basic IP throttling
+- Security headers + HSTS
+- Supabase secret is server-only
 
-```bash
-npm install
-npm run typecheck
-npm run verify
-npm run build
-npm run dev
-```
+## Server environment variables
+`SUPABASE_URL`
+`SUPABASE_SECRET_KEY`
 
-Open `http://localhost:3000`.
+Never expose the secret with a `NEXT_PUBLIC_` prefix.
 
-## Modules
+## Run
+`npm install`
+`npm run dev`
 
-- CRM: `/crm`
-- AI Itinerary: `/ai-itinerary`
-- Invoice Maker: `/invoice-maker`
-- Admin Panel: `/admin-panel`
-
-## Development rule
-
-Build new Team OAT/CRM functionality in `.tsx`/`.ts` modules. Keep secrets in environment variables only.
+## Production
+`npm run build`
+`npm start`
