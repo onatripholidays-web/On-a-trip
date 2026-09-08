@@ -1,0 +1,25 @@
+name: Website quality check
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Check TypeScript-only website
+        run: |
+          if find app components lib public -type f -name '*.html' | grep -q .; then
+            echo 'HTML files are not allowed.'; exit 1
+          fi
+          if find app components lib -type f -name '*.html' | grep -q .; then
+            echo 'HTML files are not allowed.'; exit 1
+          fi

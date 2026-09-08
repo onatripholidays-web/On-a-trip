@@ -1,0 +1,2 @@
+import type {ReactNode} from "react"; import Header from "./Header"; import Footer from "./Footer";
+export default function SiteShell({children}:{children:ReactNode}){return <div className="site"><Header/>{children}<Footer/><a className="floating-wa" href="https://wa.me/919182894146?text=Hi%20On%20A%20Trip%20Holidays%2C%20I%20want%20to%20plan%20a%20trip" target="_blank" rel="noreferrer" aria-label="Chat on WhatsApp">◔</a></div>}

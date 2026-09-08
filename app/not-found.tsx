@@ -1,0 +1,2 @@
+import Link from "next/link"; import SiteShell from "@/components/SiteShell";
+export default function NotFound(){return <SiteShell><main className="not-found"><div><span className="eyebrow">404 • PAGE NOT FOUND</span><h1>Let’s get you back to the <em>journey.</em></h1><p>The page you requested is no longer part of our current website structure.</p><div className="hero-buttons"><Link className="btn primary" href="/packages">Browse packages</Link><Link className="btn secondary" href="/">Go home</Link></div></div></main></SiteShell>}
