@@ -1,0 +1,13 @@
+@media (max-width: 850px){
+  .site-header{justify-content:space-between;padding-inline:16px;}
+  .brand{flex:0 0 175px;width:175px;}
+  .header-actions{margin-left:auto;justify-content:flex-end;}
+  .header-wa{display:none;}
+  .menu-btn{display:inline-flex;align-items:center;justify-content:center;margin-left:auto;min-width:46px;min-height:42px;}
+}
+
+@media (max-width: 600px){
+  .site-header{gap:12px;padding-inline:14px;}
+  .brand{flex:0 1 175px;width:175px;max-width:calc(100% - 64px);}
+  .header-actions{flex:0 0 auto;}
+}
