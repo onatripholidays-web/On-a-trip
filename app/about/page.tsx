@@ -12,7 +12,6 @@ export default function About(){
     <div><div className="aboutKicker">OUR PEOPLE</div><h1 className="heroTitle">Meet the Team Behind <em>On A Trip Holidays</em></h1></div>
     <p className="heroIntro">A 30 members passionate team working together to create memorable travel experiences for you</p>
    </div>
-   <div className="heroVisual"><div className="heroVisualInner" aria-hidden="true"><span className="sil"/><span className="sil"/><span className="sil"/><span className="sil"/><span className="sil"/></div></div>
   </section>
 
   <section className="story"><div className="container storyGrid">
