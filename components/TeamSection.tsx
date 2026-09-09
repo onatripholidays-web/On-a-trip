@@ -11,11 +11,12 @@ type Member = {
   fallback?: string;
   email: string;
   phone: string;
+  objectPosition?: string;
 };
 
 const members: Member[] = [
   { name: "K. Harshika", role: "COO", image: "/assets/01-coo-k-harshika.jpg", email: "beediamharshika10@gmail.com", phone: "9908048909" },
-  { name: "K. Naveen", role: "Digital Marketing Manager", image: "/assets/02-digital-marketing-manager-k-naveen.jpg", fallback: "/assets/04-editor-k-naveen.jpg", email: "onatripholidaysnaveen@gmail.com", phone: "8106954146" },
+  { name: "K. Naveen", role: "Digital Marketing Manager", image: "/assets/02-digital-marketing-manager-k-naveen.jpg", fallback: "/assets/04-editor-k-naveen.jpg", email: "onatripholidaysnaveen@gmail.com", phone: "8106954146", objectPosition: "center 50%" },
   { name: "CH. Vedavyas", role: "Content Creator", image: "/assets/03-content-creator-ch-vedavyas.jpg", email: "", phone: "" },
   { name: "K. Abhilash", role: "Editor", image: "/assets/04-editor-k-abhilash.jpg", fallback: "/assets/07-team1-k-abilash.jpg", email: "abhilashsalesoat@gmail.com", phone: "7799984303" },
   { name: "K. Mallesh", role: "Trip Captain", image: "/assets/05-trip-captain-k-mallesh.jpg", fallback: "/assets/travel-fallback.svg", email: "malleshoatsales@gmail.com", phone: "9652579696" },
@@ -41,7 +42,7 @@ function EmployeeImage({ member }: { member: Member }) {
     img.style.display = "none";
   };
 
-  return <img src={member.image} alt={`${member.name}, ${member.role}`} onError={handleError} />;
+  return <img src={member.image} alt={`${member.name}, ${member.role}`} onError={handleError} style={member.objectPosition ? { objectPosition: member.objectPosition } : undefined} />;
 }
 
 export default function TeamSection() {
@@ -66,13 +67,7 @@ export default function TeamSection() {
                   <div className={styles.roleRow}>
                     <strong>{member.role}</strong>
                     {hasDetails ? (
-                      <button
-                        type="button"
-                        className={styles.expandButton}
-                        aria-label={`${isOpen ? "Hide" : "Show"} official details for ${member.name}`}
-                        aria-expanded={isOpen}
-                        onClick={() => setOpenMember(isOpen ? null : member.name)}
-                      >
+                      <button type="button" className={styles.expandButton} aria-label={`${isOpen ? "Hide" : "Show"} official details for ${member.name}`} aria-expanded={isOpen} onClick={() => setOpenMember(isOpen ? null : member.name)}>
                         <span aria-hidden="true">⌄</span>
                       </button>
                     ) : null}
