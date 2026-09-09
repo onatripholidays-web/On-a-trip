@@ -1,6 +1,7 @@
 import type {Metadata} from "next";
 import Link from "next/link";
 import SiteShell from "@/components/SiteShell";
+import TeamSection from "@/components/TeamSection";
 
 export const metadata:Metadata={title:"About On A Trip Holidays | Founder & CEO",description:"Meet Kadamanchi Nikhil, Founder & CEO of On A Trip Holidays, and discover the story, mission and vision behind the travel brand."};
 
@@ -24,6 +25,8 @@ export default function About(){
    <div className="portrait" aria-label="Kadamanchi Nikhil, Founder & CEO"><img src="/assets/nikhil-ceo.png" alt="Kadamanchi Nikhil, Founder & CEO" style={{width:"100%",height:"100%",objectFit:"contain",objectPosition:"center bottom",display:"block",position:"relative",zIndex:2}}/></div>
    <div className="ceoCopy"><p>My journey began in <strong>2017</strong> with a passion to learn, grow, and explore the world. In <strong>2021</strong>, I turned that passion into a vision and founded <strong>On A Trip Holidays</strong> — with a simple belief: travel should be more than a trip; it should be an experience to remember.</p><p>Today, I’m focused on building a trusted, customer-first travel brand that combines <strong>personalized service, technology, and a genuine passion for travel</strong> to create seamless and memorable journeys.</p><div className="quote">“I believe the best journeys don't just take you to new places — they create stories you carry with you.”</div><div className="socials"><a href="https://www.instagram.com/kadamanchi_nikhil/" target="_blank" rel="noreferrer">Instagram <span>@KADAMANCHI_NIKHIL ↗</span></a><a href="https://www.linkedin.com/in/nikhil-kadamanchi/" target="_blank" rel="noreferrer">LinkedIn <span>Nikhil Kadamanchi ↗</span></a><a href="mailto:kadamanchinikhil1@gmail.com">Email <span>kadamanchinikhil1@gmail.com ↗</span></a></div></div>
   </div></section>
+
+  <TeamSection />
 
   <section className="stats"><div className="container statsGrid"><div className="stat"><strong>1 Lakh+</strong><span>Successful Travelers</span></div><div className="stat"><strong>5,000+</strong><span>Successful Trips</span></div><div className="stat"><strong>5+</strong><span>Years in the travel industry</span></div><div className="stat"><strong>2021</strong><span>On A Trip Holidays founded</span></div></div></section>
 
