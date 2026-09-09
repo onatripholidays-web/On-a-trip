@@ -38,7 +38,6 @@ function EmployeeImage({ member }: { member: Member }) {
       return;
     }
     img.style.display = "none";
-    img.parentElement?.classList.add(styles.emptyPhoto);
   };
 
   return <img src={member.image} alt={`${member.name}, ${member.role}`} onError={handleError} />;
@@ -85,8 +84,8 @@ export default function TeamSection() {
                 </div>
                 <div className={`${styles.detailsWrap} ${isOpen ? styles.detailsOpen : ""}`}>
                   <div className={styles.details}>
-                    <a href={`mailto:${member.email}`}>✉ <span>{member.email}</span></a>
-                    <a href={`tel:${member.phone}`}>☎ <span>{member.phone}</span></a>
+                    {member.email ? <a href={`mailto:${member.email}`}>✉ <span>{member.email}</span></a> : null}
+                    {member.phone ? <a href={`tel:${member.phone}`}>☎ <span>{member.phone}</span></a> : null}
                   </div>
                 </div>
               </article>
