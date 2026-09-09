@@ -28,6 +28,7 @@ const members: Member[] = [
   { name: "G. Shravanthi", role: "Sales Executive", image: "/assets/12-sales-executive-g-shravanthi.jpg", fallback: "/assets/12-team2-g-shravanthi.jpg", email: "shravanthisalesoat@gmail.com", phone: "9652649696" },
   { name: "B. Prabhavathi", role: "Sales Executive", image: "/assets/13-sales-executive-b-prabhavathi.jpg", fallback: "/assets/13-team2-b-prabhavathi.jpg", email: "prabhavathisalesaot@gmail.com", phone: "9032049090" },
   { name: "N. Vaishnavi", role: "Sales Executive", image: "/assets/14-sales-executive-n-vaishnavi.jpg", fallback: "/assets/08-team1-n-vaishnavi.jpg", email: "nadamintivaishnavisalesoat@gmail.com", phone: "7093210297" },
+  { name: "G. Shireesha", role: "Sales Executive", image: "/assets/15-sales-executive-g-shireesha.jpg", email: "shireeshaoatsales@gmail.com", phone: "9652799696" },
 ];
 
 function EmployeeImage({ member }: { member: Member }) {
@@ -49,12 +50,7 @@ export default function TeamSection() {
   return (
     <section className={styles.teamSection} aria-labelledby="team-heading">
       <div className={styles.container}>
-        <div className={styles.teamIntro}>
-          <div className={styles.kicker}>OUR PEOPLE</div>
-          <h2 id="team-heading">Meet the People Behind Your Journeys</h2>
-          <p>A 30 members passionate team working together to create memorable travel experiences for you</p>
-        </div>
-
+        <h2 id="team-heading" className={styles.srOnly}>On A Trip Holidays Team</h2>
         <div className={styles.teamGrid}>
           {members.map((member) => {
             const isOpen = openMember === member.name;
@@ -91,16 +87,6 @@ export default function TeamSection() {
               </article>
             );
           })}
-
-          <article className={`${styles.card} ${styles.chiefsCard}`} aria-label="Ground team: 5 Chiefs and 10 Trip Co Ordinators">
-            <div className={styles.chiefsVisual}>
-              <div className={styles.chiefsDecor} aria-hidden="true">✦</div>
-              <div className={styles.chiefsText}>
-                <strong>5 Chiefs</strong>
-                <span>10 Trip Co Ordinators</span>
-              </div>
-            </div>
-          </article>
         </div>
       </div>
     </section>
