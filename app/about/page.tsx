@@ -27,9 +27,10 @@ export default function About(){
 
   <TeamSection />
 
+  <section className="cta"><div className="container ctaBox"><div><h2>5 Telugu Chefs</h2><p>Serving authentic, delicious Telugu cuisine throughout your journey.</p><p><strong>10 Trip Coordinators</strong> — Dedicated trip coordinators ensuring a smooth, organized, and memorable travel experience.</p></div></div></section>
+
   <section className="stats"><div className="container statsGrid"><div className="stat"><strong>1 Lakh+</strong><span>Successful Travelers</span></div><div className="stat"><strong>5,000+</strong><span>Successful Trips</span></div><div className="stat"><strong>5+</strong><span>Years in the travel industry</span></div><div className="stat"><strong>2021</strong><span>On A Trip Holidays founded</span></div></div></section>
 
   <section className="vision"><div className="container visionGrid"><div className="visionCard"><h3>Founder’s Vision</h3><p>To be No 1 in the Travel Industry by building a travel brand defined by trust, thoughtful planning, personalized service and memorable experiences.</p></div><div className="visionCard"><h3>What We Believe</h3><p>Our goal is not simply to sell travel packages. We want to build a travel brand that people trust, recommend to their friends and family, and return to for their next adventure.</p></div></div></section>
-  <section className="cta"><div className="container ctaBox"><div><h2>5 Telugu Chefs</h2><p>Serving authentic, delicious Telugu cuisine throughout your journey.</p><p><strong>10 Trip Coordinators</strong> — Dedicated trip coordinators ensuring a smooth, organized, and memorable travel experience.</p></div><Link href="/contact">Plan My Trip</Link></div></section>
  </main></SiteShell>
 }
