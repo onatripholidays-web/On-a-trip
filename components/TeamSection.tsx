@@ -1,5 +1,6 @@
 "use client";
 
+import type { SyntheticEvent } from "react";
 import { useState } from "react";
 import styles from "./TeamSection.module.css";
 
@@ -30,9 +31,9 @@ const members: Member[] = [
 ];
 
 function EmployeeImage({ member }: { member: Member }) {
-  const handleError = (event: React.SyntheticEvent<HTMLImageElement>) => {
+  const handleError = (event: SyntheticEvent<HTMLImageElement>) => {
     const img = event.currentTarget;
-    if (member.fallback && img.src !== new URL(member.fallback, window.location.origin).href) {
+    if (member.fallback && img.src.endsWith(member.image)) {
       img.src = member.fallback;
       return;
     }
@@ -63,9 +64,7 @@ export default function TeamSection() {
               <article className={`${styles.card} ${isOpen ? styles.open : ""}`} key={member.name}>
                 <div className={styles.photoFrame}>
                   <EmployeeImage member={member} />
-                  {!member.image.includes("03-content-creator") && !member.fallback?.includes("travel-fallback") && null}
-                  {member.name === "CH. Vedavyas" && <span className={styles.photoPlaceholder}>Photo</span>}
-                  {member.name === "K. Mallesh" && <span className={styles.photoPlaceholder}>Photo</span>}
+                  <span className={styles.photoPlaceholder}>Photo</span>
                 </div>
                 <div className={styles.cardInfo}>
                   <div className={styles.name}>{member.name}</div>
