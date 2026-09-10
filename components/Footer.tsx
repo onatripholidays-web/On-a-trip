@@ -1,7 +1,8 @@
 import Link from "next/link";
+import type {CSSProperties} from "react";
 
-const linkStyle: React.CSSProperties = { display: "flex", alignItems: "flex-start", gap: 9, fontSize: 13, lineHeight: 1.55, margin: "10px 0", color: "#c5d0d8" };
-const headingStyle: React.CSSProperties = { color: "#ef5b2a", fontWeight: 900, fontSize: 15, margin: "0 0 17px" };
+const linkStyle: CSSProperties = { display: "flex", alignItems: "flex-start", gap: 9, fontSize: 13, lineHeight: 1.55, margin: "10px 0", color: "#c5d0d8" };
+const headingStyle: CSSProperties = { color: "#ef5b2a", fontWeight: 900, fontSize: 15, margin: "0 0 17px" };
 const arrow = <span aria-hidden="true" style={{ color: "#ef5b2a", fontWeight: 900, lineHeight: 1.4 }}>»</span>;
 
 function SocialIcon({type, href, label}:{type:"instagram"|"facebook"|"youtube";href:string;label:string}){
@@ -35,7 +36,7 @@ export default function Footer(){
       .oat-skyline{width:min(620px,82%);height:82px;color:#b8bec6;opacity:.82}
       .oat-bottom{width:min(1220px,calc(100% - 40px));margin:auto;padding:15px 0 18px;border-top:1px solid rgba(255,255,255,.1);display:flex;justify-content:center;gap:26px;flex-wrap:wrap;text-align:center;font-size:11px;color:#d3dbe0}
       .oat-bottom .accent{color:#ef5b2a;font-weight:900}
-      @media(max-width:1100px){.oat-footer-grid{grid-template-columns:1.4fr 1fr 1fr 1fr;}.oat-footer-contact{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.oat-footer-contact h3{grid-column:1/-1}}
+      @media(max-width:1100px){.oat-footer-grid{grid-template-columns:1.4fr 1fr 1fr 1fr}.oat-footer-contact{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.oat-footer-contact h3{grid-column:1/-1}}
       @media(max-width:760px){.oat-footer{padding-top:45px}.oat-footer-grid{grid-template-columns:1fr 1fr;gap:30px}.oat-footer-brand,.oat-footer-contact{grid-column:1/-1}.oat-footer-contact{display:block}.oat-footer-logo{width:165px;height:64px}.oat-footer p,.oat-footer-link,.oat-footer-contact-line{font-size:12px}.oat-skyline-wrap{height:90px;margin-top:38px}.oat-skyline{height:64px}}
       @media(max-width:480px){.oat-footer-inner,.oat-bottom{width:calc(100% - 28px)}.oat-footer-grid{grid-template-columns:1fr;gap:25px}.oat-footer-contact{grid-column:auto}.oat-footer h3{margin-bottom:12px}.oat-social-icon{width:35px;height:35px}.oat-skyline{width:94%}.oat-bottom{gap:6px;display:block}.oat-bottom span{display:block;margin:4px 0}}
     `}</style>
@@ -66,9 +67,9 @@ export default function Footer(){
 
           <div>
             <h3 style={headingStyle}>Company Policies</h3>
-            <Link className="oat-footer-link" style={linkStyle} href="/booking-terms">{arrow} Booking Terms &amp; Conditions</Link>
-            <Link className="oat-footer-link" style={linkStyle} href="/privacy-policy">{arrow} Company Privacy Policy</Link>
-            <Link className="oat-footer-link" style={linkStyle} href="/cancellation-refund">{arrow} Cancellation &amp; Refund Policy</Link>
+            <Link className="oat-footer-link" style={linkStyle} href="/contact">{arrow} Booking Terms &amp; Conditions</Link>
+            <Link className="oat-footer-link" style={linkStyle} href="/contact">{arrow} Company Privacy Policy</Link>
+            <Link className="oat-footer-link" style={linkStyle} href="/contact">{arrow} Cancellation &amp; Refund Policy</Link>
             <Link className="oat-footer-link" style={linkStyle} href="/contact">{arrow} Contact Us</Link>
           </div>
 
