@@ -29,8 +29,12 @@ const initial = {
   website: "",
 };
 
-export default function EnquiryForm() {
-  const [form, setForm] = useState(initial);
+type EnquiryFormProps = {
+  defaultPackage?: string;
+};
+
+export default function EnquiryForm({ defaultPackage = "" }: EnquiryFormProps) {
+  const [form, setForm] = useState({ ...initial, destination: defaultPackage });
   const [status, setStatus] = useState("");
 
   const update = (key: keyof typeof initial, value: string) =>
@@ -56,7 +60,7 @@ export default function EnquiryForm() {
         "_blank",
         "noopener,noreferrer"
       );
-      setForm(initial);
+      setForm({ ...initial, destination: defaultPackage });
       setStatus("Enquiry received. WhatsApp is opening for faster assistance.");
     } catch (error) {
       setStatus(
