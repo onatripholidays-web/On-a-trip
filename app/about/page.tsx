@@ -35,6 +35,27 @@ export default function About(){
 
   <section className="stats"><div className="container statsGrid"><div className="stat"><strong>1 Lakh+</strong><span>Successful Travelers</span></div><div className="stat"><strong>5,000+</strong><span>Successful Trips</span></div><div className="stat"><strong>5+</strong><span>Years in the travel industry</span></div><div className="stat"><strong>2021</strong><span>On A Trip Holidays founded</span></div></div></section>
 
-  <section className="vision"><div className="container visionGrid"><div className="visionCard"><h3>Founder’s Vision</h3><p>To be No 1 in the Travel Industry by building a travel brand defined by trust, thoughtful planning, personalized service and memorable experiences.</p></div><div className="visionCard"><h3>What We Believe</h3><p>Our goal is not simply to sell travel packages. We want to build a travel brand that people trust, recommend to their friends and family, and return to for their next adventure.</p></div></div></section>
+  <section className="vision"><div className="container visionGrid">
+    <article className="visionCard" style={{position:"relative",overflow:"hidden",borderTop:"4px solid #ef5b2a",background:"linear-gradient(145deg,#fff 0%,#fffaf7 100%)",boxShadow:"0 18px 45px rgba(8,37,66,.09)",padding:"34px 36px 30px"}}>
+      <div style={{display:"flex",alignItems:"center",gap:"18px",marginBottom:"20px"}}>
+        <div aria-hidden="true" style={{width:"62px",height:"62px",borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",background:"#fff0e8",color:"#ef5b2a",flex:"0 0 62px"}}>
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M5 25.5 13.2 14l4.2 5.2 3.5-4.1L27 25.5H5Z" fill="currentColor"/><path d="M13.2 14 16 9.5 18.5 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M23 5.5v7M19.5 9h7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+        </div>
+        <div><h3 style={{margin:0,fontSize:"clamp(26px,3vw,34px)",lineHeight:1.1,color:"#082542",letterSpacing:"-.035em"}}>Founder’s <span style={{color:"#ef5b2a"}}>Vision</span></h3><div style={{marginTop:"8px",fontSize:"11px",fontWeight:900,letterSpacing:".22em",color:"#6b7b89",textTransform:"uppercase"}}>Bigger journeys <span style={{color:"#ef5b2a",padding:"0 5px"}}>•</span> brighter lives</div></div>
+      </div>
+      <p style={{margin:"0 0 24px",fontSize:"16px",lineHeight:1.7,color:"#53687a",maxWidth:"620px"}}>To be No 1 in the Travel Industry by building a travel brand defined by trust, thoughtful planning, personalized service and memorable experiences.</p>
+      <div style={{display:"inline-flex",alignItems:"center",gap:"12px",padding:"12px 20px",borderRadius:"999px",background:"#fff0e8",color:"#ef5b2a",fontSize:"13px",fontWeight:900,letterSpacing:".06em",textTransform:"uppercase"}}>Travel a better tomorrow <span aria-hidden="true" style={{fontSize:"22px",lineHeight:1}}>→</span></div>
+    </article>
+    <article className="visionCard" style={{position:"relative",overflow:"hidden",borderTop:"4px solid #123f68",background:"linear-gradient(145deg,#fff 0%,#f7fbff 100%)",boxShadow:"0 18px 45px rgba(8,37,66,.09)",padding:"34px 36px 30px"}}>
+      <div style={{display:"flex",alignItems:"center",gap:"18px",marginBottom:"20px"}}>
+        <div aria-hidden="true" style={{width:"62px",height:"62px",borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",background:"#eaf3ff",color:"#123f68",flex:"0 0 62px"}}>
+          <svg width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true"><path d="M5 27c4.5-5 9-6.8 13.5-5.3 4.2 1.4 6.9-.2 10.5-4.7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/><circle cx="11" cy="12" r="3.2" fill="currentColor"/><circle cx="19" cy="10" r="3.2" fill="currentColor"/><circle cx="27" cy="13" r="3.2" fill="currentColor"/><path d="M5 27c1.5-4.2 4.4-6.2 8.2-5.7 2.8.4 4.8 2 6.7 3.3" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/></svg>
+        </div>
+        <div><h3 style={{margin:0,fontSize:"clamp(26px,3vw,34px)",lineHeight:1.1,color:"#082542",letterSpacing:"-.035em"}}>What We <span style={{color:"#ef5b2a"}}>Believe</span></h3><div style={{marginTop:"8px",fontSize:"11px",fontWeight:900,letterSpacing:".22em",color:"#6b7b89",textTransform:"uppercase"}}>People <span style={{color:"#ef5b2a",padding:"0 5px"}}>•</span> places <span style={{color:"#ef5b2a",padding:"0 5px"}}>•</span> lifelong memories</div></div>
+      </div>
+      <p style={{margin:"0 0 24px",fontSize:"16px",lineHeight:1.7,color:"#53687a",maxWidth:"620px"}}>Our goal is not simply to sell travel packages. We want to build a travel brand that people trust, recommend to their friends and family, and return to for their next adventure.</p>
+      <div style={{display:"inline-flex",alignItems:"center",gap:"12px",padding:"12px 20px",borderRadius:"999px",background:"#eaf3ff",color:"#123f68",fontSize:"13px",fontWeight:900,letterSpacing:".06em",textTransform:"uppercase"}}>Travel beyond expectations <span aria-hidden="true" style={{fontSize:"22px",lineHeight:1}}>→</span></div>
+    </article>
+  </div></section>
  </main></SiteShell>
 }
