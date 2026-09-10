@@ -27,7 +27,11 @@ export default function About(){
 
   <TeamSection />
 
-  <section className="cta"><div className="container ctaBox"><div><h2>5 Telugu Chefs</h2><p>Serving authentic, delicious Telugu cuisine throughout your journey.</p><p><strong>10 Trip Coordinators</strong> — Dedicated trip coordinators ensuring a smooth, organized, and memorable travel experience.</p></div></div></section>
+  <section className="cta"><div className="container ctaBox"><div>
+    <h2 style={{fontSize:"clamp(38px,4.5vw,54px)",lineHeight:1.05,margin:"0 0 8px",letterSpacing:"-.04em",fontWeight:900,color:"#ef5b2a"}}>5 Telugu Chefs</h2>
+    <p style={{margin:"0 0 10px",color:"#fff",fontSize:"16px",lineHeight:1.55,fontWeight:500}}>Serving authentic, delicious Telugu cuisine throughout your journey.</p>
+    <p style={{margin:0,color:"#fff",fontSize:"16px",lineHeight:1.55,fontWeight:500}}><strong style={{fontSize:"clamp(38px,4.5vw,54px)",lineHeight:1.05,fontWeight:900,color:"#ef5b2a",letterSpacing:"-.04em"}}>10 Trip Coordinators</strong><br/>Dedicated trip coordinators ensuring a smooth, organized, and memorable travel experience.</p>
+  </div></div></section>
 
   <section className="stats"><div className="container statsGrid"><div className="stat"><strong>1 Lakh+</strong><span>Successful Travelers</span></div><div className="stat"><strong>5,000+</strong><span>Successful Trips</span></div><div className="stat"><strong>5+</strong><span>Years in the travel industry</span></div><div className="stat"><strong>2021</strong><span>On A Trip Holidays founded</span></div></div></section>
 
