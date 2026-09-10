@@ -26,3 +26,5 @@ npm run start
 ## Environment
 
 For enquiry persistence, set `SUPABASE_URL` and `SUPABASE_ANON_KEY` in the server environment. Never place service-role keys in the browser or commit secrets.
+
+<!-- Stable production redeploy marker -->
