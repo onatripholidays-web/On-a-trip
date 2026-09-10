@@ -14,7 +14,7 @@ const packageAliases: Record<string, string> = {
   dubai: "Dubai Highlights", vietnam: "Vietnam Discovery", nepal: "Nepal & Muktinath",
 };
 
-const initial = { name: "", phone: "", destination: "", travel_date: "", travellers: "", enquiry_type: "Package enquiry", message: "", website: "" };
+const initial = { name: "", phone: "", destination: "", travel_date: "", travellers: "", enquiry_type: "Package enquiry", message: "", website: "", consent: false };
 
 type EnquiryFormProps = { defaultPackage?: string };
 
@@ -35,10 +35,15 @@ export default function EnquiryForm({ defaultPackage = "" }: EnquiryFormProps) {
     if (fromAd) setForm((previous) => ({ ...previous, destination: fromAd }));
   }, [defaultPackage]);
 
-  const update = (key: keyof typeof initial, value: string) => setForm((previous) => ({ ...previous, [key]: value }));
+  const update = (key: keyof typeof initial, value: string | boolean) => setForm((previous) => ({ ...previous, [key]: value }));
 
   async function submit(event: FormEvent) {
-    event.preventDefault(); setStatus("Sending…"); if (form.website) return;
+    event.preventDefault();
+    if (!form.consent) {
+      setStatus("Please agree to the Terms & Conditions and Privacy Policy and give your consent to receive promotional updates.");
+      return;
+    }
+    setStatus("Sending…"); if (form.website) return;
     try {
       const response = await fetch("/api/enquiry", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
       const data = await response.json(); if (!response.ok) throw new Error(data.error || "Unable to send enquiry");
@@ -58,7 +63,11 @@ export default function EnquiryForm({ defaultPackage = "" }: EnquiryFormProps) {
       <select value={form.enquiry_type} onChange={(event) => update("enquiry_type", event.target.value)}><option>Package enquiry</option><option>Custom trip</option><option>Pilgrimage</option><option>International</option><option>Group departure</option></select>
       <textarea className="full" value={form.message} onChange={(event) => update("message", event.target.value)} placeholder="Tell us your departure city, hotel preference, vehicle, budget or anything important." />
       <input className="honeypot" tabIndex={-1} autoComplete="off" value={form.website} onChange={(event) => update("website", event.target.value)} aria-hidden="true" />
+      <label className="full enquiry-consent" style={{ display: "flex", alignItems: "flex-start", gap: 12, marginTop: 4, fontSize: 13, lineHeight: 1.55, color: "#263746", cursor: "pointer" }}>
+        <input required type="checkbox" checked={form.consent} onChange={(event) => update("consent", event.target.checked)} aria-describedby="enquiry-consent-text" style={{ width: 22, height: 22, minWidth: 22, margin: "2px 0 0", accentColor: "#0b78a8", cursor: "pointer" }} />
+        <span id="enquiry-consent-text">I agree to the terms &amp; conditions and privacy policy and I am giving my consent to receive updates through SMS/email, Rcs Message</span>
+      </label>
     </div>
-    <button className="btn primary" type="submit">Send Enquiry & Continue on WhatsApp →</button><p role="status" aria-live="polite">{status}</p>
+    <button className="btn primary" type="submit">Send Enquiry &amp; Continue on WhatsApp →</button><p role="status" aria-live="polite">{status}</p>
   </form>;
 }
