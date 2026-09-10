@@ -6,7 +6,6 @@ import EnquiryForm from "@/components/EnquiryForm";
 import PackageCard from "@/components/PackageCard";
 import PackageVariants from "@/components/PackageVariants";
 import {packages,packageBySlug} from "@/lib/site-data";
-import "../../package-options.css";
 
 export async function generateStaticParams(){return packages.map(x=>({slug:x.slug}))}
 export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{const{x}=await Promise.resolve(params).then(p=>({x:packageBySlug(p.slug)}));return x?{title:x.name,description:x.description,alternates:{canonical:`/packages/${x.slug}`}}:{}}
