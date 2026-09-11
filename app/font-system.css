@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 
-:root{--oat-font:"Plus Jakarta Sans",Arial,Helvetica,sans-serif}
+:root{--oat-font:"Manrope",Arial,Helvetica,sans-serif}
 html,body,body input,body select,body textarea,body button{font-family:var(--oat-font)!important}
 .hero-copy h1,.hero-planner h2,.section h2,.page-hero h1,.package-layout h2,.package-hero h1,.package-body h3,.destination-tile h2,.final-inner h2{font-family:var(--oat-font)!important}
 body{font-synthesis:none;text-rendering:optimizeLegibility}
