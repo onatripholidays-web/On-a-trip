@@ -13,7 +13,7 @@ async function auth(){
 export async function POST(req:Request){
  const ctx=await auth(); if(!ctx)return NextResponse.json({error:"Unauthorized"},{status:401});
  const body=await req.json();
- const allowed={name:body.name||null,phone:body.phone||null,email:body.email||null,dest:body.dest||null,value:body.value||null,branch:body.branch||null,source:body.source||null,priority:body.priority||"Normal",notes:body.notes||null,status:body.status||"New",salesperson:body.salesperson||null};
+ const allowed={name:body.name||null,phone:body.phone||null,email:body.email||null,dest:body.dest??body.destination??null,value:body.value||null,branch:body.branch||null,source:body.source||null,priority:body.priority||"Normal",notes:body.notes||null,status:body.status||"New",salesperson:body.salesperson||null};
  const r=await fetch(`${ctx.url}/rest/v1/enquiries`,{method:"POST",headers:{apikey:ctx.key,Authorization:`Bearer ${ctx.access}`,"Content-Type":"application/json",Prefer:"return=representation"},body:JSON.stringify(allowed)});
  const data=await r.json().catch(()=>null); return NextResponse.json(data,{status:r.status});
 }
