@@ -1,0 +1,4 @@
+/* Targeted image fallback for the Madhya Pradesh Jyotirlingas package. */
+.destination-grid-large + *{}
+.package-image:has(img[src*="1600100397608-f010b3f6d2d5"]){background-image:url('https://images.unsplash.com/photo-1561361058-c24cecae35ca?auto=format&fit=crop&w=1400&q=85');background-size:cover;background-position:center}
+.package-image:has(img[src*="1600100397608-f010b3f6d2d5"]) img{visibility:hidden}
