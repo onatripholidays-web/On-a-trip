@@ -19,3 +19,5 @@ export default function CrmHeaderActionsPatch(){
  },[]);
  return null;
 }
+
+// Keep CRM header action patch isolated from the production branch.
