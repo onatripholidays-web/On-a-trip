@@ -1,0 +1,34 @@
+/* On A Trip Holidays — subtle motion system
+   GPU-friendly transforms/opacity only; no layout-driven animation or JS scroll observers. */
+@keyframes oat-fade-up{from{opacity:0;transform:translate3d(0,14px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+@keyframes oat-fade-in{from{opacity:0}to{opacity:1}}
+@keyframes oat-hero-image{from{transform:scale(1.025)}to{transform:scale(1)}}
+
+.hero-overlay{animation:oat-fade-in .65s ease-out both}
+.hero-copy{animation:oat-fade-up .65s .06s ease-out both}
+.hero-planner{animation:oat-fade-up .65s .14s ease-out both}
+.package-hero-content{animation:oat-fade-up .65s .06s ease-out both}
+.hero-home{background-position:center;animation:oat-hero-image 1.2s ease-out both}
+
+.trust-strip{animation:oat-fade-up .55s .18s ease-out both}
+.section-head{animation:oat-fade-up .5s ease-out both}
+.final-inner{animation:oat-fade-up .55s ease-out both}
+
+.package-card,.destination-tile,.why-grid>div,.batch-card,.feature-panel,.callout,.mini-links a{transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+.package-card:hover,.destination-tile:hover,.why-grid>div:hover{transform:translate3d(0,-4px,0);box-shadow:0 18px 38px rgba(8,37,66,.12)}
+.package-image img{transition:transform .55s cubic-bezier(.2,.7,.2,1)}
+.package-card:hover .package-image img{transform:scale(1.035)}
+
+.btn,.header-wa,.text-link,.light-link,.main-nav a,.top-social a{transition:transform .18s ease,color .18s ease,background-color .18s ease,box-shadow .18s ease}
+.btn:hover,.header-wa:hover{transform:translate3d(0,-2px,0)}
+.text-link:hover,.light-link:hover,.top-social a:hover{transform:translate3d(2px,0,0)}
+.main-nav a:hover{transform:translate3d(0,-1px,0)}
+
+.planner-grid a{transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.planner-grid a:hover{transform:translate3d(0,-2px,0)}
+.header-wa{box-shadow:0 5px 16px rgba(239,91,42,.16)}
+.header-wa:hover{box-shadow:0 8px 22px rgba(239,91,42,.22)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
