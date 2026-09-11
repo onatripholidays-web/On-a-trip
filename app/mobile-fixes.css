@@ -10,4 +10,46 @@
   .site-header{gap:12px;padding-inline:14px;}
   .brand{flex:0 1 175px;width:175px;max-width:calc(100% - 64px);}
   .header-actions{flex:0 0 auto;}
+
+  /* Prevent the About Us banner from overflowing on narrow Android/iOS screens. */
+  .soft-section .container > a{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:flex-start!important;
+    justify-content:flex-start!important;
+    gap:20px!important;
+    padding:28px 22px!important;
+    width:100%!important;
+    min-width:0!important;
+    overflow:hidden!important;
+  }
+  .soft-section .container > a > div{width:100%;min-width:0;}
+  .soft-section .container > a h3{font-size:clamp(30px,9vw,40px)!important;line-height:1.05!important;overflow-wrap:anywhere;}
+  .soft-section .container > a p{max-width:100%;font-size:16px!important;line-height:1.45!important;}
+  .soft-section .container > a > strong{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+    white-space:normal!important;
+    text-align:center!important;
+    line-height:1.35!important;
+    padding:14px 18px!important;
+    overflow-wrap:anywhere!important;
+  }
+
+  /* Keep the final CTA fully inside the viewport on both Android and iOS. */
+  .final-cta{padding:48px 0 56px!important;overflow:hidden;}
+  .final-inner{display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:flex-start!important;gap:22px!important;}
+  .final-inner > div{width:100%;min-width:0;}
+  .final-inner h2{font-size:clamp(32px,9vw,44px)!important;line-height:1.08!important;letter-spacing:-1px!important;margin:8px 0 12px!important;overflow-wrap:anywhere;}
+  .final-inner p{font-size:15px!important;line-height:1.5!important;margin:0;max-width:100%;}
+  .final-inner .btn{align-self:flex-start;max-width:100%;}
+}
+
+@supports (padding: max(0px)){
+  @media (max-width: 600px){
+    .final-cta{padding-bottom:max(56px,calc(56px + env(safe-area-inset-bottom)))!important;}
+    .site-header{padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env(safe-area-inset-right));}
+  }
 }
