@@ -49,8 +49,9 @@ export default function CrmLayout({children}:{children:React.ReactNode}){
    .crm-app .crm-brand{align-items:center;}
    .crm-app .crm-brand .crm-mark{display:flex;align-items:center;justify-content:center;overflow:hidden;background:transparent;border-radius:12px;padding:0;font-size:0;width:46px;height:46px;background-image:url('/assets/logo.png');background-repeat:no-repeat;background-position:center;background-size:contain;}
    .crm-app .crm-brand .crm-mark img{display:block;width:100%;height:100%;object-fit:contain;}
+   .crm-app .crm-top-actions{display:flex;gap:8px;flex-wrap:wrap;}
    @media (max-width:900px){.crm-app .crm-page{padding:20px 18px 30px;}.crm-app .crm-top{padding:12px 18px;}}
-   @media (max-width:700px){.crm-app .crm-page{padding:16px 12px 24px;}.crm-app .crm-welcome{padding:20px;margin-bottom:14px;}.crm-app .crm-stats{gap:8px;}.crm-app .crm-stats>div{padding:14px 12px;}}
+   @media (max-width:700px){.crm-app .crm-page{padding:16px 12px 24px;}.crm-app .crm-welcome{padding:20px;margin-bottom:14px;}.crm-app .crm-stats{gap:8px;}.crm-app .crm-stats>div{padding:14px 12px;}.crm-app .crm-top-actions{gap:5px;}.crm-app .crm-top-actions button{padding:8px 9px;font-size:8px;}.crm-app .crm-top-actions button:first-child{display:inline-flex!important;}}
   `}</style>
  </>;
 }
