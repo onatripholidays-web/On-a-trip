@@ -8,8 +8,8 @@ export default function CrmLayout({children}:{children:React.ReactNode}){
    {children}
   </div>
   <style>{`
-   .crm-app,.crm-app *{font-family:Inter,"Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif !important;font-synthesis:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
-   .crm-app input,.crm-app select,.crm-app textarea,.crm-app button{font-family:Inter,"Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif !important;}
+   .crm-app,.crm-app *{font-family:var(--oat-font),"Manrope","Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif !important;font-synthesis:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+   .crm-app input,.crm-app select,.crm-app textarea,.crm-app button{font-family:var(--oat-font),"Manrope","Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif !important;}
    .crm-app .crm-shell{min-height:100vh;background:#f4f7f9;}
    .crm-app .crm-content{min-width:0;}
    .crm-app .crm-top{min-height:72px;padding:14px 28px;border-bottom:1px solid #e3e9ed;background:rgba(255,255,255,.98);}
@@ -47,9 +47,12 @@ export default function CrmLayout({children}:{children:React.ReactNode}){
    .crm-app td{padding:12px 13px;}
    .crm-app .row-actions{gap:5px;}
    .crm-app .row-actions button{min-height:30px;padding:6px 8px;font-size:9px;border-radius:8px;}
-   .crm-app .crm-sidebar{font-family:Inter,"Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif !important;}
+   .crm-app .crm-sidebar{font-family:var(--oat-font),"Manrope","Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif !important;}
    .crm-app .crm-sidebar nav button{font-size:11px;}
    .crm-app .crm-sidebar nav button span{font-weight:650;}
+   .crm-app .crm-brand{align-items:center;}
+   .crm-app .crm-brand .crm-mark{display:flex;align-items:center;justify-content:center;overflow:hidden;background:#fff;border-radius:12px;padding:4px;}
+   .crm-app .crm-brand .crm-mark img{display:block;width:100%;height:100%;object-fit:contain;}
    @media (max-width:900px){.crm-app .crm-page{padding:20px 18px 30px;}.crm-app .crm-top{padding:12px 18px;}}
    @media (max-width:700px){.crm-app .crm-page{padding:16px 12px 24px;}.crm-app .crm-welcome{padding:20px;margin-bottom:14px;}.crm-app .crm-stats{gap:8px;}.crm-app .crm-stats>div{padding:14px 12px;}}
   `}</style>
