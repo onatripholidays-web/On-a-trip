@@ -1,9 +1,6 @@
-import CrmHeaderActionsPatch from "@/components/CrmHeaderActionsPatch";
-
 export default function CrmLayout({children}:{children:React.ReactNode}){
  return <>
   <div className="crm-app">
-   <CrmHeaderActionsPatch/>
    {children}
   </div>
   <style>{`
@@ -57,5 +54,3 @@ export default function CrmLayout({children}:{children:React.ReactNode}){
   `}</style>
  </>;
 }
-
-// Production redeploy trigger: CRM fixes are now on main.
