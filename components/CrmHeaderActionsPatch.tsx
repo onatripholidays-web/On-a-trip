@@ -5,6 +5,16 @@ export default function CrmHeaderActionsPatch(){
  useEffect(()=>{
   const patch=()=>{
    const bar=document.querySelector(".crm-top-actions") as HTMLElement|null;
+   const mark=document.querySelector(".crm-brand .crm-mark") as HTMLElement|null;
+
+   if(mark && !mark.querySelector("img")){
+    mark.textContent="";
+    const img=document.createElement("img");
+    img.src="/assets/logo.png";
+    img.alt="On A Trip Holidays";
+    mark.appendChild(img);
+   }
+
    if(!bar)return;
    const buttons=Array.from(bar.querySelectorAll("button")) as HTMLButtonElement[];
    const first=buttons[0];
