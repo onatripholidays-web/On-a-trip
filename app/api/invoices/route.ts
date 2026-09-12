@@ -17,5 +17,7 @@ export async function POST(req:Request){
   const r=await fetch(`${url}/rest/v1/business_invoices`,{method:"POST",headers:{apikey:key,Authorization:`Bearer ${access}`,"Content-Type":"application/json",Prefer:"return=representation"},body:JSON.stringify(row),cache:"no-store"});
   const body=await r.text();
   if(!r.ok)return NextResponse.json({error:"Could not save invoice.",detail:body},{status:r.status});
-  return NextResponse.json({ok:true,invoice:JSON.parse(body)[0]||row});
+  const invoice=JSON.parse(body)[0]||row;
+  try{await fetch(`${url}/rest/v1/crm_activities`,{method:"POST",headers:{apikey:key,Authorization:`Bearer ${access}`,"Content-Type":"application/json",Prefer:"return=minimal"},body:JSON.stringify({enquiry_id:d.bookingId||null,actor_id:session.user.id,type:"invoice",subject:`Invoice ${invoiceNo} created`,body:`Invoice ${invoiceNo} created for ${String(d.name)} · ₹${total.toLocaleString("en-IN")} · paid ₹${paid.toLocaleString("en-IN")} · balance ₹${balance.toLocaleString("en-IN")}`,metadata:{invoice_no:invoiceNo,total,paid,balance}})})}catch{}
+  return NextResponse.json({ok:true,invoice});
 }
