@@ -1,4 +1,3 @@
-import Script from "next/script";
 import CrmHeaderActionsPatch from "@/components/CrmHeaderActionsPatch";
 
 export default function CrmLayout({children}:{children:React.ReactNode}){
@@ -56,7 +55,6 @@ export default function CrmLayout({children}:{children:React.ReactNode}){
    @media (max-width:900px){.crm-app .crm-page{padding:20px 18px 30px;}.crm-app .crm-top{padding:12px 18px;}}
    @media (max-width:700px){.crm-app .crm-page{padding:16px 12px 24px;}.crm-app .crm-welcome{padding:20px;margin-bottom:14px;}.crm-app .crm-stats{gap:8px;}.crm-app .crm-stats>div{padding:14px 12px;}}
   `}</style>
-  <Script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" strategy="afterInteractive"/>
  </>;
 }
 
