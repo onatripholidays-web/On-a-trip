@@ -3,9 +3,14 @@ import {useEffect} from "react";
 
 export default function CrmHeaderActionsPatch(){
  useEffect(()=>{
+  let bar:HTMLElement|null=null;
+  let mark:HTMLElement|null=null;
+  let observer:MutationObserver|null=null;
+  let timer:number|undefined;
+
   const patch=()=>{
-   const bar=document.querySelector(".crm-top-actions") as HTMLElement|null;
-   const mark=document.querySelector(".crm-brand .crm-mark") as HTMLElement|null;
+   bar=document.querySelector(".crm-top-actions") as HTMLElement|null;
+   mark=document.querySelector(".crm-brand .crm-mark") as HTMLElement|null;
 
    if(mark && !mark.querySelector("img")){
     mark.textContent="";
@@ -20,23 +25,30 @@ export default function CrmHeaderActionsPatch(){
    const first=buttons[0];
    if(!first)return;
 
-   first.textContent="▣ Quotation";
+   if(first.textContent!=="▣ Quotation")first.textContent="▣ Quotation";
    first.setAttribute("aria-label","Quotation");
    first.onclick=()=>{window.location.href="/crm/quotation"};
    first.style.display="inline-flex";
 
    buttons.slice(1).forEach((button)=>{
-    if(button.textContent?.includes("AI Itinerary"))button.style.display="none";
+    const shouldHide=button.textContent?.includes("AI Itinerary")===true;
+    if(shouldHide && button.style.display!=="none")button.style.display="none";
    });
   };
 
   patch();
-  const observer=new MutationObserver(patch);
-  observer.observe(document.body,{childList:true,subtree:true});
-  const timer=window.setTimeout(patch,500);
+  timer=window.setTimeout(patch,250);
+
+  const attachObserver=()=>{
+   if(!bar)return;
+   observer=new MutationObserver(patch);
+   observer.observe(bar,{childList:true,subtree:true});
+  };
+  window.setTimeout(attachObserver,0);
+
   return()=>{
-   observer.disconnect();
-   window.clearTimeout(timer);
+   if(observer)observer.disconnect();
+   if(timer)window.clearTimeout(timer);
   };
  },[]);
  return null;
