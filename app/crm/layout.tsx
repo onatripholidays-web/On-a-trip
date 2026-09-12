@@ -7,7 +7,7 @@ export default function CrmLayout({children}:{children:React.ReactNode}){
    <CrmHeaderActionsPatch/>
    {children}
   </div>
-  <style jsx global>{`
+  <style>{`
    .crm-app,.crm-app *{font-family:Inter,"Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif !important;font-synthesis:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
    .crm-app input,.crm-app select,.crm-app textarea,.crm-app button{font-family:Inter,"Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif !important;}
    .crm-app .crm-shell{min-height:100vh;background:#f4f7f9;}
