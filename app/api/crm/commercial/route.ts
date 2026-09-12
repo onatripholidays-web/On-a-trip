@@ -2,7 +2,7 @@ import {NextResponse} from "next/server";
 import {cookies} from "next/headers";
 import {crmSupabaseConfig,getCrmSession} from "@/lib/crm-auth";
 
-const resources={customers:"crm_customers",activities:"crm_lead_activities",tasks:"crm_tasks",quotations:"crm_quotations",quotation_items:"crm_quotation_items",bookings:"crm_bookings",payments:"crm_payments",invoices:"crm_invoices",invoice_items:"crm_invoice_items",travellers:"crm_travellers",suppliers:"crm_suppliers",supplier_bookings:"crm_supplier_bookings",documents:"crm_documents",audit:"crm_audit_logs"} as const;
+const resources={customers:"crm_customers",activities:"crm_lead_activities",tasks:"crm_tasks",quotations:"crm_quotations",quotation_items:"crm_quotation_items",bookings:"crm_bookings",payments:"crm_payments",invoices:"crm_invoices",invoice_items:"crm_invoice_items",travellers:"crm_travellers",suppliers:"crm_suppliers",supplier_bookings:"crm_supplier_bookings",service_bookings:"crm_service_bookings",documents:"crm_documents",audit:"crm_audit_logs"} as const;
 type Resource=keyof typeof resources;
 
 async function ctx(){
