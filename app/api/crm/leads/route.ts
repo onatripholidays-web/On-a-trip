@@ -16,8 +16,8 @@ function dbHeaders(ctx:any,write=false){
  return {apikey:ctx.anon,Authorization:`Bearer ${authorization}`,...(write?{"Content-Type":"application/json",Prefer:"return=representation"}:{})};
 }
 
-async function activity(ctx:any,type:string,subject:string,body:string,enquiryId:string){
- try{await fetch(`${ctx.url}/rest/v1/crm_activities`,{method:"POST",headers:dbHeaders(ctx,true),body:JSON.stringify({enquiry_id:enquiryId,actor_id:ctx.session.user.id,type,subject,body,metadata:{}})})}catch{}
+async function activity(ctx:any,type:string,subject:string,body:string,enquiryId:number){
+ try{await fetch(`${ctx.url}/rest/v1/crm_lead_activities`,{method:"POST",headers:dbHeaders(ctx,true),body:JSON.stringify({enquiry_id:enquiryId,activity_type:type,subject,body,created_by:ctx.session.user.id})})}catch{}
 }
 
 function clean(body:any,session:any){
@@ -38,7 +38,7 @@ export async function POST(req:Request){
   return errorResponse(r.status,detail?`Lead could not be saved: ${detail}`:"Lead could not be saved",data);
  }
  const item=Array.isArray(data)?data[0]:data;
- if(item?.id)await activity(ctx,"system","Lead created",`Lead created for ${String(item.name||a.name||"")}`,String(item.id));
+ if(item?.id)await activity(ctx,"system","Lead created",`Lead created for ${String(item.name||a.name||"")}`,Number(item.id));
  return NextResponse.json(Array.isArray(data)?data:[item],{status:201});
 }
 
@@ -58,7 +58,7 @@ export async function PATCH(req:Request){
  const r=await fetch(`${ctx.url}/rest/v1/enquiries?id=eq.${encodeURIComponent(id)}${ownerFilter}`,{method:"PATCH",headers:dbHeaders(ctx,true),body:JSON.stringify(patch)});
  const text=await r.text();let data:any=null;try{data=text?JSON.parse(text):null}catch{data=text}
  if(!r.ok)return errorResponse(r.status,"Lead could not be updated",data);
- if(Array.isArray(data)&&data[0]){const before=beforeRows[0],after=data[0],changed=before.status!==after.status;await activity(ctx,changed?"stage_change":"note",changed?"Pipeline stage changed":"Lead updated",changed?`${before.status||"New"} → ${after.status||"New"}`:"Lead information updated",String(id));}
+ if(Array.isArray(data)&&data[0]){const before=beforeRows[0],after=data[0],changed=before.status!==after.status;await activity(ctx,changed?"stage_change":"note",changed?"Pipeline stage changed":"Lead updated",changed?`${before.status||"New"} → ${after.status||"New"}`:"Lead information updated",Number(id));}
  return NextResponse.json(data,{status:200});
 }
 
@@ -69,6 +69,6 @@ export async function DELETE(req:Request){
  if(!body.id)return errorResponse(400,"Lead id is required");
  const r=await fetch(`${ctx.url}/rest/v1/enquiries?id=eq.${encodeURIComponent(body.id)}`,{method:"PATCH",headers:dbHeaders(ctx,true),body:JSON.stringify({status:"Deleted"})});
  if(!r.ok)return errorResponse(r.status,"Could not move lead to bin",await r.text());
- await activity(ctx,"system","Lead moved to bin","Lead soft-deleted by admin",String(body.id));
+ await activity(ctx,"system","Lead moved to bin","Lead soft-deleted by admin",Number(body.id));
  return NextResponse.json({ok:true},{status:200});
 }
