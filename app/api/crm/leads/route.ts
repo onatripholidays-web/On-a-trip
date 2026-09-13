@@ -8,7 +8,7 @@ async function auth(){
  const access=(await cookies()).get("oat_crm_access")?.value||"";
  const {url,key}=crmSupabaseConfig();
  const service=process.env.SUPABASE_SERVICE_ROLE_KEY||"";
- return {session,access,url,key,service};
+ return {session,access,url,anon:key,service};
 }
 
 async function activity(ctx:any,type:string,subject:string,body:string,enquiryId:string){
@@ -27,11 +27,17 @@ export async function POST(req:Request){
  let body:any;try{body=await req.json()}catch{return errorResponse(400,"Invalid request body")}
  const a=clean(body,ctx.session);
  if(!a.name&&!a.phone&&!a.email)return errorResponse(400,"Enter at least a name, phone number or email");
- const rpcBody={p_user_id:ctx.session.user.id,p_name:a.name,p_phone:a.phone,p_email:a.email,p_dest:a.dest,p_destination:a.destination,p_value:a.value,p_branch:a.branch,p_source:a.source,p_priority:a.priority,p_notes:a.notes,p_status:a.status,p_salesperson:a.salesperson,p_travel_date:a.travel_date,p_travellers:a.travellers,p_follow_up:a.follow_up};
- const rpcAuth=ctx.service||ctx.access;
- const r=await fetch(`${ctx.url}/rest/v1/rpc/crm_create_lead`,{method:"POST",headers:{apikey:rpcAuth,Authorization:`Bearer ${rpcAuth}`,"Content-Type":"application/json",Prefer:"return=representation"},body:JSON.stringify(rpcBody)});
+ const dbAuth=ctx.service||ctx.access;
+ const r=await fetch(`${ctx.url}/rest/v1/enquiries`,{
+  method:"POST",
+  headers:{apikey:dbAuth,Authorization:`Bearer ${dbAuth}`,"Content-Type":"application/json",Prefer:"return=representation"},
+  body:JSON.stringify(a)
+ });
  const text=await r.text();let data:any=null;try{data=text?JSON.parse(text):null}catch{data=text}
- if(!r.ok)return errorResponse(r.status,"Lead could not be saved",data);
+ if(!r.ok){
+  const detail=typeof data==="object"&&data?`${data.message||data.error||data.hint||""}`.trim():String(data||"");
+  return errorResponse(r.status,detail?`Lead could not be saved: ${detail}`:"Lead could not be saved",data);
+ }
  const item=Array.isArray(data)?data[0]:data;
  if(item?.id)await activity(ctx,"system","Lead created",`Lead created for ${String(item.name||a.name||"")}`,String(item.id));
  return NextResponse.json(Array.isArray(data)?data:[item],{status:201});
