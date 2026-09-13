@@ -1,33 +1,14 @@
 "use client";
-
-import {useState} from "react";
-
+import {useMemo,useState} from "react";
 type Member={id:string;name:string;email:string;role:string;is_active:boolean;auth_user_id?:string|null};
-
-export default function CrmTeamManager({initialTeam}:{initialTeam:Member[]}){
- const [team,setTeam]=useState(initialTeam);
- const [name,setName]=useState("");
- const [email,setEmail]=useState("");
- const [message,setMessage]=useState("");
- return <main className="teamPage">
-  <div className="teamTop"><div><div className="eyebrow">CRM / ADMIN</div><h1>Sales Team</h1><p>Manage sales ownership, login status and lead distribution.</p></div><a className="teamBack" href="/crm">← Back to CRM</a></div>
-  <section className="teamGrid">
-   {team.map(m=><article className="teamCard" key={m.id}>
-    <div className="avatar">{m.name.split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase()}</div>
-    <div className="teamInfo"><h3>{m.name}</h3><div className="mail">{m.email}</div><div className="role">Salesperson</div></div>
-    <span className={m.is_active?"status active":"status"}>{m.is_active?"Active":"Inactive"}</span>
-    <div className="loginState">{m.auth_user_id?"✓ Login connected":"⚠ Login not connected"}</div>
-   </article>)}
-  </section>
-  <section className="teamSetup">
-   <div><h2>Add salesperson</h2><p>Add the team roster here. Passwords are never stored in the CRM database or source code.</p></div>
-   <form onSubmit={async e=>{e.preventDefault();setMessage("");if(!name||!email){setMessage("Enter name and email");return;}const r=await fetch("/api/crm/team",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,email})});const d=await r.json().catch(()=>({}));if(!r.ok){setMessage(d.error||"Could not add salesperson");return;}setTeam(t=>[...t,d.user]);setName("");setEmail("");setMessage("Salesperson added");}}>
-    <input value={name} onChange={e=>setName(e.target.value)} placeholder="Name"/>
-    <input value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email address" type="email"/>
-    <button type="submit">Add to team</button>
-   </form>
-   <div className="securityNote">🔐 Passwords should be created/reset through Supabase Authentication, not saved in CRM.</div>
-   {message&&<div className="teamMessage">{message}</div>}
-  </section>
- </main>;
+type Lead={status?:string|null;salesperson?:string|null;value?:number|null;follow_up?:string|null;assigned_to?:string|null};
+export default function CrmTeamManager({initialTeam,initialLeads}:{initialTeam:Member[];initialLeads:Lead[]}){
+ const [team,setTeam]=useState(initialTeam),[name,setName]=useState(""),[email,setEmail]=useState(""),[message,setMessage]=useState("");
+ const stats=useMemo(()=>team.filter(m=>m.role==="salesperson").map(m=>{const own=initialLeads.filter(l=>l.assigned_to===m.auth_user_id||(!l.assigned_to&&l.salesperson===m.name));const booked=own.filter(l=>l.status==="Booked");const revenue=booked.reduce((s,l)=>s+Number(l.value||0),0);return {...m,leads:own.length,followups:own.filter(l=>l.follow_up).length,bookings:booked.length,revenue,conversion:own.length?Math.round(booked.length/own.length*100):0};}).sort((a,b)=>b.revenue-a.revenue||b.bookings-a.bookings),[team,initialLeads]);
+ const totalBookings=initialLeads.filter(l=>l.status==="Booked").length,totalRevenue=initialLeads.filter(l=>l.status==="Booked").reduce((s,l)=>s+Number(l.value||0),0);
+ return <main className="teamPage"><div className="teamTop"><div><div className="eyebrow">CRM / ADMIN</div><h1>Sales Team</h1><p>Users, lead ownership and live performance.</p></div><a className="teamBack" href="/crm">← Back to CRM</a></div>
+ <section className="teamStats"><div><small>Total Leads</small><b>{initialLeads.length}</b></div><div><small>Bookings</small><b>{totalBookings}</b></div><div><small>Booked Revenue</small><b>₹{Math.round(totalRevenue).toLocaleString("en-IN")}</b></div></section>
+ <section className="teamGrid">{team.map(m=><article className="teamCard" key={m.id}><div className="avatar">{m.name.split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase()}</div><div className="teamInfo"><h3>{m.name}</h3><div className="mail">{m.email}</div><div className="role">{m.role}</div></div><span className={m.is_active?"status active":"status"}>{m.is_active?"Active":"Inactive"}</span><div className="loginState">{m.auth_user_id?"✓ Login connected":"⚠ Login not connected"}</div></article>)}</section>
+ <section className="teamSetup"><div><h2>Performance Ranking</h2><p>Live metrics calculated from assigned CRM leads.</p></div><div style={{overflowX:"auto"}}><table style={{width:"100%",borderCollapse:"collapse",minWidth:760}}><thead><tr>{["#","SALESPERSON","LEADS","FOLLOW-UPS","BOOKINGS","CONVERSION","REVENUE"].map(x=><th key={x} style={{textAlign:"left",padding:12,fontSize:10}}>{x}</th>)}</tr></thead><tbody>{stats.map((m,i)=><tr key={m.id} style={{borderTop:"1px solid #e5eaee"}}><td style={{padding:12,fontWeight:800}}>{i+1}</td><td style={{padding:12,fontWeight:750}}>{m.name}</td><td style={{padding:12}}>{m.leads}</td><td style={{padding:12}}>{m.followups}</td><td style={{padding:12}}>{m.bookings}</td><td style={{padding:12}}>{m.conversion}%</td><td style={{padding:12,fontWeight:800}}>₹{Math.round(m.revenue).toLocaleString("en-IN")}</td></tr>)}</tbody></table></div></section>
+ <section className="teamSetup"><div><h2>Add salesperson</h2><p>Passwords are never stored in CRM.</p></div><form onSubmit={async e=>{e.preventDefault();setMessage("");if(!name||!email){setMessage("Enter name and email");return;}const r=await fetch("/api/crm/team",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,email})});const d=await r.json().catch(()=>({}));if(!r.ok){setMessage(d.error||"Could not add salesperson");return;}setTeam(t=>[...t,d.user]);setName("");setEmail("");setMessage("Salesperson added");}}><input value={name} onChange={e=>setName(e.target.value)} placeholder="Name"/><input value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email address" type="email"/><button type="submit">Add to team</button></form>{message&&<div className="teamMessage">{message}</div>}</section></main>;
 }
