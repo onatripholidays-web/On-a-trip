@@ -17,7 +17,7 @@ function dbHeaders(ctx:any,write=false){
 }
 
 async function activity(ctx:any,type:string,subject:string,body:string,enquiryId:string){
- try{await fetch(`${ctx.url}/rest/v1/crm_activities`,{method:"POST",headers:dbHeaders(ctx,true),body:JSON.stringify({enquiry_id:enquiryId,actor_id:ctx.session.user.id,type,subject,body,metadata:{}})})}catch{}
+ try{await fetch(`${ctx.url}/rest/v1/crm_lead_activities`,{method:"POST",headers:dbHeaders(ctx,true),body:JSON.stringify({enquiry_id:enquiryId,created_by:ctx.session.user.id,activity_type:type,subject,body})})}catch{}
 }
 
 function clean(body:any,session:any){
@@ -55,6 +55,7 @@ export async function PATCH(req:Request){
  const patch:any={};for(const key of allowedKeys)if(body[key]!==undefined)patch[key]=body[key];
  if(body.destination!==undefined)patch.destination=body.destination;if(body.dest!==undefined)patch.dest=body.dest;if(body.travelDate!==undefined)patch.travel_date=body.travelDate||null;if(body.followUp!==undefined)patch.follow_up=body.followUp||null;if(body.travellers!==undefined)patch.travellers=Number(body.travellers)||null;if(body.value!==undefined)patch.value=body.value===""||body.value===null?null:Number(body.value);if(ctx.session.profile.role!=="admin")delete patch.salesperson;
  if(!Object.keys(patch).length)return errorResponse(400,"No lead changes supplied");
+ patch.updated_by=ctx.session.user.id;patch.updated_at=new Date().toISOString();
  const r=await fetch(`${ctx.url}/rest/v1/enquiries?id=eq.${encodeURIComponent(id)}${ownerFilter}`,{method:"PATCH",headers:dbHeaders(ctx,true),body:JSON.stringify(patch)});
  const text=await r.text();let data:any=null;try{data=text?JSON.parse(text):null}catch{data=text}
  if(!r.ok)return errorResponse(r.status,"Lead could not be updated",data);
@@ -67,7 +68,7 @@ export async function DELETE(req:Request){
  if(ctx.session.profile.role!=="admin")return errorResponse(403,"Only admins can delete leads");
  let body:any;try{body=await req.json()}catch{return errorResponse(400,"Invalid request body")}
  if(!body.id)return errorResponse(400,"Lead id is required");
- const r=await fetch(`${ctx.url}/rest/v1/enquiries?id=eq.${encodeURIComponent(body.id)}`,{method:"PATCH",headers:dbHeaders(ctx,true),body:JSON.stringify({status:"Deleted"})});
+ const r=await fetch(`${ctx.url}/rest/v1/enquiries?id=eq.${encodeURIComponent(body.id)}`,{method:"PATCH",headers:dbHeaders(ctx,true),body:JSON.stringify({status:"Deleted",updated_by:ctx.session.user.id,updated_at:new Date().toISOString()})});
  if(!r.ok)return errorResponse(r.status,"Could not move lead to bin",await r.text());
  await activity(ctx,"system","Lead moved to bin","Lead soft-deleted by admin",String(body.id));
  return NextResponse.json({ok:true},{status:200});
