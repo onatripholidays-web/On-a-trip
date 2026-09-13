@@ -2,7 +2,7 @@ import {NextResponse} from "next/server";
 import {cookies} from "next/headers";
 import {getCrmSession,crmSupabaseConfig} from "@/lib/crm-auth";
 
-const fields="id,name,phone,email,dest,destination,status,salesperson,source,branch,priority,value,notes,follow,follow_up,date,travel_date,trav,travellers,created_at";
+const fields="id,name,phone,email,dest,destination,status,salesperson,source,branch,priority,value,notes,travel_date,travellers,follow_up,created_at";
 
 function esc(value:string){return value.replace(/,/g,"%2C").replace(/\./g,"%2E");}
 
