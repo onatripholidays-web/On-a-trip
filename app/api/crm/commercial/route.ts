@@ -7,10 +7,12 @@ type Resource=keyof typeof resources;
 type Context={session:Awaited<ReturnType<typeof getCrmSession>>;token:string;url:string;key:string};
 type HeaderContext={key:string;token:string};
 type JsonValue=unknown;
+type RequestBody={resource?:string;id?:string|number;data?:Record<string,JsonValue>};
 async function ctx():Promise<Context|null>{const session=await getCrmSession();if(!session)return null;const token=(await cookies()).get("oat_crm_access")?.value||"";const {url,key}=crmSupabaseConfig();return{session,token,url,key}}
 function resource(v:string|null):Resource|null{return v&&v in resources?(v as Resource):null}
 function headers(c:HeaderContext,extra:Record<string,string>={}):Record<string,string>{return{apikey:c.key,Authorization:`Bearer ${c.token}`,...extra}}
 function docNo(prefix:string):string{const d=new Date();return `${prefix}-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}-${Date.now().toString(36).toUpperCase()}`}
+async function readJson(req:Request):Promise<RequestBody|null>{try{return await req.json() as RequestBody}catch{return null}}
 
 export async function GET(req:Request):Promise<NextResponse>{
  const c=await ctx();
@@ -35,10 +37,10 @@ export async function GET(req:Request):Promise<NextResponse>{
 export async function POST(req:Request):Promise<NextResponse>{
  const c=await ctx();
  if(!c)return NextResponse.json({error:"Unauthorized"},{status:401});
- const body=await req.json().catch(()=>null as JsonValue);
- const r=resource((body as {resource?:string}|null)?.resource||null);
+ const body=await readJson(req);
+ const r=resource(body?.resource||null);
  if(!r||r==="audit")return NextResponse.json({error:"Invalid resource"},{status:400});
- const payload={...(((body as {data?:Record<string,JsonValue>}|null)?.data)||{})};
+ const payload={...(body?.data||{})};
  delete payload.resource;
  payload.created_by=payload.created_by||c.session.user.id;
  if(r==="customers"&&!payload.assigned_to)payload.assigned_to=c.session.profile.salesperson;
@@ -53,8 +55,7 @@ export async function POST(req:Request):Promise<NextResponse>{
 export async function PATCH(req:Request):Promise<NextResponse>{
  const c=await ctx();
  if(!c)return NextResponse.json({error:"Unauthorized"},{status:401});
- const body=await req.json().catch(()=>null as JsonValue);
- const typedBody=body as {resource?:string;id?:string|number;data?:Record<string,JsonValue>}|null;
+ const typedBody=await readJson(req);
  const r=resource(typedBody?.resource||null);
  const id=typedBody?.id;
  if(!r||!id||r==="audit")return NextResponse.json({error:"Resource and id are required"},{status:400});
@@ -71,8 +72,7 @@ export async function DELETE(req:Request):Promise<NextResponse>{
  const c=await ctx();
  if(!c)return NextResponse.json({error:"Unauthorized"},{status:401});
  if(c.session.profile.role!=="admin")return NextResponse.json({error:"Only admins can delete CRM records"},{status:403});
- const body=await req.json().catch(()=>null as JsonValue);
- const typedBody=body as {resource?:string;id?:string|number}|null;
+ const typedBody=await readJson(req);
  const r=resource(typedBody?.resource||null);
  const id=typedBody?.id;
  if(!r||!id||r==="audit")return NextResponse.json({error:"Resource and id are required"},{status:400});
