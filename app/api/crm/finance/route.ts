@@ -79,14 +79,15 @@ export async function POST(req: Request): Promise<NextResponse> {
       const booking = body.booking_id
         ? ((await db(c, `crm_bookings?id=eq.${encodeURIComponent(body.booking_id)}&select=*`)) || [])[0]
         : null;
+      if (body.booking_id && !booking) return NextResponse.json({ error: "Booking not found" }, { status: 404 });
       const total = num(body.total ?? booking?.total_amount);
       if (total <= 0) return NextResponse.json({ error: "Invoice total must be greater than zero" }, { status: 400 });
-      const paid = num(booking?.paid_amount);
+      const paid = Math.min(num(booking?.paid_amount), total);
       const status = paid >= total ? "paid" : paid > 0 ? "partially_paid" : "sent";
-      const payload = {
+      const invoicePayload = {
         invoice_no: body.invoice_no || `INV-${new Date().toISOString().slice(0, 7).replace("-", "")}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`,
-        booking_id: body.booking_id || null,
-        quotation_id: body.quotation_id || null,
+        booking_id: booking?.id || null,
+        quotation_id: body.quotation_id || booking?.quotation_id || null,
         customer_id: body.customer_id || booking?.customer_id || null,
         invoice_date: body.invoice_date || today(),
         due_date: body.due_date || null,
@@ -95,17 +96,38 @@ export async function POST(req: Request): Promise<NextResponse> {
         tax: num(body.tax),
         tcs: num(body.tcs),
         total,
-        paid_amount: Math.min(paid, total),
+        paid_amount: paid,
         balance_amount: Math.max(0, total - paid),
         status,
         notes: body.notes || null,
         created_by: c.session.user.id,
       };
-      return NextResponse.json(await db(c, "crm_invoices", {
+      const rows = await db(c, "crm_invoices", {
         method: "POST",
         headers: { Prefer: "return=representation" },
-        body: JSON.stringify(payload),
-      }));
+        body: JSON.stringify(invoicePayload),
+      });
+      const invoice = Array.isArray(rows) ? rows[0] : rows;
+      if (!invoice?.id) throw new Error("Invoice was not created");
+      try {
+        await db(c, "crm_invoice_items", {
+          method: "POST",
+          headers: { Prefer: "return=minimal" },
+          body: JSON.stringify({
+            invoice_id: invoice.id,
+            description: body.description || booking?.destination || "Travel booking",
+            quantity: Math.max(1, num(booking?.travellers) || 1),
+            rate: total / Math.max(1, num(booking?.travellers) || 1),
+            tax_rate: num(body.tax_rate),
+            amount: total,
+            sort_order: 0,
+          }),
+        });
+      } catch (itemError) {
+        await db(c, `crm_invoices?id=eq.${encodeURIComponent(invoice.id)}`, { method: "DELETE" }).catch(() => undefined);
+        throw itemError;
+      }
+      return NextResponse.json({ invoice });
     }
 
     if (type === "payment") {
