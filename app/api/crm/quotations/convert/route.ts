@@ -33,7 +33,7 @@ export async function POST(req: Request) {
       `${c.url}/rest/v1/crm_quotations?id=eq.${encodeURIComponent(quotationId)}&select=*`,
       { headers: h(c), cache: "no-store" },
     );
-    const qs = await qR.json().catch(() => null);
+    const qs = await qR.json();
     if (!qR.ok) return NextResponse.json({ error: "Could not load quotation", details: qs }, { status: 502 });
 
     const q = Array.isArray(qs) ? qs[0] : null;
@@ -50,8 +50,6 @@ export async function POST(req: Request) {
       .slice(0, 6)
       .toUpperCase()}`;
 
-    // Live Supabase booking contract: quotation_id / departure_date /
-    // return_date / travellers / assigned_to.
     const booking = {
       booking_no: bno,
       quotation_id: q.id,
@@ -75,7 +73,7 @@ export async function POST(req: Request) {
       headers: h(c, { "Content-Type": "application/json", Prefer: "return=representation" }),
       body: JSON.stringify(booking),
     });
-    const d = await r.json().catch(() => null);
+    const d = await r.json();
     if (!r.ok) return NextResponse.json({ error: "Could not create booking", details: d }, { status: 502 });
 
     const bookingRow = Array.isArray(d) ? d[0] : d;
