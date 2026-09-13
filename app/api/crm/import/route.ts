@@ -27,7 +27,8 @@ export async function POST(req:Request):Promise<NextResponse>{
  const {url,key}=crmSupabaseConfig();
  const token=(await cookies()).get("oat_crm_access")?.value||"";
  const existing=await fetch(`${url}/rest/v1/enquiries?select=phone&limit=50000`,{headers:{apikey:key,Authorization:`Bearer ${token}`},cache:"no-store"});
- const old=await existing.json().catch(()=>[]);
+ let old:any=[];
+ try{old=await existing.json()}catch{old=[]}
  const phones=new Set((Array.isArray(old)?old:[]).map((x:any)=>String(x.phone||"").replace(/\D/g,"")).filter(Boolean));
  const unique=clean.filter((r:any)=>{const p=r.phone.replace(/\D/g,"");if(!p||phones.has(p))return false;phones.add(p);return true});
  let imported=0;const errors:string[]=[];
