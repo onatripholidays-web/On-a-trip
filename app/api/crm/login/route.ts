@@ -2,7 +2,8 @@ import {NextResponse} from "next/server";
 
 export async function POST(req:Request){
   try{
-    const body=await req.json().catch(()=>null);
+    let body:any=null;
+    try{body=await req.json()}catch{body=null}
     const email=String(body?.email||"").trim().toLowerCase();
     const password=String(body?.password||"");
     const {url,key}=getConfig();
@@ -14,7 +15,8 @@ export async function POST(req:Request){
       body:JSON.stringify({email,password}),
       cache:"no-store"
     });
-    const data=await auth.json().catch(()=>null);
+    let data:any=null;
+    try{data=await auth.json()}catch{data=null}
     if(!auth.ok){
       const message=String(data?.error_description||data?.msg||data?.message||"Invalid login details.");
       return NextResponse.json({error:message},{status:401});
@@ -27,7 +29,8 @@ export async function POST(req:Request){
       headers:{apikey:key,Authorization:`Bearer ${data.access_token}`},
       cache:"no-store"
     });
-    const profiles=await profile.json().catch(()=>null);
+    let profiles:any=null;
+    try{profiles=await profile.json()}catch{profiles=null}
     if(!profile.ok){
       const message=String(profiles?.message||profiles?.error_description||profiles?.hint||"CRM user authorization check failed.");
       return NextResponse.json({error:message},{status:502});
