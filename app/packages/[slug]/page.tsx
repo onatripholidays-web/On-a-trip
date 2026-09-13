@@ -29,7 +29,7 @@ export default async function PackagePage({params}:{params:Promise<{slug:string}
         <span className="eyebrow">{item.category} • ON A TRIP HOLIDAYS</span>
         <h1>{item.name}</h1>
         <p>{item.route}</p>
-        <div className="hero-buttons"><Link className="btn primary" href="#enquiry">Get a quote</Link><a className="btn ghost" target="_blank" rel="noreferrer" href={`https://wa.me/919182894146?text=${encodeURIComponent(`Hi On A Trip Holidays, I am interested in ${item.name}.`)}'}>WhatsApp us</a></div>
+        <div className="hero-buttons"><Link className="btn primary" href="#enquiry">Get a quote</Link><a className="btn ghost" target="_blank" rel="noreferrer" href={`https://wa.me/919182894146?text=${encodeURIComponent(`Hi On A Trip Holidays, I am interested in ${item.name}.`)}`}>WhatsApp us</a></div>
         {variants.length>0&&<PackageVariants options={variants}/>} 
       </div>
     </section>
