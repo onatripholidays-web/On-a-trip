@@ -124,7 +124,8 @@ export async function POST(req: Request): Promise<NextResponse> {
           }),
         });
       } catch (itemError) {
-        await db(c, `crm_invoices?id=eq.${encodeURIComponent(invoice.id)}`, { method: "DELETE" }).catch(() => undefined);
+        await db(c, `crm_invoices?id=eq.${encodeURIComponent(invoice.id)}`, { method: "DELETE" })
+          .catch((_cleanupError: unknown): undefined => undefined);
         throw itemError;
       }
       return NextResponse.json({ invoice });
