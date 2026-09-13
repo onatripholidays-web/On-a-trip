@@ -27,11 +27,13 @@ export async function POST(req:Request){
  let body:any;try{body=await req.json()}catch{return errorResponse(400,"Invalid request body")}
  const allowed=clean(body,ctx.session);
  if(!allowed.name&&!allowed.phone&&!allowed.email)return errorResponse(400,"Enter at least a name, phone number or email");
- const r=await fetch(`${ctx.url}/rest/v1/enquiries`,{method:"POST",headers:{apikey:ctx.key,Authorization:`Bearer ${ctx.auth}`,"Content-Type":"application/json",Prefer:"return=representation"},body:JSON.stringify(allowed)});
+ const rpcBody={p_name:allowed.name,p_phone:allowed.phone,p_email:allowed.email,p_dest:allowed.dest,p_destination:allowed.destination,p_value:allowed.value,p_branch:allowed.branch,p_source:allowed.source,p_priority:allowed.priority,p_notes:allowed.notes,p_status:allowed.status,p_salesperson:allowed.salesperson,p_travel_date:allowed.travel_date,p_travellers:allowed.travellers,p_follow_up:allowed.follow_up};
+ const r=await fetch(`${ctx.url}/rest/v1/rpc/crm_create_lead`,{method:"POST",headers:{apikey:ctx.key,Authorization:`Bearer ${ctx.auth}`,"Content-Type":"application/json",Prefer:"return=representation"},body:JSON.stringify(rpcBody)});
  const text=await r.text();let data:any=null;try{data=text?JSON.parse(text):null}catch{data=text}
  if(!r.ok)return errorResponse(r.status,"Lead could not be saved",data);
- if(Array.isArray(data)&&data[0]?.id)await activity(ctx,"system","Lead created",`Lead created for ${String(data[0].name||allowed.name||"")}`,String(data[0].id));
- return NextResponse.json(data,{status:201});
+ const item=Array.isArray(data)?data[0]:data;
+ if(item?.id)await activity(ctx,"system","Lead created",`Lead created for ${String(item.name||allowed.name||"")}`,String(item.id));
+ return NextResponse.json(Array.isArray(data)?data:[item],{status:201});
 }
 
 export async function PATCH(req:Request){
