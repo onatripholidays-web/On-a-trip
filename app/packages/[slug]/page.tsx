@@ -9,18 +9,18 @@ import TourItineraryExperience from "@/components/TourItineraryExperience";
 import {packages,packageBySlug} from "@/lib/site-data";
 import {getItineraryProfile} from "@/lib/itinerary-library";
 
-export async function generateStaticParams(){return packages.map(x=>({slug:x.slug}))}
+export async function generateStaticParams(){return packages.filter(x=>x.visible!==false).map(x=>({slug:x.slug}))}
 
 export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{
   const item=packageBySlug((await params).slug);
-  return item?{title:`${item.name} | Full Day Wise Itinerary | On A Trip Holidays`,description:`Full day-wise ${item.name} itinerary with route, stays, meals, highlights, inclusions and travel notes from On A Trip Holidays.`,alternates:{canonical:`/packages/${item.slug}`}}:{};
+  return item&&item.visible!==false?{title:`${item.name} | Full Day Wise Itinerary | On A Trip Holidays`,description:`Full day-wise ${item.name} itinerary with route, stays, meals, highlights, inclusions and travel notes from On A Trip Holidays.`,alternates:{canonical:`/packages/${item.slug}`}}:{};
 }
 
 export default async function PackagePage({params}:{params:Promise<{slug:string}>}){
   const {slug}=await params;
   const item=packageBySlug(slug);
-  if(!item)notFound();
-  const variants=packages.filter(x=>x.parentSlug===item.slug);
+  if(!item||item.visible===false)notFound();
+  const variants=packages.filter(x=>x.parentSlug===item.slug&&x.visible!==false);
   const related=packages.filter(x=>x.visible!==false&&x.category===item.category&&x.slug!==item.slug&&x.parentSlug===undefined).slice(0,3);
   const plan=getItineraryProfile(item);
   return <SiteShell><main>
@@ -29,7 +29,7 @@ export default async function PackagePage({params}:{params:Promise<{slug:string}
         <span className="eyebrow">{item.category} • ON A TRIP HOLIDAYS</span>
         <h1>{item.name}</h1>
         <p>{item.route}</p>
-        <div className="hero-buttons"><Link className="btn primary" href="#enquiry">Get a quote</Link><a className="btn ghost" target="_blank" rel="noreferrer" href={`https://wa.me/919182894146?text=${encodeURIComponent(`Hi On A Trip Holidays, I am interested in ${item.name}.`)}`}>WhatsApp us</a></div>
+        <div className="hero-buttons"><Link className="btn primary" href="#enquiry">Get a quote</Link><a className="btn ghost" target="_blank" rel="noreferrer" href={`https://wa.me/919182894146?text=${encodeURIComponent(`Hi On A Trip Holidays, I am interested in ${item.name}.`)}'}>WhatsApp us</a></div>
         {variants.length>0&&<PackageVariants options={variants}/>} 
       </div>
     </section>
