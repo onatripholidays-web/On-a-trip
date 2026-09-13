@@ -59,5 +59,5 @@ export default async function CrmLayout({children}:{children:React.ReactNode}){
    @media (max-width:900px){.crm-app .crm-page{padding:20px 18px 30px;}.crm-app .crm-top{padding:12px 18px;}}
    @media (max-width:700px){.crm-app .crm-page{padding:16px 12px 24px;}.crm-app .crm-welcome{padding:20px;margin-bottom:14px;}.crm-app .crm-stats{gap:8px;}.crm-app .crm-stats>div{padding:14px 12px;}.crm-app .crm-top-actions{gap:5px;}.crm-app .crm-top-actions button{padding:8px 9px;font-size:8px;}.crm-app .crm-top-actions button:first-child{display:inline-flex!important;}}
   `}</style>
- </div>;
+ </>;
 }
