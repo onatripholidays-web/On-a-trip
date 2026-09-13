@@ -5,6 +5,8 @@ import {packages as sitePackages} from "@/lib/site-data";
 
 export const dynamic="force-dynamic";
 
+const emptyList:string[]=[];
+
 export async function GET(){
   const session=await getCrmSession();
   if(!session)return NextResponse.json({error:"Unauthorized"},{status:401});
@@ -21,13 +23,13 @@ export async function GET(){
     return NextResponse.json(sitePackages.filter(p=>p.visible!==false).map(p=>({
       id:p.slug,slug:p.slug,name:p.name,category:p.category,duration:p.duration,route:p.route,
       from_location:p.from,price:p.price,description:p.description,image:p.image,highlights:p.highlights||[],
-      meals:p.meals||null,batch:p.batch||null,visible:true,status:"published",itinerary:[],inclusions:[],exclusions:[]
+      meals:p.meals||null,batch:p.batch||null,visible:true,status:"published",itinerary:emptyList,inclusions:emptyList,exclusions:emptyList
     })));
   }catch{
     return NextResponse.json(sitePackages.filter(p=>p.visible!==false).map(p=>({
       id:p.slug,slug:p.slug,name:p.name,category:p.category,duration:p.duration,route:p.route,
       from_location:p.from,price:p.price,description:p.description,image:p.image,highlights:p.highlights||[],
-      meals:p.meals||null,batch:p.batch||null,visible:true,status:"published",itinerary:[],inclusions:[],exclusions:[]
+      meals:p.meals||null,batch:p.batch||null,visible:true,status:"published",itinerary:emptyList,inclusions:emptyList,exclusions:emptyList
     })));
   }
 }
