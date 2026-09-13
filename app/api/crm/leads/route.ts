@@ -28,7 +28,9 @@ export async function POST(req:Request){
  const allowed=clean(body,ctx.session);
  if(!allowed.name&&!allowed.phone&&!allowed.email)return errorResponse(400,"Enter at least a name, phone number or email");
  const rpcBody={p_name:allowed.name,p_phone:allowed.phone,p_email:allowed.email,p_dest:allowed.dest,p_destination:allowed.destination,p_value:allowed.value,p_branch:allowed.branch,p_source:allowed.source,p_priority:allowed.priority,p_notes:allowed.notes,p_status:allowed.status,p_salesperson:allowed.salesperson,p_travel_date:allowed.travel_date,p_travellers:allowed.travellers,p_follow_up:allowed.follow_up};
- const r=await fetch(`${ctx.url}/rest/v1/rpc/crm_create_lead`,{method:"POST",headers:{apikey:ctx.key,Authorization:`Bearer ${ctx.auth}`,"Content-Type":"application/json",Prefer:"return=representation"},body:JSON.stringify(rpcBody)});
+ // IMPORTANT: the RPC uses auth.uid(), so the Authorization header must be the
+ // signed-in user's access token. Never send the service-role token here.
+ const r=await fetch(`${ctx.url}/rest/v1/rpc/crm_create_lead`,{method:"POST",headers:{apikey:ctx.key,Authorization:`Bearer ${ctx.access}`,"Content-Type":"application/json",Prefer:"return=representation"},body:JSON.stringify(rpcBody)});
  const text=await r.text();let data:any=null;try{data=text?JSON.parse(text):null}catch{data=text}
  if(!r.ok)return errorResponse(r.status,"Lead could not be saved",data);
  const item=Array.isArray(data)?data[0]:data;
