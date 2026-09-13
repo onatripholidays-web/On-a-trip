@@ -1,7 +1,7 @@
 "use client";
 import {useEffect} from "react";
 
-export default function CrmHeaderActionsPatch(){
+export default function CrmHeaderActionsPatch():null{
  useEffect(()=>{
   const patch=()=>{
    const bar=document.querySelector(".crm-top-actions") as HTMLElement|null;
