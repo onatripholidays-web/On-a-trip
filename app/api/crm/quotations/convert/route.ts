@@ -50,14 +50,13 @@ export async function POST(req: Request) {
       .slice(0, 6)
       .toUpperCase()}`;
 
-    // IMPORTANT: use the live Supabase booking contract. The database uses
-    // quotation_id / departure_date / return_date / travellers / assigned_to.
+    // Live Supabase booking contract: quotation_id / departure_date /
+    // return_date / travellers / assigned_to.
     const booking = {
       booking_no: bno,
       quotation_id: q.id,
       customer_id: q.customer_id,
       enquiry_id: q.enquiry_id || null,
-      package_id: q.package_id || null,
       destination: q.destination || null,
       departure_date: q.travel_date || null,
       return_date: q.return_date || null,
@@ -77,14 +76,10 @@ export async function POST(req: Request) {
       body: JSON.stringify(booking),
     });
     const d = await r.json().catch(() => null);
-    if (!r.ok) {
-      return NextResponse.json({ error: "Could not create booking", details: d }, { status: 502 });
-    }
+    if (!r.ok) return NextResponse.json({ error: "Could not create booking", details: d }, { status: 502 });
 
     const bookingRow = Array.isArray(d) ? d[0] : d;
 
-    // Mark the quotation only after the booking exists. Keep the live quotation
-    // table as the single source of truth for quotation status.
     const qUpdate = await fetch(
       `${c.url}/rest/v1/crm_quotations?id=eq.${encodeURIComponent(q.id)}`,
       {
@@ -95,8 +90,6 @@ export async function POST(req: Request) {
     );
 
     if (!qUpdate.ok) {
-      // Do not pretend the conversion succeeded: the booking exists but the
-      // quotation state is inconsistent and must be surfaced to the operator.
       return NextResponse.json(
         {
           error: "Booking created but quotation status could not be updated. Do not convert this quotation again.",
@@ -116,7 +109,7 @@ export async function POST(req: Request) {
         },
       );
       if (!enquiryUpdate.ok) {
-        console.warn("Booking conversion succeeded but enquiry status could not be updated", await enquiryUpdate.text().catch(() => ""));
+        console.warn("Booking conversion succeeded but enquiry status could not be updated");
       }
     }
 
