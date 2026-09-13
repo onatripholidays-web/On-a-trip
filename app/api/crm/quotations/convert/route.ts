@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getCrmSession, crmSupabaseConfig } from "@/lib/crm-auth";
 
+type JsonValue = unknown;
+
 async function ctx() {
   const session = await getCrmSession();
   if (!session) return null;
@@ -10,17 +12,23 @@ async function ctx() {
   return { session, token, url, key };
 }
 
-function h(c: any, extra: Record<string, string> = {}) {
+type CrmContext = NonNullable<Awaited<ReturnType<typeof ctx>>>;
+
+function h(c: CrmContext, extra: Record<string, string> = {}): Record<string, string> {
   return { apikey: c.key, Authorization: `Bearer ${c.token}`, ...extra };
+}
+
+async function readJson(response: Response): Promise<JsonValue> {
+  return response.json().catch((): JsonValue => null);
 }
 
 export async function POST(req: Request) {
   const c = await ctx();
   if (!c) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  let body: any = {};
+  let body: Record<string, unknown> = {};
   try {
-    body = await req.json();
+    body = (await req.json()) as Record<string, unknown>;
   } catch {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
@@ -33,7 +41,7 @@ export async function POST(req: Request) {
       `${c.url}/rest/v1/crm_quotations?id=eq.${encodeURIComponent(quotationId)}&select=*`,
       { headers: h(c), cache: "no-store" },
     );
-    const qs = await qR.json().catch(() => null);
+    const qs = await readJson(qR);
     if (!qR.ok) return NextResponse.json({ error: "Could not load quotation", details: qs }, { status: 502 });
 
     const q = Array.isArray(qs) ? qs[0] : null;
@@ -50,8 +58,6 @@ export async function POST(req: Request) {
       .slice(0, 6)
       .toUpperCase()}`;
 
-    // Live Supabase booking contract: quotation_id / departure_date /
-    // return_date / travellers / assigned_to.
     const booking = {
       booking_no: bno,
       quotation_id: q.id,
@@ -75,7 +81,7 @@ export async function POST(req: Request) {
       headers: h(c, { "Content-Type": "application/json", Prefer: "return=representation" }),
       body: JSON.stringify(booking),
     });
-    const d = await r.json().catch(() => null);
+    const d = await readJson(r);
     if (!r.ok) return NextResponse.json({ error: "Could not create booking", details: d }, { status: 502 });
 
     const bookingRow = Array.isArray(d) ? d[0] : d;
@@ -114,7 +120,8 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ ok: true, booking: bookingRow });
-  } catch (e: any) {
-    return NextResponse.json({ error: e?.message || "Conversion failed" }, { status: 502 });
+  } catch (e: unknown) {
+    const message = e instanceof Error ? e.message : "Conversion failed";
+    return NextResponse.json({ error: message }, { status: 502 });
   }
 }
