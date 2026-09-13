@@ -1,7 +1,7 @@
 import {cookies} from "next/headers";
 
 export type CrmRole="admin"|"salesperson";
-export type CrmSession={user:{id:string;email?:string};profile:{role:CrmRole;salesperson:string|null;email:string}};
+export type CrmSession={user:{id:string;email?:string};profile:{role:CrmRole;salesperson?:string;email:string}};
 
 const url=process.env.NEXT_PUBLIC_SUPABASE_URL;
 const key=process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -18,7 +18,7 @@ export async function getCrmSession():Promise<CrmSession|null>{
   const profiles=await profileRes.json();
   const profile=profiles?.[0];
   if(!profile)return null;
-  return {user,profile};
+  return {user,profile:{...profile,salesperson:profile.salesperson??undefined}};
 }
 
 export function crmSupabaseConfig(){
