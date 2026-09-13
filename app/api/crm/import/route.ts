@@ -2,15 +2,16 @@ import {NextResponse} from "next/server";
 import {cookies} from "next/headers";
 import {crmSupabaseConfig,getCrmSession} from "@/lib/crm-auth";
 
-const cleanText=(v:any)=>String(v??"").trim();
-const cleanPhone=(v:any)=>cleanText(v).replace(/\s+/g," ");
-const date=(v:any)=>{const x=cleanText(v);return x||null};
+const cleanText=(v:any):string=>String(v??"").trim();
+const cleanPhone=(v:any):string=>cleanText(v).replace(/\s+/g," ");
+const date=(v:any):string|null=>{const x=cleanText(v);return x||null};
 
-export async function POST(req:Request){
+export async function POST(req:Request):Promise<NextResponse>{
  const session=await getCrmSession();
  if(!session)return NextResponse.json({error:"Unauthorized"},{status:401});
- const body=await req.json().catch(()=>null);
- const rows=Array.isArray(body?.rows)?body.rows:[];
+ let body:any=null;
+ try{body=await req.json()}catch{body=null}
+ const rows:Array<any>=Array.isArray(body?.rows)?body.rows:[];
  if(!rows.length)return NextResponse.json({error:"No rows supplied"},{status:400});
  if(rows.length>1000)return NextResponse.json({error:"Maximum 1000 rows per import"},{status:400});
  const clean=rows.map((r:any)=>({
