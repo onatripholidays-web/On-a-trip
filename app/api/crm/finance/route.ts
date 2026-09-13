@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { crmSupabaseConfig, getCrmSession } from "@/lib/crm-auth";
 
 type CrmContext = { session: Awaited<ReturnType<typeof getCrmSession>>; token: string; url: string; key: string };
@@ -7,7 +8,7 @@ type HeaderContext = { key: string; token: string };
 async function ctx(): Promise<CrmContext | null> {
   const session = await getCrmSession();
   if (!session) return null;
-  const token = (await (await import("next/headers")).cookies()).get("oat_crm_access")?.value || "";
+  const token = (await cookies()).get("oat_crm_access")?.value || "";
   const { url, key } = crmSupabaseConfig();
   return { session, token, url, key };
 }
@@ -81,9 +82,6 @@ export async function POST(req: Request): Promise<NextResponse> {
       const total = num(body.total ?? booking?.total_amount);
       if (total <= 0) return NextResponse.json({ error: "Invoice total must be greater than zero" }, { status: 400 });
       const paid = num(booking?.paid_amount);
-
-      // Live DB accepts: draft, sent, partially_paid, paid, overdue, cancelled.
-      // "issued" was used by the old API but is rejected by the live CHECK constraint.
       const status = paid >= total ? "paid" : paid > 0 ? "partially_paid" : "sent";
       const payload = {
         invoice_no: body.invoice_no || `INV-${new Date().toISOString().slice(0, 7).replace("-", "")}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`,
@@ -113,9 +111,7 @@ export async function POST(req: Request): Promise<NextResponse> {
     if (type === "payment") {
       const bookingId = body.booking_id;
       const amount = num(body.amount);
-      if (!bookingId || amount <= 0) {
-        return NextResponse.json({ error: "Booking and positive payment amount are required" }, { status: 400 });
-      }
+      if (!bookingId || amount <= 0) return NextResponse.json({ error: "Booking and positive payment amount are required" }, { status: 400 });
 
       const booking = ((await db(c, `crm_bookings?id=eq.${encodeURIComponent(bookingId)}&select=*`)) || [])[0];
       if (!booking) return NextResponse.json({ error: "Booking not found" }, { status: 404 });
@@ -148,16 +144,11 @@ export async function POST(req: Request): Promise<NextResponse> {
         body: JSON.stringify(payload),
       })) || [];
 
-      // Preserve the live booking status; do not write the legacy invalid "pending" value.
       const existingStatus = String(booking.status || "confirmed");
       const updated = (await db(c, `crm_bookings?id=eq.${encodeURIComponent(bookingId)}`, {
         method: "PATCH",
         headers: { Prefer: "return=representation" },
-        body: JSON.stringify({
-          paid_amount: newPaid,
-          balance_amount: Math.max(0, total - newPaid),
-          status: existingStatus,
-        }),
+        body: JSON.stringify({ paid_amount: newPaid, balance_amount: Math.max(0, total - newPaid), status: existingStatus }),
       })) || [];
 
       return NextResponse.json({ payment: payment?.[0] || null, booking: updated?.[0] || null });
