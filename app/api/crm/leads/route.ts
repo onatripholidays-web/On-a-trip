@@ -48,7 +48,8 @@ export async function PATCH(req:Request){
  const id=body.id;if(!id)return errorResponse(400,"Lead id is required");
  const ownerFilter=ctx.session.profile.role==="admin"?"":`&salesperson=eq.${encodeURIComponent(ctx.session.profile.salesperson||"")}`;
  const beforeRes=await fetch(`${ctx.url}/rest/v1/enquiries?select=id,name,status,salesperson&id=eq.${encodeURIComponent(id)}${ownerFilter}`,{headers:dbHeaders(ctx),cache:"no-store"});
- const beforeRows=await beforeRes.json().catch(()=>[]);
+ let beforeRows:any[]=[];
+ try{beforeRows=await beforeRes.json()}catch{beforeRows=[]}
  if(!beforeRes.ok||!Array.isArray(beforeRows)||!beforeRows[0])return errorResponse(404,"Lead not found or not assigned to this salesperson",beforeRows);
  const allowedKeys=["name","phone","email","dest","destination","value","branch","source","priority","notes","status","salesperson","travel_date","travellers","follow_up"];
  const patch:any={};for(const key of allowedKeys)if(body[key]!==undefined)patch[key]=body[key];
