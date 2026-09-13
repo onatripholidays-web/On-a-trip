@@ -17,7 +17,7 @@ function dbHeaders(ctx:any,write=false){
 }
 
 async function activity(ctx:any,type:string,subject:string,body:string,enquiryId:string){
- try{await fetch(`${ctx.url}/rest/v1/crm_activities`,{method:"POST",headers:dbHeaders(ctx,true),body:JSON.stringify({enquiry_id:enquiryId,actor_id:ctx.session.user.id,type,subject,body,metadata:{}})})}catch{}
+ try{await fetch(`${ctx.url}/rest/v1/crm_lead_activities`,{method:"POST",headers:dbHeaders(ctx,true),body:JSON.stringify({enquiry_id:Number(enquiryId),created_by:ctx.session.user.id,activity_type:type,subject,body})})}catch{}
 }
 
 function clean(body:any,session:any){
