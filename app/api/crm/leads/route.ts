@@ -14,11 +14,31 @@ async function activity(ctx:any,type:string,subject:string,body:string,enquiryId
  try{await fetch(`${ctx.url}/rest/v1/crm_activities`,{method:"POST",headers:{apikey:ctx.key,Authorization:`Bearer ${ctx.access}`,"Content-Type":"application/json",Prefer:"return=minimal"},body:JSON.stringify({enquiry_id:enquiryId,actor_id:ctx.session.user.id,type,subject,body,metadata:{}})})}catch{}
 }
 
+function clean(body:any,session:any){
+ const salesperson=session.profile.role==="admin"?(body.salesperson||null):(session.profile.salesperson||null);
+ return {
+  name:body.name||null,
+  phone:body.phone||null,
+  email:body.email||null,
+  dest:body.dest??body.destination??null,
+  destination:body.destination??body.dest??null,
+  value:body.value===""||body.value===undefined||body.value===null?null:Number(body.value),
+  branch:body.branch||null,
+  source:body.source||null,
+  priority:body.priority||"Normal",
+  notes:body.notes||null,
+  status:body.status||"New",
+  salesperson,
+  travel_date:body.travel_date??body.travelDate??null,
+  travellers:body.travellers===undefined||body.travellers===""?null:Number(body.travellers),
+  follow_up:body.follow_up??body.followUp??null
+ };
+}
+
 export async function POST(req:Request){
  const ctx=await auth(); if(!ctx)return NextResponse.json({error:"Unauthorized"},{status:401});
  const body=await req.json();
- const salesperson=ctx.session.profile.role==="admin"?(body.salesperson||null):(ctx.session.profile.salesperson||null);
- const allowed={name:body.name||null,phone:body.phone||null,email:body.email||null,dest:body.dest??body.destination??null,value:body.value||null,branch:body.branch||null,source:body.source||null,priority:body.priority||"Normal",notes:body.notes||null,status:body.status||"New",salesperson,travel_date:body.travel_date??body.travelDate??null,travellers:body.travellers??null,follow_up:body.follow_up??body.followUp??null,next_action:body.next_action||null};
+ const allowed=clean(body,ctx.session);
  const r=await fetch(`${ctx.url}/rest/v1/enquiries`,{method:"POST",headers:{apikey:ctx.key,Authorization:`Bearer ${ctx.access}`,"Content-Type":"application/json",Prefer:"return=representation"},body:JSON.stringify(allowed)});
  const data=await r.json().catch(()=>null);
  if(r.ok&&Array.isArray(data)&&data[0]?.id)await activity(ctx,"system","Lead created",`Lead created for ${String(data[0].name||allowed.name||"")}`,String(data[0].id));
@@ -33,15 +53,16 @@ export async function PATCH(req:Request){
  const beforeRes=await fetch(`${ctx.url}/rest/v1/enquiries?select=id,name,status,salesperson&id=eq.${encodeURIComponent(id)}${ownerFilter}`,{headers:{apikey:ctx.key,Authorization:`Bearer ${ctx.access}`},cache:"no-store"});
  const beforeRows=await beforeRes.json().catch(()=>[]);
  if(!beforeRes.ok||!Array.isArray(beforeRows)||!beforeRows[0])return NextResponse.json({error:"Lead not found or not assigned to this salesperson"},{status:404});
- const allowedKeys=["name","phone","email","dest","value","branch","source","priority","notes","status","salesperson","travel_date","travellers","follow_up","next_action","lost_reason"];
+ const allowedKeys=["name","phone","email","dest","destination","value","branch","source","priority","notes","status","salesperson","travel_date","travellers","follow_up"];
  const patch:any={};
  for(const key of allowedKeys)if(body[key]!==undefined)patch[key]=body[key];
- if(body.destination!==undefined)patch.dest=body.destination;
+ if(body.destination!==undefined)patch.destination=body.destination;
+ if(body.dest!==undefined)patch.dest=body.dest;
  if(body.travelDate!==undefined)patch.travel_date=body.travelDate||null;
  if(body.followUp!==undefined)patch.follow_up=body.followUp||null;
  if(body.travellers!==undefined)patch.travellers=Number(body.travellers)||null;
+ if(body.value!==undefined)patch.value=body.value===""||body.value===null?null:Number(body.value);
  if(ctx.session.profile.role!=="admin")delete patch.salesperson;
- if(patch.status==="Lost"&&!patch.lost_reason)patch.lost_reason=body.lost_reason||null;
  const r=await fetch(`${ctx.url}/rest/v1/enquiries?id=eq.${encodeURIComponent(id)}${ownerFilter}`,{method:"PATCH",headers:{apikey:ctx.key,Authorization:`Bearer ${ctx.access}`,"Content-Type":"application/json",Prefer:"return=representation"},body:JSON.stringify(patch)});
  const data=await r.json().catch(()=>null);
  if(r.ok){const before=beforeRows[0];const after=Array.isArray(data)?data[0]:data;const type=before.status!==after?.status?"stage_change":"note";await activity(ctx,type,before.status!==after?.status?"Pipeline stage changed":"Lead updated",before.status!==after?.status?`${before.status||"New"} → ${after?.status||patch.status}`:"Lead information updated",String(id));}
