@@ -23,10 +23,10 @@ export async function POST(req: Request) {
     // Honeypot: silently accept obvious bot submissions without writing to the CRM.
     if (parsed.data.website) return NextResponse.json({ ok: true });
 
-    // Keep the public website and CRM on the same Supabase configuration.
-    // The anon/publishable key is intentionally used here; Supabase RLS controls writes.
+    // Public website writes must happen server-side with the service role because
+    // enquiries is protected by RLS. This secret is never exposed to the browser.
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
     if (!url || !key) {
       console.error("Supabase enquiry storage is not configured.");
       return NextResponse.json(
