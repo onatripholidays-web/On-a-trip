@@ -114,7 +114,7 @@ export async function POST(req: Request) {
       headers: h(c, { "Content-Type": "application/json", Prefer: "return=representation" }),
       body: JSON.stringify(q),
     });
-    const qd = await qr.json().catch(() => null);
+    const qd = await qr.json().catch((): null => null);
     if (!qr.ok) throw new Error(qd?.message || "Quotation save failed");
     const quotation = Array.isArray(qd) ? qd[0] : qd;
     if (!quotation?.id) throw new Error("Quotation was not returned by Supabase");
