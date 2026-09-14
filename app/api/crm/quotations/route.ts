@@ -50,7 +50,7 @@ export async function POST(req: Request) {
       }),
       body: JSON.stringify(customerPayload),
     });
-    const cd = await cr.json().catch(() => null);
+    const cd = await cr.json().catch((): null => null);
     if (!cr.ok) throw new Error(cd?.message || "Customer save failed");
     const customer = Array.isArray(cd) ? cd[0] : cd;
     if (!customer?.id) throw new Error("Customer was not returned by Supabase");
