@@ -1,0 +1,32 @@
+name: Cloudflare migration build
+
+on:
+  push:
+    branches:
+      - cloudflare-production
+  pull_request:
+    branches:
+      - cloudflare-production
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Cloudflare build tooling
+        run: npm install --no-save @opennextjs/cloudflare@1.20.6 wrangler@4.131.2
+
+      - name: Build Next.js for Cloudflare
+        run: npm run build:cloudflare
