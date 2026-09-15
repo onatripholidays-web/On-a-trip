@@ -1,7 +1,10 @@
 node_modules/
 .next/
 out/
+.open-next/
 .env
 .env.local
+.dev.vars
+.dev.vars.*
 .vercel/
 *.log
