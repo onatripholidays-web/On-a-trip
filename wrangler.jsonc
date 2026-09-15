@@ -8,6 +8,16 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
+  "routes": [
+    {
+      "pattern": "onatripholidays.com",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.onatripholidays.com",
+      "custom_domain": true
+    }
+  ],
   "observability": {
     "enabled": true
   }
