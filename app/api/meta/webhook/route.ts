@@ -39,7 +39,7 @@ export async function POST(req: Request) {
       `https://graph.facebook.com/${version}/${leadgenId}?fields=field_data&access_token=${encodeURIComponent(metaToken)}`,
       { cache: "no-store" },
     );
-    const lead = await gr.json().catch(() => null);
+    const lead = await gr.json().catch((): null => null);
     if (!gr.ok) return NextResponse.json({ error: "Meta lead fetch failed", details: lead }, { status: 502 });
 
     const fields = lead?.field_data || [];
