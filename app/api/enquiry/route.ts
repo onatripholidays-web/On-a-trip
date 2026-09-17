@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { env as cloudflareEnv } from "cloudflare:workers";
 import { z } from "zod";
 
 const schema = z.object({
@@ -24,11 +23,10 @@ export async function POST(req: Request) {
     // Honeypot: silently accept obvious bot submissions without writing to the CRM.
     if (parsed.data.website) return NextResponse.json({ ok: true });
 
-    // Cloudflare Workers exposes dashboard variables/secrets through cloudflare:workers.
-    // Keep process.env as a fallback so the same route remains compatible with local/Node runtimes.
-    const cf = cloudflareEnv as unknown as Record<string, string | undefined>;
-    const url = cf.NEXT_PUBLIC_SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = cf.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY;
+    // Public website writes must happen server-side with the service role because
+    // enquiries is protected by RLS. This secret is never exposed to the browser.
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
     if (!url || !key) {
       console.error("Supabase enquiry storage is not configured.");
       return NextResponse.json(
