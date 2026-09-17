@@ -8,6 +8,9 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
+  "limits": {
+    "cpu_ms": 30000
+  },
   "routes": [
     {
       "pattern": "onatripholidays.com",
