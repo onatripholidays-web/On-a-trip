@@ -20,7 +20,7 @@ export default async function CrmUsersPage(){
   <div style={{maxWidth:1200,margin:"0 auto"}}>
    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:16,marginBottom:24,flexWrap:"wrap"}}>
     <div><div style={{fontSize:11,fontWeight:800,letterSpacing:1.2,opacity:.55}}>ON A TRIP HOLIDAYS CRM</div><h1 style={{margin:"6px 0",fontSize:30}}>Users & Access</h1><p style={{margin:0,opacity:.65}}>All CRM users connected to the admin dashboard and lead workspace.</p></div>
-    <a href="/crm" style={{textDecoration:"none",padding:"11px 16px",borderRadius:10,background:"#111",color:"#fff",fontWeight:700}}>← Back to CRM</a>
+    <div style={{display:"flex",gap:10,alignItems:"center",flexWrap:"wrap"}}><a href="/admin" style={{textDecoration:"none",padding:"11px 16px",borderRadius:10,background:"#fff",color:"#111",border:"1px solid #dfe5e9",fontWeight:800}}>⚙ Settings</a><a href="/admin" style={{textDecoration:"none",padding:"11px 16px",borderRadius:10,background:"#111",color:"#fff",fontWeight:800}}>＋ Add Sales User</a><a href="/crm" style={{textDecoration:"none",padding:"11px 16px",borderRadius:10,background:"#111",color:"#fff",fontWeight:700}}>← Back to CRM</a></div>
    </div>
    <div style={{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:12,marginBottom:18}}>
     <div style={{background:"#fff",borderRadius:16,padding:18}}><small>Total users</small><div style={{fontSize:28,fontWeight:800}}>{users.length}</div></div>
