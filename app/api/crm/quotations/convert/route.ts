@@ -90,11 +90,13 @@ export async function POST(req: Request) {
     );
 
     if (!qUpdate.ok) {
+      // Avoid leaving a duplicate booking that could be created again on retry.
+      await fetch(
+        `undefined/rest/v1/crm_bookings?id=eq.${encodeURIComponent(String(bookingRow?.id || ""))}`,
+        { method: "DELETE", headers: h(c) },
+      ).catch(() => undefined);
       return NextResponse.json(
-        {
-          error: "Booking created but quotation status could not be updated. Do not convert this quotation again.",
-          booking: bookingRow,
-        },
+        { error: "Could not finalize quotation conversion. No booking was left behind." },
         { status: 502 },
       );
     }
