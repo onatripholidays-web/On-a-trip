@@ -28,7 +28,10 @@ export async function GET(req:Request):Promise<NextResponse>{
  const order=p.get("order");
  if(order)q.set("order",order);
  for(const key of ["id","customer_id","enquiry_id","booking_id","quotation_id","supplier_id","status","assigned_to","salesperson","phone"]){const v=p.get(key);if(v)q.set(key,v)}
- const response=await fetch(`${c.url}/rest/v1/${resources[r]}?${q.toString()}`,{headers:headers(c,{Prefer:"count=exact"}),cache:"no-store"});
+ if(c.session.profile.role!=="admin" && ["customers","tasks","quotations","bookings"].includes(r as string)){
+  q.set("assigned_to",`eq.${c.session.profile.salesperson||""}`);
+ }
+ const response=await fetch(`undefined/rest/v1/${resources[r]}?${q.toString()}`,{headers:headers(c,{Prefer:"count=exact"}),cache:"no-store"});
  let data:JsonValue=[];
  try{data=await response.json()}catch{data=[]}
  return NextResponse.json(data,{status:response.status,headers:{"x-total":response.headers.get("content-range")||""}})
@@ -42,7 +45,8 @@ export async function POST(req:Request):Promise<NextResponse>{
  if(!r||r==="audit")return NextResponse.json({error:"Invalid resource"},{status:400});
  const payload={...(body?.data||{})};
  delete payload.resource;
- payload.created_by=payload.created_by||c.session.user.id;
+ payload.created_by=c.session.user.id;
+ if(c.session.profile.role!=="admin" && r==="customers") payload.assigned_to=c.session.profile.salesperson||null;
  if(r==="customers"&&!payload.assigned_to)payload.assigned_to=c.session.profile.salesperson;
  if(r==="payments"&&!payload.receipt_no)payload.receipt_no=docNo("RC");
  if(r==="invoices"&&!payload.invoice_no)payload.invoice_no=docNo("INV");
