@@ -49,13 +49,13 @@ export async function POST(req:Request):Promise<NextResponse>{
  const response=await fetch(`${c.url}/rest/v1/${resources[r]}`,{method:"POST",headers:headers(c,{"Content-Type":"application/json",Prefer:"return=representation"}),body:JSON.stringify(payload)});
  if(response.ok&&r==="payments"&&payload.booking_id){
   try{
-   const bookingResponse=await fetch(`undefined/rest/v1/crm_bookings?id=eq.${encodeURIComponent(String(payload.booking_id))}&select=id,total_amount,paid_amount`,{headers:headers(c)});
+   const bookingResponse=await fetch(`${c.url}/rest/v1/crm_bookings?id=eq.${encodeURIComponent(String(payload.booking_id))}&select=id,total_amount,paid_amount`,{headers:headers(c)});
    const bookingRows=await bookingResponse.json();
    const booking=Array.isArray(bookingRows)?bookingRows[0]:null;
    if(booking){
     const total=Number(booking.total_amount||0),currentPaid=Number(booking.paid_amount||0),amount=Number(payload.amount||0);
     if(amount>0&&amount<=Math.max(0,total-currentPaid)){
-     await fetch(`undefined/rest/v1/crm_bookings?id=eq.${encodeURIComponent(String(payload.booking_id))}`,{method:"PATCH",headers:headers(c,{"Content-Type":"application/json",Prefer:"return=minimal"}),body:JSON.stringify({paid_amount:currentPaid+amount,balance_amount:Math.max(0,total-currentPaid-amount)})});
+     await fetch(`${c.url}/rest/v1/crm_bookings?id=eq.${encodeURIComponent(String(payload.booking_id))}`,{method:"PATCH",headers:headers(c,{"Content-Type":"application/json",Prefer:"return=minimal"}),body:JSON.stringify({paid_amount:currentPaid+amount,balance_amount:Math.max(0,total-currentPaid-amount)})});
     }
    }
   }catch{}
