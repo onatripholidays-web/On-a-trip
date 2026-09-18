@@ -23,11 +23,10 @@ export async function POST(req: Request) {
 
     if (parsed.data.website) return NextResponse.json({ ok: true });
 
-    // OpenNext's supported Cloudflare runtime context exposes dashboard
-    // variables/secrets to Next.js route handlers.
     const { env } = getCloudflareContext();
-    const url = env.NEXT_PUBLIC_SUPABASE_URL as string | undefined;
-    const key = env.SUPABASE_SERVICE_ROLE_KEY as string | undefined;
+    const cfEnv = env as unknown as Record<string, string | undefined>;
+    const url = cfEnv.NEXT_PUBLIC_SUPABASE_URL;
+    const key = cfEnv.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!url || !key) {
       console.error("Supabase enquiry storage is not configured.");
