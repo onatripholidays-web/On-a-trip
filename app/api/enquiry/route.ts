@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { z } from "zod";
 
 const schema = z.object({
@@ -20,13 +21,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Please check the required fields." }, { status: 400 });
     }
 
-    // Honeypot: silently accept obvious bot submissions without writing to the CRM.
     if (parsed.data.website) return NextResponse.json({ ok: true });
 
-    // Public website writes must happen server-side with the service role because
-    // enquiries is protected by RLS. This secret is never exposed to the browser.
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    // OpenNext's supported Cloudflare runtime context exposes dashboard
+    // variables/secrets to Next.js route handlers.
+    const { env } = getCloudflareContext();
+    const url = env.NEXT_PUBLIC_SUPABASE_URL as string | undefined;
+    const key = env.SUPABASE_SERVICE_ROLE_KEY as string | undefined;
+
     if (!url || !key) {
       console.error("Supabase enquiry storage is not configured.");
       return NextResponse.json(
