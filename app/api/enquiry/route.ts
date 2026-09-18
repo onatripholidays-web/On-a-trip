@@ -57,6 +57,7 @@ export async function POST(req: Request) {
         // Supabase publishable/secret keys are API keys, not JWTs.
         // The secret key stays server-side and is sent only via apikey.
         apikey: key,
+        "User-Agent": "OnATripHolidays-Cloudflare-Worker/1.0",
         "Content-Type": "application/json",
         Prefer: "return=minimal",
       },
