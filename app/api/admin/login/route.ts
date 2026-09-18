@@ -10,10 +10,10 @@ export async function POST(req:Request){
     const auth=await fetch(`${url}/auth/v1/token?grant_type=password`,{method:"POST",headers:{apikey:key,"Content-Type":"application/json"},body:JSON.stringify({email,password})});
     const data=await auth.json();
     if(!auth.ok) return NextResponse.json({error:data.error_description||data.msg||"Invalid login details."},{status:401});
-    const profile=await fetch(`${url}/rest/v1/admin_profiles?id=eq.${encodeURIComponent(data.user.id)}&select=id,full_name,role,active&limit=1`,{headers:{apikey:key,Authorization:`Bearer ${data.access_token}`},cache:"no-store"});
+    const profile=await fetch(`${url}/rest/v1/crm_users?user_id=eq.${encodeURIComponent(data.user.id)}&select=user_id,email,role,salesperson&limit=1`,{headers:{apikey:key,Authorization:`Bearer ${data.access_token}`},cache:"no-store"});
     const profiles=await profile.json();
-    if(!profile.ok||!profiles?.[0]?.active) return NextResponse.json({error:"This account is not authorized for the admin panel."},{status:403});
-    const res=NextResponse.json({ok:true,user:{full_name:profiles[0].full_name,role:profiles[0].role}});
+    if(!profile.ok||!profiles?.[0]||profiles[0].role!=="admin") return NextResponse.json({error:"This CRM account is not authorized for the admin panel."},{status:403});
+    const res=NextResponse.json({ok:true,user:{full_name:profiles[0].salesperson||profiles[0].email,role:"admin"}});
     res.cookies.set("oat_admin_access",data.access_token,{httpOnly:true,secure:true,sameSite:"lax",path:"/",maxAge:Math.max(300,data.expires_in||3600)});
     return res;
   }catch{return NextResponse.json({error:"Unable to sign in."},{status:500});}
