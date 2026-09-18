@@ -10,12 +10,12 @@ export async function getAdminSession(){
   const userRes=await fetch(`${url}/auth/v1/user`,{headers:{apikey:key,Authorization:`Bearer ${token}`},cache:"no-store"});
   if(!userRes.ok) return null;
   const user=await userRes.json();
-  const profileRes=await fetch(`${url}/rest/v1/admin_profiles?id=eq.${encodeURIComponent(user.id)}&select=id,full_name,role,active&limit=1`,{headers:{apikey:key,Authorization:`Bearer ${token}`},cache:"no-store"});
+  const profileRes=await fetch(`${url}/rest/v1/crm_users?user_id=eq.${encodeURIComponent(user.id)}&select=user_id,email,role,salesperson&limit=1`,{headers:{apikey:key,Authorization:`Bearer ${token}`},cache:"no-store"});
   if(!profileRes.ok) return null;
   const profiles=await profileRes.json();
   const profile=profiles?.[0];
-  if(!profile?.active) return null;
-  return {user,profile,token};
+  if(!profile||profile.role!=="admin") return null;
+  return {user,profile:{...profile,full_name:profile.salesperson||profile.email,active:true},token};
 }
 
 export function supabaseConfig(){
