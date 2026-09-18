@@ -31,7 +31,7 @@ export async function GET(req:Request):Promise<NextResponse>{
  if(c.session.profile.role!=="admin" && ["customers","tasks","quotations","bookings"].includes(r as string)){
   q.set("assigned_to",`eq.${c.session.profile.salesperson||""}`);
  }
- const response=await fetch(`undefined/rest/v1/${resources[r]}?${q.toString()}`,{headers:headers(c,{Prefer:"count=exact"}),cache:"no-store"});
+ const response=await fetch(`${c.url}/rest/v1/${resources[r]}?${q.toString()}`,{headers:headers(c,{Prefer:"count=exact"}),cache:"no-store"});
  let data:JsonValue=[];
  try{data=await response.json()}catch{data=[]}
  return NextResponse.json(data,{status:response.status,headers:{"x-total":response.headers.get("content-range")||""}})
