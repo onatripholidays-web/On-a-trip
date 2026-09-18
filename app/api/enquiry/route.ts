@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     // Worker runtime variables/secrets are also available through process.env.
     // Use both so dashboard-configured runtime values are available reliably.
     const url = "https://mdariypftlkjxfkhrans.supabase.co";
-    const key = process.env['SUPABASE_' + 'SERVICE_ROLE_KEY'] ?? cfEnv['SUPABASE_' + 'SERVICE_ROLE_KEY'];
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? cfEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     if (!url || !key) {
       console.error("Supabase enquiry storage is not configured.");
