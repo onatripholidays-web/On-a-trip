@@ -28,7 +28,7 @@ export async function POST(req: Request) {
     // OpenNext exposes Cloudflare bindings through env; with nodejs_compat,
     // Worker runtime variables/secrets are also available through process.env.
     // Use both so dashboard-configured runtime values are available reliably.
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? cfEnv.NEXT_PUBLIC_SUPABASE_URL;
+    const url = "https://mdariypftlkjxfkhrans.supabase.co";
     const key = process.env['SUPABASE_' + 'SERVICE_ROLE_KEY'] ?? cfEnv['SUPABASE_' + 'SERVICE_ROLE_KEY'];
 
     if (!url || !key) {
