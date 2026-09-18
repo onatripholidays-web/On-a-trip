@@ -51,8 +51,9 @@ export async function POST(req: Request) {
     const r = await fetch(`${url}/rest/v1/enquiries`, {
       method: "POST",
       headers: {
+        // Supabase publishable/secret keys are API keys, not JWTs.
+        // The secret key stays server-side and is sent only via apikey.
         apikey: key,
-        Authorization: `Bearer ${key}`,
         "Content-Type": "application/json",
         Prefer: "return=minimal",
       },
