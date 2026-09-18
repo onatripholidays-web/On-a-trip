@@ -69,7 +69,7 @@ export async function POST(req: Request) {
       const details = await r.text().catch(() => "");
       console.error("Website enquiry Supabase insert failed", r.status, details);
       return NextResponse.json(
-        { error: `Supabase insert failed (${r.status}): ${details.slice(0, 500)}` },
+        { error: "We could not save the enquiry. Please use WhatsApp or call us." },
         { status: 502 },
       );
     }
