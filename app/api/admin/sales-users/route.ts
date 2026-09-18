@@ -3,7 +3,7 @@ import {getAdminSession,supabaseConfig} from "@/lib/admin-auth";
 
 export async function POST(req:Request){
  const session=await getAdminSession();
- if(!session||session.profile.role!=="super_admin")return NextResponse.json({error:"Super Admin access required"},{status:403});
+ if(!session||session.profile.role!=="admin")return NextResponse.json({error:"Admin access required"},{status:403});
  const service=process.env.SUPABASE_SERVICE_ROLE_KEY;
  if(!service)return NextResponse.json({error:"Supabase server credential is not configured."},{status:503});
  let body:any;try{body=await req.json()}catch{return NextResponse.json({error:"Invalid request body"},{status:400});}
