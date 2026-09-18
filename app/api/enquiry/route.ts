@@ -68,7 +68,7 @@ export async function POST(req: Request) {
       const details = await r.text().catch(() => "");
       console.error("Website enquiry Supabase insert failed", r.status, details);
       return NextResponse.json(
-        { error: "Supabase insert failed.", supabaseStatus: r.status, details: details.slice(0, 500) },
+        { error: `Supabase insert failed (${r.status}): ${details.slice(0, 500)}` },
         { status: 502 },
       );
     }
