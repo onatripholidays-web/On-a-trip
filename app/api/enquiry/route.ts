@@ -25,8 +25,11 @@ export async function POST(req: Request) {
 
     const { env } = getCloudflareContext();
     const cfEnv = env as unknown as Record<string, string | undefined>;
-    const url = cfEnv.NEXT_PUBLIC_SUPABASE_URL;
-    const key = cfEnv.SUPABASE_SERVICE_ROLE_KEY;
+    // OpenNext exposes Cloudflare bindings through env; with nodejs_compat,
+    // Worker runtime variables/secrets are also available through process.env.
+    // Use both so dashboard-configured runtime values are available reliably.
+    const url = cfEnv.NEXT_PUBLIC_SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = cfEnv.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!url || !key) {
       console.error("Supabase enquiry storage is not configured.");
