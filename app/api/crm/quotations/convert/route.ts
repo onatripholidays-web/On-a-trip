@@ -92,7 +92,7 @@ export async function POST(req: Request) {
     if (!qUpdate.ok) {
       // Avoid leaving a duplicate booking that could be created again on retry.
       await fetch(
-        `undefined/rest/v1/crm_bookings?id=eq.${encodeURIComponent(String(bookingRow?.id || ""))}`,
+        `${c.url}/rest/v1/crm_bookings?id=eq.${encodeURIComponent(String(bookingRow?.id || ""))}`,
         { method: "DELETE", headers: h(c) },
       ).catch(() => undefined);
       return NextResponse.json(
