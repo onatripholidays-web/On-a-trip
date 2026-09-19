@@ -46,6 +46,16 @@ export async function POST(req:Request):Promise<NextResponse>{
  const payload={...(body?.data||{})};
  delete payload.resource;
  payload.created_by=c.session.user.id;
+ if(r==="payments" && payload.booking_id){
+  const bookingCheck=await fetch(`undefined/rest/v1/crm_bookings?id=eq.${encodeURIComponent(String(payload.booking_id))}&select=id,total_amount,paid_amount,balance_amount&limit=1`,{headers:headers(c),cache:"no-store"});
+  const bookingRows=await bookingCheck.json().catch(()=>[]);
+  const booking=Array.isArray(bookingRows)?bookingRows[0]:null;
+  if(!booking)return NextResponse.json({error:"Booking not found"},{status:404});
+  const amount=Number(payload.amount||0);
+  const balance=Number(booking.balance_amount ?? Math.max(0,Number(booking.total_amount||0)-Number(booking.paid_amount||0)));
+  if(amount<=0)return NextResponse.json({error:"Payment amount must be greater than zero"},{status:400});
+  if(amount>balance)return NextResponse.json({error:`Payment exceeds booking balance of ₹${balance.toFixed(2)}`},{status:400});
+ }
  if(c.session.profile.role!=="admin" && r==="customers") payload.assigned_to=c.session.profile.salesperson||null;
  if(r==="customers"&&!payload.assigned_to)payload.assigned_to=c.session.profile.salesperson;
  if(r==="payments"&&!payload.receipt_no)payload.receipt_no=docNo("RC");
