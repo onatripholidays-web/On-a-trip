@@ -94,3 +94,27 @@
 
 .lead-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.lead-actions a,.lead-actions button{font:inherit;text-decoration:none;cursor:pointer}.lead-call-btn,.lead-whatsapp-btn{display:inline-flex;align-items:center;gap:4px;padding:6px 9px;border-radius:7px;border:1px solid var(--crm-border,#dfe3e8);background:var(--crm-surface,#fff);font-size:12px;font-weight:600}.lead-call-btn:hover,.lead-whatsapp-btn:hover{background:var(--crm-surface-muted,#f5f6f8)}.lead-call-btn{color:var(--crm-text,#1f2937)}.lead-whatsapp-btn{color:var(--crm-text,#1f2937)}
 .crm-sidebar-toggle{position:absolute;top:14px;right:-12px;width:24px;height:24px;border:1px solid rgba(255,255,255,.2);border-radius:50%;background:#fff;color:#07243d;box-shadow:0 2px 8px rgba(0,0,0,.18);font-size:16px;font-weight:900;line-height:20px;cursor:pointer;z-index:45}.crm-v2-sidebar.compact{width:64px;padding:20px 8px}.crm-v2-sidebar.compact .crm-v2-brand{justify-content:center;padding-left:0;padding-right:0}.crm-v2-sidebar.compact .crm-v2-brand b,.crm-v2-sidebar.compact .crm-v2-brand span,.crm-v2-sidebar.compact .crm-v2-workspace,.crm-v2-sidebar.compact nav button span,.crm-v2-sidebar.compact nav button em,.crm-v2-sidebar.compact .crm-v2-side-foot{display:none}.crm-v2-sidebar.compact nav button{justify-content:center;padding:12px 5px}.crm-v2-sidebar.compact nav button i{margin-left:auto;margin-right:auto}.crm-v2-content{transition:margin-left .2s ease,width .2s ease}.crm-v2-sidebar.compact~.crm-v2-content{margin-left:64px;width:calc(100% - 64px)}@media(max-width:700px){.crm-sidebar-toggle{display:none}.crm-v2-sidebar.compact{width:100%;padding:9px 10px 7px}.crm-v2-sidebar.compact~.crm-v2-content{margin-left:0;width:100%}}
+
+/* TravBizz-style navigation drawer: compact rail + overlay expansion */
+.crm-v2-sidebar.compact{width:58px;padding:18px 7px}
+.crm-v2-sidebar.compact .crm-sidebar-toggle{right:-11px}
+.crm-v2-sidebar.compact .crm-v2-brand{border-bottom:0;padding-bottom:14px}
+.crm-v2-sidebar.compact .crm-v2-workspace,.crm-v2-sidebar.compact .crm-v2-side-foot,.crm-v2-sidebar.compact .crm-nav-sub{display:none}
+.crm-v2-sidebar.compact .crm-accordion-nav{padding-top:10px}
+.crm-v2-sidebar.compact .crm-accordion-nav>button{justify-content:center;width:44px;height:44px;margin:3px auto;padding:0;border-radius:12px;font-size:17px}
+.crm-v2-sidebar.compact .crm-accordion-nav>button span,.crm-v2-sidebar.compact .crm-accordion-nav>button em,.crm-v2-sidebar.compact .crm-accordion-nav>button i{display:none}
+.crm-v2-sidebar.drawer-open{width:278px;box-shadow:14px 0 42px rgba(4,20,35,.24);z-index:100}
+.crm-v2-sidebar.drawer-open .crm-sidebar-toggle{right:-12px}
+.crm-v2-sidebar.drawer-open .crm-v2-brand b{font-size:15px}
+.crm-v2-sidebar.drawer-open .crm-v2-brand span{font-size:10px}
+.crm-v2-sidebar.drawer-open .crm-accordion-nav>button{font-size:13px}
+.crm-v2-sidebar.drawer-open .crm-nav-sub button{font-size:12px}
+.crm-v2-sidebar.compact~.crm-v2-content,.crm-v2-sidebar.drawer-open~.crm-v2-content{margin-left:58px;width:calc(100% - 58px)}
+.crm-sidebar-backdrop{position:fixed;inset:0;background:rgba(4,18,31,.34);border:0;padding:0;margin:0;z-index:90;cursor:pointer;backdrop-filter:blur(1px)}
+.crm-sidebar-toggle{z-index:110}
+@media(max-width:700px){
+ .crm-v2-sidebar.compact{width:58px;height:100%;padding:12px 6px}
+ .crm-v2-sidebar.drawer-open{width:min(310px,88vw);height:100%;padding:18px 12px}
+ .crm-v2-sidebar.compact~.crm-v2-content,.crm-v2-sidebar.drawer-open~.crm-v2-content{margin-left:0;width:100%}
+ .crm-sidebar-backdrop{z-index:90}
+}
