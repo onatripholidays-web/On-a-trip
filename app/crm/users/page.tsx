@@ -16,7 +16,10 @@ export default async function CrmUsersPage(){
  if(session.profile.role!=="admin")redirect("/crm");
  const {url,key}=crmSupabaseConfig();
  const access=(await cookies()).get("oat_crm_access")?.value||"";
- const r=await fetch(`${url}/rest/v1/crm_users?select=user_id,email,role,salesperson,created_at,updated_at&order=created_at.asc`,{headers:{apikey:key,Authorization:`Bearer ${access}`},cache:"no-store"});
+ const service=process.env.SUPABASE_SECRET_KEY||process.env.SUPABASE_SERVICE_ROLE_KEY;
+ const headers:Record<string,string>={apikey:service||key};
+ if(!service && access) headers.Authorization=`Bearer ${access}`;
+ const r=await fetch(`${url}/rest/v1/crm_users?select=user_id,email,role,salesperson,created_at,updated_at&order=created_at.asc`,{headers,cache:"no-store"});
  const users:CrmUser[]=r.ok?await r.json():[];
  return <main style={{minHeight:"100vh",background:"#f4f7f9",padding:"28px"}}>
   <div style={{maxWidth:1200,margin:"0 auto"}}>
