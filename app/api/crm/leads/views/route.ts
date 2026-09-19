@@ -6,7 +6,7 @@ async function ctx(){
  const {url,key}=crmSupabaseConfig(); const service=process.env.SUPABASE_SECRET_KEY||process.env.SUPABASE_SERVICE_ROLE_KEY||"";
  return {session,url,key,service};
 }
-function h(c:any,extra:any={}){return {apikey:c.key,Authorization:"Bearer "+c.service,...extra};}
+function h(c:any,extra:any={}){return {apikey:c.service||c.key,...extra};}
 
 export async function GET(){
  const c=await ctx(); if(!c)return NextResponse.json({error:"Unauthorized"},{status:401});
