@@ -37,7 +37,7 @@ export async function POST(req:Request):Promise<NextResponse>{
  let imported=0;const errors:string[]=[];
  for(let i=0;i<unique.length;i+=100){
    const chunk=unique.slice(i,i+100);
-   const r=await fetch(`${url}/rest/v1/enquiries`,{method:"POST",headers:{apikey:key,Authorization:`Bearer ${token}`,"Content-Type":"application/json",Prefer:"return=minimal"},body:JSON.stringify(chunk)});
+   const r=await fetch(`${url}/rest/v1/enquiries`,{method:"POST",headers:{apikey:key,Authorization:`Bearer ${service}`,"Content-Type":"application/json",Prefer:"return=minimal"},body:JSON.stringify(chunk)});
    if(!r.ok){errors.push(await r.text());break} imported+=chunk.length;
  }
  return NextResponse.json({ok:!errors.length,imported,skipped:rows.length-imported,errors});
