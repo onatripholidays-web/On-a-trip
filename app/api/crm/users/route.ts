@@ -24,7 +24,7 @@ export async function POST(req:Request){
  const auth=await fetch(`${url}/auth/v1/admin/users`,{method:"POST",headers:authHeaders,body:JSON.stringify({email,password,email_confirm:true,user_metadata:{full_name:name}})});
  const authData=await auth.json().catch(()=>null);if(!auth.ok)return NextResponse.json({error:authData?.msg||authData?.message||"Could not create login account."},{status:auth.status});
  const userId=authData?.id||authData?.user?.id;if(!userId)return NextResponse.json({error:"Login account was created but no user ID was returned."},{status:500});
- const profile=await rest(url,service,"profiles",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify({id:userId,full_name:name,email,role:"sales",is_active:true})});
+ const profile=await rest(url,service,"profiles",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify({id:userId,full_name:name,email,role:role==="admin"?"admin":role==="salesperson"?"sales":role==="accountant"?"accounts":role==="operations"?"operations":role==="manager"?"manager":"staff",is_active:true})});
  if(!profile.ok){
    const details=await profile.text().catch(()=>"");
    console.error("CRM user profile insert failed",profile.status,details);
@@ -33,9 +33,11 @@ export async function POST(req:Request){
  }
  const crm=await rest(url,service,"crm_users",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify({user_id:userId,email,role,salesperson:role==="salesperson"?name:null,permissions})});
  if(!crm.ok){await rest(url,service,`profiles?id=eq.${encodeURIComponent(userId)}`,{method:"DELETE"});await fetch(`${url}/auth/v1/admin/users/${encodeURIComponent(userId)}`,{method:"DELETE",headers:{apikey:service}});return NextResponse.json({error:"Could not create the CRM user profile."},{status:500});}
- const team=await rest(url,service,"crm_sales_team",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify({name,email,role:"salesperson",is_active:true,auth_user_id:userId})});
- if(!team.ok){await rest(url,service,`crm_users?user_id=eq.${encodeURIComponent(userId)}`,{method:"DELETE"});await rest(url,service,`profiles?id=eq.${encodeURIComponent(userId)}`,{method:"DELETE"});await fetch(`${url}/auth/v1/admin/users/${encodeURIComponent(userId)}`,{method:"DELETE",headers:{apikey:service}});return NextResponse.json({error:"Could not add the user to the sales team."},{status:500});}
- return NextResponse.json({ok:true,user:{id:userId,name,email,role:"salesperson"}},{status:201});
+ if(role==="salesperson"){
+  const team=await rest(url,service,"crm_sales_team",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify({name,email,role:"salesperson",is_active:true,auth_user_id:userId})});
+  if(!team.ok){await rest(url,service,`crm_users?user_id=eq.${encodeURIComponent(userId)}`,{method:"DELETE"});await rest(url,service,`profiles?id=eq.${encodeURIComponent(userId)}`,{method:"DELETE"});await fetch(`${url}/auth/v1/admin/users/${encodeURIComponent(userId)}`,{method:"DELETE",headers:{apikey:service}});return NextResponse.json({error:"Could not add the user to the sales team."},{status:500});}
+ }
+ return NextResponse.json({ok:true,user:{id:userId,name,email,role}},{status:201});
 }
 
 export async function PUT(req:Request){
