@@ -21,12 +21,15 @@ export async function POST(req:Request):Promise<NextResponse>{
    branch:cleanText(r.branch)||"Hyderabad",source:cleanText(r.source)||"Sheet Import",
    priority:cleanText(r.priority)||"Normal",status:cleanText(r.status)||"New",
    value:cleanText(r.value)||null,follow_up:date(r.follow_up||r.followUp),notes:cleanText(r.notes)||null,
-   salesperson:session.profile.role==="admin"?(cleanText(r.salesperson)||null):(session.profile.salesperson||null)
+   salesperson:session.profile.role==="admin"?(cleanText(r.salesperson)||null):(session.profile.salesperson||null),
+   whatsapp:cleanText(r.whatsapp)||cleanPhone(r.phone)||null,query_text:cleanText(r.query_text||r.query)||null,customer_type:cleanText(r.customer_type)||"Client",company_name:cleanText(r.company_name||r.company)||null,
+   service_type:cleanText(r.service_type||r.service)||"Full Package",from_destination:cleanText(r.from_destination||r.from)||null,to_destination:cleanText(r.to_destination||r.to||r.destination)||null,return_date:date(r.return_date||r.returnDate),
+   adults:Number(r.adults||r.adult||r.travellers||1)||1,children:Number(r.children||0)||0,infants:Number(r.infants||0)||0,budget:cleanText(r.budget)||null,stage_group:cleanText(r.stage_group)||null
  })).filter((r:any)=>r.name&&r.phone);
  if(!clean.length)return NextResponse.json({error:"No valid rows. Name and phone are required."},{status:400});
  const {url,key}=crmSupabaseConfig();
- const token=(await cookies()).get("oat_crm_access")?.value||"";
- const existing=await fetch(`${url}/rest/v1/enquiries?select=phone&limit=50000`,{headers:{apikey:key,Authorization:`Bearer ${token}`},cache:"no-store"});
+ const token=(await cookies()).get("oat_crm_access")?.value||""; const service=process.env.SUPABASE_SECRET_KEY||process.env.SUPABASE_SERVICE_ROLE_KEY||token;
+ const existing=await fetch(`${url}/rest/v1/enquiries?select=phone&limit=50000`,{headers:{apikey:key,Authorization:`Bearer ${service}`},cache:"no-store"});
  let old:any=[];
  try{old=await existing.json()}catch{old=[]}
  const phones=new Set((Array.isArray(old)?old:[]).map((x:any)=>String(x.phone||"").replace(/\D/g,"")).filter(Boolean));
