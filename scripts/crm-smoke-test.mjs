@@ -14,7 +14,7 @@ const required = [
   "app/api/crm/lead-distribution/route.ts",
   "app/api/crm/lead-distribution/apply/route.ts",
   "app/api/crm/commercial/route.ts",
-  "app/api/crm/quotation/route.ts",
+  "app/api/crm/quotations/route.ts",
   "app/crm/itinerary/page.tsx",
   "supabase/migrations/20260920_travel_os_enhancements.sql",
 ];
