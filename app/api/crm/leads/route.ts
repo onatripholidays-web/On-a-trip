@@ -12,8 +12,9 @@ async function auth(){
 }
 
 function dbHeaders(ctx:any,write=false){
- const authorization=ctx.service||ctx.access;
- return {apikey:ctx.anon,Authorization:`Bearer ${authorization}`,...(write?{"Content-Type":"application/json",Prefer:"return=representation"}:{})};
+ const headers:Record<string,string>={apikey:ctx.service||ctx.anon,...(write?{"Content-Type":"application/json",Prefer:"return=representation"}:{})};
+ if(!ctx.service&&ctx.access)headers.Authorization=`Bearer ${ctx.access}`;
+ return headers;
 }
 
 async function activity(ctx:any,type:string,subject:string,body:string,enquiryId:number){
