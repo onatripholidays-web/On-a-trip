@@ -37,3 +37,46 @@ export async function POST(req:Request){
  if(!team.ok){await rest(url,service,`crm_users?user_id=eq.${encodeURIComponent(userId)}`,{method:"DELETE"});await rest(url,service,`profiles?id=eq.${encodeURIComponent(userId)}`,{method:"DELETE"});await fetch(`${url}/auth/v1/admin/users/${encodeURIComponent(userId)}`,{method:"DELETE",headers:{apikey:service}});return NextResponse.json({error:"Could not add the user to the sales team."},{status:500});}
  return NextResponse.json({ok:true,user:{id:userId,name,email,role:"salesperson"}},{status:201});
 }
+
+export async function PUT(req:Request){
+ const session=await getCrmSession();if(!session||session.profile.role!=="admin")return NextResponse.json({error:"Only CRM admins can edit users."},{status:403});
+ const {url}=crmSupabaseConfig();const service=process.env.SUPABASE_SECRET_KEY||process.env.SUPABASE_SERVICE_ROLE_KEY;if(!service)return NextResponse.json({error:"Server user-management key is not configured."},{status:503});
+ const body=await req.json().catch(()=>({}));const id=String(body.id||"").trim();const name=String(body.name||"").trim();const email=String(body.email||"").trim().toLowerCase();const role=String(body.role||"").trim();
+ if(!id||name.length<2||!email||!["admin","salesperson"].includes(role))return NextResponse.json({error:"User ID, name, valid email and a valid role are required."},{status:400});
+ const auth=await fetch(`${url}/auth/v1/admin/users/${encodeURIComponent(id)}`,{method:"PUT",headers:{apikey:service,"Content-Type":"application/json"},body:JSON.stringify({email,user_metadata:{full_name:name}})});
+ const authData=await auth.json().catch(()=>null);if(!auth.ok)return NextResponse.json({error:authData?.msg||authData?.message||"Could not update login account."},{status:auth.status});
+ const profile=await rest(url,service,`profiles?id=eq.${encodeURIComponent(id)}`,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({full_name:name,email,role:role==="admin"?"admin":"sales",is_active:true})});
+ if(!profile.ok)return NextResponse.json({error:"Could not update the user profile."},{status:500});
+ const crm=await rest(url,service,`crm_users?user_id=eq.${encodeURIComponent(id)}`,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({email,role,salesperson:role==="salesperson"?name:null})});
+ if(!crm.ok)return NextResponse.json({error:"Could not update the CRM user."},{status:500});
+ if(role==="salesperson"){
+   const existing=await rest(url,service,`crm_sales_team?auth_user_id=eq.${encodeURIComponent(id)}&select=id&limit=1`);
+   const rows=await existing.json().catch(()=>[]);
+   if(Array.isArray(rows)&&rows[0]?.id){
+     await rest(url,service,`crm_sales_team?id=eq.${encodeURIComponent(rows[0].id)}`,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({name,email,role:"salesperson",is_active:true})});
+   }else{
+     await rest(url,service,"crm_sales_team",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify({name,email,role:"salesperson",is_active:true,auth_user_id:id})});
+   }
+ }else{
+   await rest(url,service,`crm_sales_team?auth_user_id=eq.${encodeURIComponent(id)}`,{method:"DELETE"});
+ }
+ return NextResponse.json({ok:true,user:{id,name,email,role}});
+}
+
+export async function PATCH(req:Request){ return PUT(req); }
+
+export async function DELETE(req:Request){
+ const session=await getCrmSession();if(!session||session.profile.role!=="admin")return NextResponse.json({error:"Only CRM admins can delete users."},{status:403});
+ const {url}=crmSupabaseConfig();const service=process.env.SUPABASE_SECRET_KEY||process.env.SUPABASE_SERVICE_ROLE_KEY;if(!service)return NextResponse.json({error:"Server user-management key is not configured."},{status:503});
+ const body=await req.json().catch(()=>({}));const id=String(body.id||"").trim();
+ if(!id)return NextResponse.json({error:"User ID is required."},{status:400});
+ if(id===session.user.id)return NextResponse.json({error:"You cannot delete your own admin account."},{status:400});
+ await rest(url,service,`crm_sales_team?auth_user_id=eq.${encodeURIComponent(id)}`,{method:"DELETE"});
+ await rest(url,service,`crm_users?user_id=eq.${encodeURIComponent(id)}`,{method:"DELETE"});
+ await rest(url,service,`profiles?id=eq.${encodeURIComponent(id)}`,{method:"DELETE"});
+ const auth=await fetch(`${url}/auth/v1/admin/users/${encodeURIComponent(id)}`,{method:"DELETE",headers:{apikey:service}});
+ if(!auth.ok)return NextResponse.json({error:"CRM records were removed, but the login account could not be deleted."},{status:500});
+ return NextResponse.json({ok:true});
+}
+
+export async function POST_RESET_PASSWORD(req:Request){ return NextResponse.json({error:"Unsupported method"},{status:405}); }
