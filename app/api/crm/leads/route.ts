@@ -21,10 +21,25 @@ async function activity(ctx:any,type:string,subject:string,body:string,enquiryId
  try{await fetch(`${ctx.url}/rest/v1/crm_lead_activities`,{method:"POST",headers:dbHeaders(ctx,true),body:JSON.stringify({enquiry_id:enquiryId,activity_type:type,subject,body,created_by:ctx.session.user.id})})}catch{}
 }
 
-function clean(body:any,session:any){
+async function resolveSalesperson(ctx:any, body:any, session:any){
  const isAdmin=session.profile.role==="admin";
- const salesperson=isAdmin?(body.salesperson||null):(session.profile.salesperson||null);
- const assigned_to=isAdmin?(body.assigned_to||null):(session.user.id);
+ if(!isAdmin)return {salesperson:session.profile.salesperson||null,assigned_to:session.user.id,owner_user_id:session.user.id};
+ let salesperson=body.salesperson||null;
+ let assigned_to=body.assigned_to||body.owner_user_id||null;
+ if(assigned_to || salesperson){
+  const params=new URLSearchParams({select:"user_id,salesperson,email,role",role:"eq.salesperson",limit:"1"});
+  if(assigned_to)params.set("user_id","eq."+assigned_to);
+  else if(salesperson)params.set("salesperson","ilike."+salesperson);
+  const r=await fetch(ctx.url+"/rest/v1/crm_users?"+params.toString(),{headers:dbHeaders(ctx),cache:"no-store"});
+  const rows=await r.json().catch(()=>[]);
+  const u=Array.isArray(rows)?rows[0]:null;
+  if(u){salesperson=u.salesperson||salesperson;assigned_to=u.user_id;}
+ }
+ return {salesperson,assigned_to,owner_user_id:assigned_to||null};
+}
+function clean(body:any,session:any,resolved:any){
+ const salesperson=resolved.salesperson;
+ const assigned_to=resolved.assigned_to;
  return {
   name:body.name||null,phone:body.phone||null,whatsapp:body.whatsapp||body.phone||null,email:body.email||null,
   dest:body.dest??body.destination??null,destination:body.destination??body.dest??null,
@@ -32,7 +47,7 @@ function clean(body:any,session:any){
   service_type:body.service_type||body.service||"Full Package",from_destination:body.from_destination||body.from||null,to_destination:body.to_destination||body.to||body.destination||null,
   value:body.value===""||body.value===undefined||body.value===null?null:Number(body.value),budget:body.budget===""||body.budget===undefined||body.budget===null?null:Number(body.budget),
   branch:body.branch||null,source:body.source||null,priority:body.priority||"Normal",notes:body.notes||null,status:body.status||"New",
-  stage_group:body.stage_group||null,salesperson,assigned_to,owner_user_id:body.owner_user_id||assigned_to||null,
+  stage_group:body.stage_group||null,salesperson,assigned_to,owner_user_id:resolved.owner_user_id,
   travel_date:body.travel_date??body.travelDate??null,return_date:body.return_date??body.returnDate??null,
   travellers:body.travellers===undefined||body.travellers===""?null:Number(body.travellers),
   adults:body.adults===undefined||body.adults===""?1:Number(body.adults),children:body.children===undefined||body.children===""?0:Number(body.children),infants:body.infants===undefined||body.infants===""?0:Number(body.infants),
@@ -62,7 +77,8 @@ export async function GET(req:Request){
 export async function POST(req:Request){
  const ctx=await auth(); if(!ctx)return errorResponse(401,"Unauthorized");
  let body:any;try{body=await req.json()}catch{return errorResponse(400,"Invalid request body")}
- const a=clean(body,ctx.session);
+ const resolved=await resolveSalesperson(ctx,body,ctx.session);
+ const a=clean(body,ctx.session,resolved);
  if(!a.name&&!a.phone&&!a.email)return errorResponse(400,"Enter at least a name, phone number or email");
  const r=await fetch(`${ctx.url}/rest/v1/enquiries`,{method:"POST",headers:dbHeaders(ctx,true),body:JSON.stringify(a)});
  const text=await r.text();let data:any=null;try{data=text?JSON.parse(text):null}catch{data=text}
@@ -86,6 +102,10 @@ export async function PATCH(req:Request){
  if(!beforeRes.ok||!Array.isArray(beforeRows)||!beforeRows[0])return errorResponse(404,"Lead not found or not assigned to this salesperson",beforeRows);
  const allowedKeys=["name","phone","whatsapp","email","dest","destination","query_text","customer_type","company_name","service_type","from_destination","to_destination","return_date","value","budget","branch","source","priority","notes","status","stage_group","salesperson","travel_date","travellers","adults","children","infants","follow_up","assigned_to","owner_user_id"];
  const patch:any={};for(const key of allowedKeys)if(body[key]!==undefined)patch[key]=body[key];
+ if(ctx.session.profile.role==="admin" && (body.salesperson!==undefined || body.assigned_to!==undefined || body.owner_user_id!==undefined)){
+  const resolved=await resolveSalesperson(ctx,body,ctx.session);
+  patch.salesperson=resolved.salesperson;patch.assigned_to=resolved.assigned_to;patch.owner_user_id=resolved.owner_user_id;
+ }
  if(body.destination!==undefined)patch.destination=body.destination;if(body.dest!==undefined)patch.dest=body.dest;if(body.travelDate!==undefined)patch.travel_date=body.travelDate||null;if(body.followUp!==undefined)patch.follow_up=body.followUp||null;if(body.travellers!==undefined)patch.travellers=Number(body.travellers)||null;if(body.value!==undefined)patch.value=body.value===""||body.value===null?null:Number(body.value);
  if(ctx.session.profile.role!=="admin"){delete patch.salesperson;delete patch.assigned_to;delete patch.owner_user_id;}
  if(!Object.keys(patch).length)return errorResponse(400,"No lead changes supplied");
