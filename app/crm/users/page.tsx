@@ -30,3 +30,6 @@ export default async function CrmUsersPage(){
     <div style={{background:"#fff",borderRadius:16,padding:18}}><small>Sales team</small><div style={{fontSize:28,fontWeight:800}}>{users.filter(u=>u.role==="salesperson").length}</div></div>
    </div>
    <CrmUserManager initialUsers={users.map(u=>({id:u.user_id,name:u.salesperson||"",email:u.email,role:u.role,is_active:true,auth_user_id:u.user_id}))}/>
+  </div>
+ </main>;
+}
