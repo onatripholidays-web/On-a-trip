@@ -12,8 +12,20 @@ export async function GET(){
  const {url,key}=crmSupabaseConfig();const token=(await cookies()).get("oat_crm_access")?.value||"";const service=process.env.SUPABASE_SECRET_KEY||process.env.SUPABASE_SERVICE_ROLE_KEY;
  const r=service
    ? await rest(url,service,"crm_sales_team?select=id,name,email,role,is_active,auth_user_id&order=name.asc")
-   : await rest(url,key,"crm_sales_team?select=id,name,email,role,is_active,auth_user_id&order=name.asc",undefined,token);const data=await r.json().catch(()=>[]);
- if(!r.ok)return NextResponse.json({error:"Could not load sales team"},{status:r.status});return NextResponse.json({users:Array.isArray(data)?data:[]});
+   : await rest(url,key,"crm_sales_team?select=id,name,email,role,is_active,auth_user_id&order=name.asc",undefined,token);
+ const data=await r.json().catch(()=>[]);
+ if(!r.ok)return NextResponse.json({error:"Could not load sales team"},{status:r.status});
+ const team=Array.isArray(data)?data:[];
+ const crmR=service
+   ? await rest(url,service,"crm_users?select=user_id,email,role,salesperson")
+   : await rest(url,key,"crm_users?select=user_id,email,role,salesperson",undefined,token);
+ const crmData=await crmR.json().catch(()=>[]);
+ const crmUsers=Array.isArray(crmData)?crmData:[];
+ const users=team.map((person:any)=>{
+   const match=crmUsers.find((u:any)=>String(u.user_id)===String(person.auth_user_id)||String(u.email||"").toLowerCase()===String(person.email||"").toLowerCase());
+   return {...person,auth_user_id:person.auth_user_id||match?.user_id||null,name:person.name||match?.salesperson||"",email:person.email||match?.email||"",role:person.role||match?.role};
+ });
+ return NextResponse.json({users});
 }
 export async function POST(req:Request){
  const session=await getCrmSession();if(!session||session.profile.role!=="admin")return NextResponse.json({error:"Only CRM admins can create users."},{status:403});
