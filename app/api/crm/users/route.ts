@@ -91,4 +91,3 @@ export async function DELETE(req:Request){
  return NextResponse.json({ok:true});
 }
 
-export async function POST_RESET_PASSWORD(req:Request){ return NextResponse.json({error:"Unsupported method"},{status:405}); }
