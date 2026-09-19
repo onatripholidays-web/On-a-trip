@@ -4,8 +4,8 @@ import {useRouter} from "next/navigation";
 import type {CrmSession} from "@/lib/crm-auth";
 
 type P={id:string;slug:string;name:string;category:string;duration:string;route:string;from_location:string;price:string;description:string;meals?:string;batch?:string;itinerary?:any[];inclusions?:string[];exclusions?:string[]};
-type F={guest:string;dest:string;days:string;pax:string;start:string;dates:string;language:string;type:string;hotel:string;vehicle:string;meals:string;budget:string;special:string;instruction:string;travelStyle:string;currency:string;interests:string[];accommodation:string};
-const blank:F={guest:"",dest:"",days:"6",pax:"2",start:"",dates:"",language:"English",type:"Custom",hotel:"3 Star",vehicle:"Private Car",meals:"Breakfast & Dinner",budget:"",special:"",instruction:"",travelStyle:"Relaxed",currency:"INR",interests:[],accommodation:"Standard"};
+type F={guest:string;dest:string;days:string;pax:string;children:string;infants:string;start:string;dates:string;language:string;type:string;hotel:string;vehicle:string;meals:string;budget:string;special:string;instruction:string;travelStyle:string;currency:string;interests:string[];accommodation:string};
+const blank:F={guest:"",dest:"",days:"6",pax:"2",children:"0",infants:"0",start:"",dates:"",language:"English",type:"Custom",hotel:"3 Star",vehicle:"Private Car",meals:"Breakfast & Dinner",budget:"",special:"",instruction:"",travelStyle:"Relaxed",currency:"INR",interests:[],accommodation:"Standard"};
 const days=(s:string)=>s.match(/(\d+)\s*(?:Days|Day)/i)?.[1]||"";
 const price=(s:string)=>{const n=s?.replace(/[^0-9.]/g,"");return n?String(Math.round(Number(n))):""};
 export default function ItineraryBuilderV2({session}:{session:CrmSession}){
