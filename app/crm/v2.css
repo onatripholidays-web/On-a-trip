@@ -91,3 +91,5 @@
  .crm-v2-shell .complete-table-wrap th{font-size:var(--font-size-xs)}
  .crm-v2-shell .complete-table-wrap td{font-size:var(--font-size-md)}
 }
+
+.lead-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.lead-actions a,.lead-actions button{font:inherit;text-decoration:none;cursor:pointer}.lead-call-btn,.lead-whatsapp-btn{display:inline-flex;align-items:center;gap:4px;padding:6px 9px;border-radius:7px;border:1px solid var(--crm-border,#dfe3e8);background:var(--crm-surface,#fff);font-size:12px;font-weight:600}.lead-call-btn:hover,.lead-whatsapp-btn:hover{background:var(--crm-surface-muted,#f5f6f8)}.lead-call-btn{color:var(--crm-text,#1f2937)}.lead-whatsapp-btn{color:var(--crm-text,#1f2937)}
