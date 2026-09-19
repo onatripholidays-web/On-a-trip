@@ -35,3 +35,59 @@
 .crm-v2-workspace span{font-size:10px}.crm-v2-workspace b{font-size:14px}
 @media(max-width:1100px){.crm-v2-sidebar{width:225px}.crm-v2-content{margin-left:225px;width:calc(100% - 225px)}}
 @media(max-width:700px){.crm-v2-sidebar{width:100%}.crm-v2-content{margin-left:0;width:100%}.query-dropdown{right:0;width:min(320px,calc(100vw - 28px))}}
+
+
+/* TravBizz CRM 5.0 design-system migration */
+.crm-v2-shell{
+ --font-family-primary:Inter,Arial,sans-serif;
+ --font-size-base:14px;--font-size-xs:10px;--font-size-sm:11px;--font-size-md:12px;
+ --font-size-lg:13px;--font-size-xl:14px;--font-size-2xl:15px;--font-size-3xl:16px;--font-size-4xl:17px;
+ --font-weight-base:500;--line-height-base:21px;
+ --color-text-primary:#111827;--color-text-secondary:#64748b;--color-text-inverse:#dbeafe;
+ --color-surface-base:#000;--color-surface-muted:#fff;--color-surface-raised:#0c3f4b;--color-surface-strong:#eaf1ff;
+ --color-border-default:#ecf1f5;
+ --space-1:1px;--space-2:2px;--space-3:6px;--space-4:8px;--space-5:11px;--space-6:12px;--space-7:13px;--space-8:14px;
+ --radius-xs:15px;--radius-sm:17px;--radius-md:18px;--radius-lg:50px;--radius-xl:999px;
+ font-family:var(--font-family-primary);font-size:var(--font-size-base);font-weight:var(--font-weight-base);line-height:var(--line-height-base);color:var(--color-text-primary);
+}
+.crm-v2-shell button,.crm-v2-shell input,.crm-v2-shell select,.crm-v2-shell textarea{font-family:var(--font-family-primary)}
+.crm-v2-shell :focus-visible{outline:3px solid #2563eb;outline-offset:2px}
+.crm-v2-shell button:disabled,.crm-v2-shell input:disabled,.crm-v2-shell select:disabled,.crm-v2-shell textarea:disabled{cursor:not-allowed;opacity:.55}
+.crm-v2-shell button[aria-busy="true"]{cursor:progress}
+.crm-v2-shell .crm-v2-sidebar{font-size:var(--font-size-lg)}
+.crm-v2-shell .crm-v2-top{font-size:var(--font-size-lg)}
+.crm-v2-shell .complete-leads{font-size:var(--font-size-base)}
+.crm-v2-shell .complete-leads-head h1{font-size:var(--font-size-4xl);line-height:1.3}
+.crm-v2-shell .complete-leads-head p{font-size:var(--font-size-md);line-height:1.5;color:var(--color-text-secondary)}
+.crm-v2-shell .complete-filterbar,
+.crm-v2-shell .complete-advanced{gap:var(--space-4);padding:var(--space-6)}
+.crm-v2-shell .complete-filterbar input,
+.crm-v2-shell .complete-filterbar select,
+.crm-v2-shell .complete-advanced select{font-size:var(--font-size-lg);min-height:42px}
+.crm-v2-shell .complete-filterbar button,
+.crm-v2-shell .complete-head-actions button{font-size:var(--font-size-lg);min-height:42px}
+.crm-v2-shell .complete-table-wrap th{font-size:var(--font-size-sm);line-height:1.4}
+.crm-v2-shell .complete-table-wrap td{font-size:var(--font-size-md);line-height:1.5}
+.crm-v2-shell .complete-table-wrap td,.crm-v2-shell .complete-table-wrap th{padding:var(--space-7) var(--space-8)}
+.crm-v2-shell .complete-table-wrap tr:hover td{background:var(--color-surface-strong)}
+.crm-v2-shell .complete-table-wrap tr[aria-selected="true"] td{background:#eff6ff}
+.crm-v2-shell .lead-pill{font-size:var(--font-size-sm)}
+.crm-v2-shell .complete-columns label{font-size:var(--font-size-sm)}
+.crm-v2-shell .complete-meta{font-size:var(--font-size-sm)}
+.crm-v2-shell .complete-drawer{font-size:var(--font-size-base)}
+.crm-v2-shell .drawer-section h3{font-size:var(--font-size-xl)}
+.crm-v2-shell .lead-form-grid label{font-size:var(--font-size-sm)}
+.crm-v2-shell .lead-form-grid input,.crm-v2-shell .lead-form-grid select,.crm-v2-shell .drawer-section textarea{font-size:var(--font-size-md);line-height:1.5}
+.crm-v2-shell .query-dropdown{border-radius:var(--radius-sm)}
+.crm-v2-shell .query-dropdown button{font-size:var(--font-size-lg);min-height:44px}
+.crm-v2-shell .query-dropdown button:hover{background:var(--color-surface-strong)}
+.crm-v2-shell .query-dropdown button:active{transform:translateY(1px)}
+.crm-v2-shell .complete-overlay{overscroll-behavior:contain}
+.crm-v2-shell .complete-panel,.crm-v2-shell .complete-drawer{overscroll-behavior:contain}
+.crm-v2-shell .complete-table-wrap{scrollbar-gutter:stable}
+@media(max-width:700px){
+ .crm-v2-shell{font-size:var(--font-size-base)}
+ .crm-v2-shell .complete-leads-head h1{font-size:var(--font-size-3xl)}
+ .crm-v2-shell .complete-table-wrap th{font-size:var(--font-size-xs)}
+ .crm-v2-shell .complete-table-wrap td{font-size:var(--font-size-md)}
+}
