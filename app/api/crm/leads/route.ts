@@ -7,7 +7,7 @@ async function auth(){
  if(!session)return null;
  const access=(await cookies()).get("oat_crm_access")?.value||"";
  const {url,key}=crmSupabaseConfig();
- const service=process.env.SUPABASE_SERVICE_ROLE_KEY||"";
+ const service=process.env.SUPABASE_SECRET_KEY||process.env.SUPABASE_SERVICE_ROLE_KEY||"";
  return {session,access,url,anon:key,service};
 }
 
