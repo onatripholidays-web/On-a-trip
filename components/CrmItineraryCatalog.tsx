@@ -6,7 +6,7 @@ import type {CrmSession} from "@/lib/crm-auth";
 import ItineraryBuilderV2 from "@/components/ItineraryBuilderV2";
 
 type PackageItem={
-  id:string;slug?:string;name:string;category?:string;duration?:string;
+  id:string;slug?:string;name:string;category?:string;destination?:string;duration?:string;
   duration_days?:number;duration_nights?:number;route?:string;from_location?:string;
   price?:string|number;price_per_person?:string|number;description?:string;
   image?:string;image_url?:string;meals?:string;batch?:string;status?:string;
