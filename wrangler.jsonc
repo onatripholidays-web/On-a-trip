@@ -4,6 +4,10 @@
   "main": ".open-next/worker.js",
   "compatibility_date": "2026-09-15",
   "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "NEXT_PUBLIC_SUPABASE_URL": "https://mdariypftlkjxfkhrans.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kYXJpeXBmdGxranhma2hyYW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0OTcxNzgsImV4cCI6MjEwNDA3MzE3OH0.lwHQhsN1IXT95NBkEBhd2a-YH82X_pB5hbeJ4t1JEg8"
+  },
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
