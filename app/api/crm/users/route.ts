@@ -46,7 +46,8 @@ export async function PUT(req:Request){
  if(!id||name.length<2||!email||!allowedRoles.includes(role))return NextResponse.json({error:"User ID, name, valid email and a valid role are required."},{status:400});
  const auth=await fetch(`${url}/auth/v1/admin/users/${encodeURIComponent(id)}`,{method:"PUT",headers:{apikey:service,"Content-Type":"application/json"},body:JSON.stringify({email,user_metadata:{full_name:name}})});
  const authData=await auth.json().catch(()=>null);if(!auth.ok)return NextResponse.json({error:authData?.msg||authData?.message||"Could not update login account."},{status:auth.status});
- const profile=await rest(url,service,`profiles?id=eq.${encodeURIComponent(id)}`,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({full_name:name,email,role:role==="admin"?"admin":"sales",is_active:true})});
+ const profileRole=role==="admin"?"admin":role==="accountant"?"accounts":role==="operations"?"operations":role==="manager"?"manager":"staff";
+ const profile=await rest(url,service,`profiles?id=eq.${encodeURIComponent(id)}`,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({full_name:name,email,role:profileRole,is_active:true})});
  if(!profile.ok)return NextResponse.json({error:"Could not update the user profile."},{status:500});
  const crm=await rest(url,service,`crm_users?user_id=eq.${encodeURIComponent(id)}`,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({email,role,salesperson:role==="salesperson"?name:null})});
  if(!crm.ok)return NextResponse.json({error:"Could not update the CRM user."},{status:500});
