@@ -62,7 +62,16 @@ export async function GET(req:Request){
 export async function POST(req:Request){
  const ctx=await auth(); if(!ctx)return errorResponse(401,"Unauthorized");
  let body:any;try{body=await req.json()}catch{return errorResponse(400,"Invalid request body")}
- const a=clean(body,ctx.session);
+ let a=clean(body,ctx.session);
+ if(ctx.session.profile.role==="admin" && (body.salesperson||body.assigned_to) && !body.owner_user_id){
+  let resolved=String(body.assigned_to||"");
+  if(!resolved && body.salesperson){
+   const rr=await fetch(`${ctx.url}/rest/v1/crm_users?select=user_id,salesperson,email&role=eq.salesperson&or=(salesperson.eq.${encodeURIComponent(String(body.salesperson))},email.eq.${encodeURIComponent(String(body.salesperson))})&limit=1`,{headers:dbHeaders(ctx),cache:"no-store"});
+   const rows=await rr.json().catch(()=>[]);
+   if(Array.isArray(rows)&&rows[0]?.user_id)resolved=String(rows[0].user_id);
+  }
+  if(resolved){a.assigned_to=resolved;a.owner_user_id=resolved;}
+ }
  if(!a.name&&!a.phone&&!a.email)return errorResponse(400,"Enter at least a name, phone number or email");
  const r=await fetch(`${ctx.url}/rest/v1/enquiries`,{method:"POST",headers:dbHeaders(ctx,true),body:JSON.stringify(a)});
  const text=await r.text();let data:any=null;try{data=text?JSON.parse(text):null}catch{data=text}
@@ -88,6 +97,11 @@ export async function PATCH(req:Request){
  const patch:any={};for(const key of allowedKeys)if(body[key]!==undefined)patch[key]=body[key];
  if(body.destination!==undefined)patch.destination=body.destination;if(body.dest!==undefined)patch.dest=body.dest;if(body.travelDate!==undefined)patch.travel_date=body.travelDate||null;if(body.followUp!==undefined)patch.follow_up=body.followUp||null;if(body.travellers!==undefined)patch.travellers=Number(body.travellers)||null;if(body.value!==undefined)patch.value=body.value===""||body.value===null?null:Number(body.value);
  if(ctx.session.profile.role!=="admin"){delete patch.salesperson;delete patch.assigned_to;delete patch.owner_user_id;}
+ if(ctx.session.profile.role==="admin" && body.salesperson && !body.assigned_to){
+  const rr=await fetch(`${ctx.url}/rest/v1/crm_users?select=user_id,salesperson,email&role=eq.salesperson&or=(salesperson.eq.${encodeURIComponent(String(body.salesperson))},email.eq.${encodeURIComponent(String(body.salesperson))})&limit=1`,{headers:dbHeaders(ctx),cache:"no-store"});
+  const rows=await rr.json().catch(()=>[]);
+  if(Array.isArray(rows)&&rows[0]?.user_id){patch.assigned_to=rows[0].user_id;patch.owner_user_id=rows[0].user_id;}
+ }
  if(!Object.keys(patch).length)return errorResponse(400,"No lead changes supplied");
  const r=await fetch(`${ctx.url}/rest/v1/enquiries?id=eq.${encodeURIComponent(id)}${ownerFilter}`,{method:"PATCH",headers:dbHeaders(ctx,true),body:JSON.stringify(patch)});
  const text=await r.text();let data:any=null;try{data=text?JSON.parse(text):null}catch{data=text}
