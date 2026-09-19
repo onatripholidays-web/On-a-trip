@@ -63,7 +63,15 @@ export async function PUT(req:Request){
  return NextResponse.json({ok:true,user:{id,name,email,role}});
 }
 
-export async function PATCH(req:Request){ return PUT(req); }
+export async function PATCH(req:Request){
+ const session=await getCrmSession();if(!session||session.profile.role!=="admin")return NextResponse.json({error:"Only CRM admins can reset passwords."},{status:403});
+ const {url}=crmSupabaseConfig();const service=process.env.SUPABASE_SECRET_KEY||process.env.SUPABASE_SERVICE_ROLE_KEY;if(!service)return NextResponse.json({error:"Server user-management key is not configured."},{status:503});
+ const body=await req.json().catch(()=>({}));const id=String(body.id||"").trim();const password=String(body.password||"");
+ if(body.action!=="reset-password"||!id||password.length<6)return NextResponse.json({error:"A user ID and password of at least 6 characters are required."},{status:400});
+ const auth=await fetch(`${url}/auth/v1/admin/users/${encodeURIComponent(id)}`,{method:"PUT",headers:{apikey:service,"Content-Type":"application/json"},body:JSON.stringify({password})});
+ const data=await auth.json().catch(()=>null);if(!auth.ok)return NextResponse.json({error:data?.msg||data?.message||"Could not reset password."},{status:auth.status});
+ return NextResponse.json({ok:true});
+}
 
 export async function DELETE(req:Request){
  const session=await getCrmSession();if(!session||session.profile.role!=="admin")return NextResponse.json({error:"Only CRM admins can delete users."},{status:403});
