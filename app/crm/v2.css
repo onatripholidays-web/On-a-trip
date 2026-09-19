@@ -118,3 +118,38 @@
  .crm-v2-sidebar.compact~.crm-v2-content,.crm-v2-sidebar.drawer-open~.crm-v2-content{margin-left:0;width:100%}
  .crm-sidebar-backdrop{z-index:90}
 }
+
+/* TravBizz/Growin-style full CRM navigation */
+.crm-v2-sidebar.drawer-open{width:218px;padding:14px 0 12px;background:#074b5a;box-shadow:none;overflow-y:auto}
+.crm-v2-sidebar.drawer-open .crm-v2-brand{height:54px;padding:0 18px 12px;border-bottom:1px solid rgba(255,255,255,.10);gap:10px}
+.crm-v2-sidebar.drawer-open .crm-v2-brand b{font-size:15px;letter-spacing:.1px;color:#fff}
+.crm-v2-sidebar.drawer-open .crm-v2-brand span{font-size:10px;color:#b9d3d9;letter-spacing:.8px;margin-top:1px}
+.crm-v2-sidebar.drawer-open .crm-growin-nav{display:flex;flex-direction:column;gap:1px;padding:10px 0;flex:1}
+.crm-v2-sidebar.drawer-open .crm-growin-nav button{height:43px;width:100%;border:0;border-radius:0;background:transparent;color:#e0eef1;display:flex;align-items:center;gap:14px;padding:0 17px;font-size:13px;font-weight:700;text-align:left;cursor:pointer}
+.crm-v2-sidebar.drawer-open .crm-growin-nav button:hover{background:rgba(255,255,255,.08);color:#fff}
+.crm-v2-sidebar.drawer-open .crm-growin-nav button.active{background:#176ee8;color:#fff;box-shadow:inset 3px 0 0 #5fa2ff}
+.crm-side-icon{width:24px;min-width:24px;text-align:center;font-size:18px;line-height:1;color:inherit}
+.crm-side-label{white-space:nowrap}
+.crm-v2-sidebar.drawer-open .crm-sidebar-toggle{right:-11px;top:14px}
+.crm-v2-sidebar.compact .crm-growin-nav{display:flex;flex-direction:column;gap:3px;padding-top:10px}
+.crm-v2-sidebar.compact .crm-growin-nav button{display:flex;justify-content:center;align-items:center;width:44px;height:44px;margin:0 auto;border:0;border-radius:10px;background:transparent;color:#d7e8ec;padding:0}
+.crm-v2-sidebar.compact .crm-growin-nav button.active{background:#176ee8;color:#fff}
+.crm-v2-sidebar.compact .crm-side-label{display:none}
+.crm-v2-sidebar.compact .crm-side-icon{font-size:18px}
+.crm-v2-support{margin:8px 10px 10px;padding:12px 10px;border:1px solid rgba(92,190,212,.35);border-radius:7px;background:rgba(0,0,0,.08);color:#fff}
+.crm-v2-support>div:nth-child(2){margin-bottom:8px}
+.crm-v2-support b{display:block;font-size:10px}
+.crm-v2-support span{display:block;font-size:8px;color:#b7d1d8;margin-top:2px}
+.crm-support-icon{float:left;width:25px;height:25px;margin-right:8px;display:grid;place-items:center;border-radius:50%;font-size:16px}
+.crm-v2-support button{width:100%;height:29px;border:0;border-radius:6px;background:#11647a;color:#fff;font-size:9px;font-weight:800;cursor:pointer}
+.crm-v2-support button:hover{background:#197995}
+.crm-v2-sidebar.compact .crm-v2-support{display:none}
+.crm-v2-sidebar.drawer-open .crm-v2-side-foot{padding:9px 18px 0;border-top:1px solid rgba(255,255,255,.08)}
+.crm-v2-sidebar.drawer-open .crm-v2-side-foot span{font-size:8px;color:#a9c3ca}
+.crm-v2-sidebar.drawer-open .crm-v2-side-foot b{display:none}
+.crm-v2-sidebar.drawer-open .crm-v2-side-foot button{display:none}
+.crm-v2-sidebar.drawer-open~.crm-v2-content{margin-left:218px;width:calc(100% - 218px)}
+@media(max-width:700px){
+ .crm-v2-sidebar.drawer-open{width:min(280px,86vw)}
+ .crm-v2-sidebar.drawer-open~.crm-v2-content{margin-left:0;width:100%}
+}
