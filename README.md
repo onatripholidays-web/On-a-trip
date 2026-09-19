@@ -29,3 +29,4 @@ For enquiry persistence, set `SUPABASE_URL` and `SUPABASE_ANON_KEY` in the serve
 
 <!-- Stable production redeploy marker -->
 <!-- Cloudflare production runtime verification -->
+<!-- CRM distribution deployment trigger: 2026-09-19 -->
