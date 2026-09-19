@@ -8,7 +8,7 @@ import CrmUserManager from "@/components/CrmUserManager";
 
 export const dynamic="force-dynamic";
 
-type CrmUser={user_id:string;email:string;role:string;salesperson:string|null;created_at:string;updated_at:string};
+type CrmUser={user_id:string;email:string;role:string;salesperson:string|null;permissions:Record<string,boolean>|null;created_at:string;updated_at:string};
 
 export default async function CrmUsersPage(){
  const session=await getCrmSession();
@@ -19,7 +19,7 @@ export default async function CrmUsersPage(){
  const service=process.env.SUPABASE_SECRET_KEY||process.env.SUPABASE_SERVICE_ROLE_KEY;
  const headers:Record<string,string>={apikey:service||key};
  if(!service && access) headers.Authorization=`Bearer ${access}`;
- const r=await fetch(`${url}/rest/v1/crm_users?select=user_id,email,role,salesperson,created_at,updated_at&order=created_at.asc`,{headers,cache:"no-store"});
+ const r=await fetch(`${url}/rest/v1/crm_users?select=user_id,email,role,salesperson,permissions,created_at,updated_at&order=created_at.asc`,{headers,cache:"no-store"});
  const users:CrmUser[]=r.ok?await r.json():[];
  return <main style={{minHeight:"100vh",background:"#f4f7f9",padding:"28px"}}>
   <div style={{maxWidth:1200,margin:"0 auto"}}>
@@ -32,7 +32,7 @@ export default async function CrmUsersPage(){
     <div style={{background:"#fff",borderRadius:16,padding:18}}><small>Admins</small><div style={{fontSize:28,fontWeight:800}}>{users.filter(u=>u.role==="admin").length}</div></div>
     <div style={{background:"#fff",borderRadius:16,padding:18}}><small>Sales team</small><div style={{fontSize:28,fontWeight:800}}>{users.filter(u=>u.role==="salesperson").length}</div></div>
    </div>
-   <CrmUserManager initialUsers={users.map(u=>({id:u.user_id,name:u.salesperson||"",email:u.email,role:u.role,is_active:true,auth_user_id:u.user_id}))}/>
+   <CrmUserManager initialUsers={users.map(u=>({id:u.user_id,name:u.salesperson||"",email:u.email,role:u.role,is_active:true,permissions:u.permissions||{},auth_user_id:u.user_id}))}/>
   </div>
  </main>;
 }
