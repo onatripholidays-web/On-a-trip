@@ -42,17 +42,37 @@ export async function POST(req: Request) {
       created_by: c.session.user.id,
     };
 
-    const cr = await fetch(`${c.url}/rest/v1/crm_customers?on_conflict=phone`, {
-      method: "POST",
-      headers: h(c, {
-        "Content-Type": "application/json",
-        Prefer: "resolution=merge-duplicates,return=representation",
-      }),
-      body: JSON.stringify(customerPayload),
+    let customer: any = null;
+    const phoneKey = encodeURIComponent(String(customerPayload.phone));
+    const existingResponse = await fetch(`undefined/rest/v1/crm_customers?phone=eq.${phoneKey}&select=*&limit=1`, {
+      headers: h(c),
+      cache: "no-store",
     });
-    const cd = await cr.json().catch((): null => null);
-    if (!cr.ok) throw new Error(cd?.message || "Customer save failed");
-    const customer = Array.isArray(cd) ? cd[0] : cd;
+    const existingRows = await existingResponse.json().catch((): any[] => []);
+    if (existingResponse.ok && Array.isArray(existingRows) && existingRows[0]) {
+      customer = existingRows[0];
+      const updateResponse = await fetch(`undefined/rest/v1/crm_customers?id=eq.${encodeURIComponent(String(customer.id))}`, {
+        method: "PATCH",
+        headers: h(c, { "Content-Type": "application/json", Prefer: "return=representation" }),
+        body: JSON.stringify({
+          name: customerPayload.name,
+          email: customerPayload.email,
+          source: customerPayload.source,
+          assigned_to: customerPayload.assigned_to,
+        }),
+      });
+      const updated = await updateResponse.json().catch(() => null);
+      if (updateResponse.ok && Array.isArray(updated) && updated[0]) customer = updated[0];
+    } else {
+      const cr = await fetch(`undefined/rest/v1/crm_customers`, {
+        method: "POST",
+        headers: h(c, { "Content-Type": "application/json", Prefer: "return=representation" }),
+        body: JSON.stringify(customerPayload),
+      });
+      const cd = await cr.json().catch((): null => null);
+      if (!cr.ok) throw new Error(cd?.message || "Customer save failed");
+      customer = Array.isArray(cd) ? cd[0] : cd;
+    }
     if (!customer?.id) throw new Error("Customer was not returned by Supabase");
 
     const rawItems = Array.isArray(b.items) ? b.items : [];
