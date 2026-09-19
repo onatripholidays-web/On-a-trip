@@ -1,0 +1,36 @@
+name: CRM smoke test
+
+on:
+  pull_request:
+    branches:
+      - cloudflare-production
+  push:
+    branches:
+      - crm-travel-os-enhancements
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Structural CRM smoke test
+        run: node scripts/crm-smoke-test.mjs
+
+      - name: Protected CRM route availability
+        run: |
+          set -e
+          code=$(curl -L -s -o /tmp/crm.html -w "%{http_code}" https://www.onatripholidays.com/crm)
+          echo "CRM page HTTP status: $code"
+          test "$code" -ge 200
+          test "$code" -lt 500
+
+          code=$(curl -s -o /tmp/users.json -w "%{http_code}" https://www.onatripholidays.com/api/crm/users)
+          echo "Users API HTTP status: $code"
+          test "$code" = "401" || test "$code" = "403" || test "$code" = "307" || test "$code" = "308"
