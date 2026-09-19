@@ -2,6 +2,7 @@
 import {useEffect,useMemo,useState} from "react";
 import {useRouter} from "next/navigation";
 import type {CrmSession} from "@/lib/crm-auth";
+import CrmOrganizationDashboard from "@/components/CrmOrganizationDashboard";
 
 type Lead={id?:string|number;name?:string;phone?:string;email?:string;dest?:string;destination?:string;status?:string;salesperson?:string;source?:string;branch?:string;priority?:string;value?:string|number;notes?:string;follow?:string;follow_up?:string;date?:string;travel_date?:string;trav?:number;travellers?:number;created_at?:string;created_by?:string;assigned_to?:string;updated_by?:string;updated_at?:string};
 type Form={name:string;phone:string;email:string;destination:string;status:string;source:string;branch:string;priority:string;value:string;travelDate:string;travellers:string;followUp:string;notes:string};
