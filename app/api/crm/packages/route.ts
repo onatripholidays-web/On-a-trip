@@ -88,7 +88,7 @@ export async function POST(req:Request){
     };
     const r=await fetch(`${url}/rest/v1/packages`,{
       method:"POST",
-      headers:{apikey:serviceKey,Authorization:`Bearer ${serviceKey}`,"Content-Type":"application/json",Prefer:"return=representation"},
+      headers:{apikey:serviceKey,"Content-Type":"application/json",Prefer:"return=representation"},
       body:JSON.stringify(payload),cache:"no-store"
     });
     const text=await r.text();
