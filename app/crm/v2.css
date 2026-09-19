@@ -10,7 +10,7 @@
 .lead-activity-list{max-height:180px;overflow:auto}.lead-activity-list>div{padding:8px 0;border-bottom:1px solid #edf1f3}.lead-activity-list b,.lead-activity-list span,.lead-activity-list small{display:block}.lead-activity-list b{font-size:8px}.lead-activity-list span{font-size:8px;color:#506674;margin-top:3px;line-height:1.4}.lead-activity-list small{font-size:7px;color:#89969e;margin-top:3px}.lead-activity-add{display:flex;gap:6px;margin-top:9px}.lead-activity-add input{flex:1;border:1px solid #dce4e9;border-radius:8px;padding:8px;font-size:8px}.lead-activity-add button{border:0;background:#082542;color:#fff;border-radius:8px;padding:8px 10px;font-size:8px;font-weight:900}
 
 /* CRM dashboard UI refresh: larger type, accordion sidebar, Query import/export menu */
-.crm-v2-sidebar{width:255px}.crm-v2-content{margin-left:255px;width:calc(100% - 255px)}
+.crm-v2-sidebar{width:210px}.crm-v2-content{margin-left:210px;width:calc(100% - 210px)}
 .crm-v2-brand b{font-size:15px}.crm-v2-brand span{font-size:10px}
 .crm-accordion-nav{padding:8px 10px}.crm-accordion-nav>button{width:100%;position:relative;display:flex;align-items:center;gap:10px;text-align:left;padding:12px 12px;border:0;border-radius:10px;background:transparent;color:#fff;font-size:13px;font-weight:800;cursor:pointer;margin:2px 0}
 .crm-accordion-nav>button:hover,.crm-accordion-nav>button.active{background:rgba(65,125,210,.28)}
@@ -33,7 +33,7 @@
 .complete-bulk b{font-size:12px}.complete-bulk select,.complete-bulk button{font-size:11px}
 .complete-drawer h2{font-size:26px}.drawer-section h3{font-size:13px}.lead-form-grid label{font-size:11px}.lead-form-grid input,.lead-form-grid select,.drawer-section textarea{font-size:12px;padding:11px}
 .crm-v2-workspace span{font-size:10px}.crm-v2-workspace b{font-size:14px}
-@media(max-width:1100px){.crm-v2-sidebar{width:225px}.crm-v2-content{margin-left:225px;width:calc(100% - 225px)}}
+@media(max-width:1100px){.crm-v2-sidebar{width:210px}.crm-v2-content{margin-left:210px;width:calc(100% - 210px)}}
 @media(max-width:700px){.crm-v2-sidebar{width:100%}.crm-v2-content{margin-left:0;width:100%}.query-dropdown{right:0;width:min(320px,calc(100vw - 28px))}}
 
 
