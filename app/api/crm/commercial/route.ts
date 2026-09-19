@@ -28,6 +28,9 @@ export async function GET(req:Request):Promise<NextResponse>{
  const order=p.get("order");
  if(order)q.set("order",order);
  for(const key of ["id","customer_id","enquiry_id","booking_id","quotation_id","supplier_id","status","assigned_to","salesperson","phone"]){const v=p.get(key);if(v)q.set(key,v)}
+ if(c.session.profile.role!=="admin" && ["customers","tasks","quotations","bookings"].includes(r as string)){
+  q.set("assigned_to",`eq.${c.session.profile.salesperson||""}`);
+ }
  const response=await fetch(`${c.url}/rest/v1/${resources[r]}?${q.toString()}`,{headers:headers(c,{Prefer:"count=exact"}),cache:"no-store"});
  let data:JsonValue=[];
  try{data=await response.json()}catch{data=[]}
@@ -42,11 +45,25 @@ export async function POST(req:Request):Promise<NextResponse>{
  if(!r||r==="audit")return NextResponse.json({error:"Invalid resource"},{status:400});
  const payload={...(body?.data||{})};
  delete payload.resource;
- payload.created_by=payload.created_by||c.session.user.id;
+ payload.created_by=c.session.user.id;
+ if(c.session.profile.role!=="admin" && r==="customers") payload.assigned_to=c.session.profile.salesperson||null;
  if(r==="customers"&&!payload.assigned_to)payload.assigned_to=c.session.profile.salesperson;
  if(r==="payments"&&!payload.receipt_no)payload.receipt_no=docNo("RC");
  if(r==="invoices"&&!payload.invoice_no)payload.invoice_no=docNo("INV");
  const response=await fetch(`${c.url}/rest/v1/${resources[r]}`,{method:"POST",headers:headers(c,{"Content-Type":"application/json",Prefer:"return=representation"}),body:JSON.stringify(payload)});
+ if(response.ok&&r==="payments"&&payload.booking_id){
+  try{
+   const bookingResponse=await fetch(`${c.url}/rest/v1/crm_bookings?id=eq.${encodeURIComponent(String(payload.booking_id))}&select=id,total_amount,paid_amount`,{headers:headers(c)});
+   const bookingRows=await bookingResponse.json();
+   const booking=Array.isArray(bookingRows)?bookingRows[0]:null;
+   if(booking){
+    const total=Number(booking.total_amount||0),currentPaid=Number(booking.paid_amount||0),amount=Number(payload.amount||0);
+    if(amount>0&&amount<=Math.max(0,total-currentPaid)){
+     await fetch(`${c.url}/rest/v1/crm_bookings?id=eq.${encodeURIComponent(String(payload.booking_id))}`,{method:"PATCH",headers:headers(c,{"Content-Type":"application/json",Prefer:"return=minimal"}),body:JSON.stringify({paid_amount:currentPaid+amount,balance_amount:Math.max(0,total-currentPaid-amount)})});
+    }
+   }
+  }catch{}
+ }
  let data:JsonValue=null;
  try{data=await response.json()}catch{data=null}
  return NextResponse.json(data,{status:response.status})

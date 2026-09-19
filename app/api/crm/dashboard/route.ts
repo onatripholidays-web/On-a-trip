@@ -14,7 +14,7 @@ export async function GET(){
   count(url,key,token,"enquiries",`status=neq.Deleted${owner?`&${owner}`:""}`),
   count(url,key,token,"enquiries",`status=eq.Booked${owner?`&${owner}`:""}`),
   count(url,key,token,"enquiries",`status=eq.Hot${owner?`&${owner}`:""}`),
-  count(url,key,token,"enquiries","follow_up=not.is.null"),
+  count(url,key,token,"enquiries",`follow_up=not.is.null${owner?`&${owner}`:""}`),
   count(url,key,token,"crm_quotations"),count(url,key,token,"crm_bookings"),count(url,key,token,"crm_payments"),count(url,key,token,"crm_invoices"),count(url,key,token,"crm_customers"),count(url,key,token,"crm_tasks","status=eq.open")
  ]);
  return NextResponse.json({total,booked,hot,followups,customers,tasks,commercial:{quotes,bookings,payments,invoices},conversion:total?Math.round(booked/total*100):0});

@@ -15,7 +15,7 @@ export default async function CrmPage(){
  const {cookies}=await import("next/headers");
  const access=(await cookies()).get("oat_crm_access")?.value||"";
  const query=session.profile.role==="admin"?"":"&assigned_to=eq."+encodeURIComponent(session.user.id);
- const fields="id,name,phone,email,dest,destination,status,salesperson,source,branch,priority,value,notes,travel_date,travellers,follow_up,created_at,created_by,assigned_to,updated_by,updated_at";
+ const fields="id,name,phone,whatsapp,email,dest,destination,query_text,customer_type,company_name,service_type,from_destination,to_destination,status,stage_group,salesperson,source,branch,priority,value,budget,notes,travel_date,return_date,travellers,adults,children,infants,follow_up,created_at,created_by,assigned_to,owner_user_id,updated_by,updated_at";
  const response=await fetch(`${url}/rest/v1/enquiries?select=${fields}&order=created_at.desc${query}&limit=200`,{headers:{apikey:key,Authorization:`Bearer ${access}`},cache:"no-store"});
  const leads=response.ok?await response.json():[];
  const safeLeads=Array.isArray(leads)?leads:[];
