@@ -42,7 +42,8 @@ export async function PUT(req:Request){
  const session=await getCrmSession();if(!session||session.profile.role!=="admin")return NextResponse.json({error:"Only CRM admins can edit users."},{status:403});
  const {url}=crmSupabaseConfig();const service=process.env.SUPABASE_SECRET_KEY||process.env.SUPABASE_SERVICE_ROLE_KEY;if(!service)return NextResponse.json({error:"Server user-management key is not configured."},{status:503});
  const body=await req.json().catch(()=>({}));const id=String(body.id||"").trim();const name=String(body.name||"").trim();const email=String(body.email||"").trim().toLowerCase();const role=String(body.role||"").trim();
- if(!id||name.length<2||!email||!["admin","salesperson"].includes(role))return NextResponse.json({error:"User ID, name, valid email and a valid role are required."},{status:400});
+ const allowedRoles=["admin","salesperson","accountant","operations","manager","staff"];
+ if(!id||name.length<2||!email||!allowedRoles.includes(role))return NextResponse.json({error:"User ID, name, valid email and a valid role are required."},{status:400});
  const auth=await fetch(`${url}/auth/v1/admin/users/${encodeURIComponent(id)}`,{method:"PUT",headers:{apikey:service,"Content-Type":"application/json"},body:JSON.stringify({email,user_metadata:{full_name:name}})});
  const authData=await auth.json().catch(()=>null);if(!auth.ok)return NextResponse.json({error:authData?.msg||authData?.message||"Could not update login account."},{status:auth.status});
  const profile=await rest(url,service,`profiles?id=eq.${encodeURIComponent(id)}`,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({full_name:name,email,role:role==="admin"?"admin":"sales",is_active:true})});
