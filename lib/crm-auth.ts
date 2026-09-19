@@ -1,6 +1,6 @@
 import {cookies} from "next/headers";
 
-export type CrmRole="admin"|"salesperson";
+export type CrmRole="admin"|"salesperson"|"accountant"|"operations"|"manager"|"staff";
 export type CrmSession={user:{id:string;email?:string};profile:{role:CrmRole;salesperson?:string;email:string}};
 
 const url=process.env.NEXT_PUBLIC_SUPABASE_URL;
